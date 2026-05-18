@@ -4944,11 +4944,7 @@
         },
         {
             "name": "symfony/polyfill-php80",
-<<<<<<< HEAD
-            "version": "v1.37.0",
-=======
             "version": "v1.36.0",
->>>>>>> 5a2862375079bb5c4e5285ef7f4aff099847b289
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
