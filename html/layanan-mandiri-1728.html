@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1728">
+<title>Layanan Mandiri — Disdukcapil Kabupaten Toba (Preview 1728px)</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../public/css/style-guide.css">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                colors: {
+                    blue: {
+                        50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',
+                        500:'#3b82f6',600:'#0052CC',700:'#003d99',800:'#1e40af',900:'#1e3a8a'
+                    }
+                },
+                maxWidth: { 'page': '1728px', '8xl': '1600px' }
+            }
+        }
+    }
+</script>
+
+<style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+    html, body { background: #f9fafb; }
+    .stage-1728 {
+        width: 1728px;
+        margin: 0 auto;
+        background: #ffffff;
+        box-shadow: 0 0 0 1px #e5e7eb;
+        overflow: hidden;
+    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    .preview-modal-section {
+        background: #f3f4f6;
+        padding: 48px 0;
+        border-top: 4px dashed #cbd5e1;
+    }
+    .preview-modal-label {
+        display: inline-block;
+        background: #1f2937;
+        color: #fff;
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+
+    /* Modal mock-up cards */
+    .modal-mock {
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,.12);
+        max-width: 640px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .step-dot { width: 28px; height: 28px; border-radius: 999px; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; background:#e5e7eb; color:#9ca3af; }
+    .step-dot.active { background:#2563eb; color:#fff; box-shadow:0 0 0 3px #bfdbfe; }
+    .step-line { flex:1; height:2px; background:#e5e7eb; margin: 0 4px 16px; }
+</style>
+</head>
+
+<body class="bg-gray-100">
+<div class="stage-1728">
+
+    <!-- ============ NAVBAR ============ -->
+    <header class="sticky top-0 bg-white/95 backdrop-blur-md shadow-sm z-50">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="flex justify-between items-center h-20">
+                <a href="index-1728.html" class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md overflow-hidden border-2 border-blue-200">
+                        <div class="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white font-bold">T</div>
+                    </div>
+                    <div>
+                        <span class="text-lg font-bold text-gray-800">Disdukcapil Toba</span>
+                        <p class="text-xs text-gray-500 -mt-1">Kabupaten Toba</p>
+                    </div>
+                </a>
+                <nav class="flex items-center gap-1">
+                    <a href="index-1728.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50"><i class="fas fa-home mr-2"></i>Beranda</a>
+                    <a href="antrian-online-1728.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50"><i class="fas fa-ticket-alt mr-2"></i>Antrian Online</a>
+                    <a href="layanan-mandiri-1728.html" class="px-4 py-2 rounded-lg text-sm font-medium text-blue-600 bg-blue-50"><i class="fas fa-rocket mr-2"></i>Layanan Mandiri</a>
+                    <a href="statistik-1728.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50"><i class="fas fa-chart-line mr-2"></i>Statistik</a>
+                    <a href="#" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50"><i class="fas fa-sign-in-alt mr-2"></i>Login</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white py-24 overflow-hidden">
+        <div class="max-w-8xl mx-auto px-10 relative z-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium mb-6">
+                    <i class="fas fa-rocket"></i> Layanan Mandiri
+                </div>
+                <h1 class="text-5xl font-extrabold mb-6">Pilih Jenis Layanan</h1>
+                <p class="text-lg text-blue-100">Pilih kategori layanan yang Anda butuhkan dan isi form pendaftaran secara online.</p>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;height:120px;display:block;">
+                <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#f9fafb"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- ============ PANDUAN + KATEGORI ============ -->
+    <section class="py-16 bg-gray-50 -mt-6 relative z-10">
+        <div class="max-w-5xl mx-auto px-10">
+            <!-- Panduan -->
+            <div class="mb-10 bg-blue-50 border border-blue-200 rounded-2xl p-6 reveal shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-200">
+                        <i class="fas fa-info-circle text-xl text-white"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-1">Panduan Pengajuan</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">Pilih kategori layanan, lalu pilih jenis layanan yang sesuai kebutuhan Anda. Pastikan dokumen pendukung sudah disiapkan sebelum mengisi formulir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kategori Grid (4 kategori) -->
+            <div class="grid grid-cols-2 gap-5 reveal">
+
+                <!-- KATEGORI 1: KK -->
+                <button class="bg-white rounded-2xl p-6 text-left border-2 border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col" style="min-height:160px;">
+                    <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-3" style="background:#E6F1FB">
+                        <i class="fas fa-id-card text-2xl" style="color:#1D4ED8"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800 mb-1">Kartu Keluarga (KK)</h3>
+                        <p class="text-xs text-gray-400">4 layanan tersedia</p>
+                    </div>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold" style="background:#DBEAFE;color:#1E40AF">
+                            <i class="fas fa-arrow-right text-[10px]"></i> Lihat Layanan
+                        </span>
+                    </div>
+                </button>
+
+                <!-- KATEGORI 2: Akte Kelahiran -->
+                <button class="bg-white rounded-2xl p-6 text-left border-2 border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col" style="min-height:160px;">
+                    <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-3" style="background:#EAF3DE">
+                        <i class="fas fa-baby text-2xl" style="color:#15803D"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800 mb-1">Akte Kelahiran</h3>
+                        <p class="text-xs text-gray-400">1 layanan tersedia</p>
+                    </div>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold" style="background:#DCFCE7;color:#166534">
+                            <i class="fas fa-arrow-right text-[10px]"></i> Lihat Layanan
+                        </span>
+                    </div>
+                </button>
+
+                <!-- KATEGORI 3: Akte Kematian -->
+                <button class="bg-white rounded-2xl p-6 text-left border-2 border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col" style="min-height:160px;">
+                    <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-3" style="background:#FAEEDA">
+                        <i class="fas fa-file-medical text-2xl" style="color:#C2410C"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800 mb-1">Akte Kematian</h3>
+                        <p class="text-xs text-gray-400">2 layanan tersedia</p>
+                    </div>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold" style="background:#FFEDD5;color:#9A3412">
+                            <i class="fas fa-arrow-right text-[10px]"></i> Lihat Layanan
+                        </span>
+                    </div>
+                </button>
+
+                <!-- KATEGORI 4: Akte Perkawinan -->
+                <button class="bg-white rounded-2xl p-6 text-left border-2 border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col" style="min-height:160px;">
+                    <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-3" style="background:#FBEAF0">
+                        <i class="fas fa-ring text-2xl" style="color:#7E22CE"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800 mb-1">Akte Perkawinan</h3>
+                        <p class="text-xs text-gray-400">1 layanan tersedia</p>
+                    </div>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold" style="background:#F3E8FF;color:#6B21A8">
+                            <i class="fas fa-arrow-right text-[10px]"></i> Lihat Layanan
+                        </span>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ KEUNTUNGAN ============ -->
+    <section class="py-16 bg-white">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-4xl font-bold text-gray-800">Keuntungan Layanan Mandiri</h2>
+            </div>
+            <div class="grid grid-cols-3 gap-6 reveal">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 text-center border border-blue-200">
+                    <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg mb-2">Hemat Waktu</h3>
+                    <p class="text-gray-600">Tanpa antri di kantor dukcapil</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 text-center border border-purple-200">
+                    <div class="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-home text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg mb-2">Dari Mana Saja</h3>
+                    <p class="text-gray-600">Proses online 24 jam</p>
+                </div>
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 text-center border border-green-200">
+                    <div class="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check-circle text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg mb-2">Pantau Status</h3>
+                    <p class="text-gray-600">Update status secara real-time</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white">
+        <div class="absolute top-0 left-0 right-0 transform rotate-180">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;height:120px;display:block;">
+                <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#1e40af"/>
+            </svg>
+        </div>
+        <div class="max-w-8xl mx-auto px-10 py-12 pt-20 relative z-10">
+            <div class="grid grid-cols-3 gap-12 mb-6">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30"><span class="font-bold text-white">T</span></div>
+                        <div>
+                            <h3 class="text-sm font-bold">Disdukcapil Toba</h3>
+                            <p class="text-xs text-blue-100 -mt-0.5">Kabupaten Toba</p>
+                        </div>
+                    </div>
+                    <p class="text-blue-100 text-sm mb-4 leading-snug">Melayani dengan sepenuh hati untuk administrasi kependudukan.</p>
+                    <div class="flex gap-2">
+                        <a href="#" class="w-8 h-8 bg-white/20 hover:bg-white hover:text-blue-600 border border-white/30 rounded-lg flex items-center justify-center"><i class="fab fa-facebook-f text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 bg-white/20 hover:bg-white hover:text-pink-600 border border-white/30 rounded-lg flex items-center justify-center"><i class="fab fa-instagram text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 bg-white/20 hover:bg-white hover:text-sky-500 border border-white/30 rounded-lg flex items-center justify-center"><i class="fab fa-twitter text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 bg-white/20 hover:bg-white hover:text-red-600 border border-white/30 rounded-lg flex items-center justify-center"><i class="fab fa-youtube text-xs"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-sm">Layanan</h4>
+                    <ul class="space-y-1">
+                        <li><a href="layanan-mandiri-1728.html" class="flex items-center gap-2 px-2 py-1 rounded text-sm text-blue-100 hover:text-white hover:bg-white/20"><i class="fas fa-rocket text-xs"></i> Layanan Mandiri</a></li>
+                        <li><a href="antrian-online-1728.html" class="flex items-center gap-2 px-2 py-1 rounded text-sm text-blue-100 hover:text-white hover:bg-white/20"><i class="fas fa-ticket-alt text-xs"></i> Antrian Online</a></li>
+                        <li><a href="statistik-1728.html" class="flex items-center gap-2 px-2 py-1 rounded text-sm text-blue-100 hover:text-white hover:bg-white/20"><i class="fas fa-chart-line text-xs"></i> Statistik</a></li>
+                        <li><a href="#" class="flex items-center gap-2 px-2 py-1 rounded text-sm text-blue-100 hover:text-white hover:bg-white/20"><i class="fas fa-search text-xs"></i> Lacak Berkas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-sm">Kontak</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start gap-2"><div class="w-7 h-7 bg-white/20 border border-white/30 rounded flex items-center justify-center flex-shrink-0"><i class="fas fa-map-marker-alt text-xs"></i></div><div><p class="font-medium">Balige, Kabupaten Toba</p><p class="text-blue-100 text-xs">Sumatera Utara</p></div></li>
+                        <li class="flex items-start gap-2"><div class="w-7 h-7 bg-white/20 border border-white/30 rounded flex items-center justify-center flex-shrink-0"><i class="fas fa-phone text-xs"></i></div><div><p class="font-medium">(0632) 123456</p><p class="text-blue-100 text-xs">08.00 - 16.00</p></div></li>
+                        <li class="flex items-start gap-2"><div class="w-7 h-7 bg-white/20 border border-white/30 rounded flex items-center justify-center flex-shrink-0"><i class="fas fa-envelope text-xs"></i></div><div><p class="font-medium">info@disdukcapil-toba.go.id</p></div></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/20 pt-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-blue-100 text-xs">&copy; 2026 Disdukcapil Kabupaten Toba.</p>
+                    <div class="flex gap-4 text-xs">
+                        <a href="#" class="text-blue-100 hover:text-white">Privasi</a>
+                        <a href="#" class="text-blue-100 hover:text-white">Syarat</a>
+                        <a href="#" class="text-blue-100 hover:text-white">Bantuan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!--
+    ================================================================================
+    ================================================================================
+                BAGIAN MODAL / FORM — PREVIEW STATIS DI BAWAH FOOTER
+                Setiap modal dipisah dalam section sendiri untuk kemudahan referensi.
+                Daftar modal:
+                  1. Modal Pilih Layanan dari Kategori
+                  2. Modal Form Service (5-Step generic) — referensi struktur
+                  3. Modal Form: KK Perubahan
+                  4. Modal Form: KK Ganti Kepala
+                  5. Modal Form: KK Hilang / Rusak
+                  6. Modal Form: KK Pisah
+                  7. Modal Form: Akte Kelahiran
+                  8. Modal Form: Akte Kematian
+                  9. Modal Form: Lahir Mati
+                 10. Modal Form: Akte Perkawinan
+    ================================================================================
+    ================================================================================
+    -->
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 1: PILIH LAYANAN DARI KATEGORI =================-->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label"><i class="fas fa-window-restore mr-1"></i> Modal 1 — Pilih Layanan dari Kategori</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Modal Daftar Layanan (muncul saat klik kartu kategori)</h3>
+            <p class="text-sm text-gray-600 mb-6">Contoh isi: kategori <strong>Kartu Keluarga (KK)</strong>.</p>
+
+            <div class="modal-mock">
+                <div class="p-5 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#E6F1FB">
+                                <i class="fas fa-id-card" style="color:#1D4ED8"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-gray-800">Kartu Keluarga (KK)</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">Pilih layanan yang Anda butuhkan</p>
+                            </div>
+                        </div>
+                        <button class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-500 text-sm"></i></button>
+                    </div>
+                </div>
+                <div class="p-3 space-y-1 max-h-[60vh] overflow-y-auto">
+                    <div class="layanan-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center"><i class="fas fa-address-card text-blue-600"></i></div>
+                        <div class="flex-1"><h4 class="font-semibold text-sm text-gray-800">Perubahan Data KK</h4><p class="text-xs text-gray-500">Ubah data anggota keluarga</p></div>
+                        <i class="fas fa-chevron-right text-gray-300"></i>
+                    </div>
+                    <div class="layanan-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center"><i class="fas fa-user-edit text-blue-600"></i></div>
+                        <div class="flex-1"><h4 class="font-semibold text-sm text-gray-800">Ganti Kepala Keluarga</h4><p class="text-xs text-gray-500">Pengalihan status kepala KK</p></div>
+                        <i class="fas fa-chevron-right text-gray-300"></i>
+                    </div>
+                    <div class="layanan-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center"><i class="fas fa-file-medical-alt text-blue-600"></i></div>
+                        <div class="flex-1"><h4 class="font-semibold text-sm text-gray-800">KK Hilang / Rusak</h4><p class="text-xs text-gray-500">Penggantian KK akibat hilang/rusak</p></div>
+                        <i class="fas fa-chevron-right text-gray-300"></i>
+                    </div>
+                    <div class="layanan-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center"><i class="fas fa-people-arrows text-blue-600"></i></div>
+                        <div class="flex-1"><h4 class="font-semibold text-sm text-gray-800">Pisah KK</h4><p class="text-xs text-gray-500">Pemisahan anggota dari KK induk</p></div>
+                        <i class="fas fa-chevron-right text-gray-300"></i>
+                    </div>
+                </div>
+                <div class="px-5 py-3 border-t border-gray-100">
+                    <p class="text-xs text-gray-400 text-center">Siapkan berkas pendukung dalam format PDF maks. 200 KB per file.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 2: STRUKTUR 5-STEP GENERIK (REFERENSI) ========= -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#0ea5e9"><i class="fas fa-layer-group mr-1"></i> Modal 2 — Struktur 5-Step Generik (Referensi)</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Setiap form layanan menggunakan 5 step:</h3>
+            <p class="text-sm text-gray-600 mb-6"><strong>Informasi → Data → Berkas → Verifikasi Wajah → Konfirmasi</strong></p>
+
+            <div class="modal-mock" style="max-width:720px;">
+                <!-- Header steps -->
+                <div class="p-5 border-b border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center"><i class="fas fa-file-alt text-blue-600"></i></div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Form Layanan (Generik)</h3>
+                                <p class="text-xs text-gray-400">Langkah 1 dari 5</p>
+                            </div>
+                        </div>
+                        <button class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-500 text-sm"></i></button>
+                    </div>
+                    <div class="flex items-end">
+                        <div class="flex-1 flex flex-col items-center"><span class="step-dot active">1</span><span class="text-[9px] font-semibold mt-1 text-blue-600">Informasi</span></div>
+                        <div class="step-line"></div>
+                        <div class="flex-1 flex flex-col items-center"><span class="step-dot">2</span><span class="text-[9px] font-semibold mt-1 text-gray-400">Data</span></div>
+                        <div class="step-line"></div>
+                        <div class="flex-1 flex flex-col items-center"><span class="step-dot">3</span><span class="text-[9px] font-semibold mt-1 text-gray-400">Berkas</span></div>
+                        <div class="step-line"></div>
+                        <div class="flex-1 flex flex-col items-center"><span class="step-dot">4</span><span class="text-[9px] font-semibold mt-1 text-gray-400">Verifikasi</span></div>
+                        <div class="step-line"></div>
+                        <div class="flex-1 flex flex-col items-center"><span class="step-dot">5</span><span class="text-[9px] font-semibold mt-1 text-gray-400">Konfirmasi</span></div>
+                    </div>
+                </div>
+                <div class="p-5 space-y-5">
+                    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-info-circle text-blue-600"></i><h4 class="font-bold text-blue-800 text-sm">Informasi Layanan</h4></div>
+                        <p class="text-sm text-blue-700">Deskripsi singkat tentang layanan ditampilkan di sini.</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-6 h-6 bg-orange-100 rounded-lg flex items-center justify-center"><i class="fas fa-list-check text-orange-600 text-xs"></i></div>
+                            <h4 class="font-bold text-gray-800 text-sm">Persyaratan Dokumen</h4>
+                        </div>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="flex gap-2"><i class="fas fa-check-circle text-green-500 mt-0.5"></i> KTP pemohon</li>
+                            <li class="flex gap-2"><i class="fas fa-check-circle text-green-500 mt-0.5"></i> Kartu Keluarga lama</li>
+                            <li class="flex gap-2"><i class="fas fa-check-circle text-green-500 mt-0.5"></i> Formulir F-1.02</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center"><i class="fas fa-route text-green-600 text-xs"></i></div>
+                            <h4 class="font-bold text-gray-800 text-sm">Alur Pengajuan</h4>
+                        </div>
+                        <ol class="space-y-2 text-sm text-gray-700 list-decimal list-inside">
+                            <li>Lengkapi data pemohon</li>
+                            <li>Upload berkas persyaratan</li>
+                            <li>Verifikasi wajah (liveness)</li>
+                            <li>Tunggu validasi admin</li>
+                        </ol>
+                    </div>
+                    <button class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold">Selanjutnya <i class="fas fa-arrow-right ml-1"></i></button>
+                </div>
+            </div>
+
+            <p class="text-center text-xs text-gray-500 mt-6">Setiap form layanan di bawah ini mengikuti struktur 5-step ini, hanya field <code>Data</code> &amp; <code>Berkas</code> yang berbeda per layanan.</p>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 3: FORM — KK PERUBAHAN ========================= -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#1D4ED8"><i class="fas fa-address-card mr-1"></i> Modal 3 — Form: Perubahan Data KK</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — Perubahan Data KK</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Step 2 Data -->
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Pemohon</h4>
+                    <p class="text-xs text-gray-500 mb-4">Lengkapi data Anda sesuai dokumen resmi.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Kepala KK <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none font-mono" placeholder="16 digit"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nomor KK <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none font-mono" placeholder="16 digit"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Kepala KK <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none" placeholder="Sesuai KK"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Alasan Perubahan <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none bg-white"><option>Tambah anggota</option><option>Hapus anggota</option><option>Ubah biodata</option></select></div>
+                        <div class="col-span-2"><label class="block font-semibold text-gray-700 mb-1">Keterangan <span class="text-red-500">*</span></label><textarea rows="3" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none resize-none" placeholder="Jelaskan perubahan yang diajukan"></textarea></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <!-- Step 3 Berkas -->
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB per file.</p>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl">
+                            <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                            <div class="flex-1"><p class="font-semibold text-gray-800">Formulir F-1.02 <span class="text-red-500">*</span></p><p class="text-xs text-gray-400">Belum dipilih</p></div>
+                            <button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl">
+                            <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                            <div class="flex-1"><p class="font-semibold text-gray-800">Formulir F-1.06 <span class="text-red-500">*</span></p><p class="text-xs text-gray-400">Belum dipilih</p></div>
+                            <button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl">
+                            <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                            <div class="flex-1"><p class="font-semibold text-gray-800">Scan KK Lama <span class="text-red-500">*</span></p><p class="text-xs text-gray-400">Belum dipilih</p></div>
+                            <button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl">
+                            <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                            <div class="flex-1"><p class="font-semibold text-gray-800">Scan KTP Pemohon <span class="text-red-500">*</span></p><p class="text-xs text-gray-400">Belum dipilih</p></div>
+                            <button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 4: FORM — KK GANTI KEPALA ====================== -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#1D4ED8"><i class="fas fa-user-edit mr-1"></i> Modal 4 — Form: Ganti Kepala Keluarga</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — Ganti Kepala KK</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Pemohon</h4>
+                    <p class="text-xs text-gray-500 mb-4">Data kepala KK lama &amp; baru.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nomor KK <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Alasan Penggantian <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Meninggal dunia</option><option>Cerai / pisah</option><option>Pindah domisili</option></select></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Kepala KK Lama <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Kepala KK Lama <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Kepala KK Baru <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Kepala KK Baru <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Keterangan Kematian / Cerai <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KK Lama <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Kepala KK Baru <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Pernyataan <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                    </ul>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 5: FORM — KK HILANG / RUSAK ==================== -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#1D4ED8"><i class="fas fa-file-medical-alt mr-1"></i> Modal 5 — Form: KK Hilang / Rusak</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — KK Hilang / Rusak</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Pemohon</h4>
+                    <p class="text-xs text-gray-500 mb-4">Pemohon harus kepala keluarga.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nomor KK <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Pemohon <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Pemohon <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Jenis Permohonan <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Hilang</option><option>Rusak</option></select></div>
+                        <div class="col-span-2"><label class="block font-semibold text-gray-700 mb-1">Kronologi <span class="text-red-500">*</span></label><textarea rows="3" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none resize-none" placeholder="Ceritakan kronologi hilang/rusaknya KK"></textarea></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Keterangan Kepolisian <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Pemohon <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">KK Rusak (jika rusak)</span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                    </ul>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 6: FORM — KK PISAH ============================= -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#1D4ED8"><i class="fas fa-people-arrows mr-1"></i> Modal 6 — Form: Pisah KK</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — Pisah KK</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Pemohon</h4>
+                    <p class="text-xs text-gray-500 mb-4">Untuk anggota yang ingin pisah dari KK induk.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nomor KK Induk <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Pemohon (Kepala KK Baru) <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Pemohon <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Alasan Pisah <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Menikah</option><option>Pindah rumah</option><option>Mandiri</option></select></div>
+                        <div class="col-span-2"><label class="block font-semibold text-gray-700 mb-1">Alamat KK Baru <span class="text-red-500">*</span></label><textarea rows="2" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none resize-none"></textarea></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KK Induk <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Pemohon <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Pernyataan Pisah KK <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Pengantar RT/RW <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-blue-50 text-blue-600 rounded font-semibold">Pilih</button></li>
+                    </ul>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 7: FORM — AKTE KELAHIRAN ======================= -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#15803D"><i class="fas fa-baby mr-1"></i> Modal 7 — Form: Akte Kelahiran</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — Akte Kelahiran</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Bayi &amp; Orang Tua</h4>
+                    <p class="text-xs text-gray-500 mb-4">Isi sesuai dokumen kelahiran &amp; KK.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Bayi <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Laki-laki</option><option>Perempuan</option></select></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tempat Lahir <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tanggal Lahir <span class="text-red-500">*</span></label><input type="date" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Ayah <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Ibu <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Ayah <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Ibu <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-green-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Formulir F-2.01 <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Keterangan Lahir Bidan/Dokter <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KK <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Ayah <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Ibu <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Buku Nikah Orang Tua</span><button class="text-xs px-3 py-1.5 bg-green-50 text-green-600 rounded font-semibold">Pilih</button></li>
+                    </ul>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-green-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 8: FORM — AKTE KEMATIAN ======================== -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#C2410C"><i class="fas fa-user-times mr-1"></i> Modal 8 — Form: Akte Kematian</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — Akte Kematian</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Almarhum</h4>
+                    <p class="text-xs text-gray-500 mb-4">Isi sesuai dokumen kematian &amp; KK.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Almarhum <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Almarhum <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tempat Meninggal <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tanggal Meninggal <span class="text-red-500">*</span></label><input type="date" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Penyebab <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Sakit</option><option>Kecelakaan</option><option>Lainnya</option></select></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Hubungan Pemohon <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Anak</option><option>Istri/Suami</option><option>Orang tua</option></select></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Pemohon <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Pemohon <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-orange-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Keterangan Kematian RS/Dokter <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KK <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Almarhum <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Pemohon <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Keterangan dari Kelurahan <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                    </ul>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-orange-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 9: FORM — LAHIR MATI =========================== -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#C2410C"><i class="fas fa-exclamation-triangle mr-1"></i> Modal 9 — Form: Lahir Mati</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — Lahir Mati (bayi lahir dalam keadaan meninggal)</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Lahir Mati</h4>
+                    <p class="text-xs text-gray-500 mb-4">Isi data orang tua &amp; kelahiran.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Ayah <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Ibu <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Ayah <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Ibu <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tanggal Lahir/Mati <span class="text-red-500">*</span></label><input type="date" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tempat <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Laki-laki</option><option>Perempuan</option></select></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Usia Kandungan (minggu) <span class="text-red-500">*</span></label><input type="number" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-orange-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Keterangan Lahir Mati Bidan/Dokter <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KK Orang Tua <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Ayah <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Ibu <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-orange-50 text-orange-600 rounded font-semibold">Pilih</button></li>
+                    </ul>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-orange-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 10: FORM — AKTE PERKAWINAN ===================== -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#7E22CE"><i class="fas fa-ring mr-1"></i> Modal 10 — Form: Akte Perkawinan</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 2 (Data) &amp; Step 3 (Berkas) — Akte Perkawinan</h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 2 — Data Pasangan &amp; Saksi</h4>
+                    <p class="text-xs text-gray-500 mb-4">Isi sesuai dokumen pernikahan.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Suami <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Istri <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Suami <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Istri <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tanggal Pernikahan <span class="text-red-500">*</span></label><input type="date" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Tempat Pernikahan <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Agama <span class="text-red-500">*</span></label><select class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-white outline-none"><option>Kristen Protestan</option><option>Katolik</option><option>Hindu</option><option>Buddha</option><option>Konghucu</option></select></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Saksi 1 <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Saksi 1 <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">Nama Saksi 2 <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg outline-none"></div>
+                        <div><label class="block font-semibold text-gray-700 mb-1">NIK Saksi 2 <span class="text-red-500">*</span></label><input class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg font-mono outline-none"></div>
+                    </div>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-purple-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+                <div class="modal-mock p-6">
+                    <h4 class="font-bold text-gray-800 mb-1">Step 3 — Upload Berkas</h4>
+                    <p class="text-xs text-gray-500 mb-4">Format PDF, maks. 200 KB.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Surat Pemberkatan Gereja <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Suami <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Istri <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KK Suami <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KK Istri <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Pasfoto Berdampingan <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Saksi 1 <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                        <li class="flex items-center gap-3 p-3 border-2 border-dashed border-gray-200 rounded-xl"><i class="fas fa-file-pdf text-red-500 text-xl"></i><span class="flex-1 font-semibold">Scan KTP Saksi 2 <span class="text-red-500">*</span></span><button class="text-xs px-3 py-1.5 bg-purple-50 text-purple-600 rounded font-semibold">Pilih</button></li>
+                    </ul>
+                    <div class="flex gap-2 mt-5">
+                        <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                        <button class="flex-1 py-2.5 bg-purple-600 text-white rounded-xl font-bold text-sm">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 11: STEP 4 VERIFIKASI WAJAH (LIVENESS) ========= -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#0ea5e9"><i class="fas fa-camera mr-1"></i> Modal 11 — Step 4: Verifikasi Wajah (Liveness)</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 4 berlaku untuk SEMUA form layanan (verifikasi 2x kedipan mata)</h3>
+
+            <div class="modal-mock p-6" style="max-width:560px;">
+                <h3 class="font-bold text-lg text-gray-800 mb-1">Verifikasi Wajah</h3>
+                <p class="text-sm text-gray-500 mb-4">Kedipkan mata <strong>2 kali</strong> di depan kamera untuk membuktikan Anda bukan robot.</p>
+                <div class="relative rounded-2xl overflow-hidden border-2 border-gray-200 bg-black h-64 flex items-center justify-center">
+                    <i class="fas fa-video text-gray-700 text-6xl"></i>
+                    <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center py-2 text-sm font-semibold">Tekan "Mulai Verifikasi" untuk mengaktifkan kamera</div>
+                </div>
+                <div class="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mt-4">
+                    <div class="flex gap-2">
+                        <span class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-400">1</span>
+                        <span class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-400">2</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700">Kedipan terdeteksi: <span>0</span>/2</p>
+                        <p class="text-xs text-gray-400">Kedipkan secara natural, jangan terlalu cepat</p>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-5">
+                    <button class="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm">Kembali</button>
+                    <button class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm"><i class="fas fa-camera mr-1"></i> Mulai Verifikasi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ====== MODAL 12: STEP 5 KONFIRMASI &amp; RINGKASAN ============== -->
+    <!-- ============================================================ -->
+    <div class="preview-modal-section">
+        <div class="max-w-8xl mx-auto px-10">
+            <div class="preview-modal-label" style="background:#16a34a"><i class="fas fa-check-circle mr-1"></i> Modal 12 — Step 5: Konfirmasi &amp; Kirim Pengajuan</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Step 5 berlaku untuk SEMUA form layanan (ringkasan data + tombol kirim)</h3>
+
+            <div class="modal-mock p-6" style="max-width:560px;">
+                <div class="bg-green-50 border border-green-200 rounded-2xl p-5 text-center mb-4">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-green-800 mb-1">Data Siap Dikirim</h4>
+                    <p class="text-green-700 text-sm">Pastikan semua data dan berkas sudah benar sebelum mengirim.</p>
+                </div>
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                    <h5 class="font-bold text-gray-700 text-sm mb-3 flex items-center gap-2"><i class="fas fa-clipboard-list text-blue-500"></i> Ringkasan Pengajuan</h5>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Jenis Layanan</span><span class="font-semibold">Perubahan Data KK</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Pemohon</span><span class="font-semibold">JOHN DOE</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">NIK</span><span class="font-mono">1271xxxxxxxxxxxx</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">No. KK</span><span class="font-mono">1271xxxxxxxxxxxx</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Berkas</span><span class="font-semibold">4 file terlampir</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Verifikasi Wajah</span><span class="font-semibold text-green-600">✓ Lulus</span></div>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-5">
+                    <button class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold text-sm"><i class="fas fa-arrow-left mr-1"></i> Kembali</button>
+                    <button class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold text-sm"><i class="fas fa-paper-plane mr-1"></i> Kirim Pengajuan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+<script src="../public/js/style-guide-enhancer.js"></script>
+</body>
+</html>

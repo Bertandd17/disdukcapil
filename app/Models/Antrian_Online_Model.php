@@ -1,0 +1,290 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
+
+/**
+ * Antrian_Online_Model - Model untuk tabel antrian_online
+ * 
+ * Alias/backward compatibility untuk AntrianOnline
+ * Menggunakan tabel yang sama: antrian_online
+ */
+class Antrian_Online_Model extends Model
+{
+    use HasFactory;
+
+    protected $table = 'antrian_online';
+
+    protected $primaryKey = 'antrian_online_id';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
+    public $timestamps = true;
+
+    protected $fillable = [
+        'antrian_online_id',
+        'nomor_antrian',
+        'nik',
+        'nama_lengkap',
+        'alamat',
+        'layanan_id',
+        'status_antrian',
+        'file_ktp_path',
+        'ocr_raw_text',
+        'ocr_confidence',
+        'ocr_field_confidence',
+        'ocr_processed_at',
+    ];
+
+    protected $casts = [
+        'status_antrian' => 'string',
+        'ocr_confidence' => 'decimal:4',
+        'ocr_field_confidence' => 'array',
+        'ocr_processed_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    // Status constants
+    public const STATUS_MENUNGGU = 'Menunggu';
+    public const STATUS_DOKUMEN_DITERIMA = 'Dokumen Diterima';
+    public const STATUS_VERIFIKASI = 'Verifikasi Data';
+    public const STATUS_PROSES_CETAK = 'Proses Cetak';
+    public const STATUS_SIAP_PENGAMBILAN = 'Siap Pengambilan';
+    public const STATUS_DITOLAK = 'Ditolak';
+    public const STATUS_DIBATALKAN = 'Dibatalkan';
+
+    /**
+     * Boot method untuk auto-generate UUID
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
+
+    /**
+     * Relasi ke tabel layanan
+     */
+    public function layanan(): BelongsTo
+    {
+        return $this->belongsTo(Layanan_Model::class, 'layanan_id', 'layanan_id');
+    }
+
+    /**
+     * Relasi ke tabel lacak_berkas
+     */
+    public function lacak_berkas(): HasMany
+    {
+        return $this->hasMany(Lacak_Berkas_Model::class, 'antrian_online_id', 'antrian_online_id');
+    }
+
+    /**
+     * Alias untuk relasi lacak_berkas (camelCase)
+     */
+    public function lacakBerkas(): HasMany
+    {
+        return $this->lacak_berkas();
+    }
+
+    /**
+     * Scope untuk antrian yang menunggu
+     */
+    public function scopeMenunggu($query)
+    {
+        return $query->where('status_antrian', self::STATUS_MENUNGGU);
+    }
+
+    /**
+     * Scope untuk antrian hari ini
+     */
+    public function scopeHariIni($query)
+    {
+        return $query->whereDate('created_at', now()->toDateString());
+    }
+
+    /**
+     * Scope untuk pencarian berdasarkan nomor antrian
+     */
+    public function scopeCariNomor($query, string $nomor)
+    {
+        $nomor = strtoupper(trim($nomor));
+        $nomorClean = str_replace('-', '', $nomor);
+
+        return $query->where(function($q) use ($nomor, $nomorClean) {
+            $q->where('nomor_antrian', $nomor)
+              ->orWhere('nomor_antrian', 'like', $nomor . '%')
+              ->orWhereRaw("REPLACE(UPPER(nomor_antrian), '-', '') LIKE ?", [$nomorClean . '%']);
+        });
+    }
+
+    /**
+     * Scope untuk pencarian exact nomor antrian (case-insensitive)
+     * Untuk MySQL dengan berbagai collation
+     */
+    public function scopeCariNomorExact($query, string $nomor)
+    {
+        $nomor = strtoupper(trim($nomor));
+
+        return $query->where(function($q) use ($nomor) {
+            // Coba exact match dengan case-insensitive
+            $q->whereRaw('UPPER(nomor_antrian) = ?', [$nomor])
+              // Fallback dengan LIKE (MySQL)
+              ->orWhere('nomor_antrian', 'like', $nomor)
+              // Fallback dengan case-sensitive exact
+              ->orWhere('nomor_antrian', '=', $nomor);
+        });
+    }
+
+    /**
+     * Scope untuk pencarian berdasarkan nama
+     */
+    public function scopeCariNama($query, string $nama)
+    {
+        return $query->where('nama_lengkap', 'like', '%' . trim($nama) . '%');
+    }
+
+    /**
+     * Scope untuk antrian yang belum digunakan (belum ada lacak_berkas)
+     */
+    public function scopeBelumDigunakan($query)
+    {
+        return $query->whereDoesntHave('lacak_berkas');
+    }
+
+    /**
+     * Scope untuk antrian yang sudah digunakan (sudah ada lacak_berkas)
+     */
+    public function scopeSudahDigunakan($query)
+    {
+        return $query->whereHas('lacak_berkas');
+    }
+
+    /**
+     * Cek apakah antrian sudah digunakan
+     * Validasi: cek apakah sudah ada record di lacak_berkas dengan status 'Dokumen Diterima' atau lebih lanjut
+     * Status yang dianggap "used": Dokumen Diterima, Verifikasi Data, Proses Cetak, Siap Pengambilan, Selesai
+     */
+    public function isAlreadyUsed(): bool
+    {
+        // Status yang dianggap "sudah digunakan"
+        $usedStatuses = [
+            'Dokumen Diterima',
+            'Verifikasi Data',
+            'Proses Cetak',
+            'Siap Pengambilan',
+            'Selesai',
+            'Diterima',
+            'Selesaikan'
+        ];
+
+        return $this->lacak_berkas()
+            ->whereIn('status', $usedStatuses)
+            ->exists();
+    }
+
+    /**
+     * Cek apakah user dengan NIK tertentu hari ini sudah mengajukan layanan yang sama
+     * OPTIMIZED: Gunakan join langsung untuk performa lebih baik
+     *
+     * @param string $nik NIK user yang akan dicek
+     * @param string $layananId ID layanan yang akan dicek
+     * @return array ['already_submitted' => bool, 'message' => string]
+     */
+    public static function checkDailyLimit(string $nik, string $layananId): array
+    {
+        $startTime = microtime(true);
+
+        // OPTIMIZED: Gunakan join langsung ke lacak_berkas daripada whereHas
+        // Ini jauh lebih cepat karena tidak perlu subquery
+        $exists = \DB::table('antrian_online')
+            ->join('lacak_berkas', 'antrian_online.antrian_online_id', '=', 'lacak_berkas.antrian_online_id')
+            ->where('antrian_online.nik', $nik)
+            ->where('antrian_online.layanan_id', $layananId)
+            ->whereDate('lacak_berkas.tanggal', '=', now()->toDateString())
+            ->exists();
+
+        $elapsed = round((microtime(true) - $startTime) * 1000, 2);
+        \Log::info('checkDailyLimit query', [
+            'nik' => $nik,
+            'layanan_id' => $layananId,
+            'exists' => $exists,
+            'query_time_ms' => $elapsed
+        ]);
+
+        if ($exists) {
+            // Ambil nama layanan untuk pesan (cache jika bisa)
+            $layanan = Layanan_Model::find($layananId);
+            $namaLayanan = $layanan ? $layanan->nama_layanan : 'layanan ini';
+
+            return [
+                'already_submitted' => true,
+                'message' => "Anda sudah mengajukan <strong>{$namaLayanan}</strong> hari ini. Satu user hanya dapat mengajukan layanan yang sama sekali dalam satu hari. Silakan coba lagi besok.",
+                'error_code' => 'DAILY_LIMIT_EXCEEDED',
+                'layanan_id' => $layananId,
+                'layanan_nama' => $namaLayanan,
+                'nik' => $nik
+            ];
+        }
+
+        return [
+            'already_submitted' => false,
+            'message' => 'Belum mencapai limit harian'
+        ];
+    }
+
+    /**
+     * Validasi antrian untuk layanan tertentu
+     *
+     * @param string $layananId ID layanan yang akan dicek
+     * @return array ['valid' => bool, 'message' => string]
+     */
+    public function validateForLayanan(string $layananId): array
+    {
+        // Cek apakah sudah digunakan (sudah ada lacak_berkas)
+        if ($this->isAlreadyUsed()) {
+            return [
+                'valid' => false,
+                'message' => 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.',
+                'error_code' => 'ALREADY_USED'
+            ];
+        }
+
+        // Cek apakah layanan sesuai
+        if ($this->layanan_id !== $layananId) {
+            // Ambil nama layanan untuk pesan error
+            $layananAsal = Layanan_Model::find($this->layanan_id);
+            $layananTujuan = Layanan_Model::find($layananId);
+
+            $namaLayananAsal = $layananAsal ? $layananAsal->nama_layanan : 'layanan lain';
+            $namaLayananTujuan = $layananTujuan ? $layananTujuan->nama_layanan : 'layanan ini';
+
+            return [
+                'valid' => false,
+                'message' => "Nomor antrian ini hanya berlaku untuk layanan <strong>{$namaLayananAsal}</strong>. Silakan buat nomor antrian baru untuk layanan <strong>{$namaLayananTujuan}</strong>.",
+                'error_code' => 'INVALID_SERVICE',
+                'layanan_asal' => $this->layanan_id,
+                'layanan_asal_nama' => $namaLayananAsal,
+                'layanan_tujuan' => $layananId,
+                'layanan_tujuan_nama' => $namaLayananTujuan
+            ];
+        }
+
+        return [
+            'valid' => true,
+            'message' => 'Nomor antrian valid'
+        ];
+    }
+}

@@ -1,0 +1,803 @@
+PANDUAN SETUP OCR KTP DISDUKCAPIL TOBA
+======================================
+
+Dokumen ini dibuat untuk membantu anggota tim menyiapkan OCR KTP dari awal
+sampai bisa digunakan oleh aplikasi Laravel.
+
+OCR pada project ini menggunakan alur utama:
+
+1. Model CRNN hasil training internal sebagai OCR utama.
+2. EasyOCR sebagai detector/support/fallback kecil.
+3. Flask API sebagai mode yang direkomendasikan agar model tidak reload setiap
+   request dari Laravel.
+4. CLI mode sebagai fallback jika Flask API tidak berjalan.
+
+Lokasi project contoh:
+D:\Semester 6\PA 3\Project\disdukcapil_project
+
+Lokasi file OCR:
+D:\Semester 6\PA 3\Project\disdukcapil_project\scripts
+
+
+DAFTAR FILE PENTING
+===================
+
+Pastikan file berikut ada di project:
+
+1. scripts\easyocr_ktp.py
+   Service OCR utama. Bisa dijalankan sebagai Flask API atau CLI.
+
+2. scripts\ktp_crnn_ocr.py
+   Runtime model CRNN hasil training.
+
+3. scripts\requirements.txt
+   Daftar dependency Python untuk OCR.
+
+4. scripts\setup_ocr.py
+   Helper untuk install/check dependency OCR.
+
+5. scripts\start_ocr_api.bat
+   Starter Flask API untuk Windows.
+
+6. scripts\models\ktp_crnn_v2_state_dict.pt
+   Model CRNN utama. Model ini wajib ada.
+
+7. scripts\models\ktp_crnn_v2_traced.pt
+   Model TorchScript pendukung. Model ini akan dipakai jika environment
+   mendukung. Pada CPU, model traced dapat tidak aktif karena export model
+   memiliki referensi CUDA internal.
+
+8. scripts\models\easyocr_models\craft_mlt_25k.pth
+   Model detector EasyOCR lokal.
+
+9. scripts\models\easyocr_models\latin_g2.pth
+   Model recognizer EasyOCR lokal sebagai support/fallback.
+
+
+PRASYARAT YANG HARUS DIDOWNLOAD DAN DIINSTALL
+=============================================
+
+1. Python 64-bit
+----------------
+Gunakan Python 3.10, 3.11, atau 3.12 64-bit.
+
+Download:
+https://www.python.org/downloads/
+
+Saat install di Windows:
+- Centang "Add python.exe to PATH".
+- Pilih "Install Now" atau "Customize installation".
+- Pastikan pip ikut terinstall.
+
+Cek setelah install:
+
+    python --version
+    python -m pip --version
+
+Jika perintah python tidak dikenali, coba:
+
+    py --version
+    py -m pip --version
+
+Catatan:
+- Jangan gunakan Python 32-bit.
+- Jika PyTorch gagal diinstall pada versi Python tertentu, gunakan Python 3.10
+  atau 3.11 karena dukungan package biasanya paling stabil.
+
+
+2. Git
+------
+Git dibutuhkan jika tim mengambil project dari repository.
+
+Download:
+https://git-scm.com/downloads
+
+Cek setelah install:
+
+    git --version
+
+
+3. PHP, Composer, dan Laravel dependency
+----------------------------------------
+Bagian ini biasanya sudah disiapkan untuk project Laravel. Jika belum:
+
+Download PHP:
+https://windows.php.net/download/
+
+Download Composer:
+https://getcomposer.org/download/
+
+Cek:
+
+    php -v
+    composer --version
+
+Install dependency Laravel dari root project:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project"
+    composer install
+
+Jika file .env belum ada:
+
+    copy .env.example .env
+    php artisan key:generate
+
+Catatan:
+- Untuk OCR ini tidak perlu install npm, Vite, atau package frontend.
+
+
+4. Dependency Python OCR
+------------------------
+Dependency utama OCR ada di:
+
+    scripts\requirements.txt
+
+Isi pentingnya:
+- torch
+- torchvision
+- easyocr
+- opencv-python
+- pillow
+- imutils
+- scikit-image
+- numpy
+- scipy
+- flask
+- flask-cors
+- pytesseract
+- imagehash
+- matplotlib
+- tqdm
+- tensorboard
+
+
+SETUP DARI NOL
+==============
+
+Step 1 - Masuk ke root project
+------------------------------
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project"
+
+
+Step 2 - Pastikan folder scripts tersedia
+-----------------------------------------
+
+    dir scripts
+
+Minimal harus terlihat file:
+
+    easyocr_ktp.py
+    ktp_crnn_ocr.py
+    requirements.txt
+    setup_ocr.py
+    start_ocr_api.bat
+    models
+
+
+Step 3 - Buat virtual environment Python
+----------------------------------------
+Direkomendasikan membuat virtual environment agar dependency OCR tidak
+bercampur dengan Python global.
+
+Masuk ke folder scripts:
+
+    cd scripts
+
+Buat virtual environment:
+
+    python -m venv .venv
+
+Jika memakai Python Launcher:
+
+    py -3.11 -m venv .venv
+
+Aktifkan virtual environment:
+
+    .venv\Scripts\activate
+
+Jika aktif, terminal biasanya menampilkan awalan:
+
+    (.venv)
+
+
+Step 4 - Upgrade pip
+--------------------
+
+    python -m pip install --upgrade pip setuptools wheel
+
+
+Step 5 - Install dependency OCR
+-------------------------------
+
+    python -m pip install -r requirements.txt
+
+Jika instalasi PyTorch bermasalah, install PyTorch CPU terlebih dahulu:
+
+    python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+    python -m pip install -r requirements.txt
+
+Jika komputer memiliki NVIDIA GPU dan ingin memakai CUDA:
+
+1. Cek GPU:
+
+       nvidia-smi
+
+2. Install PyTorch sesuai versi CUDA dari panduan resmi:
+
+       https://pytorch.org/get-started/locally/
+
+3. Setelah PyTorch GPU berhasil, install requirement lain:
+
+       python -m pip install -r requirements.txt
+
+Catatan:
+- Mode CPU tetap bisa dipakai, tetapi lebih lambat.
+- Mode GPU dapat lebih cepat jika driver, CUDA, dan PyTorch cocok.
+
+
+Step 6 - Cek dependency OCR
+---------------------------
+
+Masih dari folder scripts dan venv aktif:
+
+    python setup_ocr.py --check
+
+Atau jalankan semua check bawaan:
+
+    python setup_ocr.py --all
+
+Jika semua dependency siap, output akan menunjukkan package utama seperti
+PyTorch, OpenCV, Pillow, EasyOCR, dan NumPy sudah terinstall.
+
+
+Step 7 - Pastikan model CRNN tersedia
+-------------------------------------
+
+Cek file model:
+
+    dir models
+
+Harus ada:
+
+    models\ktp_crnn_v2_state_dict.pt
+    models\ktp_crnn_v2_traced.pt
+
+Cek model EasyOCR lokal:
+
+    dir models\easyocr_models
+
+Harus ada:
+
+    models\easyocr_models\craft_mlt_25k.pth
+    models\easyocr_models\latin_g2.pth
+
+Jika file model belum ada, minta file model dari tim yang melakukan training.
+Tempatkan persis di path berikut:
+
+    scripts\models\ktp_crnn_v2_state_dict.pt
+    scripts\models\ktp_crnn_v2_traced.pt
+    scripts\models\easyocr_models\craft_mlt_25k.pth
+    scripts\models\easyocr_models\latin_g2.pth
+
+Catatan penting:
+- ktp_crnn_v2_state_dict.pt adalah model utama dan wajib.
+- ktp_crnn_v2_traced.pt dipakai jika bisa dijalankan oleh environment.
+- Jika traced model tidak aktif di CPU, OCR tetap berjalan memakai state_dict.
+
+
+Step 8 - Diagnose OCR Python
+----------------------------
+
+Dari folder scripts:
+
+    python easyocr_ktp.py --diagnose
+
+Output harus berupa JSON.
+
+Yang perlu dicek:
+
+    "primary": "ktp_crnn_v2"
+    "crnn_available": true
+    "easyocr_support": true
+    "image_libs": true
+
+Jika "crnn_available" false:
+- Pastikan ktp_crnn_ocr.py ada.
+- Pastikan ktp_crnn_v2_state_dict.pt ada.
+- Pastikan torch sudah terinstall.
+
+Jika "easyocr_support" false:
+- Pastikan easyocr sudah terinstall.
+- Pastikan model EasyOCR lokal ada, atau biarkan EasyOCR mendownload model saat
+  pertama kali dijalankan jika internet tersedia.
+
+
+KONFIGURASI LARAVEL
+===================
+
+Step 9 - Atur file .env
+-----------------------
+
+Buka file .env di root project:
+
+    D:\Semester 6\PA 3\Project\disdukcapil_project\.env
+
+Pastikan konfigurasi OCR seperti berikut:
+
+    EASYOCR_MOCK_ENABLED=false
+    EASYOCR_USE_API=true
+    EASYOCR_API_HOST=127.0.0.1
+    EASYOCR_API_PORT=5000
+    EASYOCR_PYTHON_PATH=python
+    EASYOCR_TIMEOUT=120
+    EASYOCR_USE_GPU=false
+
+Penjelasan:
+
+EASYOCR_MOCK_ENABLED=false
+    OCR memakai model asli, bukan data dummy/mock.
+
+EASYOCR_USE_API=true
+    Laravel akan memanggil Flask API. Ini mode yang direkomendasikan karena
+    model OCR hanya diload sekali saat server Flask menyala.
+
+EASYOCR_API_HOST=127.0.0.1
+    Host Flask API lokal.
+
+EASYOCR_API_PORT=5000
+    Port Flask API lokal.
+
+EASYOCR_PYTHON_PATH=python
+    Path Python untuk CLI fallback. Jika memakai virtual environment dan perlu
+    path eksplisit, isi dengan path python venv, contoh:
+
+    EASYOCR_PYTHON_PATH="D:\Semester 6\PA 3\Project\disdukcapil_project\scripts\.venv\Scripts\python.exe"
+
+EASYOCR_TIMEOUT=120
+    Timeout OCR dalam detik.
+
+EASYOCR_USE_GPU=false
+    Konfigurasi Laravel. Untuk runtime CRNN, pengaturan device utama ada di
+    environment Python seperti KTP_CRNN_DEVICE atau KTP_CRNN_USE_CUDA.
+
+
+Step 10 - Clear cache konfigurasi Laravel
+-----------------------------------------
+
+Dari root project:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project"
+    php artisan config:clear
+    php artisan cache:clear
+
+
+MENJALANKAN OCR VIA FLASK API
+=============================
+
+Mode Flask API adalah mode utama yang disarankan untuk aplikasi Laravel.
+Keuntungannya:
+
+- Model CRNN dan EasyOCR diload satu kali saat server hidup.
+- Request berikutnya lebih cepat dibanding CLI mode.
+- Laravel cukup mengirim gambar ke endpoint OCR.
+
+
+Step 11 - Jalankan Flask API
+----------------------------
+
+Opsi A - Pakai file batch:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project\scripts"
+    start_ocr_api.bat
+
+Opsi B - Jalankan langsung:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project\scripts"
+    .venv\Scripts\activate
+    python easyocr_ktp.py
+
+Jika berhasil, terminal menampilkan service berjalan di:
+
+    http://localhost:5000
+
+Endpoint tersedia:
+
+    GET  http://localhost:5000/health
+    POST http://localhost:5000/api/ocr/ktp
+    POST http://localhost:5000/api/ocr/batch
+
+Biarkan terminal Flask API tetap terbuka selama Laravel menggunakan OCR.
+
+
+Step 12 - Test health Flask API
+-------------------------------
+
+Buka terminal baru, lalu jalankan:
+
+    curl http://127.0.0.1:5000/health
+
+Output harus JSON dan memuat informasi:
+
+    "primary": "ktp_crnn_v2"
+    "crnn_available": true
+
+
+Step 13 - Test OCR satu gambar via Flask API
+--------------------------------------------
+
+Contoh memakai curl:
+
+    curl -X POST -F "image=@D:\path\ke\gambar_ktp.jpg" http://127.0.0.1:5000/api/ocr/ktp
+
+Output sukses berbentuk JSON:
+
+    {
+      "success": true,
+      "data": {
+        "nik": "...",
+        "nama_lengkap": "...",
+        "tempat_lahir": "...",
+        "tanggal_lahir": "...",
+        "_ocr_source": "crnn_primary"
+      }
+    }
+
+Catatan:
+- _ocr_source idealnya "crnn_primary" atau sumber CRNN lain.
+- Jika "_ocr_source" menunjukkan EasyOCR fallback, berarti CRNN tidak cukup
+  kuat untuk gambar tersebut atau ada masalah pada model/runtime.
+
+
+MENJALANKAN OCR VIA CLI MODE
+============================
+
+CLI mode berguna untuk testing cepat atau fallback jika Flask API tidak hidup.
+Kekurangannya: model diload ulang setiap command, sehingga lebih lambat.
+
+Step 14 - Test CLI satu gambar
+------------------------------
+
+Dari folder scripts:
+
+    python easyocr_ktp.py "D:\path\ke\gambar_ktp.jpg"
+
+Output sukses berbentuk JSON:
+
+    {
+      "status": "success",
+      "data": {
+        "nik": "...",
+        "nama_lengkap": "..."
+      },
+      "ocr_source": "crnn_primary"
+    }
+
+
+TEST DARI LARAVEL
+=================
+
+Step 15 - Pastikan Flask API hidup
+----------------------------------
+
+Sebelum test dari Laravel:
+
+    http://127.0.0.1:5000/health
+
+harus bisa diakses.
+
+
+Step 16 - Test command Laravel OCR
+----------------------------------
+
+Dari root project:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project"
+    php artisan ocr:test-easyocr --image="D:\path\ke\gambar_ktp.jpg"
+
+Jika berhasil, Laravel akan menerima hasil OCR dari Flask API.
+
+Jika Flask API tidak hidup, service Laravel akan mencoba fallback ke CLI mode.
+
+
+Step 17 - Jalankan Laravel
+--------------------------
+
+Dari root project:
+
+    php artisan serve
+
+Lalu gunakan flow upload KTP pada aplikasi.
+
+Pastikan:
+
+- Flask API tetap berjalan.
+- .env memakai EASYOCR_USE_API=true.
+- File gambar yang diupload berupa JPG/JPEG/PNG dan maksimal 10 MB.
+
+
+URUTAN MENJALANKAN SETIAP HARI
+==============================
+
+Jika dependency dan model sudah pernah disiapkan, tim cukup menjalankan:
+
+Terminal 1 - OCR Flask API:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project\scripts"
+    .venv\Scripts\activate
+    python easyocr_ktp.py
+
+Terminal 2 - Laravel:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project"
+    php artisan serve
+
+Setelah itu buka aplikasi Laravel dan lakukan upload KTP.
+
+
+VARIABEL ENVIRONMENT OPSIONAL UNTUK CRNN
+========================================
+
+Variabel berikut hanya diperlukan jika ingin mengubah runtime OCR.
+
+KTP_CRNN_DEVICE
+    Paksa device CRNN.
+
+    Nilai:
+        cpu
+        cuda
+
+    Contoh PowerShell:
+
+        $env:KTP_CRNN_DEVICE="cpu"
+        python easyocr_ktp.py
+
+KTP_CRNN_USE_CUDA
+    Mengizinkan CRNN memakai CUDA jika tersedia.
+
+    Contoh:
+
+        $env:KTP_CRNN_USE_CUDA="true"
+        python easyocr_ktp.py
+
+KTP_CRNN_TRY_INVERT
+    Mengaktifkan percobaan gambar inverted. Default false untuk menjaga speed.
+
+    Contoh:
+
+        $env:KTP_CRNN_TRY_INVERT="true"
+        python easyocr_ktp.py
+
+KTP_CRNN_MIN_CONFIDENCE
+    Ambang confidence minimal CRNN.
+
+    Contoh:
+
+        $env:KTP_CRNN_MIN_CONFIDENCE="0.18"
+        python easyocr_ktp.py
+
+Catatan:
+- Untuk produksi lokal CPU, biarkan default terlebih dahulu.
+- Jangan aktifkan terlalu banyak opsi jika target utama adalah speed.
+
+
+OPTIMASI SPEED
+==============
+
+Rekomendasi agar OCR lebih cepat:
+
+1. Gunakan Flask API, bukan CLI mode.
+   CLI mode meload model setiap request. Flask API meload model sekali.
+
+2. Jalankan OCR API sebelum Laravel menerima upload.
+   Request pertama biasanya lebih lambat karena warm up model.
+
+3. Gunakan gambar ukuran wajar.
+   Hindari upload gambar sangat besar jika tidak perlu.
+
+4. Gunakan CPU hanya jika GPU tidak tersedia.
+   Jika ada NVIDIA GPU, install PyTorch CUDA yang sesuai.
+
+5. Jangan mengaktifkan KTP_CRNN_TRY_INVERT kecuali dibutuhkan.
+   Opsi ini menambah variasi inference dan memperlambat proses.
+
+6. Pastikan model EasyOCR lokal tersedia.
+   Jika tidak tersedia, EasyOCR dapat mencoba download model dan memperlambat
+   startup pertama.
+
+
+TROUBLESHOOTING
+===============
+
+Masalah: python tidak dikenali
+------------------------------
+Solusi:
+
+    py --version
+
+Jika py ada, gunakan:
+
+    py -3.11 -m venv .venv
+
+Jika tetap tidak ada, install ulang Python dan centang "Add python.exe to PATH".
+
+
+Masalah: pip install torch gagal
+--------------------------------
+Solusi CPU:
+
+    python -m pip install --upgrade pip setuptools wheel
+    python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+    python -m pip install -r requirements.txt
+
+Jika masih gagal:
+- Gunakan Python 3.10 atau 3.11 64-bit.
+- Pastikan koneksi internet stabil.
+
+
+Masalah: crnn_available false
+-----------------------------
+Solusi:
+
+1. Cek file model:
+
+       dir scripts\models
+
+2. Pastikan file ini ada:
+
+       ktp_crnn_v2_state_dict.pt
+       ktp_crnn_v2_traced.pt
+
+3. Cek torch:
+
+       cd scripts
+       python -c "import torch; print(torch.__version__)"
+
+4. Jalankan diagnose:
+
+       python easyocr_ktp.py --diagnose
+
+
+Masalah: EasyOCR mencoba download model terus
+---------------------------------------------
+Solusi:
+
+Pastikan folder ini ada:
+
+    scripts\models\easyocr_models
+
+Dan berisi:
+
+    craft_mlt_25k.pth
+    latin_g2.pth
+
+Jika belum ada, EasyOCR membutuhkan internet untuk download model pertama kali.
+Setelah berhasil, simpan model ke folder tersebut agar tim lain bisa memakai
+model lokal tanpa download ulang.
+
+
+Masalah: Laravel tidak bisa connect ke OCR API
+----------------------------------------------
+Solusi:
+
+1. Pastikan Flask API hidup:
+
+       curl http://127.0.0.1:5000/health
+
+2. Pastikan .env:
+
+       EASYOCR_USE_API=true
+       EASYOCR_API_HOST=127.0.0.1
+       EASYOCR_API_PORT=5000
+
+3. Clear config:
+
+       php artisan config:clear
+
+4. Restart Laravel server.
+
+
+Masalah: OCR lambat
+-------------------
+Solusi:
+
+1. Pastikan memakai Flask API, bukan CLI mode.
+2. Jangan tutup terminal Flask API.
+3. Abaikan request pertama untuk benchmark karena model masih warm up.
+4. Gunakan gambar dengan ukuran file tidak terlalu besar.
+5. Jika memungkinkan, pakai GPU NVIDIA dan PyTorch CUDA.
+
+
+Masalah: hasil OCR salah orientasi
+----------------------------------
+Service OCR sudah memiliki auto-rotate fallback.
+
+Jika hasil tetap buruk:
+- Pastikan gambar KTP terlihat penuh dan tidak terlalu blur.
+- Pastikan teks tidak terpotong.
+- Test beberapa gambar dari folder rotasi 0, 90, 180, 270.
+
+
+Masalah: traced model tidak aktif di CPU
+----------------------------------------
+Ini masih normal pada model saat ini.
+
+Penjelasan:
+- ktp_crnn_v2_traced.pt memiliki referensi CUDA internal pada export LSTM.
+- Pada CPU, runtime dapat menandainya sebagai unusable.
+- OCR tetap berjalan memakai ktp_crnn_v2_state_dict.pt.
+
+Yang penting:
+- state_dict ready.
+- crnn_available true.
+
+
+CHECKLIST SETUP UNTUK ANGGOTA TIM
+=================================
+
+Gunakan checklist ini setelah setup:
+
+[ ] Python 3.10/3.11/3.12 64-bit sudah terinstall.
+[ ] pip berjalan.
+[ ] Project Laravel sudah ada di komputer.
+[ ] Virtual environment scripts\.venv sudah dibuat.
+[ ] requirements.txt berhasil diinstall.
+[ ] scripts\models\ktp_crnn_v2_state_dict.pt ada.
+[ ] scripts\models\ktp_crnn_v2_traced.pt ada.
+[ ] scripts\models\easyocr_models\craft_mlt_25k.pth ada.
+[ ] scripts\models\easyocr_models\latin_g2.pth ada.
+[ ] python easyocr_ktp.py --diagnose berhasil.
+[ ] .env memakai EASYOCR_USE_API=true.
+[ ] php artisan config:clear sudah dijalankan.
+[ ] Flask API berjalan di http://127.0.0.1:5000.
+[ ] curl http://127.0.0.1:5000/health berhasil.
+[ ] php artisan ocr:test-easyocr --image="D:\path\gambar.jpg" berhasil.
+[ ] Upload KTP dari aplikasi Laravel berhasil mengisi data.
+
+
+RINGKASAN PERINTAH UTAMA
+========================
+
+Install awal:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project\scripts"
+    python -m venv .venv
+    .venv\Scripts\activate
+    python -m pip install --upgrade pip setuptools wheel
+    python -m pip install -r requirements.txt
+    python easyocr_ktp.py --diagnose
+
+Jalankan OCR API:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project\scripts"
+    .venv\Scripts\activate
+    python easyocr_ktp.py
+
+Test health:
+
+    curl http://127.0.0.1:5000/health
+
+Test OCR API:
+
+    curl -X POST -F "image=@D:\path\ke\gambar_ktp.jpg" http://127.0.0.1:5000/api/ocr/ktp
+
+Test Laravel:
+
+    cd /d "D:\Semester 6\PA 3\Project\disdukcapil_project"
+    php artisan config:clear
+    php artisan ocr:test-easyocr --image="D:\path\ke\gambar_ktp.jpg"
+
+
+CATATAN AKHIR
+=============
+
+Untuk penggunaan harian, jangan jalankan OCR dengan CLI berulang-ulang jika
+targetnya speed. Jalankan Flask API sekali, biarkan hidup, lalu Laravel akan
+mengirim request ke API tersebut.
+
+Model utama tetap dua file CRNN hasil training:
+
+    ktp_crnn_v2_state_dict.pt
+    ktp_crnn_v2_traced.pt
+
+EasyOCR hanya dipakai sebagai detector/support/fallback, bukan sumber utama.

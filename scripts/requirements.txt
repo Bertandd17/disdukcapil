@@ -1,0 +1,31 @@
+# OCR Requirements for Disdukcapil Project
+# Python 3.10+ required
+
+# Core ML/DL
+torch>=2.0.0
+torchvision>=0.15.0
+easyocr>=1.7.0
+
+# Image Processing
+opencv-python>=4.8.0
+pillow>=10.0.0
+imutils>=0.5.4
+scikit-image>=0.21.0
+
+# Image Enhancement
+numpy>=1.24.0
+scipy>=1.11.0
+
+# Flask API (optional)
+flask>=3.0.0
+flask-cors>=4.0.0
+gunicorn>=21.0.0
+
+# Utilities
+pytesseract>=0.3.10
+imagehash>=4.3.0
+
+# Training
+matplotlib>=3.7.0
+tqdm>=4.66.0
+tensorboard>=2.14.0
