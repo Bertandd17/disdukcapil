@@ -24,7 +24,8 @@ RUN python -m pip install --upgrade pip setuptools wheel \
 COPY scripts /app/scripts
 COPY railway/ocr-start.sh /app/railway/ocr-start.sh
 
-RUN mkdir -p /app/uploads /tmp/easyocr_models
+RUN mkdir -p /app/uploads /tmp/easyocr_models \
+    && cp /app/railway/ocr-start.sh /app/railway/start.sh
 
 EXPOSE 5000
 
