@@ -83,14 +83,18 @@ def preprocess_image(path):
     if img is None: return path
     try:
         h, w = img.shape[:2]
-        if w < 800:
+        max_side = int(os.environ.get("EASYOCR_MAX_IMAGE_SIDE", "1200"))
+        scale = min(1.0, max_side / max(h, w))
+        if scale < 1.0:
+            img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+        elif w < 800:
             img = cv2.resize(img, None, fx=800/w, fy=800/w, interpolation=cv2.INTER_CUBIC)
         gray = cv2.cvtColor(img.copy(), cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         enhanced = clahe.apply(gray)
-        denoised = cv2.fastNlMeansDenoising(enhanced, None, h=5, templateWindowSize=7)
+        denoised = cv2.fastNlMeansDenoising(enhanced, None, h=3, templateWindowSize=7)
         out = path.replace(".", "_proc.")
-        cv2.imwrite(out, denoised, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        cv2.imwrite(out, denoised, [cv2.IMWRITE_PNG_COMPRESSION, 3])
         return out
     except: return path
 
@@ -731,7 +735,15 @@ def run_easyocr_detection(path):
     reader = get_reader()
     if not reader:
         return []
-    return reader.readtext(path, detail=1)
+    return reader.readtext(
+        path,
+        detail=1,
+        batch_size=int(os.environ.get("EASYOCR_BATCH_SIZE", "1")),
+        workers=int(os.environ.get("EASYOCR_WORKERS", "0")),
+        paragraph=False,
+        canvas_size=int(os.environ.get("EASYOCR_CANVAS_SIZE", "1280")),
+        mag_ratio=float(os.environ.get("EASYOCR_MAG_RATIO", "1.0")),
+    )
 
 
 def score_ocr_data(data):

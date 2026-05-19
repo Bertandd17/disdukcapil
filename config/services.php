@@ -54,6 +54,8 @@ return [
         'api_url' => env('EASYOCR_API_URL'),
         'api_host' => env('EASYOCR_API_HOST', '127.0.0.1'),
         'api_port' => env('EASYOCR_API_PORT', 5000),
+        'api_health_check' => env('EASYOCR_API_HEALTH_CHECK', false),
+        'api_health_timeout' => env('EASYOCR_API_HEALTH_TIMEOUT', 15),
         
         // Path ke Python executable (untuk CLI mode)
         'python_path' => env('EASYOCR_PYTHON_PATH', 'python'),
@@ -66,7 +68,7 @@ return [
         'cli_enabled' => env('EASYOCR_CLI_ENABLED', env('APP_ENV') !== 'production'),
         
         // Timeout untuk proses OCR (dalam detik)
-        'timeout' => env('EASYOCR_TIMEOUT', 120),
+        'timeout' => env('EASYOCR_TIMEOUT', 300),
         
         // GPU mode (jika tersedia)
         'use_gpu' => env('EASYOCR_USE_GPU', false),

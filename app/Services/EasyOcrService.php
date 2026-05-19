@@ -454,24 +454,26 @@ class EasyOcrService
         $baseUrl = $this->getApiBaseUrl();
         $timeout = (int) config('services.easyocr.timeout', self::MAX_PROCESS_TIME_SECONDS);
         
-        // Check if API is running
-        try {
-            $healthCheck = Http::timeout(5)->get("{$baseUrl}/health");
-            if ($healthCheck->failed()) {
-                Log::warning('EasyOcrService: API health check failed', [
+        if ((bool) config('services.easyocr.api_health_check', false)) {
+            try {
+                $healthTimeout = (int) config('services.easyocr.api_health_timeout', 15);
+                $healthCheck = Http::timeout($healthTimeout)->get("{$baseUrl}/health");
+                if ($healthCheck->failed()) {
+                    Log::warning('EasyOcrService: API health check failed', [
+                        'base_url' => $baseUrl,
+                        'status' => $healthCheck->status(),
+                    ]);
+
+                    return $this->apiFailure('Service OCR sedang belum siap. Coba unggah ulang beberapa saat lagi.');
+                }
+            } catch (\Throwable $e) {
+                Log::warning('EasyOcrService: API health check not reachable', [
                     'base_url' => $baseUrl,
-                    'status' => $healthCheck->status(),
+                    'error' => $e->getMessage(),
                 ]);
 
-                return $this->apiFailure('Service OCR Python belum siap atau health check gagal.');
+                return $this->apiFailure('Service OCR sedang sibuk atau belum siap. Coba unggah ulang beberapa saat lagi.');
             }
-        } catch (\Throwable $e) {
-            Log::warning('EasyOcrService: API not reachable', [
-                'base_url' => $baseUrl,
-                'error' => $e->getMessage(),
-            ]);
-
-            return $this->apiFailure('Service OCR Python tidak dapat dihubungi: ' . $e->getMessage());
         }
         
         // Send image to API
@@ -507,12 +509,12 @@ class EasyOcrService
                 'body' => $response->body(),
             ]);
 
-            return $this->apiFailure('Service OCR Python gagal memproses gambar dengan status ' . $response->status());
+            return $this->apiFailure('Service OCR belum berhasil membaca gambar. Coba gunakan foto KTP yang lebih terang dan tidak blur.');
             
         } catch (\Throwable $e) {
             Log::error('EasyOcrService: API exception', ['error' => $e->getMessage()]);
 
-            return $this->apiFailure('Service OCR Python error: ' . $e->getMessage());
+            return $this->apiFailure('Service OCR sedang sibuk atau butuh waktu terlalu lama. Coba unggah ulang foto KTP yang lebih kecil/jelas.');
         }
     }
     
