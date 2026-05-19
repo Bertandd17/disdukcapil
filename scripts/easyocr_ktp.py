@@ -72,16 +72,21 @@ def get_reader():
             "EASYOCR_MODEL_DIR",
             os.path.join(os.path.dirname(__file__), "models", "easyocr_models"),
         )
+        languages = [
+            lang.strip()
+            for lang in os.environ.get("EASYOCR_LANGS", "id,en").split(",")
+            if lang.strip()
+        ] or ["en"]
         try:
             _reader = easyocr.Reader(
-                ["id", "en"],
+                languages,
                 gpu=False,
                 verbose=False,
                 model_storage_directory=model_dir,
                 download_enabled=_env_bool("EASYOCR_DOWNLOAD_ENABLED", False),
             )
         except TypeError:
-            _reader = easyocr.Reader(["id", "en"], gpu=False, verbose=False)
+            _reader = easyocr.Reader(languages, gpu=False, verbose=False)
         except Exception as e:
             print(f"# Warning: EasyOCR reader unavailable: {e}", file=sys.stderr)
             _reader = None
