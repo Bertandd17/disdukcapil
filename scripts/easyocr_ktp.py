@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """KTP OCR Service - Flask API + CLI Mode v4.0.
 
-Primary recognizer: EasyOCR.
+Primary recognizer: trained ktp_crnn_v2 PyTorch models.
+Support/fallback: EasyOCR detection and recognition.
 """
 
 import os
@@ -20,29 +21,22 @@ except ImportError as e:
     IMAGE_LIBS_AVAILABLE = False
     print(f"# Warning: {e}", file=sys.stderr)
 
-CRNN_ENABLED = os.environ.get("KTP_CRNN_ENABLED", "false").strip().lower() in {"1", "true", "yes", "on"}
-
-if CRNN_ENABLED:
-    try:
-        from ktp_crnn_ocr import diagnose as diagnose_crnn
-        from ktp_crnn_ocr import recognize_image as recognize_image_with_crnn
-        CRNN_AVAILABLE = True
-    except Exception as e:
-        CRNN_AVAILABLE = False
-        diagnose_crnn = None
-        recognize_image_with_crnn = None
-        print(f"# Warning: custom CRNN module unavailable: {e}", file=sys.stderr)
-else:
-    CRNN_AVAILABLE = False
-    diagnose_crnn = None
-    recognize_image_with_crnn = None
-
 try:
     import easyocr
     EASYOCR_AVAILABLE = True
 except ImportError as e:
     EASYOCR_AVAILABLE = False
     print(f"# Warning: {e}", file=sys.stderr)
+
+try:
+    from ktp_crnn_ocr import diagnose as diagnose_crnn
+    from ktp_crnn_ocr import recognize_image as recognize_image_with_crnn
+    CRNN_AVAILABLE = True
+except Exception as e:
+    CRNN_AVAILABLE = False
+    diagnose_crnn = None
+    recognize_image_with_crnn = None
+    print(f"# Warning: custom CRNN module unavailable: {e}", file=sys.stderr)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "uploads"
@@ -54,18 +48,14 @@ _reader = None
 def get_reader():
     global _reader
     if _reader is None and EASYOCR_AVAILABLE:
-        model_dir = os.environ.get(
-            "EASYOCR_MODEL_DIR",
-            os.path.join(os.path.dirname(__file__), "models", "easyocr_models"),
-        )
-        download_enabled = os.environ.get("EASYOCR_DOWNLOAD_ENABLED", "false").lower() in {"1", "true", "yes", "on"}
+        model_dir = os.path.join(os.path.dirname(__file__), "models", "easyocr_models")
         try:
             _reader = easyocr.Reader(
                 ["id", "en"],
                 gpu=False,
                 verbose=False,
                 model_storage_directory=model_dir,
-                download_enabled=download_enabled,
+                download_enabled=False,
             )
         except TypeError:
             _reader = easyocr.Reader(["id", "en"], gpu=False, verbose=False)
@@ -83,18 +73,14 @@ def preprocess_image(path):
     if img is None: return path
     try:
         h, w = img.shape[:2]
-        max_side = int(os.environ.get("EASYOCR_MAX_IMAGE_SIDE", "1200"))
-        scale = min(1.0, max_side / max(h, w))
-        if scale < 1.0:
-            img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
-        elif w < 800:
+        if w < 800:
             img = cv2.resize(img, None, fx=800/w, fy=800/w, interpolation=cv2.INTER_CUBIC)
         gray = cv2.cvtColor(img.copy(), cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         enhanced = clahe.apply(gray)
-        denoised = cv2.fastNlMeansDenoising(enhanced, None, h=3, templateWindowSize=7)
+        denoised = cv2.fastNlMeansDenoising(enhanced, None, h=5, templateWindowSize=7)
         out = path.replace(".", "_proc.")
-        cv2.imwrite(out, denoised, [cv2.IMWRITE_PNG_COMPRESSION, 3])
+        cv2.imwrite(out, denoised, [cv2.IMWRITE_PNG_COMPRESSION, 0])
         return out
     except: return path
 
@@ -735,15 +721,7 @@ def run_easyocr_detection(path):
     reader = get_reader()
     if not reader:
         return []
-    return reader.readtext(
-        path,
-        detail=1,
-        batch_size=int(os.environ.get("EASYOCR_BATCH_SIZE", "1")),
-        workers=int(os.environ.get("EASYOCR_WORKERS", "0")),
-        paragraph=False,
-        canvas_size=int(os.environ.get("EASYOCR_CANVAS_SIZE", "1280")),
-        mag_ratio=float(os.environ.get("EASYOCR_MAG_RATIO", "1.0")),
-    )
+    return reader.readtext(path, detail=1)
 
 
 def score_ocr_data(data):
@@ -851,20 +829,56 @@ def is_portrait_image(path):
 
 
 def _process_ocr_single(path):
-    if not EASYOCR_AVAILABLE:
-        return {'success':False,'message':'EasyOCR is not available','data':None}
+    if not CRNN_AVAILABLE and not EASYOCR_AVAILABLE:
+        return {'success':False,'message':'CRNN and EasyOCR are not available','data':None}
 
     proc = path
     try:
         proc = preprocess_image(path)
+        easy_results = []
+        easy_data = None
+
+        # EasyOCR is used first as a detector/support signal. Recognition is
+        # attempted with the trained CRNN models for every detected crop.
+        if EASYOCR_AVAILABLE:
+            try:
+                easy_results = run_easyocr_detection(proc)
+                if easy_results:
+                    easy_raw = raw_from_ocr_results(easy_results)
+                    easy_data = parse_raw_text(easy_raw, 'easyocr_support')
+            except Exception as e:
+                print(f"# Warning: EasyOCR support failed: {e}", file=sys.stderr)
+                easy_results = []
+
+        crnn_data = None
+        if CRNN_AVAILABLE and recognize_image_with_crnn:
+            try:
+                crnn_result = recognize_image_with_crnn(proc, detections=easy_results)
+                if crnn_result.get('success'):
+                    crnn_meta = crnn_result.get('stats') or {}
+                    crnn_meta['crnn_confidence'] = crnn_result.get('confidence', 0)
+                    crnn_data = parse_raw_text(
+                        crnn_result.get('raw_text') or '',
+                        'crnn_primary',
+                        crnn_meta,
+                    )
+            except Exception as e:
+                print(f"# Warning: CRNN primary OCR failed: {e}", file=sys.stderr)
+
         selected = None
-        try:
-            easy_results = run_easyocr_detection(proc)
-            if easy_results:
-                easy_raw = raw_from_ocr_results(easy_results)
-                selected = parse_raw_text(easy_raw, 'easyocr')
-        except Exception as e:
-            print(f"# Warning: EasyOCR failed: {e}", file=sys.stderr)
+        if has_core_ocr_data(crnn_data):
+            selected = merge_support_fields(crnn_data, easy_data)
+        elif easy_data:
+            selected = easy_data
+            selected['_ocr_source'] = 'easyocr_fallback_after_crnn'
+            if crnn_data:
+                selected['_ocr_meta'] = {
+                    'crnn_raw_text': crnn_data.get('_raw_text', ''),
+                    'crnn_confidence_avg': crnn_data.get('_confidence_avg', 0),
+                    'fallback_reason': 'crnn_no_core_ktp_fields',
+                }
+        elif crnn_data:
+            selected = crnn_data
 
         if proc != path and os.path.exists(proc):
             os.remove(proc)
@@ -931,15 +945,14 @@ def process_ocr(path):
 # Flask Routes
 @app.route("/health")
 def health():
-    crnn = diagnose_crnn() if CRNN_AVAILABLE and diagnose_crnn else {"available": False, "reason": "disabled"}
+    crnn = diagnose_crnn() if CRNN_AVAILABLE and diagnose_crnn else {"available": False}
     return jsonify({
         "status": "ok",
         "service": "KTP OCR",
         "version": "4.0",
-        "primary": "easyocr",
+        "primary": "ktp_crnn_v2",
         "crnn": crnn,
-        "easyocr": EASYOCR_AVAILABLE,
-        "easyocr_model_dir": os.environ.get("EASYOCR_MODEL_DIR"),
+        "easyocr_support": EASYOCR_AVAILABLE,
         "image_libs": IMAGE_LIBS_AVAILABLE,
     })
 
@@ -988,15 +1001,14 @@ def ocr_batch():
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] in ["--diagnose", "--health"]:
-        crnn = diagnose_crnn() if CRNN_AVAILABLE and diagnose_crnn else {"available": False, "reason": "disabled"}
+        crnn = diagnose_crnn() if CRNN_AVAILABLE and diagnose_crnn else {"available": False}
         print(json.dumps({
             "status": "ok",
             "service": "KTP OCR",
             "version": "4.0",
-            "primary": "easyocr",
+            "primary": "ktp_crnn_v2",
             "crnn": crnn,
-            "easyocr": EASYOCR_AVAILABLE,
-            "easyocr_model_dir": os.environ.get("EASYOCR_MODEL_DIR"),
+            "easyocr_support": EASYOCR_AVAILABLE,
             "image_libs": IMAGE_LIBS_AVAILABLE,
         }, ensure_ascii=False, indent=2))
         sys.exit(0)
@@ -1006,8 +1018,8 @@ if __name__ == "__main__":
         if not os.path.exists(path):
             print(json.dumps({'status':'error','error':f'Not found: {path}'}), file=sys.stderr)
             sys.exit(1)
-        if not EASYOCR_AVAILABLE:
-            print(json.dumps({'status':'error','error':'EasyOCR is not available'}), file=sys.stderr)
+        if not CRNN_AVAILABLE and not EASYOCR_AVAILABLE:
+            print(json.dumps({'status':'error','error':'CRNN and EasyOCR are not available'}), file=sys.stderr)
             sys.exit(1)
         import contextlib
         with contextlib.redirect_stderr(open(os.devnull, 'w')):
@@ -1029,5 +1041,5 @@ if __name__ == "__main__":
             print(json.dumps({'status':'error','error':result['message']}), file=sys.stderr)
         sys.exit(0)
     port = int(os.environ.get('PORT', 5000))
-    print(f"KTP OCR Service di http://localhost:{port} | Primary: EasyOCR | CRNN enabled: {CRNN_ENABLED}")
+    print(f"KTP OCR Service di http://localhost:{port} | CRNN: {CRNN_AVAILABLE} | EasyOCR support: {EASYOCR_AVAILABLE}")
     app.run(host="0.0.0.0", port=port, debug=False)

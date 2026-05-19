@@ -2,7 +2,6 @@ FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    KTP_CRNN_ENABLED=false \
     EASYOCR_DOWNLOAD_ENABLED=false \
     EASYOCR_MODEL_DIR=/app/scripts/models/easyocr_models
 
