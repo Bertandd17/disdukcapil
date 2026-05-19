@@ -10,6 +10,8 @@ storage/
 public/storage
 public/build/
 public/hot
+scripts/models/ktp_crnn_v2_state_dict.pt
+scripts/models/ktp_crnn_v2_traced.pt
 scripts/dataset_51.png
 scripts/__pycache__/
 *.bak
