@@ -9,6 +9,23 @@ import os
 # Fix OpenMP duplicate library conflict (PyTorch + OpenCV bundle libiomp5md.dll)
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
+
+def _env_bool(name, default=True):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() not in {"0", "false", "no", "off"}
+
+
+def _env_path(name, default):
+    value = os.environ.get(name)
+    if not value:
+        return default
+    path = value.strip()
+    if os.path.isabs(path):
+        return path
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", path))
+
 import sys, re, json, base64, io
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
@@ -48,14 +65,17 @@ _reader = None
 def get_reader():
     global _reader
     if _reader is None and EASYOCR_AVAILABLE:
-        model_dir = os.path.join(os.path.dirname(__file__), "models", "easyocr_models")
+        model_dir = _env_path(
+            "EASYOCR_MODEL_DIR",
+            os.path.join(os.path.dirname(__file__), "models", "easyocr_models"),
+        )
         try:
             _reader = easyocr.Reader(
                 ["id", "en"],
                 gpu=False,
                 verbose=False,
                 model_storage_directory=model_dir,
-                download_enabled=False,
+                download_enabled=_env_bool("EASYOCR_DOWNLOAD_ENABLED", False),
             )
         except TypeError:
             _reader = easyocr.Reader(["id", "en"], gpu=False, verbose=False)

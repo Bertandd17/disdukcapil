@@ -96,6 +96,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | KTP OCR Model Services
+    |--------------------------------------------------------------------------
+    |
+    | Empat model OCR lokal yang dipakai service Python. Path ini dapat dioverride
+    | lewat Railway variables jika model dipasang pada service OCR terpisah.
+    |
+    */
+
+    'ktp_ocr_models' => [
+        'base_path' => env('KTP_OCR_MODELS_PATH', base_path('scripts/models')),
+        'crnn_state_dict' => env('KTP_CRNN_STATE_DICT_PATH', base_path('scripts/models/ktp_crnn_v2_state_dict.pt')),
+        'crnn_traced' => env('KTP_CRNN_TRACED_PATH', base_path('scripts/models/ktp_crnn_v2_traced.pt')),
+        'easyocr_model_dir' => env('EASYOCR_MODEL_DIR', base_path('scripts/models/easyocr_models')),
+        'easyocr_detector' => env('EASYOCR_DETECTOR_MODEL_PATH', base_path('scripts/models/easyocr_models/craft_mlt_25k.pth')),
+        'easyocr_recognizer' => env('EASYOCR_RECOGNIZER_MODEL_PATH', base_path('scripts/models/easyocr_models/latin_g2.pth')),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Google Vision Service Configuration
     |--------------------------------------------------------------------------
     |

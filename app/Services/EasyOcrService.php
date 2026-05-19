@@ -58,6 +58,10 @@ class EasyOcrService
      */
     public function diagnose(): array
     {
+        $apiMode = $this->isApiMode();
+        $apiBaseUrl = $apiMode ? $this->getApiBaseUrl() : null;
+        $apiReachable = $apiMode ? $this->isApiReachable() : false;
+        $cliEnabled = $this->isCliModeEnabled();
         $pythonPath = $this->findPythonPath();
         $scriptPath = base_path('scripts/easyocr_ktp.py');
         
@@ -88,7 +92,11 @@ class EasyOcrService
             'python_version' => $pythonVersion,
             'script_exists' => file_exists($scriptPath),
             'script_path' => $scriptPath,
-            'api_mode' => $this->isApiMode(),
+            'api_mode' => $apiMode,
+            'api_base_url' => $apiBaseUrl,
+            'api_reachable' => $apiReachable,
+            'cli_enabled' => $cliEnabled,
+            'provider' => $apiMode ? 'easyocr_api' : ($cliEnabled ? 'easyocr_cli' : 'not_configured'),
             'test_result' => $testResult,
         ];
     }
@@ -333,6 +341,13 @@ class EasyOcrService
             Log::warning('EasyOcrService: API mode failed, falling back to CLI mode');
         }
 
+        if (!$this->isCliModeEnabled()) {
+            return [
+                'success' => false,
+                'error' => 'Service OCR online belum siap atau tidak bisa dihubungi. Periksa EASYOCR_API_URL dan status service EasyOCR.',
+            ];
+        }
+
         // CLI mode - langsung jalankan Python script
         return $this->runViaCli($imagePath);
     }
@@ -346,6 +361,35 @@ class EasyOcrService
     {
         return config('services.easyocr.use_api', env('EASYOCR_USE_API', false));
     }
+
+    private function isCliModeEnabled(): bool
+    {
+        return (bool) config('services.easyocr.cli_enabled', !app()->environment('production'));
+    }
+
+    private function getApiBaseUrl(): string
+    {
+        $apiUrl = trim((string) config('services.easyocr.api_url', ''));
+        if ($apiUrl !== '') {
+            return rtrim($apiUrl, '/');
+        }
+
+        $host = config('services.easyocr.api_host', env('EASYOCR_API_HOST', self::DEFAULT_API_HOST));
+        $port = config('services.easyocr.api_port', env('EASYOCR_API_PORT', self::DEFAULT_API_PORT));
+
+        return "http://{$host}:{$port}";
+    }
+
+    private function isApiReachable(): bool
+    {
+        try {
+            $timeout = (int) config('services.easyocr.api_health_timeout', 15);
+
+            return Http::timeout($timeout)->get($this->getApiBaseUrl() . '/health')->successful();
+        } catch (\Throwable) {
+            return false;
+        }
+    }
     
     /**
      * Run OCR via Flask API
@@ -355,25 +399,31 @@ class EasyOcrService
      */
     private function runViaApi(string $imagePath): ?array
     {
-        $host = config('services.easyocr.api_host', env('EASYOCR_API_HOST', self::DEFAULT_API_HOST));
-        $port = config('services.easyocr.api_port', env('EASYOCR_API_PORT', self::DEFAULT_API_PORT));
-        $baseUrl = "http://{$host}:{$port}";
+        $baseUrl = $this->getApiBaseUrl();
+        $timeout = (int) config('services.easyocr.timeout', self::MAX_PROCESS_TIME_SECONDS);
         
         // Check if API is running
         try {
-            $healthCheck = Http::timeout(2)->get("{$baseUrl}/health");
+            $healthTimeout = (int) config('services.easyocr.api_health_timeout', 15);
+            $healthCheck = Http::timeout($healthTimeout)->get("{$baseUrl}/health");
             if ($healthCheck->failed()) {
-                Log::warning('EasyOcrService: API health check failed');
+                Log::warning('EasyOcrService: API health check failed', [
+                    'base_url' => $baseUrl,
+                    'status' => $healthCheck->status(),
+                ]);
                 return null;
             }
-        } catch (\Exception $e) {
-            Log::warning('EasyOcrService: API not reachable', ['error' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            Log::warning('EasyOcrService: API not reachable', [
+                'base_url' => $baseUrl,
+                'error' => $e->getMessage(),
+            ]);
             return null;
         }
         
         // Send image to API
         try {
-            $response = Http::timeout(120)
+            $response = Http::timeout($timeout)
                 ->attach('image', file_get_contents($imagePath), basename($imagePath))
                 ->post("{$baseUrl}/api/ocr/ktp");
             
@@ -387,6 +437,9 @@ class EasyOcrService
                         'raw_text' => $data['_raw_text'] ?? '',
                         'data' => $this->normalizeDataFields($data),
                         'confidence' => $data['_confidence_avg'] ?? 0,
+                        'field_confidence' => $data['_field_confidence'] ?? [],
+                        'ocr_source' => $data['_ocr_source'] ?? 'easyocr_api',
+                        'ocr_meta' => $data['_ocr_meta'] ?? [],
                     ];
                 } else {
                     return [

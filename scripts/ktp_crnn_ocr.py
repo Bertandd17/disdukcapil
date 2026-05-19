@@ -32,9 +32,21 @@ except ImportError as exc:  # pragma: no cover - depends on local OCR env
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-MODELS_DIR = SCRIPT_DIR / "models"
-STATE_DICT_PATH = MODELS_DIR / "ktp_crnn_v2_state_dict.pt"
-TRACED_PATH = MODELS_DIR / "ktp_crnn_v2_traced.pt"
+PROJECT_DIR = SCRIPT_DIR.parent
+
+
+def _env_path(name: str, default: Path) -> Path:
+    value = os.environ.get(name)
+    if not value:
+        return default
+
+    path = Path(value)
+    return path if path.is_absolute() else PROJECT_DIR / path
+
+
+MODELS_DIR = _env_path("KTP_OCR_MODELS_PATH", SCRIPT_DIR / "models")
+STATE_DICT_PATH = _env_path("KTP_CRNN_STATE_DICT_PATH", MODELS_DIR / "ktp_crnn_v2_state_dict.pt")
+TRACED_PATH = _env_path("KTP_CRNN_TRACED_PATH", MODELS_DIR / "ktp_crnn_v2_traced.pt")
 
 DEFAULT_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz /"
 KTP_KEYWORDS = {

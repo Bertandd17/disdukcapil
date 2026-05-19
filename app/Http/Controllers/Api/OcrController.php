@@ -297,21 +297,27 @@ class OcrController extends Controller
     {
         $diagnostics = $this->ocrService->diagnose();
 
-        $isHealthy = $diagnostics['python_found'] && $diagnostics['script_exists'];
+        $isHealthy = ($diagnostics['api_mode'] ?? false)
+            ? (bool) ($diagnostics['api_reachable'] ?? false)
+            : (($diagnostics['python_found'] ?? false) && ($diagnostics['script_exists'] ?? false));
 
         return response()->json([
             'success' => true,
             'data' => [
                 'status' => $isHealthy ? 'healthy' : 'unhealthy',
+                'provider' => $diagnostics['provider'] ?? 'unknown',
                 'python' => [
-                    'found' => $diagnostics['python_found'],
+                    'found' => $diagnostics['python_found'] ?? false,
                     'version' => $diagnostics['python_version'] ?? null,
                 ],
                 'script' => [
-                    'exists' => $diagnostics['script_exists'],
+                    'exists' => $diagnostics['script_exists'] ?? false,
                     'path' => $diagnostics['script_path'] ?? null,
                 ],
                 'api_mode' => $diagnostics['api_mode'] ?? false,
+                'api_base_url' => $diagnostics['api_base_url'] ?? null,
+                'api_reachable' => $diagnostics['api_reachable'] ?? false,
+                'cli_enabled' => $diagnostics['cli_enabled'] ?? false,
             ],
         ], $isHealthy ? 200 : 503);
     }
