@@ -9,7 +9,7 @@
     <link rel="icon" type="image/jpeg" href="{{ asset('images/logo_toba.jpeg') }}">
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    @include('partials.vite-assets')
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
