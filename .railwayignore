@@ -10,7 +10,6 @@ storage/
 public/storage
 public/build/
 public/hot
-scripts/models/
 scripts/dataset_51.png
 scripts/__pycache__/
 *.bak

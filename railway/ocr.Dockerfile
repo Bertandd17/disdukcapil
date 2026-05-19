@@ -2,8 +2,8 @@ FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    EASYOCR_DOWNLOAD_ENABLED=true \
-    EASYOCR_MODEL_DIR=/tmp/easyocr_models
+    EASYOCR_DOWNLOAD_ENABLED=false \
+    EASYOCR_MODEL_DIR=/app/scripts/models/easyocr_models
 
 WORKDIR /app
 
