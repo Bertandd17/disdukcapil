@@ -418,7 +418,9 @@ class EasyOcrService
     private function isApiReachable(): bool
     {
         try {
-            return Http::timeout(3)->get($this->getApiBaseUrl() . '/health')->successful();
+            $timeout = (int) config('services.easyocr.api_health_timeout', 15);
+
+            return Http::timeout($timeout)->get($this->getApiBaseUrl() . '/health')->successful();
         } catch (\Throwable) {
             return false;
         }
