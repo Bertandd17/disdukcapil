@@ -58,6 +58,10 @@ class EasyOcrService
      */
     public function diagnose(): array
     {
+        $ocrSpaceEnabled = $this->ocrSpaceService->isEnabled();
+        $cliEnabled = $this->isCliModeEnabled();
+        $apiMode = $this->isApiMode();
+        $apiReachable = $apiMode ? $this->isApiReachable() : false;
         $pythonPath = $this->findPythonPath();
         $scriptPath = base_path('scripts/easyocr_ktp.py');
         
@@ -88,7 +92,12 @@ class EasyOcrService
             'python_version' => $pythonVersion,
             'script_exists' => file_exists($scriptPath),
             'script_path' => $scriptPath,
-            'api_mode' => $this->isApiMode(),
+            'api_mode' => $apiMode,
+            'api_base_url' => $apiMode ? $this->getApiBaseUrl() : null,
+            'api_reachable' => $apiReachable,
+            'ocr_space_enabled' => $ocrSpaceEnabled,
+            'cli_enabled' => $cliEnabled,
+            'provider' => $this->resolveProviderName($ocrSpaceEnabled, $cliEnabled),
             'test_result' => $testResult,
         ];
     }
@@ -154,6 +163,20 @@ class EasyOcrService
                 Log::warning('EasyOcrService: OCR.space failed, falling back to EasyOCR', [
                     'error' => $ocrSpaceResult['error'] ?? 'Unknown OCR.space error',
                 ]);
+
+                if ($this->appIsProduction() && !$this->isApiMode() && !$this->isCliModeEnabled()) {
+                    return [
+                        'success' => false,
+                        'message' => 'OCR.space gagal memproses gambar: ' . ($ocrSpaceResult['error'] ?? 'provider OCR tidak tersedia.'),
+                        'processing_time' => round(microtime(true) - $startTime, 2),
+                    ];
+                }
+            } elseif ($this->appIsProduction() && !$this->isApiMode() && !$this->isCliModeEnabled()) {
+                return [
+                    'success' => false,
+                    'message' => 'OCR online belum dikonfigurasi di Railway. Atur OCR_SPACE_ENABLED=true + OCR_SPACE_API_KEY, atau EASYOCR_USE_API=true + EASYOCR_API_URL untuk service OCR Python terpisah.',
+                    'processing_time' => round(microtime(true) - $startTime, 2),
+                ];
             }
 
             // 4. Jalankan EasyOCR Python script
@@ -333,6 +356,15 @@ class EasyOcrService
             Log::warning('EasyOcrService: API mode failed, falling back to CLI mode');
         }
 
+        if (!$this->isCliModeEnabled()) {
+            return [
+                'success' => false,
+                'error' => $this->appIsProduction()
+                    ? 'OCR Python lokal dinonaktifkan di production. Gunakan OCR.space atau aktifkan EASYOCR_CLI_ENABLED=true dengan runtime Python lengkap.'
+                    : 'OCR Python lokal dinonaktifkan.',
+            ];
+        }
+
         // CLI mode - langsung jalankan Python script
         return $this->runViaCli($imagePath);
     }
@@ -346,6 +378,70 @@ class EasyOcrService
     {
         return config('services.easyocr.use_api', env('EASYOCR_USE_API', false));
     }
+
+    private function isCliModeEnabled(): bool
+    {
+        return (bool) config('services.easyocr.cli_enabled', !$this->appIsProduction());
+    }
+
+    private function appIsProduction(): bool
+    {
+        return app()->environment('production');
+    }
+
+    private function resolveProviderName(bool $ocrSpaceEnabled, bool $cliEnabled): string
+    {
+        if ($ocrSpaceEnabled) {
+            return 'ocr_space';
+        }
+
+        if ($this->isApiMode()) {
+            return 'easyocr_api';
+        }
+
+        return $cliEnabled ? 'easyocr_cli' : 'not_configured';
+    }
+
+    private function getApiBaseUrl(): string
+    {
+        $apiUrl = trim((string) config('services.easyocr.api_url', ''));
+        if ($apiUrl !== '') {
+            return rtrim($apiUrl, '/');
+        }
+
+        $host = config('services.easyocr.api_host', env('EASYOCR_API_HOST', self::DEFAULT_API_HOST));
+        $port = config('services.easyocr.api_port', env('EASYOCR_API_PORT', self::DEFAULT_API_PORT));
+
+        return "http://{$host}:{$port}";
+    }
+
+    private function isApiReachable(): bool
+    {
+        try {
+            return Http::timeout(3)->get($this->getApiBaseUrl() . '/health')->successful();
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    private function shouldStopOnApiFailure(): bool
+    {
+        return $this->appIsProduction()
+            || !$this->isCliModeEnabled()
+            || trim((string) config('services.easyocr.api_url', '')) !== '';
+    }
+
+    private function apiFailure(string $message): ?array
+    {
+        if (!$this->shouldStopOnApiFailure()) {
+            return null;
+        }
+
+        return [
+            'success' => false,
+            'error' => $message,
+        ];
+    }
     
     /**
      * Run OCR via Flask API
@@ -355,25 +451,32 @@ class EasyOcrService
      */
     private function runViaApi(string $imagePath): ?array
     {
-        $host = config('services.easyocr.api_host', env('EASYOCR_API_HOST', self::DEFAULT_API_HOST));
-        $port = config('services.easyocr.api_port', env('EASYOCR_API_PORT', self::DEFAULT_API_PORT));
-        $baseUrl = "http://{$host}:{$port}";
+        $baseUrl = $this->getApiBaseUrl();
+        $timeout = (int) config('services.easyocr.timeout', self::MAX_PROCESS_TIME_SECONDS);
         
         // Check if API is running
         try {
-            $healthCheck = Http::timeout(2)->get("{$baseUrl}/health");
+            $healthCheck = Http::timeout(5)->get("{$baseUrl}/health");
             if ($healthCheck->failed()) {
-                Log::warning('EasyOcrService: API health check failed');
-                return null;
+                Log::warning('EasyOcrService: API health check failed', [
+                    'base_url' => $baseUrl,
+                    'status' => $healthCheck->status(),
+                ]);
+
+                return $this->apiFailure('Service OCR Python belum siap atau health check gagal.');
             }
-        } catch (\Exception $e) {
-            Log::warning('EasyOcrService: API not reachable', ['error' => $e->getMessage()]);
-            return null;
+        } catch (\Throwable $e) {
+            Log::warning('EasyOcrService: API not reachable', [
+                'base_url' => $baseUrl,
+                'error' => $e->getMessage(),
+            ]);
+
+            return $this->apiFailure('Service OCR Python tidak dapat dihubungi: ' . $e->getMessage());
         }
         
         // Send image to API
         try {
-            $response = Http::timeout(120)
+            $response = Http::timeout($timeout)
                 ->attach('image', file_get_contents($imagePath), basename($imagePath))
                 ->post("{$baseUrl}/api/ocr/ktp");
             
@@ -387,6 +490,9 @@ class EasyOcrService
                         'raw_text' => $data['_raw_text'] ?? '',
                         'data' => $this->normalizeDataFields($data),
                         'confidence' => $data['_confidence_avg'] ?? 0,
+                        'field_confidence' => $data['_field_confidence'] ?? [],
+                        'ocr_source' => $data['_ocr_source'] ?? 'easyocr_api',
+                        'ocr_meta' => $data['_ocr_meta'] ?? [],
                     ];
                 } else {
                     return [
@@ -400,11 +506,13 @@ class EasyOcrService
                 'status' => $response->status(),
                 'body' => $response->body(),
             ]);
-            return null;
+
+            return $this->apiFailure('Service OCR Python gagal memproses gambar dengan status ' . $response->status());
             
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('EasyOcrService: API exception', ['error' => $e->getMessage()]);
-            return null;
+
+            return $this->apiFailure('Service OCR Python error: ' . $e->getMessage());
         }
     }
     
@@ -495,7 +603,9 @@ class EasyOcrService
             Log::error('EasyOcrService: Python not found');
             return [
                 'success' => false,
-                'error' => 'Python tidak ditemukan. Pastikan Python sudah terinstall.',
+                'error' => $this->appIsProduction()
+                    ? 'Runtime Python tidak tersedia di Railway. Gunakan OCR.space atau deploy service OCR Python terpisah.'
+                    : 'Python tidak ditemukan. Pastikan Python sudah terinstall.',
             ];
         }
 
@@ -692,7 +802,13 @@ class EasyOcrService
      */
     private function findPythonPath(): ?string
     {
-        $paths = [
+        if (!$this->isCliModeEnabled()) {
+            return null;
+        }
+
+        $configuredPath = config('services.easyocr.python_path');
+        $paths = array_values(array_filter([
+            is_string($configuredPath) && $configuredPath !== '' ? $configuredPath : null,
             'python',
             'python3',
             'C:\Python312\python.exe',
@@ -701,7 +817,7 @@ class EasyOcrService
             'C:\Python39\python.exe',
             '/usr/bin/python3',
             '/usr/local/bin/python3',
-        ];
+        ]));
 
         foreach ($paths as $path) {
             $result = [];

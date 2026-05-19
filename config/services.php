@@ -51,6 +51,7 @@ return [
         'use_api' => env('EASYOCR_USE_API', false),
         
         // Flask API host dan port
+        'api_url' => env('EASYOCR_API_URL'),
         'api_host' => env('EASYOCR_API_HOST', '127.0.0.1'),
         'api_port' => env('EASYOCR_API_PORT', 5000),
         
@@ -59,6 +60,10 @@ return [
         
         // Path ke script Python OCR
         'script_path' => env('EASYOCR_SCRIPT_PATH', base_path('scripts/easyocr_ktp.py')),
+
+        // Jalankan Python CLI lokal. Di production Railway default dimatikan karena container PHP
+        // tidak membawa runtime Python + model ML besar. Untuk Railway gunakan OCR.space.
+        'cli_enabled' => env('EASYOCR_CLI_ENABLED', env('APP_ENV') !== 'production'),
         
         // Timeout untuk proses OCR (dalam detik)
         'timeout' => env('EASYOCR_TIMEOUT', 120),

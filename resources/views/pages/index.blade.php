@@ -32,10 +32,6 @@
         {{-- Hero Content --}}
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div class="text-center max-w-3xl mx-auto">
-                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium mb-6 animate-fade-in-up">
-                    <i class="fas fa-rocket"></i>
-                    Platform Digital Terintegrasi
-                </span>
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 animate-fade-in-up" style="animation-delay: 0.1s;">
                     Urus Dokumen Kependudukan
                     <span class="block text-blue-200">Kini Lebih Mudah & Cepat</span>
