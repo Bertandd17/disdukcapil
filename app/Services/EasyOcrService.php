@@ -112,6 +112,7 @@ class EasyOcrService
     {
         $startTime = microtime(true);
         $tempPath = null;
+        $ocrSpaceError = null;
         
         try {
             // 1. Validasi file
@@ -162,6 +163,8 @@ class EasyOcrService
                 Log::warning('EasyOcrService: OCR.space failed, falling back to EasyOCR', [
                     'error' => $ocrSpaceResult['error'] ?? 'Unknown OCR.space error',
                 ]);
+
+                $ocrSpaceError = $ocrSpaceResult['error'] ?? 'Provider OCR.space gagal memproses gambar.';
             }
 
             // 4. Jalankan EasyOCR Python script
@@ -194,9 +197,14 @@ class EasyOcrService
                 ];
             }
             
+            $message = $ocrResult['error'] ?? 'Gagal memproses OCR dengan EasyOCR';
+            if ($ocrSpaceError !== null) {
+                $message = 'OCR.space gagal: ' . $ocrSpaceError . ' Fallback EasyOCR: ' . $message;
+            }
+
             return [
                 'success' => false,
-                'message' => $ocrResult['error'] ?? 'Gagal memproses OCR dengan EasyOCR',
+                'message' => $message,
                 'processing_time' => $processingTime,
             ];
 

@@ -90,8 +90,8 @@ return [
         'language' => env('OCR_SPACE_LANGUAGE', 'auto'),
         'engine' => env('OCR_SPACE_ENGINE', '2'),
         'timeout' => env('OCR_SPACE_TIMEOUT', 60),
-        'max_file_size' => env('OCR_SPACE_MAX_FILE_SIZE', 1450000),
-        'max_dimension' => env('OCR_SPACE_MAX_DIMENSION', 1600),
+        'max_file_size' => env('OCR_SPACE_MAX_FILE_SIZE', 1200000),
+        'max_dimension' => env('OCR_SPACE_MAX_DIMENSION', 1280),
     ],
 
     /*

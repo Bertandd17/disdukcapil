@@ -39,6 +39,12 @@ class OcrSpaceService
         }
 
         $preparedFile = $this->prepareUploadFile($path, $filename);
+        if (isset($preparedFile['error'])) {
+            return [
+                'success' => false,
+                'error' => $preparedFile['error'],
+            ];
+        }
 
         try {
             $response = Http::timeout((int) config('services.ocr_space.timeout', 60))
@@ -125,8 +131,9 @@ class OcrSpaceService
     private function prepareUploadFile(string $path, string $filename): array
     {
         $maxBytes = (int) config('services.ocr_space.max_file_size', 1450000);
+        $targetBytes = max(250000, (int) floor($maxBytes * 0.92));
 
-        if (filesize($path) <= $maxBytes) {
+        if (filesize($path) <= $targetBytes) {
             return [
                 'path' => $path,
                 'filename' => $filename,
@@ -171,21 +178,21 @@ class OcrSpaceService
         imagedestroy($source);
 
         $outputPath = $tempDir . DIRECTORY_SEPARATOR . pathinfo($filename, PATHINFO_FILENAME) . '_' . uniqid('', true) . '.jpg';
-        $qualities = [82, 74, 66, 58, 50, 42];
+        $qualities = [78, 70, 62, 54, 46, 38, 30];
         $currentImage = $resized;
         $currentWidth = $targetWidth;
         $currentHeight = $targetHeight;
 
-        for ($attempt = 0; $attempt < 4; $attempt++) {
+        for ($attempt = 0; $attempt < 8; $attempt++) {
             foreach ($qualities as $quality) {
                 imagejpeg($currentImage, $outputPath, $quality);
-                if (is_file($outputPath) && filesize($outputPath) <= $maxBytes) {
+                if (is_file($outputPath) && filesize($outputPath) <= $targetBytes) {
                     break 2;
                 }
             }
 
-            $nextWidth = max(1, (int) floor($currentWidth * 0.85));
-            $nextHeight = max(1, (int) floor($currentHeight * 0.85));
+            $nextWidth = max(1, (int) floor($currentWidth * 0.82));
+            $nextHeight = max(1, (int) floor($currentHeight * 0.82));
             $nextImage = imagecreatetruecolor($nextWidth, $nextHeight);
             $white = imagecolorallocate($nextImage, 255, 255, 255);
             imagefilledrectangle($nextImage, 0, 0, $nextWidth, $nextHeight, $white);
@@ -210,6 +217,17 @@ class OcrSpaceService
                 'path' => $path,
                 'filename' => $filename,
                 'cleanup' => false,
+            ];
+        }
+
+        if (filesize($outputPath) > $maxBytes) {
+            @unlink($outputPath);
+
+            return [
+                'path' => $path,
+                'filename' => $filename,
+                'cleanup' => false,
+                'error' => 'Gambar masih terlalu besar untuk OCR.space setelah kompresi. Gunakan gambar maksimal sekitar 1.2 MB.',
             ];
         }
 
