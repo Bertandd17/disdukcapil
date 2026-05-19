@@ -46,6 +46,9 @@ except ImportError as e:
     print(f"# Warning: {e}", file=sys.stderr)
 
 try:
+    if not _env_bool("KTP_CRNN_ENABLED", True):
+        raise RuntimeError("CRNN disabled by KTP_CRNN_ENABLED=false")
+
     from ktp_crnn_ocr import diagnose as diagnose_crnn
     from ktp_crnn_ocr import recognize_image as recognize_image_with_crnn
     CRNN_AVAILABLE = True
