@@ -367,7 +367,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 reveal">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 reveal">
                 @foreach($kategoriLayanan as $namaKategori => $kategoriConfig)
                     @php
                         $c = $colorMap[$kategoriConfig['color']] ?? $colorMap['blue'];
@@ -451,7 +451,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 
 <div id="kategoriModal" class="fixed inset-0 z-40 hidden overflow-y-auto">
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeKategoriModal()"></div>
-    <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="flex items-start sm:items-center justify-center min-h-screen p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md relative z-10 overflow-hidden" style="animation: popIn 0.2s ease;">
             {{-- Header --}}
             <div id="km-header" class="p-5 border-b border-gray-100">
@@ -479,15 +479,15 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 
 <div id="serviceModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto transform transition-all relative z-10" id="modalContent">
+    <div class="flex items-start sm:items-center justify-center min-h-screen p-2 sm:p-4">
+        <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-2xl w-full max-h-[96vh] sm:max-h-[92vh] overflow-y-auto transform transition-all relative z-10" id="modalContent">
             {{-- Sticky Header + Steps --}}
             <div id="modalHeader" class="sticky top-0 z-20 bg-white p-5 border-b border-gray-100 rounded-t-3xl">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
                         <div id="modalIcon" class="w-11 h-11 rounded-xl flex items-center justify-center"></div>
-                        <div>
-                            <h3 id="modalTitle" class="text-lg font-bold text-gray-800"></h3>
+                        <div class="min-w-0">
+                            <h3 id="modalTitle" class="text-base sm:text-lg font-bold text-gray-800 leading-snug"></h3>
                             <p id="modalStepLabel" class="text-xs text-gray-400 font-medium"></p>
                         </div>
                     </div>
@@ -561,7 +561,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 <div id="step2" class="step-content p-5 space-y-4 hidden">
                     <p class="text-sm text-gray-500 mb-1">Lengkapi data Anda dengan benar sesuai dokumen resmi.</p>
                     <div id="formFields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                    <div class="flex gap-3 mt-6 pt-4 border-t border-gray-100">
+                    <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(1)"
                                 class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
@@ -576,7 +576,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 <div id="step3" class="step-content p-5 space-y-4 hidden">
                     <p id="step3Description" class="text-sm text-gray-500 mb-1">Upload berkas persyaratan dalam format <strong>PDF</strong>. Pastikan dokumen terbaca dengan jelas.</p>
                     <div id="fileFields" class="space-y-4"></div>
-                    <div class="flex gap-3 mt-6 pt-4 border-t border-gray-100">
+                    <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(2)"
                                 class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
@@ -610,7 +610,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     </div>
                     <input type="hidden" name="liveness_passed" id="liveness_passed" value="0">
                     <div id="liveness-error" class="hidden bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700"></div>
-                    <div class="flex gap-3 pt-4 border-t border-gray-100">
+                    <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(3); stopCamera();"
                                 class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
@@ -636,7 +636,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                         </h5>
                         <div id="summaryData" class="space-y-2 text-sm text-gray-600"></div>
                     </div>
-                    <div class="flex gap-3 mt-6 pt-4 border-t border-gray-100">
+                    <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(4)"
                                 class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
@@ -683,6 +683,47 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
     /* Layanan item hover */
     .layanan-item { transition: background 0.15s; }
     .layanan-item:hover { background: #f9fafb; }
+
+    @media (max-width: 640px) {
+        #modalHeader {
+            padding: 1rem;
+        }
+
+        #modalIcon,
+        #km-icon {
+            flex-shrink: 0;
+        }
+
+        #modalTitle,
+        #km-title {
+            overflow-wrap: anywhere;
+        }
+
+        #modalHeader .step-label {
+            display: none;
+        }
+
+        #modalHeader .step-indicator {
+            width: 1.8rem;
+            height: 1.8rem;
+            margin-bottom: 0;
+        }
+
+        #serviceModal .step-content {
+            padding: 1rem;
+        }
+
+        #summaryData .flex {
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        #summaryData span:last-child {
+            max-width: 55%;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+    }
 </style>
 @endpush
 
@@ -1011,17 +1052,19 @@ function validateAndGoStep3() {
     const inputs = document.getElementById('step2')
         .querySelectorAll('input[required],textarea[required],select[required]');
     let valid = true;
-    let errMsg = 'Harap lengkapi semua data yang diperlukan.';
+    let hasEmpty = false;
+    let errMsg = 'Perhatikan ada isian yang kosong.';
     inputs.forEach(input => {
         input.style.borderColor = '';
         let val = input.value.trim();
-        if (!val) { input.style.borderColor = '#ef4444'; valid = false; }
+        if (!val) { input.style.borderColor = '#ef4444'; valid = false; hasEmpty = true; }
         else if (val && (input.name.toLowerCase().includes('nik') || input.name.toLowerCase().includes('nomor_kk')) && val.length !== 16) {
             input.style.borderColor = '#ef4444';
             valid = false;
             errMsg = `Nomor harus tepat 16 angka!`;
         }
     });
+    if (hasEmpty) errMsg = 'Perhatikan ada isian yang kosong.';
     if (!valid) { showToast(errMsg, 'error'); return; }
     goToStep(3);
 }
@@ -1042,7 +1085,7 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) { showToast(`Harap upload berkas: ${missingLabel}`, 'error'); return; }
+    if (!valid) { showToast('Perhatikan ada isian yang kosong.', 'error'); return; }
     goToStep(4);
 }
 

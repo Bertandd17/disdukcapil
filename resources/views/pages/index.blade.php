@@ -3,7 +3,7 @@
 @section('content')
 <main class="pt-0">
     {{-- Hero Section --}}
-    <section class="relative min-h-[600px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden">
+    <section class="user-home-hero relative min-h-[600px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden">
         {{-- Background Figures --}}
         <div class="hero-bg-left">
             <div class="hero-figure">
@@ -1082,6 +1082,90 @@
     .berita-badge {
         background: #FEF7E0;
         color: #B06000;
+    }
+
+    @media (max-width: 767px) {
+        .user-home-hero {
+            min-height: 720px;
+        }
+
+        .user-home-hero .relative.z-10 {
+            padding-top: 13rem;
+            padding-bottom: 12rem;
+        }
+
+        .hero-bg-left,
+        .hero-bg-right {
+            top: auto;
+            right: auto;
+            left: 50%;
+            width: 190px;
+            height: auto;
+            transform: translateX(-50%);
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .hero-bg-left {
+            top: 1rem;
+        }
+
+        .hero-bg-right {
+            bottom: 3.25rem;
+        }
+
+        .hero-figure {
+            padding: 0;
+        }
+
+        .hero-figure-image {
+            width: 120px;
+            height: 162px;
+            border-radius: 12px;
+            border-width: 3px;
+            animation: none;
+        }
+
+        .hero-figure-name {
+            margin-top: 8px;
+            font-size: 0.8rem;
+        }
+
+        .hero-figure-title {
+            font-size: 0.68rem;
+        }
+
+        .news-modal-overlay {
+            align-items: flex-end;
+            padding: 0.75rem;
+        }
+
+        .news-modal {
+            max-height: 88vh;
+            border-radius: 18px;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1180px) {
+        .hero-bg-left,
+        .hero-bg-right {
+            width: 320px;
+            height: 520px;
+            opacity: 0.18;
+        }
+
+        .hero-bg-left {
+            left: -110px;
+        }
+
+        .hero-bg-right {
+            right: -110px;
+        }
+
+        .hero-figure-image {
+            width: 210px;
+            height: 300px;
+        }
     }
 </style>
 @endpush

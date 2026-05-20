@@ -110,6 +110,34 @@
             .replace(/'/g, '&#39;');
     }
 
+    var EMPTY_REQUIRED_MESSAGE = 'Perhatikan ada isian yang kosong.';
+    var EMPTY_REQUIRED_PATTERN = /(wajib\s+diisi|tidak\s+boleh\s+kosong|isian\s+yang\s+kosong|field[^.]{0,40}wajib|harus\s+dipilih|harap\s+lengkapi|mohon\s+lengkapi|lengkapi\s+(semua|seluruh)\s+data|form\s+belum\s+lengkap|\brequired\b)/i;
+
+    function stripTags(s) {
+        return String(s || '').replace(/<[^>]*>/g, ' ');
+    }
+
+    function normalizeEmptyRequiredToast(opts) {
+        if (!opts || typeof opts !== 'object') return opts;
+        var type = opts.type || opts.icon || '';
+        if (type !== 'error' && type !== 'warning') return opts;
+
+        var combined = [
+            opts.title,
+            opts.text,
+            stripTags(opts.html)
+        ].filter(Boolean).join(' ');
+
+        if (!EMPTY_REQUIRED_PATTERN.test(combined)) return opts;
+
+        opts.title = EMPTY_REQUIRED_MESSAGE;
+        delete opts.text;
+        delete opts.html;
+        opts.icon = 'error';
+        opts.type = 'error';
+        return opts;
+    }
+
     function generateNoReg() {
         var year = new Date().getFullYear();
         var rand = Math.floor(Math.random() * 900000) + 100000; // 6 digit
@@ -133,6 +161,7 @@
     }
 
     function fireToast(opts) {
+        opts = normalizeEmptyRequiredToast(opts || {});
         var type = opts.type || 'info';
         var timer = typeof opts.timer === 'number' ? opts.timer : 4000;
         var cfg = {
@@ -735,6 +764,7 @@
             }
 
             // Cabang TOAST
+            opt = normalizeEmptyRequiredToast(opt) || opt;
             var hasIcon = (opt.icon === 'success' || opt.icon === 'error' || opt.icon === 'warning' || opt.icon === 'info');
             var iconClass = hasIcon ? (' swal-dd-' + opt.icon) : '';
             var ddClass = 'swal-dd-toast' + (mode === 'mixin' ? '' : iconClass);

@@ -285,7 +285,7 @@
             var nama   = ($('nama_lengkap').value || '').trim();
             var alamat = ($('alamat').value || '').trim();
             
-            if (!nik || !nama || !alamat) { toastError('Mohon lengkapi semua data'); return; }
+            if (!nik || !nama || !alamat) { toastError('Perhatikan ada isian yang kosong.'); return; }
             if (nama.toUpperCase() === 'MENUNGGU OCR') { toastError('Isi nama lengkap sesuai KTP (bukan teks placeholder)'); return; }
             if (!/^\d{16}$/.test(nik))   { toastError('NIK harus 16 digit angka'); return; }
             
@@ -328,7 +328,7 @@
             var nama   = ($('nama_lengkap').value || '').trim();
             var alamat = ($('alamat').value || '').trim();
             if (!/^\d{16}$/.test(nik)) { toastError('NIK harus 16 digit angka'); return; }
-            if (!nama || !alamat)      { toastError('Mohon lengkapi semua data'); return; }
+            if (!nama || !alamat)      { toastError('Perhatikan ada isian yang kosong.'); return; }
 
             var btn = $('submitBtn'); var ori = btn.innerHTML;
             btn.disabled = true;

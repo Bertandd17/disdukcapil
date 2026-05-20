@@ -105,6 +105,32 @@
 </main>
 @endsection
 
+@push('styles')
+<style>
+    @media (max-width: 640px) {
+        #filterTahun {
+            min-width: 7rem;
+        }
+
+        #dokumenChart,
+        #layananChart {
+            min-height: 280px;
+        }
+
+        #dokumenChart,
+        #layananChart,
+        #dokumenChart + *,
+        #layananChart + * {
+            max-width: 100%;
+        }
+
+        #districtCardsContainer > div {
+            width: min(20rem, calc(100vw - 2.5rem)) !important;
+        }
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
     // Chart instances
