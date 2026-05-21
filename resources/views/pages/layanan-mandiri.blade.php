@@ -1120,6 +1120,24 @@ function stripToastHtml(message) {
     return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
 }
 
+function showErrorToast(problem, solution, title = 'Terjadi kesalahan', timer = 6000) {
+    const cleanProblem = stripToastHtml(problem || 'Terjadi kesalahan saat memproses permintaan.');
+    const cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
+
+    if (typeof window.fireToast === 'function') {
+        return window.fireToast({
+            type: 'error',
+            icon: 'error',
+            title: title,
+            problem: cleanProblem,
+            solution: cleanSolution,
+            timer: timer
+        });
+    }
+
+    return showToast(`${cleanProblem} ${cleanSolution}`, 'error');
+}
+
 // Fungsi autofill data pemohon dari nomor antrian
 function autoFillFromAntrian(nomorAntrian) {
     console.log('=== autoFillFromAntrian DEBUG ===');
@@ -1167,16 +1185,35 @@ function autoFillFromAntrian(nomorAntrian) {
                 const errorCode = data.error_code;
 
                 if (errorCode === 'NOT_FOUND') {
-                    showToast(data.message || 'Nomor antrian tidak ditemukan dalam sistem.', 'error');
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
+                        data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.',
+                        'Nomor antrian tidak ditemukan'
+                    );
                     input.value = ''; // Clear input
                 } else if (errorCode === 'ALREADY_USED') {
-                    showToast(data.message || 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.', 'error');
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
+                        data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
+                        'Nomor antrian sudah digunakan'
+                    );
                     input.value = ''; // Clear input
                 } else if (errorCode === 'INVALID_SERVICE') {
-                    showToast(stripToastHtml(data.message || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.'), 'error');
+                    const layananAsal = data.layanan_asal_nama || 'layanan lain';
+                    const layananTujuan = data.layanan_tujuan_nama || 'layanan yang dipilih';
+                    showErrorToast(
+                        data.problem || `Nomor antrian tidak sesuai dengan layanan yang dipilih. Nomor ini berlaku untuk layanan ${layananAsal}.`,
+                        data.solution || `Pilih layanan ${layananAsal}, atau buat nomor antrian baru untuk layanan ${layananTujuan}.`,
+                        'Nomor antrian tidak sesuai layanan',
+                        7000
+                    );
                     input.value = ''; // Clear input
                 } else {
-                    showToast(stripToastHtml(data.message || 'Gagal mengambil data antrian'), 'error');
+                    showErrorToast(
+                        data.problem || data.message || 'Gagal mengambil data antrian.',
+                        data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.',
+                        'Gagal mengambil data antrian'
+                    );
                 }
                 return;
             }
@@ -1224,7 +1261,11 @@ function autoFillFromAntrian(nomorAntrian) {
             console.error('=== AUTOFILL CATCH ERROR ===');
             console.error('Error:', error);
             if (input) input.classList.remove('loading');
-            showToast('Gagal mengambil data antrian. Silakan coba lagi.', 'error');
+            showErrorToast(
+                'Sistem gagal mengambil data antrian.',
+                'Periksa koneksi internet, lalu masukkan nomor antrian kembali.',
+                'Gagal mengambil data antrian'
+            );
         })
         .finally(() => {
             if (input) input.classList.remove('loading');

@@ -39,11 +39,16 @@
             '.swal2-container.swal2-toast .swal2-backdrop,.swal2-container.swal2-top .swal2-backdrop,.swal2-container.swal2-top-end .swal2-backdrop,.swal2-container.swal2-top-right .swal2-backdrop{display:none!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}' +
             T + '{font-family:"Plus Jakarta Sans",sans-serif!important;color:var(--neutral-900)!important;background:var(--neutral-white)!important;background-color:var(--neutral-white)!important;background-image:none!important;border-radius:var(--radius-lg)!important;box-shadow:var(--shadow-xl)!important;padding:14px 18px!important;min-width:320px!important;max-width:420px!important;border:0!important;border-left:4px solid var(--info-blue)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none!important;display:grid!important;grid-template-columns:44px minmax(0,1fr) auto!important;column-gap:14px!important;align-items:center!important;}' +
             T + '.swal-dd-success{border-left-color:var(--success-green)!important;}' +
-            T + '.swal-dd-error{border-left-color:var(--danger-red)!important;}' +
+            T + '.swal-dd-error{border-left-color:var(--danger-red)!important;background:#fff7f7!important;border-top:1px solid #fecaca!important;border-right:1px solid #fecaca!important;border-bottom:1px solid #fecaca!important;}' +
             T + '.swal-dd-warning{border-left-color:var(--warning-orange)!important;}' +
             T + '.swal-dd-info{border-left-color:var(--info-blue)!important;}' +
             T + ' .swal2-title{font-family:"Plus Jakarta Sans",sans-serif!important;color:var(--neutral-900)!important;font-size:var(--font-size-sm)!important;font-weight:500!important;line-height:1.4!important;margin:0!important;padding:0!important;text-align:left!important;grid-column:2!important;min-width:0!important;}' +
+            T + '.swal-dd-error .swal2-title{color:#991b1b!important;font-weight:800!important;}' +
             T + ' .swal2-html-container{font-family:"Plus Jakarta Sans",sans-serif!important;color:var(--neutral-600)!important;font-size:var(--font-size-xs)!important;font-weight:400!important;line-height:1.5!important;margin:4px 0 0 0!important;padding:0!important;text-align:left!important;display:block!important;grid-column:2!important;min-width:0!important;}' +
+            T + ' .swal-dd-error-detail{display:grid;gap:7px;margin-top:2px;color:#7f1d1d!important;}' +
+            T + ' .swal-dd-error-block{padding:7px 9px;border-radius:8px;background:#fff!important;border:1px solid #fee2e2!important;}' +
+            T + ' .swal-dd-error-label{display:block;margin-bottom:2px;color:#991b1b!important;font-size:11px!important;font-weight:800!important;line-height:1.3!important;}' +
+            T + ' .swal-dd-error-text{display:block;color:#7f1d1d!important;font-size:12px!important;font-weight:500!important;line-height:1.45!important;}' +
             T + ' .swal2-icon{grid-column:1!important;grid-row:1 / span 2!important;align-self:center!important;justify-self:center!important;position:relative!important;margin:0!important;width:38px!important;height:38px!important;min-width:38px!important;flex:0 0 38px!important;border-width:2px!important;border-style:solid!important;border-radius:999px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;overflow:hidden!important;}' +
             T + '.swal-dd-success .swal2-icon{background:#ecfdf5!important;border-color:#bbf7d0!important;color:var(--success-green)!important;}' +
             T + '.swal-dd-error .swal2-icon,' + T + '.swal-dd-danger .swal2-icon{background:#fef2f2!important;border-color:#fecaca!important;color:var(--danger-red)!important;}' +
@@ -117,6 +122,45 @@
         return String(s || '').replace(/<[^>]*>/g, ' ');
     }
 
+    function normalizeWhitespace(s) {
+        return String(s || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function htmlToText(s) {
+        if (!s) return '';
+        var div = document.createElement('div');
+        div.innerHTML = String(s);
+        return normalizeWhitespace(div.textContent || div.innerText || stripTags(s));
+    }
+
+    function firstNonEmpty() {
+        for (var i = 0; i < arguments.length; i++) {
+            var value = normalizeWhitespace(arguments[i]);
+            if (value) return value;
+        }
+        return '';
+    }
+
+    function defaultErrorSolution(problem) {
+        var text = normalizeWhitespace(problem).toLowerCase();
+        if (!text) return 'Periksa data yang Anda masukkan, lalu coba lagi.';
+        if (EMPTY_REQUIRED_PATTERN.test(text)) return 'Lengkapi kolom yang bertanda wajib, lalu lanjutkan kembali.';
+        if (/pdf|format file|berformat/i.test(text)) return 'Pilih ulang file dengan format PDF sesuai ketentuan.';
+        if (/ukuran file|2mb|5mb|maksimal/i.test(text)) return 'Kompres file atau pilih file yang ukurannya sesuai batas maksimal.';
+        if (/nomor antrian|antrian/i.test(text)) return 'Periksa kembali nomor antrian dan pastikan layanan yang dipilih sesuai.';
+        if (/nik|nomor kk|16 digit/i.test(text)) return 'Masukkan angka yang benar sesuai dokumen kependudukan.';
+        if (/koneksi|jaringan|network|fetch|http/i.test(text)) return 'Periksa koneksi internet, lalu ulangi beberapa saat lagi.';
+        if (/csrf|kadaluarsa|kedaluwarsa|419|session/i.test(text)) return 'Muat ulang halaman, lalu kirim formulir kembali.';
+        return 'Periksa data atau aksi yang sedang dilakukan, lalu coba lagi.';
+    }
+
+    function buildErrorHtml(problem, solution) {
+        return '<div class="swal-dd-error-detail">' +
+            '<div class="swal-dd-error-block"><span class="swal-dd-error-label">Masalah</span><span class="swal-dd-error-text">' + escapeHtml(problem) + '</span></div>' +
+            '<div class="swal-dd-error-block"><span class="swal-dd-error-label">Cara memperbaiki</span><span class="swal-dd-error-text">' + escapeHtml(solution) + '</span></div>' +
+            '</div>';
+    }
+
     function normalizeEmptyRequiredToast(opts) {
         if (!opts || typeof opts !== 'object') return opts;
         var type = opts.type || opts.icon || '';
@@ -131,10 +175,43 @@
         if (!EMPTY_REQUIRED_PATTERN.test(combined)) return opts;
 
         opts.title = EMPTY_REQUIRED_MESSAGE;
+        opts.problem = 'Ada kolom wajib yang belum diisi.';
+        opts.solution = 'Lengkapi semua kolom yang bertanda wajib, lalu lanjutkan kembali.';
         delete opts.text;
         delete opts.html;
         opts.icon = 'error';
         opts.type = 'error';
+        return opts;
+    }
+
+    function normalizeErrorToast(opts) {
+        if (!opts || typeof opts !== 'object') return opts;
+        var type = opts.type || opts.icon || '';
+        if (type !== 'error') return opts;
+
+        if (opts.html && String(opts.html).indexOf('swal-dd-error-detail') !== -1) return opts;
+
+        var title = normalizeWhitespace(opts.title || '');
+        var text = firstNonEmpty(opts.problem, opts.text, htmlToText(opts.html));
+        var genericTitle = !title || /^(error!?|gagal!?|terjadi kesalahan!?|gagal memproses!?)$/i.test(title);
+        var problem = text || (genericTitle ? 'Terjadi kesalahan saat memproses permintaan.' : title);
+
+        if (genericTitle) {
+            title = 'Terjadi kesalahan';
+        } else if (!text) {
+            title = 'Terjadi kesalahan';
+        }
+
+        opts.title = title || 'Terjadi kesalahan';
+        opts.html = buildErrorHtml(problem, firstNonEmpty(opts.solution, defaultErrorSolution(problem)));
+        delete opts.text;
+        opts.icon = 'error';
+        opts.type = 'error';
+
+        if (typeof opts.timer !== 'number' || opts.timer < 5000) {
+            opts.timer = 6000;
+        }
+
         return opts;
     }
 
@@ -162,6 +239,7 @@
 
     function fireToast(opts) {
         opts = normalizeEmptyRequiredToast(opts || {});
+        opts = normalizeErrorToast(opts || {});
         var type = opts.type || 'info';
         var timer = typeof opts.timer === 'number' ? opts.timer : 4000;
         var cfg = {
@@ -185,6 +263,7 @@
 
         if (opts.title) cfg.title = opts.title;
         if (opts.html) cfg.html = opts.html;
+        if (opts.text) cfg.text = opts.text;
         if (opts.icon) cfg.icon = opts.icon;
 
         return window.Swal.fire(cfg);
@@ -635,7 +714,16 @@
         // + modalSuccess/Error/Warning/Info → toast & modal gradient baru
         if (window.SwalHelper) {
             var ts = function (m, d) { return fireToast({ type: 'success', icon: 'success', title: m || 'Berhasil', timer: d || 4000 }); };
-            var te = function (m, d) { return fireToast({ type: 'error',   icon: 'error',   title: m || 'Terjadi kesalahan', timer: d || 4000 }); };
+            var te = function (m, d) {
+                var hasDetail = typeof d === 'string' && d.trim() !== '';
+                return fireToast({
+                    type: 'error',
+                    icon: 'error',
+                    title: hasDetail ? (m || 'Terjadi kesalahan') : 'Terjadi kesalahan',
+                    problem: hasDetail ? d : (m || 'Terjadi kesalahan saat memproses permintaan.'),
+                    timer: typeof d === 'number' ? d : 6000
+                });
+            };
             var tw = function (m, d) { return fireToast({ type: 'warning', icon: 'warning', title: m || 'Perhatian', timer: d || 4000 }); };
             var ti = function (m, d) { return fireToast({ type: 'info',    icon: 'info',    title: m || 'Informasi', timer: d || 4000 }); };
 
@@ -762,6 +850,7 @@
 
             // Cabang TOAST
             opt = normalizeEmptyRequiredToast(opt) || opt;
+            opt = normalizeErrorToast(opt) || opt;
             var hasIcon = (opt.icon === 'success' || opt.icon === 'error' || opt.icon === 'warning' || opt.icon === 'info');
             var iconClass = hasIcon ? (' swal-dd-' + opt.icon) : '';
             var ddClass = 'swal-dd-toast' + (mode === 'mixin' ? '' : iconClass);

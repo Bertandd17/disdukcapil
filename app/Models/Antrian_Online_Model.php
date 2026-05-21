@@ -228,10 +228,14 @@ class Antrian_Online_Model extends Model
 
         if ($exists) {
             $namaLayanan = $layanan ? $layanan->nama_layanan : 'layanan ini';
+            $problem = "Anda sudah mengajukan {$namaLayanan} hari ini.";
+            $solution = 'Satu user hanya dapat mengajukan layanan yang sama sekali dalam satu hari. Silakan coba lagi besok.';
 
             return [
                 'already_submitted' => true,
                 'message' => "Anda sudah mengajukan <strong>{$namaLayanan}</strong> hari ini. Satu user hanya dapat mengajukan layanan yang sama sekali dalam satu hari. Silakan coba lagi besok.",
+                'problem' => $problem,
+                'solution' => $solution,
                 'error_code' => 'DAILY_LIMIT_EXCEEDED',
                 'layanan_id' => $normalizedLayananId,
                 'layanan_nama' => $namaLayanan,
@@ -259,6 +263,8 @@ class Antrian_Online_Model extends Model
             return [
                 'valid' => false,
                 'message' => 'Layanan yang dipilih tidak ditemukan. Silakan muat ulang halaman dan pilih layanan kembali.',
+                'problem' => 'Layanan yang dipilih tidak ditemukan.',
+                'solution' => 'Muat ulang halaman, lalu pilih layanan kembali sebelum memasukkan nomor antrian.',
                 'error_code' => 'UNKNOWN_SERVICE',
                 'layanan_tujuan' => $layananId,
             ];
@@ -269,6 +275,8 @@ class Antrian_Online_Model extends Model
             return [
                 'valid' => false,
                 'message' => 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.',
+                'problem' => 'Nomor antrian ini sudah digunakan.',
+                'solution' => 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
                 'error_code' => 'ALREADY_USED'
             ];
         }
@@ -281,10 +289,14 @@ class Antrian_Online_Model extends Model
 
             $namaLayananAsal = $layananAsal ? $layananAsal->nama_layanan : 'layanan lain';
             $namaLayananTujuan = $layananTujuan->nama_layanan;
+            $problem = "Nomor antrian ini berlaku untuk layanan {$namaLayananAsal}, bukan {$namaLayananTujuan}.";
+            $solution = "Pilih layanan {$namaLayananAsal}, atau buat nomor antrian baru untuk layanan {$namaLayananTujuan}.";
 
             return [
                 'valid' => false,
                 'message' => "Nomor antrian ini hanya berlaku untuk layanan <strong>{$namaLayananAsal}</strong>. Silakan buat nomor antrian baru untuk layanan <strong>{$namaLayananTujuan}</strong>.",
+                'problem' => $problem,
+                'solution' => $solution,
                 'error_code' => 'INVALID_SERVICE',
                 'layanan_asal' => $this->layanan_id,
                 'layanan_asal_nama' => $namaLayananAsal,

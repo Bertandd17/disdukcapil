@@ -1571,6 +1571,8 @@ class Antrian_Online_Controller extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Nomor antrian tidak ditemukan',
+                    'problem' => 'Nomor antrian tidak ditemukan dalam sistem.',
+                    'solution' => 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.',
                     'error_code' => 'NOT_FOUND'
                 ], 404);
             }
@@ -1597,6 +1599,8 @@ class Antrian_Online_Controller extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.',
+                    'problem' => 'Nomor antrian ini sudah digunakan.',
+                    'solution' => 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
                     'error_code' => 'ALREADY_USED'
                 ], 400);
             }
@@ -1622,6 +1626,8 @@ class Antrian_Online_Controller extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan sistem',
+                'problem' => 'Sistem gagal mengambil data antrian.',
+                'solution' => 'Coba lagi beberapa saat lagi. Jika masih gagal, hubungi petugas layanan.',
                 'error_code' => 'SYSTEM_ERROR'
             ], 500);
         }
@@ -1651,6 +1657,8 @@ class Antrian_Online_Controller extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Layanan yang dipilih tidak ditemukan. Silakan muat ulang halaman dan pilih layanan kembali.',
+                    'problem' => 'Layanan yang dipilih tidak ditemukan.',
+                    'solution' => 'Muat ulang halaman, lalu pilih layanan kembali sebelum mengirim pengajuan.',
                     'error_code' => 'UNKNOWN_SERVICE',
                 ], 422);
             }
@@ -1661,6 +1669,8 @@ class Antrian_Online_Controller extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => $result['message'],
+                    'problem' => $result['problem'] ?? 'Anda sudah mengajukan layanan ini hari ini.',
+                    'solution' => $result['solution'] ?? 'Silakan coba lagi besok.',
                     'error_code' => $result['error_code'],
                     'data' => [
                         'layanan_id' => $result['layanan_id'],
@@ -1679,7 +1689,9 @@ class Antrian_Online_Controller extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validasi gagal: ' . implode(', ', $e->errors()),
+                'message' => 'Validasi gagal: ' . collect($e->errors())->flatten()->implode(', '),
+                'problem' => 'Data pengecekan batas harian belum valid.',
+                'solution' => 'Pastikan NIK berisi 16 digit dan layanan sudah dipilih.',
                 'error_code' => 'VALIDATION_ERROR'
             ], 422);
         } catch (\Throwable $e) {
@@ -1690,6 +1702,8 @@ class Antrian_Online_Controller extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan sistem',
+                'problem' => 'Sistem gagal memeriksa batas harian pengajuan.',
+                'solution' => 'Coba lagi beberapa saat lagi. Jika masih gagal, hubungi petugas layanan.',
                 'error_code' => 'SYSTEM_ERROR'
             ], 500);
         }
