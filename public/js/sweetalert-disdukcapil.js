@@ -110,7 +110,7 @@
             .replace(/'/g, '&#39;');
     }
 
-    var EMPTY_REQUIRED_MESSAGE = 'Perhatikan ada isian yang kosong.';
+    var EMPTY_REQUIRED_MESSAGE = 'Ada kolom yang wajib diisi';
     var EMPTY_REQUIRED_PATTERN = /(wajib\s+diisi|tidak\s+boleh\s+kosong|isian\s+yang\s+kosong|field[^.]{0,40}wajib|harus\s+dipilih|harap\s+lengkapi|mohon\s+lengkapi|lengkapi\s+(semua|seluruh)\s+data|form\s+belum\s+lengkap|\brequired\b)/i;
 
     function stripTags(s) {
@@ -272,13 +272,10 @@
      */
     function notifFormBelumLengkap() {
         return fireToast({
-            type: 'warning',
-            icon: 'warning',
-            title: 'Form belum lengkap',
-            html: 'Mohon lengkapi seluruh data yang wajib diisi.' +
-                  '<br><button type="button" class="swal-dd-action" onclick="window.Swal.close()">' +
-                  '<i class="fas fa-pen mr-1"></i>Lengkapi Data</button>',
-            timer: 6000,
+            type: 'error',
+            icon: 'error',
+            title: EMPTY_REQUIRED_MESSAGE,
+            timer: 4000,
             showCloseButton: true
         });
     }
@@ -855,6 +852,31 @@
         patchLegacy();
         if (++tries > 40) clearInterval(iv);
     }, 50);
+
+    var lastRequiredToastAt = 0;
+    document.addEventListener('invalid', function (event) {
+        var el = event.target;
+        if (!el || !el.matches || !el.matches('input, select, textarea')) return;
+
+        event.preventDefault();
+        if (el.setCustomValidity) el.setCustomValidity('');
+
+        var now = Date.now();
+        if (now - lastRequiredToastAt > 800) {
+            lastRequiredToastAt = now;
+            fireToast({
+                type: 'error',
+                icon: 'error',
+                title: EMPTY_REQUIRED_MESSAGE,
+                timer: 4000
+            });
+        }
+
+        if (typeof el.focus === 'function') {
+            try { el.focus({ preventScroll: false }); }
+            catch (e) { el.focus(); }
+        }
+    }, true);
 
     // =====================================================================
     // CONTOH PEMAKAIAN (untuk dokumentasi — tidak dijalankan otomatis)

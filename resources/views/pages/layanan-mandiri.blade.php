@@ -1003,7 +1003,7 @@ function renderField(field) {
         fieldId = 'id="nikPemohonInput"';
     } else if (field.name === 'nama_pemohon') {
         fieldId = 'id="namaPemohonInput"';
-    } else if (field.name === 'alamat_pemohon') {
+    } else if (field.name === 'alamat_pemohon' || field.name === 'alamat') {
         fieldId = 'id="alamatPemohonInput"';
     }
 
@@ -1053,7 +1053,7 @@ function validateAndGoStep3() {
         .querySelectorAll('input[required],textarea[required],select[required]');
     let valid = true;
     let hasEmpty = false;
-    let errMsg = 'Perhatikan ada isian yang kosong.';
+    let errMsg = 'Ada kolom yang wajib diisi';
     inputs.forEach(input => {
         input.style.borderColor = '';
         let val = input.value.trim();
@@ -1064,7 +1064,7 @@ function validateAndGoStep3() {
             errMsg = `Nomor harus tepat 16 angka!`;
         }
     });
-    if (hasEmpty) errMsg = 'Perhatikan ada isian yang kosong.';
+    if (hasEmpty) errMsg = 'Ada kolom yang wajib diisi';
     if (!valid) { showToast(errMsg, 'error'); return; }
     goToStep(3);
 }
@@ -1085,7 +1085,7 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) { showToast('Perhatikan ada isian yang kosong.', 'error'); return; }
+    if (!valid) { showToast('Ada kolom yang wajib diisi', 'error'); return; }
     goToStep(4);
 }
 
@@ -1113,6 +1113,12 @@ function buildSummary() {
 
 const LEFT_EYE_IDX  = [33, 160, 158, 133, 153, 144];
 const RIGHT_EYE_IDX = [362, 385, 387, 263, 373, 380];
+
+function stripToastHtml(message) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = message || '';
+    return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
+}
 
 // Fungsi autofill data pemohon dari nomor antrian
 function autoFillFromAntrian(nomorAntrian) {
@@ -1161,72 +1167,16 @@ function autoFillFromAntrian(nomorAntrian) {
                 const errorCode = data.error_code;
 
                 if (errorCode === 'NOT_FOUND') {
-                    // Toast di kanan atas untuk NOT_FOUND
-                    Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 4000,
-                        timerProgressBar: true,
-                        icon: 'error',
-                        title: 'Nomor Antrian Tidak Ditemukan',
-                        text: data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire();
+                    showToast(data.message || 'Nomor antrian tidak ditemukan dalam sistem.', 'error');
                     input.value = ''; // Clear input
                 } else if (errorCode === 'ALREADY_USED') {
-                    // Toast di kanan atas untuk ALREADY_USED
-                    Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 5000,
-                        timerProgressBar: true,
-                        icon: 'error',
-                        title: 'Nomor Antrian Sudah Digunakan',
-                        text: data.message || 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.',
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire();
+                    showToast(data.message || 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.', 'error');
                     input.value = ''; // Clear input
                 } else if (errorCode === 'INVALID_SERVICE') {
-                    // Toast di kanan atas untuk INVALID_SERVICE
-                    Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 6000,
-                        timerProgressBar: true,
-                        icon: 'warning',
-                        title: 'Nomor Antrian Tidak Sesuai',
-                        html: data.message || 'Nomor antrian ini hanya berlaku untuk layanan tertentu.',
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire();
+                    showToast(stripToastHtml(data.message || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.'), 'error');
                     input.value = ''; // Clear input
                 } else {
-                    // Default error toast di kanan atas
-                    Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 4000,
-                        timerProgressBar: true,
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: data.message || 'Gagal mengambil data antrian',
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire();
+                    showToast(stripToastHtml(data.message || 'Gagal mengambil data antrian'), 'error');
                 }
                 return;
             }
@@ -1236,7 +1186,9 @@ function autoFillFromAntrian(nomorAntrian) {
                 // Isi field secara otomatis
                 const nikInput = document.getElementById('nikPemohonInput');
                 const namaInput = document.getElementById('namaPemohonInput');
-                const alamatInput = document.getElementById('alamatPemohonInput');
+                const alamatInput = document.getElementById('alamatPemohonInput')
+                    || document.querySelector('[name="alamat_pemohon"]')
+                    || document.querySelector('[name="alamat"]');
 
                 console.log('nikInput found:', !!nikInput, 'data.nik:', data.data.nik);
                 console.log('namaInput found:', !!namaInput, 'data.nama_lengkap:', data.data.nama_lengkap);
