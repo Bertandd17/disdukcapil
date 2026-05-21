@@ -145,14 +145,34 @@
 
     @stack('styles')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 min-h-screen flex flex-col">
     @include('components.page-loading')
 
-    @yield('content')
+    <main class="flex-1 flex flex-col">
+        @yield('content')
+    </main>
 
     @stack('scripts')
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                SwalHelper.success(@json(session('success')));
+            @endif
+
+            @if(session('error'))
+                SwalHelper.error(@json(session('error')));
+            @endif
+
+            @if(session('info'))
+                SwalHelper.info(@json(session('info')));
+            @endif
+
+            @if(session('warning'))
+                SwalHelper.warning(@json(session('warning')));
+            @endif
+        });
+
         // Reveal elements on scroll
         const reveals = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {

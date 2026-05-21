@@ -260,12 +260,14 @@ class PernikahanController extends Controller
 
         // Validasi manual untuk mengontrol response JSON
         $validator = \Validator::make($request->all(), [
+            'layanan_id' => 'required|string|exists:layanan,layanan_id',
             'nomor_antrian' => [
                 'required',
                 'string',
-                function ($attribute, $value, $fail) {
+                function ($attribute, $value, $fail) use ($request) {
                     $nomorTrimmed = trim($value);
                     $nomorUpper = strtoupper($nomorTrimmed);
+                    $layananId = $request->input('layanan_id');
 
                     Log::info('=== VALIDATING NOMOR ANTRIAN ===', [
                         'original' => $value,
@@ -274,11 +276,11 @@ class PernikahanController extends Controller
                         'trimmed_hex' => bin2hex($nomorTrimmed),
                         'upper' => $nomorUpper,
                         'length' => strlen($nomorTrimmed),
+                        'layanan_id' => $layananId,
                     ]);
 
-                    // Cek dengan beberapa cara untuk memastikan
-                    $antrian = Antrian_Online_Model::where('nomor_antrian', $nomorTrimmed)
-                        ->orWhere('nomor_antrian', $nomorUpper)
+                    $antrian = Antrian_Online_Model::with('layanan')
+                        ->cariNomorExact($nomorTrimmed)
                         ->first();
 
                     Log::info('=== DIRECT QUERY RESULT ===', [
@@ -311,6 +313,19 @@ class PernikahanController extends Controller
                         ]);
 
                         $fail('Nomor antrian tidak ditemukan dalam sistem.');
+                        return;
+                    }
+
+                    $validasiLayanan = $antrian->validateForLayanan($layananId);
+                    if (!$validasiLayanan['valid']) {
+                        Log::warning('=== NOMOR ANTRIAN INVALID FOR SERVICE ===', [
+                            'nomor_antrian' => $antrian->nomor_antrian,
+                            'layanan_antrian' => $antrian->layanan_id,
+                            'layanan_diminta' => $layananId,
+                            'error_code' => $validasiLayanan['error_code'] ?? null,
+                        ]);
+
+                        $fail(strip_tags($validasiLayanan['message']));
                     }
                 },
             ],

@@ -20,7 +20,7 @@ class KartKeluargaController extends Controller
     public function store_perubahan_data(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'layanan_id' => 'required|string',
+            'layanan_id' => 'required|string|exists:layanan,layanan_id',
             'nomor_antrian' => 'required|string|unique:ganti_data_kk,nomor_antrian',
             'nama_pemohon' => 'required|string',
             'nik_pemohon' => 'required|digits:16',
@@ -73,9 +73,14 @@ class KartKeluargaController extends Controller
             }
             return redirect()->back()->with('error', $validator->errors()->first())->withInput();
         }
+        $antrian = $this->validatedAntrianForLayanan($request);
+        if (!$antrian instanceof Antrian_Online_Model) {
+            return $antrian;
+        }
         $data = $request->except([
             'formulir_f102', 'ktp_pemohon','kk_pemohon','formulir_f106','surat_keterangan_perubahan', 'pernyataan_pindah_kk','foto_wajah'
         ]);
+        $data['nomor_antrian'] = $antrian->nomor_antrian;
         $data['status'] = 'Verifikasi Data';
         $fileFields = [
             'formulir_f102', 
@@ -98,6 +103,7 @@ class KartKeluargaController extends Controller
             $data['foto_wajah'] = "ubah_data_kk/{$filename}";
         }
         KartuKeluarga::create($data);
+        $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
         // Kirim notifikasi ke admin
         AdminNotificationService::layananKKBaru(
@@ -116,7 +122,7 @@ class KartKeluargaController extends Controller
     public function store_ganti_kepala_kk(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'layanan_id' => 'required|string',
+            'layanan_id' => 'required|string|exists:layanan,layanan_id',
             'nomor_antrian' => 'required|string',
             'nama_pemohon' => 'required|string',
             'nik_pemohon' => 'required|digits:16',
@@ -163,9 +169,14 @@ class KartKeluargaController extends Controller
             }
             return redirect()->back()->with('error', $validator->errors()->first())->withInput();
         }
+        $antrian = $this->validatedAntrianForLayanan($request);
+        if (!$antrian instanceof Antrian_Online_Model) {
+            return $antrian;
+        }
         $data = $request->except([
             'formulir_f102', 'ktp_pemohon','kk_pemohon','akta_kematian','surat_pernyataan_wali','foto_wajah'
         ]);
+        $data['nomor_antrian'] = $antrian->nomor_antrian;
         $data['status'] = 'Verifikasi Data';
         $fileFields = [
             'formulir_f102', 
@@ -187,6 +198,7 @@ class KartKeluargaController extends Controller
             $data['foto_wajah'] = "ganti_kepala_kk/{$filename}";
         }
         GantiKepalaKK::create($data);
+        $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
         // Kirim notifikasi ke admin
         AdminNotificationService::layananKKBaru(
@@ -206,7 +218,7 @@ class KartKeluargaController extends Controller
     public function store_kk_hilang_rusak(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'layanan_id' => 'required|string',
+            'layanan_id' => 'required|string|exists:layanan,layanan_id',
             'nomor_antrian' => 'required|string|unique:kk_hilang_rusak,nomor_antrian',
             'nama_pemohon' => 'required|string',
             'nik_pemohon' => 'required|digits:16',
@@ -245,9 +257,14 @@ class KartKeluargaController extends Controller
             }
             return redirect()->back()->with('error', $validator->errors()->first())->withInput();
         }
+        $antrian = $this->validatedAntrianForLayanan($request);
+        if (!$antrian instanceof Antrian_Online_Model) {
+            return $antrian;
+        }
         $data = $request->except([
             'formulir_f102','ktp_pemohon','suket_hilang_rusak','foto_wajah'
         ]);
+        $data['nomor_antrian'] = $antrian->nomor_antrian;
         $data['status'] = 'Verifikasi Data';
         $fileFields = [
             'formulir_f102', 
@@ -268,6 +285,7 @@ class KartKeluargaController extends Controller
             $data['foto_wajah'] = "kk_hilang_rusak/{$filename}";
         }
         KKHilangRusak::create($data);
+        $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
         // Kirim notifikasi ke admin
         AdminNotificationService::layananKKBaru(
@@ -286,7 +304,7 @@ class KartKeluargaController extends Controller
     public function store_pisah_kk(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'layanan_id' => 'required|string',
+            'layanan_id' => 'required|string|exists:layanan,layanan_id',
             'nomor_antrian' => 'required|string',
             'nama_pemohon' => 'required|string',
             'nik_pemohon' => 'required|digits:16',
@@ -333,9 +351,14 @@ class KartKeluargaController extends Controller
             }
             return redirect()->back()->with('error', $validator->errors()->first())->withInput();
         }
+        $antrian = $this->validatedAntrianForLayanan($request);
+        if (!$antrian instanceof Antrian_Online_Model) {
+            return $antrian;
+        }
         $data = $request->except([
             'formulir_f102','ktp_pemohon','kk_pemohon','fotokopi_buku_nikah', 'kk_lama','foto_wajah'
         ]);
+        $data['nomor_antrian'] = $antrian->nomor_antrian;
         $data['status'] = 'Verifikasi Data';
         $fileFields = [
             'formulir_f102', 
@@ -357,6 +380,7 @@ class KartKeluargaController extends Controller
             $data['foto_wajah'] = "pisah_kk/{$filename}";
         }
         PisahKK::create($data);
+        $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
         // Kirim notifikasi ke admin
         AdminNotificationService::layananKKBaru(
@@ -370,6 +394,36 @@ class KartKeluargaController extends Controller
         }
         return redirect()->route('layanan-mandiri')
                         ->with('success', 'Data dan dokumen berhasil dikirim.');
+    }
+
+    private function validatedAntrianForLayanan(Request $request)
+    {
+        $antrian = Antrian_Online_Model::with('layanan')
+            ->cariNomorExact($request->nomor_antrian)
+            ->first();
+
+        if (!$antrian) {
+            return $this->invalidAntrianResponse($request, 'Nomor antrian tidak ditemukan dalam sistem.');
+        }
+
+        $validasiLayanan = $antrian->validateForLayanan($request->layanan_id);
+        if (!$validasiLayanan['valid']) {
+            return $this->invalidAntrianResponse($request, strip_tags($validasiLayanan['message']));
+        }
+
+        return $antrian;
+    }
+
+    private function invalidAntrianResponse(Request $request, string $message)
+    {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => $message,
+            ], 422);
+        }
+
+        return redirect()->back()->with('error', $message)->withInput();
     }
 
 

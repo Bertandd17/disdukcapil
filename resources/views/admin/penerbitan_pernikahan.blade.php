@@ -722,8 +722,7 @@ function showDateEvents(dateKey) {
             </div>
         `;
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modalShow('detailModal');
     }
 }
 
@@ -1154,8 +1153,7 @@ function showConfirm(action, id) {
     }
 
     btn.onclick = () => executeConfirm();
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    modalShow('confirmModal');
 }
 
 function closeConfirmModal() {

@@ -15,8 +15,8 @@ class AkteKematianController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'layanan_id'                => 'required|integer',
-            'nomor_antrian'             => 'nullable|string', // Pastikan ini sudah diganti ke nomor_antrian
+            'layanan_id'                => 'required|string|exists:layanan,layanan_id',
+            'nomor_antrian'             => 'required|string',
             'nik_pemohon'               => 'required|string|digits:16',
             'nomor_kk_pemohon'          => 'nullable|string|digits:16',
             'nama_pemohon'              => 'required|string',
@@ -49,9 +49,21 @@ class AkteKematianController extends Controller
                 ->withInput();
         }
 
+        $antrian = Antrian_Online_Model::with('layanan')
+            ->cariNomorExact($request->nomor_antrian)
+            ->first();
+
+        if (!$antrian) {
+            return $this->invalidAntrianResponse($request, 'Nomor antrian tidak ditemukan dalam sistem.');
+        }
+
+        $validasiLayanan = $antrian->validateForLayanan($request->layanan_id);
+        if (!$validasiLayanan['valid']) {
+            return $this->invalidAntrianResponse($request, strip_tags($validasiLayanan['message']));
+        }
+
         try {
-            // 1. GENERATE TOKEN ANTRIAN DI AWAL
-            $nomorAntrian = $this->generateNomorAntrian();
+            $nomorAntrian = $antrian->nomor_antrian;
 
             // 2. Ambil semua data teks
             $data = $request->except([
@@ -84,16 +96,8 @@ class AkteKematianController extends Controller
             // 5. Simpan ke database Akte Kematian
             $akteKematian = AkteKematian::create($data);
 
-            // 6. Create antrian online record
-            $antrian = Antrian_Online_Model::create([
-                'layanan_id'     => $request->layanan_id,
-                'nomor_antrian'  => $nomorAntrian,
-                'nama_lengkap'   => $request->nama_pemohon, 
-                'nik'            => $request->nik_pemohon,
-                'alamat'         => $request->alamat_pemohon, 
-                'tanggal_lahir'  => null,
-                'status_antrian' => 'Menunggu',
-            ]);
+            // 6. Tandai nomor antrian yang sudah ada sebagai mulai diproses
+            $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
             // 7. Update relasi
             $akteKematian->update(['antrian_online_id' => $antrian->antrian_online_id]);
@@ -140,6 +144,18 @@ class AkteKematianController extends Controller
         $urutan = str_pad($count, 3, '0', STR_PAD_LEFT);
         
         return "{$huruf}-{$hariKe}-{$urutan}";
+    }
+
+    private function invalidAntrianResponse(Request $request, string $message)
+    {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => $message,
+            ], 422);
+        }
+
+        return redirect()->back()->with('error', $message)->withInput();
     }
 
     // ... method daftar, detail, dan updateStatus tetap sama ...

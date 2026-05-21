@@ -93,9 +93,24 @@ class AkteLahirController extends Controller
             }
             return redirect()->back()->with('error', $validator->errors()->first())->withInput();
         }
+
+        $antrian = Antrian_Online_Model::with('layanan')
+            ->cariNomorExact($request->nomor_antrian)
+            ->first();
+
+        if (!$antrian) {
+            return $this->invalidAntrianResponse($request, 'Nomor antrian tidak ditemukan dalam sistem.');
+        }
+
+        $validasiLayanan = $antrian->validateForLayanan($request->layanan_id);
+        if (!$validasiLayanan['valid']) {
+            return $this->invalidAntrianResponse($request, strip_tags($validasiLayanan['message']));
+        }
+
         $data = $request->except([
             'formulir_f201', 'ktp_pemohon','ktp_saksi1','ktp_saksi2','kk_pemohon', 'file_surat_lahir','file_buku_nikah','file_sptjm_kelahiran','file_sptjm_pasutri','file_berita_acara_polisi','foto_wajah'
         ]);
+        $data['nomor_antrian'] = $antrian->nomor_antrian;
         $data['uuid'] = Str::uuid();
         $data['status'] = 'Verifikasi Data';
         $fileFields = [
@@ -123,6 +138,7 @@ class AkteLahirController extends Controller
             $data['foto_wajah'] = "akte_lahir/{$filename}";
         }
         AkteLahir::create($data);
+        $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
         // Kirim notifikasi ke admin
         AdminNotificationService::layananAkteLahirBaru(
@@ -139,6 +155,18 @@ class AkteLahirController extends Controller
 
         return redirect()->route('layanan-mandiri')
             ->with('success', 'Data dan dokumen berhasil dikirim.');
+    }
+
+    private function invalidAntrianResponse(Request $request, string $message)
+    {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => $message,
+            ], 422);
+        }
+
+        return redirect()->back()->with('error', $message)->withInput();
     }
 
     public function daftar_aktelahir(Request $request)

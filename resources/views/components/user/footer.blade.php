@@ -1,5 +1,5 @@
 {{-- Footer Compact dengan desain Hero Section --}}
-<footer class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white">
+<footer class="relative mt-auto bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white">
     {{-- SVG Wave di bagian atas sebagai transisi (warna biru, bukan putih) --}}
     <div class="absolute top-0 left-0 right-0 transform rotate-180">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">

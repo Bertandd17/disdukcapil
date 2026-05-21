@@ -10,7 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  * Form Request untuk validasi Antrian Online
  *
  * Strict Data Type Validation:
- * - layanan_id: numeric dan exists di database
+ * - layanan_id: string dan exists di database
  * - nama_lengkap: string dengan max length
  * - alamat: nullable string
  * - tanggal_lahir: nullable date format
@@ -36,7 +36,7 @@ class AntrianOnlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'layanan_id' => 'required|numeric|exists:layanan,layanan_id',
+            'layanan_id' => 'required|string|exists:layanan,layanan_id',
             'nama_lengkap' => 'required|string|max:100|regex:/^[\p{L}\s\.\-,]+$/u',
             'alamat' => 'nullable|string|max:500',
             'tanggal_lahir' => 'nullable|date|date_format:Y-m-d|before:today',
@@ -52,7 +52,7 @@ class AntrianOnlineRequest extends FormRequest
     {
         return [
             'layanan_id.required' => 'Layanan harus dipilih',
-            'layanan_id.numeric' => 'ID layanan harus berupa angka',
+            'layanan_id.string' => 'ID layanan harus berupa teks',
             'layanan_id.exists' => 'Layanan tidak ditemukan',
             'nama_lengkap.required' => 'Nama lengkap harus diisi',
             'nama_lengkap.string' => 'Nama lengkap harus berupa teks',

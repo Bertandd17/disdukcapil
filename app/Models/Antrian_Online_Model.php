@@ -206,34 +206,34 @@ class Antrian_Online_Model extends Model
     public static function checkDailyLimit(string $nik, string $layananId): array
     {
         $startTime = microtime(true);
+        $layanan = Layanan_Model::findByIdentifier($layananId);
+        $normalizedLayananId = $layanan?->layanan_id ?? $layananId;
 
         // OPTIMIZED: Gunakan join langsung ke lacak_berkas daripada whereHas
         // Ini jauh lebih cepat karena tidak perlu subquery
         $exists = \DB::table('antrian_online')
             ->join('lacak_berkas', 'antrian_online.antrian_online_id', '=', 'lacak_berkas.antrian_online_id')
             ->where('antrian_online.nik', $nik)
-            ->where('antrian_online.layanan_id', $layananId)
+            ->where('antrian_online.layanan_id', $normalizedLayananId)
             ->whereDate('lacak_berkas.tanggal', '=', now()->toDateString())
             ->exists();
 
         $elapsed = round((microtime(true) - $startTime) * 1000, 2);
         \Log::info('checkDailyLimit query', [
             'nik' => $nik,
-            'layanan_id' => $layananId,
+            'layanan_id' => $normalizedLayananId,
             'exists' => $exists,
             'query_time_ms' => $elapsed
         ]);
 
         if ($exists) {
-            // Ambil nama layanan untuk pesan (cache jika bisa)
-            $layanan = Layanan_Model::find($layananId);
             $namaLayanan = $layanan ? $layanan->nama_layanan : 'layanan ini';
 
             return [
                 'already_submitted' => true,
                 'message' => "Anda sudah mengajukan <strong>{$namaLayanan}</strong> hari ini. Satu user hanya dapat mengajukan layanan yang sama sekali dalam satu hari. Silakan coba lagi besok.",
                 'error_code' => 'DAILY_LIMIT_EXCEEDED',
-                'layanan_id' => $layananId,
+                'layanan_id' => $normalizedLayananId,
                 'layanan_nama' => $namaLayanan,
                 'nik' => $nik
             ];
@@ -253,6 +253,17 @@ class Antrian_Online_Model extends Model
      */
     public function validateForLayanan(string $layananId): array
     {
+        $layananTujuan = Layanan_Model::findByIdentifier($layananId);
+
+        if (!$layananTujuan) {
+            return [
+                'valid' => false,
+                'message' => 'Layanan yang dipilih tidak ditemukan. Silakan muat ulang halaman dan pilih layanan kembali.',
+                'error_code' => 'UNKNOWN_SERVICE',
+                'layanan_tujuan' => $layananId,
+            ];
+        }
+
         // Cek apakah sudah digunakan (sudah ada lacak_berkas)
         if ($this->isAlreadyUsed()) {
             return [
@@ -263,13 +274,13 @@ class Antrian_Online_Model extends Model
         }
 
         // Cek apakah layanan sesuai
-        if ($this->layanan_id !== $layananId) {
-            // Ambil nama layanan untuk pesan error
-            $layananAsal = Layanan_Model::find($this->layanan_id);
-            $layananTujuan = Layanan_Model::find($layananId);
+        if ($this->layanan_id !== $layananTujuan->layanan_id) {
+            $layananAsal = $this->relationLoaded('layanan')
+                ? $this->layanan
+                : Layanan_Model::findByIdentifier($this->layanan_id);
 
             $namaLayananAsal = $layananAsal ? $layananAsal->nama_layanan : 'layanan lain';
-            $namaLayananTujuan = $layananTujuan ? $layananTujuan->nama_layanan : 'layanan ini';
+            $namaLayananTujuan = $layananTujuan->nama_layanan;
 
             return [
                 'valid' => false,
@@ -277,7 +288,7 @@ class Antrian_Online_Model extends Model
                 'error_code' => 'INVALID_SERVICE',
                 'layanan_asal' => $this->layanan_id,
                 'layanan_asal_nama' => $namaLayananAsal,
-                'layanan_tujuan' => $layananId,
+                'layanan_tujuan' => $layananTujuan->layanan_id,
                 'layanan_tujuan_nama' => $namaLayananTujuan
             ];
         }

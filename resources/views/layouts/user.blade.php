@@ -174,7 +174,7 @@
 
     @stack('styles')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 min-h-screen flex flex-col">
     @include('components.page-loading')
 
     {{-- Navbar --}}
@@ -226,7 +226,9 @@
     @endif
 
     {{-- Content --}}
-    @yield('content')
+    <main class="flex-1 flex flex-col">
+        @yield('content')
+    </main>
 
     {{-- Footer --}}
     @include('components.user.footer')
@@ -440,19 +442,19 @@
         // Show SweetAlert for session messages on page load
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
-                SwalHelper.success('{{ session('success') }}');
+                SwalHelper.success(@json(session('success')));
             @endif
 
             @if(session('error'))
-                SwalHelper.error('{{ session('error') }}');
+                SwalHelper.error(@json(session('error')));
             @endif
 
             @if(session('info'))
-                SwalHelper.info('{{ session('info') }}');
+                SwalHelper.info(@json(session('info')));
             @endif
 
             @if(session('warning'))
-                SwalHelper.warning('{{ session('warning') }}');
+                SwalHelper.warning(@json(session('warning')));
             @endif
         });
     </script>

@@ -1558,7 +1558,9 @@ class Antrian_Online_Controller extends Controller
             ]);
 
             // Gunakan scope cariNomorExact yang sudah dioptimasi untuk MySQL
-            $antrian = Antrian_Online_Model::cariNomorExact($nomorAntrian)->first();
+            $antrian = Antrian_Online_Model::with('layanan')
+                ->cariNomorExact($nomorAntrian)
+                ->first();
 
             if (!$antrian) {
                 Log::warning('Antrian not found', [
@@ -1578,35 +1580,24 @@ class Antrian_Online_Controller extends Controller
                 'antrian_online_id' => $antrian->antrian_online_id,
             ]);
 
-            // Validasi: cek apakah sudah digunakan
-            // Hanya consider "used" jika status berkas sudah 'Dokumen Diterima' atau lebih lanjut
-            if ($antrian->isAlreadyUsed()) {
+            // Validasi layanan: cek parameter layanan_id dari query string
+            $requestedLayananId = $request->query('layanan_id');
+
+            if ($requestedLayananId) {
+                $validasiLayanan = $antrian->validateForLayanan($requestedLayananId);
+                if (!$validasiLayanan['valid']) {
+                    unset($validasiLayanan['valid']);
+                    $status = ($validasiLayanan['error_code'] ?? null) === 'UNKNOWN_SERVICE' ? 422 : 400;
+
+                    return response()->json(array_merge([
+                        'success' => false,
+                    ], $validasiLayanan), $status);
+                }
+            } elseif ($antrian->isAlreadyUsed()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.',
                     'error_code' => 'ALREADY_USED'
-                ], 400);
-            }
-
-            // Validasi layanan: cek parameter layanan_id dari query string
-            $requestedLayananId = $request->query('layanan_id');
-
-            if ($requestedLayananId && $antrian->layanan_id !== $requestedLayananId) {
-                // Ambil nama layanan untuk pesan error yang lebih jelas
-                $layananAsal = Layanan_Model::find($antrian->layanan_id);
-                $layananTujuan = Layanan_Model::find($requestedLayananId);
-
-                $namaLayananAsal = $layananAsal ? $layananAsal->nama_layanan : 'layanan lain';
-                $namaLayananTujuan = $layananTujuan ? $layananTujuan->nama_layanan : 'layanan ini';
-
-                return response()->json([
-                    'success' => false,
-                    'message' => "Nomor antrian ini hanya berlaku untuk layanan <strong>{$namaLayananAsal}</strong>. Silakan buat nomor antrian baru untuk layanan <strong>{$namaLayananTujuan}</strong>.",
-                    'error_code' => 'INVALID_SERVICE',
-                    'layanan_asal' => $antrian->layanan_id,
-                    'layanan_asal_nama' => $namaLayananAsal,
-                    'layanan_tujuan' => $requestedLayananId,
-                    'layanan_tujuan_nama' => $namaLayananTujuan
                 ], 400);
             }
 
@@ -1654,8 +1645,17 @@ class Antrian_Online_Controller extends Controller
 
             $nik = $request->query('nik');
             $layananId = $request->query('layanan_id');
+            $layanan = Layanan_Model::findByIdentifier($layananId);
 
-            $result = Antrian_Online_Model::checkDailyLimit($nik, $layananId);
+            if (!$layanan) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Layanan yang dipilih tidak ditemukan. Silakan muat ulang halaman dan pilih layanan kembali.',
+                    'error_code' => 'UNKNOWN_SERVICE',
+                ], 422);
+            }
+
+            $result = Antrian_Online_Model::checkDailyLimit($nik, $layanan->layanan_id);
 
             if ($result['already_submitted']) {
                 return response()->json([

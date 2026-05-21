@@ -12,7 +12,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  * Security Features:
  * - nomor_antrian: string dengan format valid
  * - nama_lengkap: string untuk like query
- * - layanan_id: numeric untuk exact match
+ * - layanan_id: string untuk exact match
  */
 class CariAntrianRequest extends FormRequest
 {
@@ -36,7 +36,7 @@ class CariAntrianRequest extends FormRequest
         return [
             'nomor_antrian' => 'nullable|string|max:20|regex:/^[A-Z0-9\-]+$/',
             'nama_lengkap' => 'nullable|string|max:100|regex:/^[\p{L}\s\.\-,]+$/u',
-            'layanan_id' => 'nullable|numeric|exists:layanan,layanan_id',
+            'layanan_id' => 'nullable|string|exists:layanan,layanan_id',
         ];
     }
 
@@ -52,7 +52,7 @@ class CariAntrianRequest extends FormRequest
             'nomor_antrian.regex' => 'Format nomor antrian tidak valid',
             'nama_lengkap.string' => 'Nama lengkap harus berupa teks',
             'nama_lengkap.regex' => 'Nama hanya boleh mengandung huruf, spasi, titik, koma, dan tanda hubung',
-            'layanan_id.numeric' => 'ID layanan harus berupa angka',
+            'layanan_id.string' => 'ID layanan harus berupa teks',
             'layanan_id.exists' => 'Layanan tidak ditemukan',
         ];
     }

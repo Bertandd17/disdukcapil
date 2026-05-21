@@ -344,14 +344,14 @@ Route::prefix('admin')->group(function () {
         // Layanan Pernikahan
         Route::prefix('pernikahan')->name('admin.pernikahan.')->group(function () {
             Route::get('/', [AdminPernikahanController::class, 'index'])->name('index');
-            Route::get('/{id}', [AdminPernikahanController::class, 'show'])->name('show');
-            Route::post('/detail-ajax', [AdminPernikahanController::class, 'detailAjax'])->name('detail-ajax');
-            Route::post('/{id}/verifikasi', [AdminPernikahanController::class, 'verifikasi'])->name('verifikasi');
-            Route::post('/{id}/proses', [AdminPernikahanController::class, 'prosesBerkas'])->name('proses');
-            Route::post('/{id}/approve-tanggal', [AdminPernikahanController::class, 'approveTanggal'])->name('approve-tanggal');
-            Route::post('/{id}/reject-tanggal', [AdminPernikahanController::class, 'rejectTanggal'])->name('reject-tanggal');
-            Route::post('/{id}/upload-dokumen-final', [AdminPernikahanController::class, 'uploadDokumenFinal'])->name('upload-dokumen-final');
             Route::get('/calendar-data', [AdminPernikahanController::class, 'calendarData'])->name('calendar-data');
+            Route::post('/detail-ajax', [AdminPernikahanController::class, 'detailAjax'])->name('detail-ajax');
+            Route::post('/{id}/verifikasi', [AdminPernikahanController::class, 'verifikasi'])->name('verifikasi')->whereUuid('id');
+            Route::post('/{id}/proses', [AdminPernikahanController::class, 'prosesBerkas'])->name('proses')->whereUuid('id');
+            Route::post('/{id}/approve-tanggal', [AdminPernikahanController::class, 'approveTanggal'])->name('approve-tanggal')->whereUuid('id');
+            Route::post('/{id}/reject-tanggal', [AdminPernikahanController::class, 'rejectTanggal'])->name('reject-tanggal')->whereUuid('id');
+            Route::post('/{id}/upload-dokumen-final', [AdminPernikahanController::class, 'uploadDokumenFinal'])->name('upload-dokumen-final')->whereUuid('id');
+            Route::get('/{id}', [AdminPernikahanController::class, 'show'])->name('show')->whereUuid('id');
         });
 
         // Manajemen Akun
@@ -417,21 +417,18 @@ Route::prefix('keagamaan')->name('keagamaan.')->group(function () {
             Route::get('/', [KeagamaanPernikahanController::class, 'index'])->name('index');
             Route::get('/request-tanggal', [KeagamaanPernikahanController::class, 'requestTanggal'])->name('request-tanggal');
             Route::get('/upload-berkas', [KeagamaanPernikahanController::class, 'uploadBerkas'])->name('upload-berkas');
-            Route::get('/print-berkas/{id}', [KeagamaanPernikahanController::class, 'printBerkas'])->name('print-berkas');
-            Route::get('/{id}', [KeagamaanPernikahanController::class, 'show'])->name('show');
-            Route::post('/detail-ajax', [KeagamaanPernikahanController::class, 'detailAjax'])->name('detail-ajax');
-            Route::post('/upload-berkas-post', [KeagamaanPernikahanController::class, 'uploadBerkasPost'])->name('upload-berkas-post');
-            Route::post('/{id}/konfirmasi-jemaat', [KeagamaanPernikahanController::class, 'konfirmasiJemaat'])->name('konfirmasi-jemaat');
-            Route::post('/{id}/set-tanggal', [KeagamaanPernikahanController::class, 'setTanggal'])->name('set-tanggal');
-            Route::post('/{id}/upload-dokumen', [KeagamaanPernikahanController::class, 'uploadDokumen'])->name('upload');
             Route::get('/data', [KeagamaanPernikahanController::class, 'getData'])->name('data');
-            // API untuk Request Tanggal
             Route::get('/available-jemaat', [KeagamaanPernikahanController::class, 'getAvailableJemaat'])->name('available-jemaat');
             Route::post('/submit-request-tanggal', [KeagamaanPernikahanController::class, 'submitRequestTanggal'])->name('submit-request-tanggal');
-            // Auto-refresh check updates
             Route::get('/check-updates', [KeagamaanPernikahanController::class, 'checkUpdates'])->name('check-updates');
-            // Detail dokumen untuk modal
-            Route::get('/detail-dokumen/{id}', [KeagamaanPernikahanController::class, 'detailDokumen'])->name('detail-dokumen');
+            Route::get('/detail-dokumen/{id}', [KeagamaanPernikahanController::class, 'detailDokumen'])->name('detail-dokumen')->whereUuid('id');
+            Route::get('/print-berkas/{id}', [KeagamaanPernikahanController::class, 'printBerkas'])->name('print-berkas')->whereUuid('id');
+            Route::post('/detail-ajax', [KeagamaanPernikahanController::class, 'detailAjax'])->name('detail-ajax');
+            Route::post('/upload-berkas-post', [KeagamaanPernikahanController::class, 'uploadBerkasPost'])->name('upload-berkas-post');
+            Route::post('/{id}/konfirmasi-jemaat', [KeagamaanPernikahanController::class, 'konfirmasiJemaat'])->name('konfirmasi-jemaat')->whereUuid('id');
+            Route::post('/{id}/set-tanggal', [KeagamaanPernikahanController::class, 'setTanggal'])->name('set-tanggal')->whereUuid('id');
+            Route::post('/{id}/upload-dokumen', [KeagamaanPernikahanController::class, 'uploadDokumen'])->name('upload')->whereUuid('id');
+            Route::get('/{id}', [KeagamaanPernikahanController::class, 'show'])->name('show')->whereUuid('id');
         });
     });
 });

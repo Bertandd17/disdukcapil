@@ -19,6 +19,7 @@ class Layanan_Model extends Model
 
     protected $fillable = [
         'layanan_id',
+        'kode_layanan',
         'nama_layanan',
     ];
 
@@ -43,5 +44,19 @@ class Layanan_Model extends Model
     public function antrian_online(): HasMany
     {
         return $this->hasMany(Antrian_Online_Model::class, 'layanan_id', 'layanan_id');
+    }
+
+    public static function findByIdentifier(?string $identifier): ?self
+    {
+        $identifier = trim((string) $identifier);
+
+        if ($identifier === '') {
+            return null;
+        }
+
+        return self::query()
+            ->where('layanan_id', $identifier)
+            ->orWhere('kode_layanan', $identifier)
+            ->first();
     }
 }
