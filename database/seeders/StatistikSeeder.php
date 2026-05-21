@@ -8,7 +8,6 @@ use App\Models\StatistikDokumen;
 use App\Models\StatistikLayananBulanan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class StatistikSeeder extends Seeder
 {
@@ -140,13 +139,10 @@ class StatistikSeeder extends Seeder
     {
         $this->command->info(' Menyimpan data statistik penduduk...');
 
-        // Hapus data existing
-        StatistikPenduduk::query()->delete();
-
         // Ambil semua kecamatan
         $kecamatanList = Kecamatan::all()->keyBy('nama_kecamatan');
 
-        $inserted = 0;
+        $saved = 0;
         foreach ($this->dataPenduduk as $data) {
             [$namaKecamatan, $tahun, $totalPenduduk] = $data;
 
@@ -155,54 +151,65 @@ class StatistikSeeder extends Seeder
                 continue;
             }
 
-            StatistikPenduduk::create([
-                'kecamatan_id' => $kecamatan->kecamatan_id,
-                'tahun' => $tahun,
-                'total_penduduk' => $totalPenduduk,
-            ]);
+            $statistik = StatistikPenduduk::withTrashed()->updateOrCreate(
+                [
+                    'kecamatan_id' => $kecamatan->kecamatan_id,
+                    'tahun' => $tahun,
+                ],
+                [
+                    'total_penduduk' => $totalPenduduk,
+                ]
+            );
 
-            $inserted++;
+            if ($statistik->trashed()) {
+                $statistik->restore();
+            }
+
+            $saved++;
         }
 
-        $this->command->info("   ✓ {$inserted} data statistik penduduk berhasil disimpan");
+        $this->command->info("   {$saved} data statistik penduduk berhasil disimpan");
     }
 
     private function seedStatistikDokumen(): void
     {
         $this->command->info(' Menyimpan data statistik dokumen...');
 
-        // Hapus data existing
-        StatistikDokumen::query()->delete();
-
-        $inserted = 0;
+        $saved = 0;
         foreach ($this->dataDokumen as $data) {
             [$tahun, $bulan, $kk, $akteLahir, $akteKematian, $ktp, $kia] = $data;
 
-            StatistikDokumen::create([
-                'tahun' => $tahun,
-                'bulan' => $bulan,
-                'jumlah_kk' => $kk,
-                'jumlah_akte_lahir' => $akteLahir,
-                'jumlah_akte_kematian' => $akteKematian,
-                'jumlah_ktp' => $ktp,
-                'jumlah_kia' => $kia,
-                'is_auto_generated' => false,
-            ]);
+            $statistik = StatistikDokumen::withTrashed()->updateOrCreate(
+                [
+                    'tahun' => $tahun,
+                    'bulan' => $bulan,
+                ],
+                [
+                    'jumlah_kk' => $kk,
+                    'jumlah_akte_lahir' => $akteLahir,
+                    'jumlah_akte_kematian' => $akteKematian,
+                    'jumlah_ktp' => $ktp,
+                    'jumlah_kia' => $kia,
+                    'is_auto_generated' => false,
+                    'generated_at' => null,
+                ]
+            );
 
-            $inserted++;
+            if ($statistik->trashed()) {
+                $statistik->restore();
+            }
+
+            $saved++;
         }
 
-        $this->command->info("   ✓ {$inserted} data statistik dokumen berhasil disimpan");
+        $this->command->info("   {$saved} data statistik dokumen berhasil disimpan");
     }
 
     private function seedStatistikLayananBulanan(): void
     {
         $this->command->info(' Menyimpan data statistik layanan bulanan...');
 
-        // Hapus data existing
-        StatistikLayananBulanan::query()->delete();
-
-        $inserted = 0;
+        $saved = 0;
         foreach ($this->dataLayanan as $data) {
             [
                 $tahun,
@@ -216,22 +223,31 @@ class StatistikSeeder extends Seeder
                 $kepuasan
             ] = $data;
 
-            StatistikLayananBulanan::create([
-                'tahun' => $tahun,
-                'bulan' => $bulan,
-                'total_antrian' => $total,
-                'antrian_menunggu' => $menunggu,
-                'antrian_diproses' => $diproses,
-                'antrian_selesai' => $selesai,
-                'antrian_ditolak' => $ditolak,
-                'waktu_avg_penanganan_menit' => $waktuAvg,
-                'persentase_kepuasan' => $kepuasan,
-                'is_auto_generated' => false,
-            ]);
+            $statistik = StatistikLayananBulanan::withTrashed()->updateOrCreate(
+                [
+                    'tahun' => $tahun,
+                    'bulan' => $bulan,
+                ],
+                [
+                    'total_antrian' => $total,
+                    'antrian_menunggu' => $menunggu,
+                    'antrian_diproses' => $diproses,
+                    'antrian_selesai' => $selesai,
+                    'antrian_ditolak' => $ditolak,
+                    'waktu_avg_penanganan_menit' => $waktuAvg,
+                    'persentase_kepuasan' => $kepuasan,
+                    'is_auto_generated' => false,
+                    'generated_at' => null,
+                ]
+            );
 
-            $inserted++;
+            if ($statistik->trashed()) {
+                $statistik->restore();
+            }
+
+            $saved++;
         }
 
-        $this->command->info("   ✓ {$inserted} data statistik layanan bulanan berhasil disimpan");
+        $this->command->info("   {$saved} data statistik layanan bulanan berhasil disimpan");
     }
 }

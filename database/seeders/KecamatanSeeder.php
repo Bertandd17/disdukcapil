@@ -34,6 +34,21 @@ class KecamatanSeeder extends Seeder
         ];
 
         foreach ($kecamatan as $kec) {
+            $existing = DB::table('kecamatan')
+                ->where('kode_kecamatan', $kec['kode'])
+                ->first();
+
+            if ($existing) {
+                DB::table('kecamatan')
+                    ->where('kode_kecamatan', $kec['kode'])
+                    ->update([
+                        'nama_kecamatan' => trim($kec['nama']),
+                        'updated_at' => now(),
+                    ]);
+
+                continue;
+            }
+
             DB::table('kecamatan')->insert([
                 'kecamatan_id' => Str::uuid()->toString(),
                 'kode_kecamatan' => $kec['kode'],
