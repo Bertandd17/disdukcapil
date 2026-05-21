@@ -22,16 +22,16 @@ class AkteLahirController extends Controller
             'nik_pemohon' => 'required|digits:16',
             'nomor_kk_pemohon' => 'required|string',
             'alamat' => 'required|string',
-            'formulir_f201' => 'required|file|mimes:pdf|max:5120',
-            'ktp_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'ktp_saksi1' => 'required|file|mimes:pdf|max:5120',
-            'ktp_saksi2' => 'required|file|mimes:pdf|max:5120',
-            'kk_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'file_surat_lahir' => 'required|file|mimes:pdf|max:5120',
-            'file_buku_nikah' => 'required|file|mimes:pdf|max:5120',
-            'file_sptjm_kelahiran' => 'nullable|file|mimes:pdf|max:5120',
-            'file_sptjm_pasutri' => 'nullable|file|mimes:pdf|max:5120',
-            'file_berita_acara_polisi' => 'nullable|file|mimes:pdf|max:5120',
+            'formulir_f201' => 'required|file|mimes:pdf|max:2048',
+            'ktp_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'ktp_saksi1' => 'required|file|mimes:pdf|max:2048',
+            'ktp_saksi2' => 'required|file|mimes:pdf|max:2048',
+            'kk_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'file_surat_lahir' => 'required|file|mimes:pdf|max:2048',
+            'file_buku_nikah' => 'required|file|mimes:pdf|max:2048',
+            'file_sptjm_kelahiran' => 'nullable|file|mimes:pdf|max:2048',
+            'file_sptjm_pasutri' => 'nullable|file|mimes:pdf|max:2048',
+            'file_berita_acara_polisi' => 'nullable|file|mimes:pdf|max:2048',
         ], [
             'layanan_id.required' => 'ID layanan tidak boleh kosong.',
             'layanan_id.exists' => 'ID layanan tidak ditemukan di sistem.',
@@ -256,12 +256,12 @@ class AkteLahirController extends Controller
     public function uploadBerkasFinal(Request $request, $uuid)
     {
         $validator = Validator::make($request->all(), [
-            'file_berkas' => 'required|file|mimes:pdf|max:5120',
+            'file_berkas' => 'required|file|mimes:pdf|max:2048',
         ], [
             'file_berkas.required' => 'File berkas wajib diunggah.',
             'file_berkas.file'     => 'Berkas tidak valid.',
             'file_berkas.mimes'    => 'Format yang diizinkan: PDF.',
-            'file_berkas.max'      => 'Ukuran file maksimal 5 MB.',
+            'file_berkas.max'      => 'Ukuran file maksimal 2 MB.',
         ]);
 
         if ($validator->fails()) {

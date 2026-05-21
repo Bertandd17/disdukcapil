@@ -23,12 +23,12 @@ class LahirMatiController extends Controller
             'alamat_pemohon'              => 'required|string',
             'hubungan_pemohon'            => 'required|string',
             
-            'ktp_pemohon'                 => 'nullable|file|mimes:pdf|max:5120',
-            'kartu_keluarga_pemohon'      => 'nullable|file|mimes:pdf|max:5120',
-            'ktp_saksi1'                  => 'nullable|file|mimes:pdf|max:5120',
-            'ktp_saksi2'                  => 'nullable|file|mimes:pdf|max:5120',
-            'formulir_f201'               => 'nullable|file|mimes:pdf|max:5120',
-            'surat_keterangan_lahir_mati' => 'nullable|file|mimes:pdf|max:5120',
+            'ktp_pemohon'                 => 'nullable|file|mimes:pdf|max:2048',
+            'kartu_keluarga_pemohon'      => 'nullable|file|mimes:pdf|max:2048',
+            'ktp_saksi1'                  => 'nullable|file|mimes:pdf|max:2048',
+            'ktp_saksi2'                  => 'nullable|file|mimes:pdf|max:2048',
+            'formulir_f201'               => 'nullable|file|mimes:pdf|max:2048',
+            'surat_keterangan_lahir_mati' => 'nullable|file|mimes:pdf|max:2048',
         ], [
             'digits' => 'Pastikan nomor NIK/KK tepat 16 angka!',
             'mimes'  => 'Berkas yang diunggah harus berformat PDF!',
@@ -213,11 +213,11 @@ class LahirMatiController extends Controller
     public function uploadBerkasFinal(Request $request, $uuid)
     {
         $validator = Validator::make($request->all(), [
-            'file_berkas' => 'required|file|mimes:pdf|max:5120',
+            'file_berkas' => 'required|file|mimes:pdf|max:2048',
         ], [
             'file_berkas.required' => 'File berkas wajib diunggah.',
             'file_berkas.mimes'    => 'Format yang diizinkan: PDF.',
-            'file_berkas.max'      => 'Ukuran file maksimal 5 MB.',
+            'file_berkas.max'      => 'Ukuran file maksimal 2 MB.',
         ]);
 
         if ($validator->fails()) {

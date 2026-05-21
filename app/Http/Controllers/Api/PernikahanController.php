@@ -656,7 +656,7 @@ class PernikahanController extends Controller
     public function uploadBerkas(Request $request, string $id): JsonResponse
     {
         $request->validate([
-            'file' => 'required|file|mimes:pdf|max:5120',
+            'file' => 'required|file|mimes:pdf|max:2048',
             'type' => 'required|in:berkas_acara,surat_keterangan',
         ]);
 

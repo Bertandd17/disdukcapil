@@ -428,13 +428,16 @@
                                 width: 100%;
                                 display: flex;
                                 justify-content: center;
-                                overflow: hidden;
+                                overflow-x: auto;
+                                overflow-y: visible;
                                 padding: 8px 4px;
+                                scrollbar-width: thin;
                             }
                             .org-inner {
                                 display: inline-flex;
                                 flex-direction: column;
                                 align-items: center;
+                                min-width: max-content;
                                 transform-origin: top center;
                                 transition: transform 0.2s ease;
                             }
@@ -872,12 +875,12 @@
                                     const cw = inner.scrollWidth;
                                     if (cw === 0 || vw === 0) return;
 
-                                    const scale = Math.min(1, vw / cw);
+                                    const scale = vw < 768 ? 1 : Math.min(1, vw / cw);
                                     inner.style.transform = 'scale(' + scale + ')';
 
                                     // Sesuaikan tinggi viewport agar tidak menyisakan ruang kosong
                                     const ch = inner.scrollHeight;
-                                    viewport.style.height = (ch * scale) + 'px';
+                                    viewport.style.height = scale < 1 ? (ch * scale) + 'px' : '';
                                 }
 
                                 window.addEventListener('load', fitOrgChart);

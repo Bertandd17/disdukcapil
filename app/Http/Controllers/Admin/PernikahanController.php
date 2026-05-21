@@ -450,8 +450,8 @@ class PernikahanController extends Controller
     public function uploadBerkas(Request $request, string $id): JsonResponse
     {
         $request->validate([
-            'file_berkas_acara' => 'nullable|file|mimes:pdf|max:5120',
-            'file_surat_keterangan' => 'nullable|file|mimes:pdf|max:5120',
+            'file_berkas_acara' => 'nullable|file|mimes:pdf|max:2048',
+            'file_surat_keterangan' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
         try {
@@ -517,10 +517,10 @@ class PernikahanController extends Controller
     public function uploadDokumenFinal(Request $request, string $id): JsonResponse
     {
         $request->validate([
-            'file_akta_pernikahan' => 'nullable|file|mimes:pdf|max:5120',
-            'file_kk_pasangan' => 'nullable|file|mimes:pdf|max:5120',
-            'file_kk_ortu_pria' => 'nullable|file|mimes:pdf|max:5120',
-            'file_kk_ortu_wanita' => 'nullable|file|mimes:pdf|max:5120',
+            'file_akta_pernikahan' => 'nullable|file|mimes:pdf|max:2048',
+            'file_kk_pasangan' => 'nullable|file|mimes:pdf|max:2048',
+            'file_kk_ortu_pria' => 'nullable|file|mimes:pdf|max:2048',
+            'file_kk_ortu_wanita' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
         try {

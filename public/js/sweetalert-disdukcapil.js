@@ -878,6 +878,81 @@
         }
     }, true);
 
+    function isPdfOnlyFileInput(input) {
+        if (!input || input.type !== 'file') return false;
+        var accept = String(input.getAttribute('accept') || '').toLowerCase();
+        return accept.indexOf('.pdf') !== -1 &&
+            accept.indexOf('image') === -1 &&
+            accept.indexOf('.jpg') === -1 &&
+            accept.indexOf('.jpeg') === -1 &&
+            accept.indexOf('.png') === -1;
+    }
+
+    function ensurePdfFileHelpText(root) {
+        var scope = root && root.querySelectorAll ? root : document;
+        var inputs = scope.querySelectorAll('input[type="file"][accept]');
+        Array.prototype.forEach.call(inputs, function (input) {
+            if (!isPdfOnlyFileInput(input) || input.dataset.pdfHelpAttached === '1') return;
+            input.dataset.pdfHelpAttached = '1';
+
+            var help = document.createElement('p');
+            help.className = 'dd-pdf-help text-xs text-gray-500 mt-1';
+            help.textContent = 'Maksimal ukuran file: 2MB. Format yang diperbolehkan: PDF.';
+
+            var target = input.closest('label') || input;
+            if (target && target.parentNode) {
+                target.parentNode.insertBefore(help, target.nextSibling);
+            }
+        });
+    }
+
+    document.addEventListener('change', function (event) {
+        var input = event.target;
+        if (!isPdfOnlyFileInput(input)) return;
+
+        var file = input.files && input.files[0] ? input.files[0] : null;
+        if (!file) return;
+
+        var isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+        if (!isPdf) {
+            input.value = '';
+            fireToast({
+                type: 'error',
+                icon: 'error',
+                title: 'Hanya file PDF yang diperbolehkan',
+                timer: 4000
+            });
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            input.value = '';
+            fireToast({
+                type: 'error',
+                icon: 'error',
+                title: 'Maksimal ukuran file: 2MB',
+                timer: 4000
+            });
+        }
+    }, true);
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { ensurePdfFileHelpText(document); });
+    } else {
+        ensurePdfFileHelpText(document);
+    }
+
+    if (window.MutationObserver) {
+        var pdfHelpObserver = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                Array.prototype.forEach.call(mutation.addedNodes || [], function (node) {
+                    if (node && node.nodeType === 1) ensurePdfFileHelpText(node);
+                });
+            });
+        });
+        pdfHelpObserver.observe(document.documentElement, { childList: true, subtree: true });
+    }
+
     // =====================================================================
     // CONTOH PEMAKAIAN (untuk dokumentasi — tidak dijalankan otomatis)
     // =====================================================================

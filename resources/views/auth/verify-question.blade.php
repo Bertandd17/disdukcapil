@@ -166,10 +166,17 @@
         .shake-animation {
             animation: shake 0.5s ease-in-out;
         }
+
+        .auth-shell,
+        .auth-card {
+            transform: none !important;
+            rotate: 0deg !important;
+            skew: 0deg !important;
+        }
     </style>
 </head>
 
-<body class="bg-animated min-h-screen flex items-center justify-center p-4">
+<body class="bg-animated min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
 @include('components.page-loading')
 
     <!-- Background Particles -->
@@ -182,7 +189,7 @@
     </div>
 
     <!-- Verification Container -->
-    <div class="relative z-10 w-full max-w-md">
+    <div class="auth-shell relative z-10 w-full max-w-md">
         <!-- Logo & Header -->
         <div class="text-center mb-8">
             <div class="relative inline-flex items-center justify-center">
@@ -198,7 +205,7 @@
         </div>
 
         <!-- Verification Card -->
-        <div class="bg-white rounded-3xl shadow-2xl p-8">
+        <div class="auth-card bg-white rounded-3xl shadow-2xl p-8">
             <div class="text-center mb-6">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
                     <i class="fas fa-check text-green-600 text-2xl"></i>

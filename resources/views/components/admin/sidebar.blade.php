@@ -52,17 +52,17 @@
             </a>
             <div class="dropdown-menu {{ request()->routeIs('admin.statistik*') ? 'active' : '' }}">
                 <a href="{{ route('admin.statistik-penduduk.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 text-sm">
+                    class="sidebar-link {{ request()->routeIs('admin.statistik-penduduk.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 text-sm">
                     <i class="fas fa-users w-4"></i>
                     <span class="sidebar-text">Statistik Penduduk</span>
                 </a>
                 <a href="{{ route('admin.statistik-dokumen.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 text-sm">
+                    class="sidebar-link {{ request()->routeIs('admin.statistik-dokumen.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 text-sm">
                     <i class="fas fa-file-alt w-4"></i>
                     <span class="sidebar-text">Statistik Dokumen</span>
                 </a>
                 <a href="{{ route('admin.statistik-layanan.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 text-sm">
+                    class="sidebar-link {{ request()->routeIs('admin.statistik-layanan.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 text-sm">
                     <i class="fas fa-clipboard-list w-4"></i>
                     <span class="sidebar-text">Statistik Layanan</span>
                 </a>

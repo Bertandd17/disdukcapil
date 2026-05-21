@@ -177,7 +177,7 @@
 
     @stack('styles')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 min-h-screen flex flex-col">
     @include('components.page-loading')
 
     @include('components.keagamaan.sidebar')
@@ -185,7 +185,7 @@
     <main class="main-content ml-64 min-h-screen flex flex-col">
         @include('components.keagamaan.navbar')
 
-        <div class="p-6 flex-1">
+        <div class="p-6 flex-1 min-h-0">
             @if (session('success'))
                 <div class="bg-green-50 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded-xl mb-6 shadow-md">
                     <div class="flex items-center gap-3">

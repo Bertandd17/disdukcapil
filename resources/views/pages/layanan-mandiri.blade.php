@@ -333,11 +333,11 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 
 <main class="pt-0">
     {{-- Hero --}}
-    <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white py-16">
+    <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white pt-16 pb-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto">
                 <h1 class="text-3xl md:text-4xl font-extrabold mb-4">Pilih Jenis Layanan</h1>
-                <p class="text-base text-blue-100 mb-6">
+                <p class="text-base text-blue-100 mb-8">
                     Pilih kategori layanan yang Anda butuhkan dan isi form pendaftaran secara online.
                 </p>
             </div>
@@ -349,7 +349,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
         </div>
     </section>
 
-    <section class="py-12 bg-gray-50 -mt-6 relative z-10">
+    <section class="py-12 bg-gray-50 relative z-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="mb-8 bg-blue-50 border border-blue-200 rounded-2xl p-5 reveal shadow-sm">
@@ -917,7 +917,7 @@ function openServiceModal(config, serviceName) {
                                           hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">
                                 <i class="fas fa-file-image text-xl text-gray-400 mb-1" id="icon-${file.name}"></i>
                                 <p class="text-xs font-semibold text-gray-600">Pilih File</p>
-                                <p class="text-[9px] text-gray-400 mt-1">PDF/Gambar</p>
+                                <p class="text-[9px] text-gray-400 mt-1">PDF/Gambar, maks. 2MB</p>
                                 <input type="file" name="${file.name}" accept=".pdf,.jpg,.jpeg,.png"
                                        ${file.required !== false ? 'required' : ''}
                                        class="hidden" onchange="handleFileSelect(this,'${file.name}')">
@@ -953,7 +953,7 @@ function openServiceModal(config, serviceName) {
                                   hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">
                         <i class="fas fa-file-pdf text-2xl text-gray-400 mb-2" id="icon-${file.name}"></i>
                         <p class="text-sm font-semibold text-gray-600">Pilih File PDF</p>
-                        <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Format: PDF</p>
+                        <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Format: PDF, maks. 2MB</p>
                         <input type="file" name="${file.name}" accept=".pdf"
                                ${file.required !== false ? 'required' : ''}
                                class="hidden" onchange="handleFileSelect(this,'${file.name}')">
@@ -1414,6 +1414,8 @@ function loadKeagamaanByAgama(jenisAgamaId) {
 }
 
 function handleFileSelect(input, fieldName) {
+    if (!validateSelectedFile(input)) return;
+
     const displayDiv = document.getElementById(`name-${fieldName}`);
     const icon       = document.getElementById(`icon-${fieldName}`);
     const clearBtn   = document.getElementById(`clear-${fieldName}`);
@@ -1427,6 +1429,33 @@ function handleFileSelect(input, fieldName) {
         if (icon) icon.className = 'fas fa-file-pdf text-2xl text-gray-400 mb-2';
         if (clearBtn) clearBtn.classList.add('hidden');
     }
+}
+
+function isPdfOnlyInput(input) {
+    const accept = (input.getAttribute('accept') || '').toLowerCase();
+    return accept.includes('.pdf') && !accept.includes('image') && !accept.includes('.jpg') && !accept.includes('.jpeg') && !accept.includes('.png');
+}
+
+function validateSelectedFile(input) {
+    const file = input.files && input.files[0] ? input.files[0] : null;
+    if (!file) return true;
+
+    if (isPdfOnlyInput(input)) {
+        const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        if (!isPdf) {
+            input.value = '';
+            showToast('Hanya file PDF yang diperbolehkan', 'error');
+            return false;
+        }
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        input.value = '';
+        showToast('Maksimal ukuran file: 2MB', 'error');
+        return false;
+    }
+
+    return true;
 }
 function clearFileInput(fieldName) {
     const input = document.querySelector(`input[type="file"][name="${fieldName}"]`);

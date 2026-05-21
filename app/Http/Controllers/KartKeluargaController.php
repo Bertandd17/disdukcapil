@@ -26,12 +26,12 @@ class KartKeluargaController extends Controller
             'nik_pemohon' => 'required|digits:16',
             'nomor_kk_pemohon' => 'required|integer',
             'alamat_pemohon' => 'required|string',
-            'formulir_f102' => 'required|file|mimes:pdf|max:5120',
-            'ktp_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'kk_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'formulir_f106' => 'required|file|mimes:pdf|max:5120',
-            'surat_keterangan_perubahan' => 'required|file|mimes:pdf|max:5120',
-            'pernyataan_pindah_kk' => 'nullable|file|mimes:pdf|max:5120',
+            'formulir_f102' => 'required|file|mimes:pdf|max:2048',
+            'ktp_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'kk_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'formulir_f106' => 'required|file|mimes:pdf|max:2048',
+            'surat_keterangan_perubahan' => 'required|file|mimes:pdf|max:2048',
+            'pernyataan_pindah_kk' => 'nullable|file|mimes:pdf|max:2048',
             'status' => 'nullable|string'
         ],[
             'layanan_id.required' => 'ID layanan tidak boleh kosong.',
@@ -128,11 +128,11 @@ class KartKeluargaController extends Controller
             'nik_pemohon' => 'required|digits:16',
             'nomor_kk_pemohon' => 'required|integer',
             'alamat_pemohon' => 'required|string',
-            'formulir_f102' => 'required|file|mimes:pdf|max:5120',
-            'ktp_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'kk_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'akta_kematian' => 'required|file|mimes:pdf|max:5120',
-            'surat_pernyataan_wali' => 'nullable|file|mimes:pdf|max:5120',
+            'formulir_f102' => 'required|file|mimes:pdf|max:2048',
+            'ktp_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'kk_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'akta_kematian' => 'required|file|mimes:pdf|max:2048',
+            'surat_pernyataan_wali' => 'nullable|file|mimes:pdf|max:2048',
             'status' => 'nullable|string'
         ], [
             'layanan_id.required' => 'ID layanan tidak boleh kosong.',
@@ -224,9 +224,9 @@ class KartKeluargaController extends Controller
             'nik_pemohon' => 'required|digits:16',
             'nomor_kk_pemohon' => 'required|integer',
             'alamat_pemohon' => 'required|string',
-            'formulir_f102' => 'required|file|mimes:pdf|max:5120',
-            'ktp_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'suket_hilang_rusak' => 'required|file|mimes:pdf|max:5120',
+            'formulir_f102' => 'required|file|mimes:pdf|max:2048',
+            'ktp_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'suket_hilang_rusak' => 'required|file|mimes:pdf|max:2048',
             'status' => 'nullable|string'
         ], [
             'layanan_id.required' => 'ID layanan tidak boleh kosong.',
@@ -310,11 +310,11 @@ class KartKeluargaController extends Controller
             'nik_pemohon' => 'required|digits:16',
             'nomor_kk_pemohon' => 'required|integer',
             'alamat_pemohon' => 'required|string',
-            'formulir_f102' => 'required|file|mimes:pdf|max:5120',
-            'ktp_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'kk_pemohon' => 'required|file|mimes:pdf|max:5120',
-            'fotokopi_buku_nikah' => 'nullable|file|mimes:pdf|max:5120',
-            'kk_lama' => 'required|file|mimes:pdf|max:5120',
+            'formulir_f102' => 'required|file|mimes:pdf|max:2048',
+            'ktp_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'kk_pemohon' => 'required|file|mimes:pdf|max:2048',
+            'fotokopi_buku_nikah' => 'nullable|file|mimes:pdf|max:2048',
+            'kk_lama' => 'required|file|mimes:pdf|max:2048',
             'status' => 'nullable|string'
         ], [
             'layanan_id.required' => 'ID layanan tidak boleh kosong.',
@@ -564,11 +564,11 @@ class KartKeluargaController extends Controller
     public function uploadBerkasFinal(Request $request, $uuid, $jenis)
     {
         $validator = Validator::make($request->all(), [
-            'file_berkas' => 'required|file|mimes:pdf|max:5120',
+            'file_berkas' => 'required|file|mimes:pdf|max:2048',
         ], [
             'file_berkas.required' => 'File berkas wajib diunggah.',
             'file_berkas.mimes'    => 'Format yang diizinkan: PDF.',
-            'file_berkas.max'      => 'Ukuran file maksimal 5 MB.',
+            'file_berkas.max'      => 'Ukuran file maksimal 2 MB.',
         ]);
 
         if ($validator->fails()) {
