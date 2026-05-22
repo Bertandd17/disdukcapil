@@ -15,14 +15,14 @@
         <div class="flex flex-wrap gap-2">
             @if($canCreate)
             <button type="button" onclick="openModal('create')" 
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition shadow-sm text-sm">
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition shadow-sm text-sm">
                 <i class="bi bi-plus-circle"></i>
                 Tambah Data
             </button>
             @endif
             @if($canGenerate)
             <button type="button" onclick="openGenerateModal()" 
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition shadow-sm text-sm">
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition shadow-sm text-sm">
                 <i class="bi bi-arrow-clockwise"></i>
                 Generate Otomatis
             </button>
@@ -72,7 +72,7 @@
     </div>
 
     <!-- Total -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-sm p-6 mb-6 text-white">
+    <div class="bg-blue-600 rounded-xl shadow-sm p-6 mb-6 text-white">
         <div class="flex justify-between items-center">
             <div>
                 <p class="text-sm opacity-80">Total Dokumen</p>
@@ -213,8 +213,8 @@
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition">Batal</button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold hover:from-green-700 hover:to-green-800 transition shadow-sm">
+                <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
                     <span id="btnText">Simpan</span>
                 </button>
             </div>
@@ -267,8 +267,8 @@
                 </div>
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closeGenerateModal()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition">Batal</button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold hover:from-green-700 hover:to-green-800 transition shadow-sm">
+                <button type="button" onclick="closeGenerateModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
                     <i class="bi bi-arrow-clockwise me-1"></i> Generate
                 </button>
             </div>
@@ -442,7 +442,7 @@
                     icon: 'success',
                     title: 'Berhasil!',
                     text: r.message,
-                    confirmButtonColor: '#10b981'
+                    confirmButtonColor: '#16a34a'
                 }).then(() => {
                     window.location.reload();
                 });
@@ -473,11 +473,11 @@
             Swal.fire({
                 title: 'Hapus Data?',
                 html: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
-                icon: 'warning',
+                icon: false,
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Ya, Hapus!',
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#e5e7eb',
+                confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -488,7 +488,7 @@
                     .then(r => r.json())
                     .then(r => {
                         if (r.success) {
-                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 3000 });
+                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 5000 });
                             setTimeout(() => { window.location.reload(); }, 1000);
                         }
                     });

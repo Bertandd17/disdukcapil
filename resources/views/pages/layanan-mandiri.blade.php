@@ -553,7 +553,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                         <ol id="listPenjelasan" class="space-y-2"></ol>
                     </div>
                     <button type="button" onclick="goToStep(2)"
-                            class="w-full py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                            class="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                         Selanjutnya <i class="fas fa-arrow-right text-sm"></i>
                     </button>
                 </div>
@@ -563,11 +563,11 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     <div id="formFields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(1)"
-                                class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
                         <button type="button" onclick="validateAndGoStep3()"
-                                class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             Selanjutnya <i class="fas fa-arrow-right text-sm"></i>
                         </button>
                     </div>
@@ -578,11 +578,11 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     <div id="fileFields" class="space-y-4"></div>
                     <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(2)"
-                                class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
                         <button type="button" onclick="validateAndGoStep4()"
-                                class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             Selanjutnya <i class="fas fa-arrow-right text-sm"></i>
                         </button>
                     </div>
@@ -612,11 +612,11 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     <div id="liveness-error" class="hidden bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700"></div>
                     <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(3); stopCamera();"
-                                class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
                         <button type="button" id="btnStartLiveness" onclick="startLiveness()"
-                                class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fas fa-camera text-sm"></i> Mulai Verifikasi
                         </button>
                     </div>
@@ -638,11 +638,11 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(4)"
-                                class="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
                         <button type="submit" id="btnSubmit" form="serviceForm"
-                                class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                                class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fas fa-paper-plane text-sm"></i> Kirim Pengajuan
                         </button>
                     </div>
@@ -826,7 +826,7 @@ function openServiceModal(config, serviceName) {
     console.log('serviceForm.action set to:', document.getElementById('serviceForm').action);
 
     document.getElementById('infoLayanan').textContent =
-        `Layanan ${serviceName} adalah layanan kependudukan yang dapat diajukan secara online melalui portal Disdukcapil Kabupaten Toba. Proses verifikasi dilakukan oleh petugas dalam 2–3 hari kerja.`;
+        `Layanan ${serviceName} adalah layanan kependudukan yang dapat diajukan secara online melalui portal Disdukcapil Kabupaten Toba. Proses verifikasi dilakukan oleh petugas dalam 2ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“3 hari kerja.`;
 
     document.getElementById('listPersyaratan').innerHTML = config.persyaratan.map((p, i) => `
         <li class="flex items-start gap-3 bg-white border border-gray-100 rounded-xl p-3">
@@ -907,7 +907,7 @@ function openServiceModal(config, serviceName) {
                         </label>
                         <div class="relative">
                             <button type="button" id="clear-${file.name}"
-                                    class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white text-xs flex items-center justify-center shadow-md transition"
+                                    class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"
                                     title="Hapus file"
                                     onclick="event.preventDefault(); event.stopPropagation(); clearFileInput('${file.name}')">
                                 <i class="fas fa-times"></i>
@@ -943,7 +943,7 @@ function openServiceModal(config, serviceName) {
                 </label>
                 <div class="relative">
                     <button type="button" id="clear-${file.name}"
-                            class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white text-xs flex items-center justify-center shadow-md transition"
+                            class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"
                             title="Hapus file"
                             onclick="event.preventDefault(); event.stopPropagation(); clearFileInput('${file.name}')">
                         <i class="fas fa-times"></i>
@@ -1043,7 +1043,7 @@ function goToStep(step) {
             if (line) line.className = 'flex-1 h-0.5 rounded mb-5 transition-all duration-500 ' + (i < step ? 'bg-green-400' : 'bg-gray-200');
         }
     }
-    document.getElementById('modalStepLabel').textContent = `Langkah ${step} dari 5 — ${labels[step-1]}`;
+    document.getElementById('modalStepLabel').textContent = `Langkah ${step} dari 5 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ${labels[step-1]}`;
     document.getElementById('modalContent').scrollTop = 0;
     if (step === 5) buildSummary();
 }
@@ -1233,21 +1233,21 @@ function autoFillFromAntrian(nomorAntrian) {
 
                 if (nikInput && data.data.nik) {
                     nikInput.value = data.data.nik;
-                    console.log('✓ NIK filled:', data.data.nik);
+                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ NIK filled:', data.data.nik);
                 } else {
-                    console.log('✗ NIK field not found or no data');
+                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬â€ NIK field not found or no data');
                 }
                 if (namaInput && data.data.nama_lengkap) {
                     namaInput.value = data.data.nama_lengkap;
-                    console.log('✓ Nama filled:', data.data.nama_lengkap);
+                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Nama filled:', data.data.nama_lengkap);
                 } else {
-                    console.log('✗ Nama field not found or no data');
+                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬â€ Nama field not found or no data');
                 }
                 if (alamatInput && data.data.alamat) {
                     alamatInput.value = data.data.alamat;
-                    console.log('✓ Alamat filled:', data.data.alamat);
+                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Alamat filled:', data.data.alamat);
                 } else {
-                    console.log('✗ Alamat field not found or no data');
+                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬â€ Alamat field not found or no data');
                 }
 
                 showToast('Data berhasil diambil dari nomor antrian', 'success');
@@ -1302,7 +1302,7 @@ function updateBlinkUI() {
             dot.innerHTML = '<i class="fas fa-check text-xs"></i>';
         }
     }
-    setOverlay(`Kedipan ${blinkCount}/${BLINK_TARGET} terdeteksi…`);
+    setOverlay(`Kedipan ${blinkCount}/${BLINK_TARGET} terdeteksiÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦`);
 }
 function onLivenessPassed() {
     const video  = document.getElementById('video');
@@ -1324,7 +1324,7 @@ function onLivenessPassed() {
     preview.id = 'foto-preview';
     video.style.display = 'none';
     video.parentNode.insertBefore(preview, video);
-    document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
+    document.getElementById('liveness-overlay').textContent = 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Foto berhasil diambil!';
     document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
     showToast('Verifikasi wajah berhasil! Foto tersimpan.', 'success');
     setTimeout(() => goToStep(5), 900);
@@ -1345,16 +1345,16 @@ function startLiveness() {
         faceMeshInstance.setOptions({ maxNumFaces:1, refineLandmarks:true, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
         faceMeshInstance.onResults((results) => {
             if (!results.multiFaceLandmarks || !results.multiFaceLandmarks.length) {
-                setOverlay('Wajah tidak terdeteksi — pastikan wajah terlihat jelas'); return;
+                setOverlay('Wajah tidak terdeteksi ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â pastikan wajah terlihat jelas'); return;
             }
-            setOverlay('Kedipkan mata 2 kali secara natural…');
+            setOverlay('Kedipkan mata 2 kali secara naturalÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦');
             detectBlink(results.multiFaceLandmarks[0]);
         });
         mpCamera = new Camera(video, {
             onFrame: async () => { if (faceMeshInstance) await faceMeshInstance.send({ image: video }); },
             width: 640, height: 480
         });
-        mpCamera.start().then(() => setOverlay('Kedipkan mata 2 kali secara natural…'))
+        mpCamera.start().then(() => setOverlay('Kedipkan mata 2 kali secara naturalÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦'))
             .catch(err => {
                 errEl.textContent = 'Gagal render MediaPipe: ' + (err.message || err);
                 errEl.classList.remove('hidden');
@@ -1508,10 +1508,10 @@ function showToast(message, type = 'error') {
     // Delegasi ke sistem notifikasi global (sweetalert-disdukcapil.js) agar konsisten dengan toast gradient top-end di seluruh project.
     var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'info';
     if (typeof window.fireToast === 'function') {
-        return window.fireToast({ type: t, icon: t, title: message || '', timer: 3500 });
+        return window.fireToast({ type: t, icon: t, title: message || '', timer: 5000 });
     }
     if (window.Swal && typeof window.Swal.fire === 'function') {
-        return window.Swal.fire({ toast: true, icon: t, title: message || '', timer: 3500, position: 'top-end', showConfirmButton: false, timerProgressBar: true });
+        return window.Swal.fire({ toast: true, icon: t, title: message || '', timer: 5000, position: 'top-end', showConfirmButton: false, timerProgressBar: true });
     }
 }
 function closeModal() {
@@ -1595,7 +1595,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: false,
-                        timer: 6000,
+                        timer: 5000,
                         timerProgressBar: true,
                         icon: 'warning',
                         title: 'Batas Harian Tercapai',
@@ -1610,7 +1610,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: false,
-                        timer: 4000,
+                        timer: 5000,
                         timerProgressBar: true,
                         icon: 'error',
                         title: 'Validasi Gagal',
@@ -1710,7 +1710,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                timer: 4000,
+                timer: 5000,
                 timerProgressBar: true,
                 icon: 'error',
                 title: 'Gagal!',
@@ -1730,7 +1730,7 @@ document.addEventListener('DOMContentLoaded', function() {
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 4000,
+            timer: 5000,
             timerProgressBar: true,
             icon: 'error',
             title: 'Terjadi Kesalahan!',

@@ -16,8 +16,8 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="text-2xl font-bold text-gray-800">⚖️ Dasar Hukum</h1>
-        <button class="ml-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg hover:shadow-xl hover:from-emerald-600 hover:to-green-700 transition-all transform hover:scale-105 border-2 border-emerald-300">
+        <h1 class="text-2xl font-bold text-gray-800">âš–ï¸ Dasar Hukum</h1>
+        <button class="ml-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-green-600 text-white shadow-lg hover:shadow-xl hover:bg-green-700 transition-all transform hover:scale-105 border-2 border-emerald-300">
             <i class="fas fa-plus mr-2"></i>Tambah Dasar Hukum
         </button>
     </div>
@@ -42,7 +42,7 @@
                     <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition">
+                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition">
@@ -70,7 +70,7 @@
                     <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition">
+                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition">
@@ -98,7 +98,7 @@
                     <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition">
+                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition">

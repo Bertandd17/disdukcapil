@@ -1,6 +1,6 @@
 /**
  * =====================================================================
- * SWEETALERT2 NOTIFIKASI DISDUKCAPIL — DESAIN BARU (TOP-END GRADIENT)
+ * SWEETALERT2 NOTIFIKASI DISDUKCAPIL â€” DESAIN BARU (TOP-END GRADIENT)
  * =====================================================================
  * Sistem notifikasi terpusat untuk Sistem Informasi Disdukcapil Kab. Toba.
  *
@@ -84,12 +84,13 @@
             '.swal-dd-modal .swal2-html-container{color:var(--neutral-600)!important;font-size:var(--font-size-sm)!important;line-height:1.6!important;}' +
             '.swal-dd-btn{padding:0.75rem 1.5rem!important;border-radius:var(--radius-md)!important;font-weight:600!important;font-size:var(--font-size-sm)!important;border:none!important;box-shadow:none!important;}' +
             '.swal-dd-btn-primary{background:var(--primary-blue-main)!important;color:var(--neutral-white)!important;}' +
-            '.swal-dd-btn-success{background-color:#16a34a!important;background-image:linear-gradient(to right,#16a34a,#15803d)!important;color:var(--neutral-white)!important;border-color:#16a34a!important;border-radius:.75rem!important;font-weight:700!important;box-shadow:0 10px 15px -3px rgba(22,163,74,.22),0 4px 6px -4px rgba(22,163,74,.22)!important;}' +
-            '.swal-dd-btn-success:hover{background-color:#15803d!important;background-image:linear-gradient(to right,#15803d,#166534)!important;border-color:#15803d!important;box-shadow:0 12px 18px -5px rgba(22,101,52,.28),0 6px 8px -6px rgba(22,101,52,.28)!important;}' +
-            '.swal-dd-btn-danger{background:var(--danger-red)!important;color:var(--neutral-white)!important;}' +
+            '.swal-dd-btn-success{background-color:#16a34a!important;background-image:none!important;color:var(--neutral-white)!important;border-color:#16a34a!important;}' +
+            '.swal-dd-btn-success:hover{background-color:#15803d!important;background-image:none!important;border-color:#15803d!important;}' +
+            '.swal-dd-btn-danger{background:#dc2626!important;color:var(--neutral-white)!important;}' +
+            '.swal-dd-btn-danger:hover{background:#b91c1c!important;color:var(--neutral-white)!important;}' +
             '.swal-dd-btn-warning{background:var(--warning-orange)!important;color:var(--neutral-white)!important;}' +
-            '.swal-dd-btn-cancel{background:var(--neutral-200)!important;color:var(--neutral-900)!important;}' +
-            '.swal-dd-btn-cancel:hover{background:var(--neutral-300)!important;}' +
+            '.swal-dd-btn-cancel{background:#e5e7eb!important;color:#1f2937!important;}' +
+            '.swal-dd-btn-cancel:hover{background:#d1d5db!important;color:#1f2937!important;}' +
             '.swal-dd-modal .swal2-actions{gap:8px!important;margin-top:18px!important;}' +
             '.swal-dd-pillbar{display:inline-flex;align-items:center;gap:6px;background:var(--primary-blue-100);border:1px solid var(--primary-blue-100);color:var(--primary-blue-dark);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;}' +
             '@keyframes swal-dd-slidein{from{opacity:0;transform:translateX(110%);}to{opacity:1;transform:translateX(0);}}' +
@@ -208,8 +209,8 @@
         opts.icon = 'error';
         opts.type = 'error';
 
-        if (typeof opts.timer !== 'number' || opts.timer < 5000) {
-            opts.timer = 6000;
+        if (typeof opts.timer !== 'number' || opts.timer !== 5000) {
+            opts.timer = 5000;
         }
 
         return opts;
@@ -241,7 +242,7 @@
         opts = normalizeEmptyRequiredToast(opts || {});
         opts = normalizeErrorToast(opts || {});
         var type = opts.type || 'info';
-        var timer = typeof opts.timer === 'number' ? opts.timer : 4000;
+        var timer = 5000;
         var cfg = {
             toast: true,
             position: 'top-end',
@@ -302,7 +303,7 @@
             icon: 'success',
             title: 'Data berhasil disimpan',
             html: 'No. Registrasi: <strong>' + no + '</strong>',
-            timer: 4000
+            timer: 5000
         });
     }
 
@@ -318,7 +319,7 @@
             icon: 'error',
             title: 'Gagal menyimpan data',
             html: escapeHtml(pesanError || 'Terjadi kesalahan saat menyimpan data.'),
-            timer: 4000
+            timer: 5000
         });
     }
 
@@ -327,7 +328,7 @@
     // =====================================================================
 
     /**
-     * Toast validasi gagal — menampilkan daftar field bermasalah.
+     * Toast validasi gagal â€” menampilkan daftar field bermasalah.
      * @param {string[]} arrayKesalahan Contoh: ['NIK wajib diisi', 'Format tanggal tidak valid']
      * @example
      *   notifValidasiGagal(['NIK wajib diisi (16 digit)', 'Format tanggal tidak valid']);
@@ -354,7 +355,7 @@
             type: 'error',
             icon: 'error',
             title: EMPTY_REQUIRED_MESSAGE,
-            timer: 4000,
+            timer: 5000,
             showCloseButton: true
         });
     }
@@ -406,7 +407,7 @@
                 icon: 'success',
                 title: 'Berhasil diunggah',
                 html: '<strong>' + nf + '</strong> berhasil disimpan.',
-                timer: 3500
+                timer: 5000
             });
             return res;
         }).catch(function (err) {
@@ -541,15 +542,10 @@
     function notifKonfirmasiHapus(namaPenduduk, onHapus) {
         var nm = escapeHtml(namaPenduduk || 'data ini');
         return window.Swal.fire({
-            icon: 'warning',
             title: 'Konfirmasi Hapus Data',
-            html: '<div style="text-align:left;color:var(--neutral-600);font-size:13.5px;line-height:1.6;">' +
-                  '<p style="margin:0 0 10px;">Anda akan menghapus data <strong>' + nm + '</strong>.</p>' +
-                  '<div style="background:var(--danger-red-light);border:1px solid var(--danger-red);border-radius:10px;padding:10px 12px;color:var(--danger-red);font-size:12.5px;">' +
-                  '<i class="fas fa-exclamation-triangle mr-1"></i> Tindakan ini <strong>tidak dapat dibatalkan</strong>.' +
-                  '</div></div>',
+            html: '<p style="color:var(--neutral-600);font-size:14px;margin:6px 0 0;">Data <strong>' + nm + '</strong> akan dihapus dan tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?</p>',
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus',
+            confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             reverseButtons: true,
             allowOutsideClick: false,
@@ -572,9 +568,9 @@
      * Toast info biru besar untuk menampilkan nomor antrian.
      * @param {string} nomorAntrian   Contoh: 'A-015'
      * @param {string} jenisLayanan   Contoh: 'KTP Elektronik'
-     * @param {string} estimasiWaktu  Contoh: '± 15 menit'
+     * @param {string} estimasiWaktu  Contoh: 'Â± 15 menit'
      * @example
-     *   notifNomorAntrian('A-015', 'KTP Elektronik', '± 15 menit');
+     *   notifNomorAntrian('A-015', 'KTP Elektronik', 'Â± 15 menit');
      */
     function notifNomorAntrian(nomorAntrian, jenisLayanan, estimasiWaktu) {
         var no = escapeHtml(nomorAntrian || '-');
@@ -607,7 +603,7 @@
             icon: 'success',
             title: jml + ' data ditemukan',
             html: 'Hasil pencarian untuk "<strong>' + kw + '</strong>".',
-            timer: 3000
+            timer: 5000
         });
     }
 
@@ -622,7 +618,7 @@
             icon: 'warning',
             title: 'Data tidak ditemukan',
             html: 'Tidak ada data untuk "<strong>' + kw + '</strong>".',
-            timer: 3500
+            timer: 5000
         });
     }
 
@@ -638,12 +634,11 @@
      */
     function notifKonfirmasi(pesan, onSetuju, onBatal) {
         return window.Swal.fire({
-            icon: 'question',
             title: 'Konfirmasi',
             html: '<p style="color:var(--neutral-600);font-size:14px;margin:6px 0 0;">' + escapeHtml(pesan || 'Apakah Anda yakin?') + '</p>',
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-check mr-2"></i>Ya, Lanjutkan',
-            cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+            confirmButtonText: 'Konfirmasi',
+            cancelButtonText: 'Batal',
             reverseButtons: true,
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -669,7 +664,7 @@
             icon: 'success',
             title: 'Pengajuan Disetujui <span class="swal-dd-pill">APPROVED</span>',
             html: 'Pengajuan <strong>' + nm + '</strong> telah disetujui.',
-            timer: 4000
+            timer: 5000
         });
     }
 
@@ -707,13 +702,13 @@
     window.SwalDisdukcapil = api;
 
     // =====================================================================
-    // KOMPATIBILITAS — pasang patch agar semua toast lama mengikuti desain baru
+    // KOMPATIBILITAS â€” pasang patch agar semua toast lama mengikuti desain baru
     // =====================================================================
     function patchLegacy() {
         // SwalHelper.success/error/warning/info + toastSuccess/Error/Warning/Info
-        // + modalSuccess/Error/Warning/Info → toast & modal gradient baru
+        // + modalSuccess/Error/Warning/Info â†’ toast & modal gradient baru
         if (window.SwalHelper) {
-            var ts = function (m, d) { return fireToast({ type: 'success', icon: 'success', title: m || 'Berhasil', timer: d || 4000 }); };
+            var ts = function (m, d) { return fireToast({ type: 'success', icon: 'success', title: m || 'Berhasil', timer: 5000 }); };
             var te = function (m, d) {
                 var hasDetail = typeof d === 'string' && d.trim() !== '';
                 return fireToast({
@@ -721,11 +716,11 @@
                     icon: 'error',
                     title: hasDetail ? (m || 'Terjadi kesalahan') : 'Terjadi kesalahan',
                     problem: hasDetail ? d : (m || 'Terjadi kesalahan saat memproses permintaan.'),
-                    timer: typeof d === 'number' ? d : 6000
+                    timer: 5000
                 });
             };
-            var tw = function (m, d) { return fireToast({ type: 'warning', icon: 'warning', title: m || 'Perhatian', timer: d || 4000 }); };
-            var ti = function (m, d) { return fireToast({ type: 'info',    icon: 'info',    title: m || 'Informasi', timer: d || 4000 }); };
+            var tw = function (m, d) { return fireToast({ type: 'warning', icon: 'warning', title: m || 'Perhatian', timer: 5000 }); };
+            var ti = function (m, d) { return fireToast({ type: 'info',    icon: 'info',    title: m || 'Informasi', timer: 5000 }); };
 
             window.SwalHelper.success      = ts;
             window.SwalHelper.error        = te;
@@ -736,7 +731,7 @@
             window.SwalHelper.toastWarning = tw;
             window.SwalHelper.toastInfo    = ti;
 
-            // Modal helpers — putih dengan tombol gradient
+            // Modal helpers â€” putih dengan tombol gradient
             var modalFactory = function (icon, btnClass) {
                 return function (title, message, callback) {
                     return window.Swal.fire({
@@ -759,7 +754,7 @@
             window.SwalHelper.infoModal    = window.SwalHelper.modalInfo;
         }
 
-        // notifToast(icon, judul, pesan, durasi) — signature lama
+        // notifToast(icon, judul, pesan, durasi) â€” signature lama
         window.notifToast = function (icon, judul, pesan, durasi) {
             var t = (icon === 'success' || icon === 'error' || icon === 'warning' || icon === 'info') ? icon : 'info';
             return fireToast({
@@ -767,29 +762,29 @@
                 icon: t,
                 title: judul || '',
                 html: pesan ? escapeHtml(pesan) : undefined,
-                timer: typeof durasi === 'number' ? durasi : 4000
+                timer: 5000
             });
         };
         window.showToast = function (type, message, duration) {
             var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'info';
-            return fireToast({ type: t, icon: t, title: message || '', timer: typeof duration === 'number' ? duration : 4000 });
+            return fireToast({ type: t, icon: t, title: message || '', timer: 5000 });
         };
 
         // DToast.show(type, message, duration)
         window.DToast = {
             show: function (type, message, duration) {
                 var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'info';
-                return fireToast({ type: t, icon: t, title: message || '', timer: typeof duration === 'number' ? duration : 4000 });
+                return fireToast({ type: t, icon: t, title: message || '', timer: 5000 });
             },
             dismiss: function () { if (window.Swal) window.Swal.close(); }
         };
 
         // window.Notifikasi wrapper
         window.Notifikasi = window.Notifikasi || {};
-        window.Notifikasi.success = function (m) { return fireToast({ type: 'success', icon: 'success', title: m, timer: 4000 }); };
-        window.Notifikasi.error = function (m) { return fireToast({ type: 'error', icon: 'error', title: m, timer: 4000 }); };
-        window.Notifikasi.warning = function (m) { return fireToast({ type: 'warning', icon: 'warning', title: m, timer: 4000 }); };
-        window.Notifikasi.info = function (m) { return fireToast({ type: 'info', icon: 'info', title: m, timer: 4000 }); };
+        window.Notifikasi.success = function (m) { return fireToast({ type: 'success', icon: 'success', title: m, timer: 5000 }); };
+        window.Notifikasi.error = function (m) { return fireToast({ type: 'error', icon: 'error', title: m, timer: 5000 }); };
+        window.Notifikasi.warning = function (m) { return fireToast({ type: 'warning', icon: 'warning', title: m, timer: 5000 }); };
+        window.Notifikasi.info = function (m) { return fireToast({ type: 'info', icon: 'info', title: m, timer: 5000 }); };
         window.Notifikasi.confirm = function (msg, onYes, onNo) { return notifKonfirmasi(msg, onYes, onNo); };
     }
 
@@ -798,17 +793,17 @@
     // ---------------------------------------------------------------------
     // Otomatis menyuntik customClass gradient + opsi standar (timerProgressBar,
     // showCloseButton, pause-on-hover, position top-end) untuk SEMUA pemanggilan
-    // `Swal.fire({ toast:true, ... })` di seluruh project — termasuk OCR
+    // `Swal.fire({ toast:true, ... })` di seluruh project â€” termasuk OCR
     // (antrian-ocr.js), halaman antrian-online, statistik, layanan-mandiri,
     // auto-logout, dan inline script lainnya. Tanpa edit blade/JS lain.
     // =====================================================================
     if (window.Swal && !window.Swal.__ddIntercepted) {
         // Util: tempel customClass swal-dd-toast pada konfigurasi toast.
-        // mode='mixin' → hanya kelas dasar (tanpa variant ikon), agar fire-time menambah variant.
+        // mode='mixin' â†’ hanya kelas dasar (tanpa variant ikon), agar fire-time menambah variant.
         function __ddDecorateToastOpts(opt, mode) {
             if (!opt || typeof opt !== 'object') return opt;
 
-            // Cabang MODAL — bila bukan toast, suntik swal-dd-modal untuk konsistensi putih.
+            // Cabang MODAL â€” bila bukan toast, suntik swal-dd-modal untuk konsistensi putih.
             if (opt.toast !== true) {
                 // Skip jika sudah ditandai eksplisit oleh helper internal.
                 var existingPopup = '';
@@ -871,7 +866,7 @@
             if (typeof opt.showConfirmButton === 'undefined') opt.showConfirmButton = false;
             if (typeof opt.timerProgressBar === 'undefined') opt.timerProgressBar = true;
             if (typeof opt.showCloseButton === 'undefined') opt.showCloseButton = true;
-            if (typeof opt.timer === 'undefined') opt.timer = 4000;
+            opt.timer = 5000;
             opt.backdrop = false;
             if (!opt.showClass) opt.showClass = {};
             if (!opt.hideClass) opt.hideClass = {};
@@ -893,7 +888,7 @@
         }
         window.__ddDecorateToastOpts = __ddDecorateToastOpts;
 
-        // Patch Swal.fire — menangkap pemanggilan langsung
+        // Patch Swal.fire â€” menangkap pemanggilan langsung
         var __ddOrigFire = window.Swal.fire.bind(window.Swal);
         window.Swal.fire = function () {
             try {
@@ -904,7 +899,7 @@
             return __ddOrigFire.apply(window.Swal, arguments);
         };
 
-        // Patch Swal.mixin — menangkap Toast = Swal.mixin({toast:true}); Toast.fire(...)
+        // Patch Swal.mixin â€” menangkap Toast = Swal.mixin({toast:true}); Toast.fire(...)
         var __ddOrigMixin = window.Swal.mixin.bind(window.Swal);
         window.Swal.mixin = function (mixinOpts) {
             try { mixinOpts = __ddDecorateToastOpts(mixinOpts, 'mixin'); } catch (e) {}
@@ -957,7 +952,7 @@
                 type: 'error',
                 icon: 'error',
                 title: EMPTY_REQUIRED_MESSAGE,
-                timer: 4000
+                timer: 5000
             });
         }
 
@@ -1009,7 +1004,7 @@
                 type: 'error',
                 icon: 'error',
                 title: 'Hanya file PDF yang diperbolehkan',
-                timer: 4000
+                timer: 5000
             });
             return;
         }
@@ -1020,7 +1015,7 @@
                 type: 'error',
                 icon: 'error',
                 title: 'Maksimal ukuran file: 2MB',
-                timer: 4000
+                timer: 5000
             });
         }
     }, true);
@@ -1043,13 +1038,13 @@
     }
 
     // =====================================================================
-    // CONTOH PEMAKAIAN (untuk dokumentasi — tidak dijalankan otomatis)
+    // CONTOH PEMAKAIAN (untuk dokumentasi â€” tidak dijalankan otomatis)
     // =====================================================================
     /*
     // Dari tombol PHP/Blade:
     // <button onclick="notifSimpanBerhasil('#REG-2024-001234')">Simpan</button>
     // <button onclick="notifValidasiGagal(['NIK wajib diisi', 'Format tanggal tidak valid'])">Validasi</button>
-    // <button onclick="notifNomorAntrian('A-015', 'KTP', '± 15 menit')">Antrian</button>
+    // <button onclick="notifNomorAntrian('A-015', 'KTP', 'Â± 15 menit')">Antrian</button>
 
     // Dengan fetch/AJAX ke endpoint Laravel:
     async function simpanData(formData) {

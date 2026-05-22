@@ -15,7 +15,7 @@
                 <button onclick="openRequestModal()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors">
                     <i class="fas fa-plus mr-2"></i>Request Tanggal Baru
                 </button>
-                <a href="{{ route('keagamaan.pernikahan.index') }}" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+                <a href="{{ route('keagamaan.pernikahan.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl text-sm font-medium transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>
             </div>
@@ -89,7 +89,7 @@
                                                 @endif
                                             @endif
                                             <button onclick="showRequestDetail('{{ $item->pernikahan_id }}')"
-                                                    class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-300">
+                                                    class="px-3 py-1.5 bg-gray-200 text-gray-800 rounded-lg text-xs font-medium hover:bg-gray-300">
                                                 <i class="fas fa-eye mr-1"></i>Detail
                                             </button>
                                         </div>
@@ -130,7 +130,7 @@
                                         </div>
                                         <div class="flex flex-col gap-2">
                                             <button onclick="showRequestDetail('{{ $item->pernikahan_id }}')"
-                                                    class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-300">
+                                                    class="px-3 py-1.5 bg-gray-200 text-gray-800 rounded-lg text-xs font-medium hover:bg-gray-300">
                                                 <i class="fas fa-eye mr-1"></i>Detail
                                             </button>
                                         </div>
@@ -191,7 +191,7 @@
                                                 </button>
                                             @endif
                                             <button onclick="showRequestDetail('{{ $item->pernikahan_id }}')"
-                                                    class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-300">
+                                                    class="px-3 py-1.5 bg-gray-200 text-gray-800 rounded-lg text-xs font-medium hover:bg-gray-300">
                                                 <i class="fas fa-eye mr-1"></i>Detail
                                             </button>
                                         </div>
@@ -244,7 +244,7 @@
                                         </div>
                                         <div class="flex flex-col gap-2">
                                             <button onclick="showRequestDetail('{{ $item->pernikahan_id }}')"
-                                                    class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-300">
+                                                    class="px-3 py-1.5 bg-gray-200 text-gray-800 rounded-lg text-xs font-medium hover:bg-gray-300">
                                                 <i class="fas fa-eye mr-1"></i>Detail
                                             </button>
                                         </div>
@@ -398,10 +398,10 @@
             </div>
 
             <div class="flex gap-3">
-                <button onclick="closeRequestModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300">
+                <button onclick="closeRequestModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-xl font-medium hover:bg-gray-300">
                     Batal
                 </button>
-                <button id="btnStep1Next" onclick="goToStep(2)" disabled class="flex-1 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-medium hover:from-green-700 hover:to-green-800 disabled:bg-gray-300 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50">
+                <button id="btnStep1Next" onclick="goToStep(2)" disabled class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50">
                     Lanjut <i class="fas fa-arrow-right ml-2"></i>
                 </button>
             </div>
@@ -446,10 +446,10 @@
             </div>
 
             <div class="flex gap-3">
-                <button onclick="goToStep(1)" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300">
+                <button onclick="goToStep(1)" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-xl font-medium hover:bg-gray-300">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali
                 </button>
-                <button id="btnStep2Next" onclick="goToStep(3)" disabled class="flex-1 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-medium hover:from-green-700 hover:to-green-800 disabled:bg-gray-300 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50">
+                <button id="btnStep2Next" onclick="goToStep(3)" disabled class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50">
                     Lanjut <i class="fas fa-arrow-right ml-2"></i>
                 </button>
             </div>
@@ -485,7 +485,7 @@
             </div>
 
             <div class="flex gap-3">
-                <button onclick="goToStep(2)" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300">
+                <button onclick="goToStep(2)" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-xl font-medium hover:bg-gray-300">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali
                 </button>
                 <button id="btnSubmit" onclick="submitRequest()" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700">
@@ -854,8 +854,8 @@ async function silentCheckUpdates() {
                     position: 'top-end',
                     showConfirmButton: true,
                     confirmButtonText: 'Muat Ulang',
-                    confirmButtonColor: '#22c55e',
-                    timer: 6000,
+                    confirmButtonColor: '#16a34a',
+                    timer: 5000,
                     timerProgressBar: true,
                     didOpen: (toast) => {
                         toast.onmouseenter = Swal.stopTimer;

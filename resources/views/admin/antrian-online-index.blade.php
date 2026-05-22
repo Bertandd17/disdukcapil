@@ -348,7 +348,7 @@
                         </div>
                         <p class="text-rose-500 font-bold">Gagal memuat data</p>
                         <p class="text-slate-400 text-sm mt-2">${e.message}</p>
-                        <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors">
+                        <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
                             <i class="fas fa-sync-alt mr-2"></i>Refresh Halaman
                         </button>
                     </div>
@@ -430,7 +430,7 @@
 
                     <!-- Actions -->
                     <div class="flex flex-wrap gap-2 items-center flex-shrink-0">
-                        <button data-action="show-detail" data-id="${q.antrian_online_id}" class="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm font-semibold text-sm flex items-center gap-2 h-[44px] btn-show-detail">
+                        <button data-action="show-detail" data-id="${q.antrian_online_id}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm font-semibold text-sm flex items-center gap-2 h-[44px] btn-show-detail">
                             <i class="fas fa-expand-alt text-xs"></i>
                             <span>Detail</span>
                         </button>
@@ -526,11 +526,11 @@
             const result = await Swal.fire({
                 title: 'Mulai Antrian',
                 text: 'Apakah Anda yakin ingin memulai proses antrian ini? Status akan diubah menjadi "Dokumen Diterima" dan antrian akan masuk ke halaman layanan sesuai.',
-                icon: 'warning',
+                icon: false,
                 showCancelButton: true,
                 confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Ya, Mulai',
+                cancelButtonColor: '#e5e7eb',
+                confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',
                 reverseButtons: true,
                 allowOutsideClick: false,

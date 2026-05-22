@@ -84,13 +84,13 @@
                     <td class="p-4">
                         <div class="flex flex-row gap-2 items-center justify-center flex-wrap">
                             <a href="{{ route('admin.lahir-mati.detail', $data->uuid) }}"
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm font-semibold text-sm h-[44px]">
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm font-semibold text-sm h-[44px]">
                                 <i class="fas fa-expand-alt text-xs"></i> <span>Detail</span>
                             </a>
                             @if($data->status == 'Proses Cetak')
                                 <button type="button"
                                     onclick='openUploadModal("{{ $data->uuid }}", {!! json_encode($data->nama_pemohon) !!})'
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white rounded-lg text-xs font-semibold shadow-sm transition">
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
                                     <i class="fas fa-upload"></i> Upload Berkas
                                 </button>
                             @endif
@@ -118,7 +118,7 @@
             <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <h3 class="font-bold text-slate-800 text-base">
                     <i class="fas fa-upload text-emerald-600 mr-2"></i>
-                    Upload Berkas — Surat Keterangan Lahir Mati
+                    Upload Berkas â€” Surat Keterangan Lahir Mati
                 </h3>
                 <button type="button" onclick="closeUploadModal()" class="text-slate-400 hover:text-red-500 transition">
                     <i class="fas fa-times text-lg"></i>
@@ -134,16 +134,16 @@
                     <span class="text-sm font-semibold text-slate-700">File Berkas <span class="text-red-500">*</span></span>
                     <input type="file" name="file_berkas" required accept="application/pdf,.pdf"
                         class="mt-2 block w-full text-sm border border-slate-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                    <span class="text-xs text-slate-500 mt-1 block">Format: PDF • Maksimal 5 MB</span>
+                    <span class="text-xs text-slate-500 mt-1 block">Format: PDF â€¢ Maksimal 5 MB</span>
                 </label>
             </div>
             <div class="p-4 bg-slate-50 flex justify-end gap-2 border-t border-slate-100">
                 <button type="button" onclick="closeUploadModal()"
-                    class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm font-semibold transition">
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-semibold transition">
                     Batal
                 </button>
                 <button type="submit"
-                    class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white rounded-lg text-sm font-semibold shadow-sm transition">
+                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold shadow-sm transition">
                     <i class="fas fa-upload mr-1"></i> Upload
                 </button>
             </div>

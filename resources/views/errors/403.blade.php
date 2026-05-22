@@ -201,11 +201,11 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="{{ route('login') }}" class="flex-1 px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                <a href="{{ route('login') }}" class="flex-1 px-6 py-4 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                     <i class="fas fa-sign-in-alt"></i>
                     Login
                 </a>
-                <a href="{{ route('home') }}" class="flex-1 px-6 py-4 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 rounded-xl font-bold hover:from-gray-200 hover:to-gray-300 transition-all shadow-md flex items-center justify-center gap-2">
+                <a href="{{ route('home') }}" class="flex-1 px-6 py-4 bg-gray-200 text-gray-800 rounded-xl font-bold hover:bg-gray-300 transition-all shadow-md flex items-center justify-center gap-2">
                     <i class="fas fa-home"></i>
                     Beranda
                 </a>

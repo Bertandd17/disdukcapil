@@ -1,12 +1,10 @@
 (function () {
     'use strict';
 
-    var successPattern = /\b(login|masuk|lanjut|lanjutkan|selanjutnya|next|konfirmasi|setuju|setujui|ya,\s*(lanjutkan|mulai|setujui|konfirmasi|verifikasi|terima)|tambah|simpan|submit|kirim|upload|cari\s+antrian|generate|verifikasi|approve|terima|mulai)\b/i;
-    var primaryPattern = /\b(update|perbarui)\b/i;
-    var outlinePattern = /\b(edit|ubah)\b/i;
+    var successPattern = /\b(login|masuk|lanjut|lanjutkan|selanjutnya|next|konfirmasi|setuju|setujui|ya,\s*(lanjutkan|mulai|setujui|konfirmasi|verifikasi|terima)|tambah|simpan|submit|kirim|upload|cari\s+antrian|generate|verifikasi|approve|terima|aktifkan|mulai)\b/i;
+    var primaryPattern = /\b(edit|ubah|update|perbarui|lihat|detail|preview|info|unduh|download)\b/i;
     var secondaryPattern = /\b(batal|kembali|tutup|cancel)\b/i;
-    var dangerPattern = /\b(hapus|delete|tolak|batalkan)\b/i;
-    var ghostPattern = /\b(skip|info|detail|lihat)\b/i;
+    var dangerPattern = /\b(hapus|delete|tolak|batalkan|nonaktifkan|reset|logout|keluar)\b/i;
 
     function textOf(el) {
         return (el.textContent || el.value || el.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim();
@@ -26,7 +24,7 @@
     }
 
     function removeVariants(el) {
-        ['btn-primary', 'btn-secondary', 'btn-outline', 'btn-ghost', 'btn-danger', 'swal-btn-primary', 'swal-dd-btn-primary'].forEach(function (cls) {
+        ['btn-primary', 'btn-secondary', 'btn-outline', 'btn-ghost', 'btn-danger', 'btn-success', 'swal-btn-primary', 'swal-dd-btn-primary'].forEach(function (cls) {
             el.classList.remove(cls);
         });
     }
@@ -44,7 +42,7 @@
 
         var variant = '';
         if (dangerPattern.test(text)) {
-            if (hasVariant(el)) return;
+            removeVariants(el);
             variant = 'btn-danger';
         } else if (successPattern.test(text)) {
             if (
@@ -59,11 +57,9 @@
             el.classList.add('style-guide-positive-action');
         }
         else if (primaryPattern.test(text)) variant = 'btn-primary';
-        else if (outlinePattern.test(text)) variant = 'btn-outline';
         else if (secondaryPattern.test(text)) variant = 'btn-secondary';
-        else if (ghostPattern.test(text)) variant = 'btn-ghost';
 
-        if (variant && (!hasVariant(el) || variant === 'btn-success')) {
+        if (variant && (!hasVariant(el) || variant === 'btn-success' || variant === 'btn-primary' || variant === 'btn-secondary')) {
             el.classList.add('style-guide-action', variant);
         }
     }

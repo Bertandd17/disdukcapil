@@ -67,7 +67,7 @@
                     <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                 </div>
                 <button onclick="openAddModal()"
-                    class="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                    class="w-full md:w-auto px-8 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                     <i class="fas fa-plus"></i> Tambah Akun
                 </button>
             </div>
@@ -187,10 +187,10 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 border-t">
-                        <button type="button" onclick="closeModal()" class="w-full py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200">
+                        <button type="button" onclick="closeModal()" class="w-full py-3 bg-gray-200 text-gray-800 rounded-xl font-bold hover:bg-gray-300">
                             Batal
                         </button>
-                        <button type="submit" id="saveAccountBtn" class="w-full py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button type="submit" id="saveAccountBtn" class="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                             <span id="saveAccountText"><i class="fas fa-save mr-2"></i> Simpan Akun</span>
                         </button>
                     </div>

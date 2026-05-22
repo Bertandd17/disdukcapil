@@ -426,13 +426,13 @@
         window.resetForm = function () {
             if (window.Swal && typeof window.Swal.fire === 'function') {
                 window.Swal.fire({
-                    title: 'Ambil Antrian Baru?',
+                    title: 'Konfirmasi Reset',
                     text: 'Nomor antrian saat ini akan hilang. Lanjutkan?',
-                    icon: 'question',
+                    icon: false,
                     showCancelButton: true,
-                    confirmButtonColor: '#28A745',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Ya, ambil lagi',
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#e5e7eb',
+                    confirmButtonText: 'Konfirmasi',
                     cancelButtonText: 'Batal',
                     reverseButtons: true,
                 }).then(function (r) {

@@ -277,7 +277,7 @@
             @endif
 
             <div class="flex gap-3">
-                <button onclick="closeConfirmModal()" class="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                <button onclick="closeConfirmModal()" class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium text-gray-800 transition-colors">
                     Batal
                 </button>
                 <button id="confirmActionBtn" class="flex-1 px-4 py-3 rounded-xl font-medium text-white transition-colors">

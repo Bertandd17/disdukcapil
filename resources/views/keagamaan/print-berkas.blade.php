@@ -119,10 +119,10 @@
 <body>
     {{-- Print Button (no print) --}}
     <div class="no-print" style="text-align: right; margin-bottom: 20px;">
-        <button onclick="window.print()" style="padding: 10px 20px; background: #0d9488; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        <button onclick="window.print()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer;">
             <i class="fas fa-print"></i> Cetak
         </button>
-        <button onclick="window.close()" style="padding: 10px 20px; background: #64748b; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+        <button onclick="window.close()" style="padding: 10px 20px; background: #e5e7eb; color: #1f2937; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
             <i class="fas fa-times"></i> Tutup
         </button>
     </div>

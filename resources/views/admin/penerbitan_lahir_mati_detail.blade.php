@@ -6,7 +6,7 @@
             Detail Permohonan Lahir Mati
         </h1>
         <a href="{{ route('admin.penerbitan-lahir-mati') }}"
-        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm">
+        class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg text-sm">
             Kembali
         </a>
     </div>
@@ -164,7 +164,7 @@
                         
                         @if($berkas->{$dok['field']})
                             <a href="{{ asset('storage/'.$berkas->{$dok['field']}) }}" target="_blank"
-                            class="w-full bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 py-2 rounded-lg text-sm font-semibold transition text-center flex items-center justify-center">
+                            class="w-full bg-green-600 text-white hover:bg-green-700 py-2 rounded-lg text-sm font-semibold transition text-center flex items-center justify-center">
                                 <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
                             </a>
                         @else
@@ -195,18 +195,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnTerima) {
         btnTerima.addEventListener('click', function () {
             if (!statusBerikut) {
-                Swal.fire({ icon: 'info', title: 'Tidak ada langkah berikutnya', text: 'Permohonan ini sudah berada di tahap akhir.', confirmButtonColor: '#0052CC' });
+                Swal.fire({ icon: 'info', title: 'Tidak ada langkah berikutnya', text: 'Permohonan ini sudah berada di tahap akhir.', confirmButtonColor: '#2563eb' });
                 return;
             }
             Swal.fire({
-                icon: 'question',
+                icon: false,
                 title: 'Konfirmasi Penerimaan',
                 html: 'Lanjutkan permohonan ke tahap <strong>' + statusBerikut + '</strong>?',
                 showCancelButton: true,
-                confirmButtonText: '<i class="fas fa-check mr-1"></i> Ya, Lanjutkan',
+                confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#6b7280',
+                cancelButtonColor: '#e5e7eb',
                 reverseButtons: true
             }).then((res) => {
                 if (res.isConfirmed) {
@@ -221,17 +221,17 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnTolak) {
         btnTolak.addEventListener('click', function () {
             Swal.fire({
-                icon: 'warning',
+                icon: false,
                 title: 'Tolak Permohonan',
                 html: 'Masukkan <strong>alasan penolakan</strong>. Alasan ini akan ditampilkan pada halaman lacak berkas pengguna.',
                 input: 'textarea',
                 inputPlaceholder: 'Tulis alasan penolakan di sini...',
                 inputAttributes: { 'aria-label': 'Alasan penolakan', 'maxlength': '500' },
                 showCancelButton: true,
-                confirmButtonText: '<i class="fas fa-times mr-1"></i> Tolak Permohonan',
+                confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#6b7280',
+                cancelButtonColor: '#e5e7eb',
                 reverseButtons: true,
                 inputValidator: (value) => {
                     if (!value || value.trim().length < 5) {

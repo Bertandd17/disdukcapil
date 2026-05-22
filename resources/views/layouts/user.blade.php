@@ -180,50 +180,7 @@
     {{-- Navbar --}}
     @include('components.user.navbar')
 
-    {{-- Flash Messages --}}
-    @if (session('success'))
-        <div class="fixed top-20 right-4 z-50 max-w-md animate-fade-in-up">
-            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl shadow-lg">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-check-circle"></i>
-                    <span>{{ session('success') }}</span>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if (session('info'))
-        <div class="fixed top-20 right-4 z-50 max-w-md animate-fade-in-up">
-            <div class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl shadow-lg">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-info-circle"></i>
-                    <span>{{ session('info') }}</span>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if (session('warning'))
-        <div class="fixed top-20 right-4 z-50 max-w-md animate-fade-in-up">
-            <div class="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-xl shadow-lg">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span>{{ session('warning') }}</span>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="fixed top-20 right-4 z-50 max-w-md animate-fade-in-up">
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl shadow-lg">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>{{ session('error') }}</span>
-                </div>
-            </div>
-        </div>
-    @endif
+    {{-- Flash messages ditampilkan sebagai toast SweetAlert top-right pada DOMContentLoaded --}}
 
     {{-- Content --}}
     <main class="flex-1 flex flex-col">
@@ -281,13 +238,12 @@
         // Jangan replace jika sudah ada
         if (typeof window.SwalHelper === 'undefined') {
             window.SwalHelper = {
-            // Success Toast
-            success: function(message) {
+            _toast: function(icon, title, message) {
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
-                    timer: 3000,
+                    timer: 5000,
                     timerProgressBar: true,
                     backdrop: false,
                     didOpen: (toast) => {
@@ -296,81 +252,41 @@
                     }
                 });
                 Toast.fire({
-                    icon: 'success',
-                    title: message
+                    icon: icon,
+                    title: title,
+                    html: message ? '<p class="text-sm text-gray-600 mt-1">' + message + '</p>' : undefined
                 });
             },
 
+            // Success Toast
+            success: function(message) {
+                this._toast('success', message, null);
+            },
+
             // Error Toast
-            error: function(message) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    backdrop: false,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-                    }
-                });
-                Toast.fire({
-                    icon: 'error',
-                    title: message
-                });
+            error: function(title, message) {
+                this._toast('error', title || 'Terjadi kesalahan', message || 'Periksa data yang Anda masukkan, lalu coba lagi.');
             },
 
             // Info Toast
             info: function(message) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    backdrop: false,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-                    }
-                });
-                Toast.fire({
-                    icon: 'info',
-                    title: message
-                });
+                this._toast('info', message, null);
             },
 
             // Warning Toast
             warning: function(message) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    backdrop: false,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-                    }
-                });
-                Toast.fire({
-                    icon: 'warning',
-                    title: message
-                });
+                this._toast('warning', message, null);
             },
 
             // Confirm Dialog
             confirm: function(title, text, callback) {
                 Swal.fire({
                     title: title,
-                    text: text,
-                    icon: 'question',
+                    html: '<p class="text-gray-600 text-sm">' + text + '</p>',
                     showCancelButton: true,
                     confirmButtonColor: 'var(--success-green)',
                     cancelButtonColor: 'var(--neutral-600)',
-                    confirmButtonText: 'Ya, lanjutkan',
+                    confirmButtonText: 'Konfirmasi',
                     cancelButtonText: 'Batal',
                     showClass: {
                         popup: 'swal2-show',
@@ -393,12 +309,12 @@
             deleteConfirm: function(title, text, callback) {
                 Swal.fire({
                     title: title,
-                    text: text,
-                    icon: 'warning',
+                    html: '<p class="text-gray-600 text-sm">' + text + '</p>',
+                    icon: false,
                     showCancelButton: true,
                     confirmButtonColor: 'var(--danger-red)',
                     cancelButtonColor: 'var(--neutral-600)',
-                    confirmButtonText: 'Ya, hapus',
+                    confirmButtonText: 'Konfirmasi',
                     cancelButtonText: 'Batal',
                     showClass: {
                         popup: 'swal2-show',
@@ -446,7 +362,11 @@
             @endif
 
             @if(session('error'))
-                SwalHelper.error(@json(session('error')));
+                @php($flashError = session('error'))
+                SwalHelper.error(
+                    @json(is_array($flashError) ? ($flashError['title'] ?? 'Terjadi kesalahan') : 'Terjadi kesalahan'),
+                    @json(is_array($flashError) ? ($flashError['message'] ?? 'Periksa data yang Anda masukkan, lalu coba lagi.') : $flashError)
+                );
             @endif
 
             @if(session('info'))

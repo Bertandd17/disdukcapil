@@ -52,12 +52,12 @@
     // TOAST NOTIFICATIONS
     // =====================================================
 
-    function toastSuccess(message, duration = 3000) {
+    function toastSuccess(message, duration = 5000) {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: duration,
+            timer: 5000,
             timerProgressBar: true,
             backdrop: false,
             customClass: {
@@ -76,12 +76,12 @@
         });
     }
 
-    function toastError(message, duration = 4000) {
+    function toastError(message, duration = 5000) {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: duration,
+            timer: 5000,
             timerProgressBar: true,
             backdrop: false,
             didOpen: (toast) => {
@@ -97,12 +97,12 @@
         });
     }
 
-    function toastWarning(message, duration = 3500) {
+    function toastWarning(message, duration = 5000) {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: duration,
+            timer: 5000,
             timerProgressBar: true,
             backdrop: false,
             didOpen: (toast) => {
@@ -118,12 +118,12 @@
         });
     }
 
-    function toastInfo(message, duration = 3000) {
+    function toastInfo(message, duration = 5000) {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: duration,
+            timer: 5000,
             timerProgressBar: true,
             backdrop: false,
             didOpen: (toast) => {
@@ -203,10 +203,9 @@
         Swal.fire({
             title: title,
             html: `<p>${text}</p>`,
-            icon: 'question',
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-check mr-2"></i>Ya, Lanjutkan',
-            cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+            confirmButtonText: 'Konfirmasi',
+            cancelButtonText: 'Batal',
             reverseButtons: true,
             confirmButtonColor: 'var(--success-green)',
             cancelButtonColor: 'var(--neutral-600)'
@@ -218,17 +217,11 @@
     function deleteConfirm(title, text, callback) {
         Swal.fire({
             title: title,
-            html: `
-                <div class="text-center">
-                    <i class="fas fa-exclamation-triangle text-5xl text-red-500 mb-4"></i>
-                    <p class="mb-4">${text}</p>
-                    <p class="text-red-500 font-semibold">Tindakan ini tidak dapat dibatalkan!</p>
-                </div>
-            `,
+            html: `<p>${text || 'Data yang dihapus tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?'}</p>`,
             icon: false,
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus',
-            cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+            confirmButtonText: 'Konfirmasi',
+            cancelButtonText: 'Batal',
             reverseButtons: true,
             confirmButtonColor: 'var(--danger-red)',
             cancelButtonColor: 'var(--neutral-600)'
@@ -241,10 +234,9 @@
         Swal.fire({
             title: title,
             html: `<p>${text}</p>`,
-            icon: 'question',
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-save mr-2"></i>Ya, Simpan',
-            cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+            confirmButtonText: 'Konfirmasi',
+            cancelButtonText: 'Batal',
             reverseButtons: true,
             confirmButtonColor: 'var(--primary-blue-main)',
             cancelButtonColor: 'var(--neutral-600)'
@@ -279,10 +271,7 @@
 
         let htmlContent = `
             <div class="text-center">
-                <div class="mb-4">
-                    <i class="${config.iconClass} text-6xl" style="color: ${config.iconColor}"></i>
-                </div>
-                <p class="text-gray-600 text-lg mb-2">${config.message}</p>
+                <p class="text-gray-600 text-sm mb-2">${config.message}</p>
         `;
 
         if (config.subMessage) {
@@ -298,8 +287,8 @@
             showCancelButton: true,
             confirmButtonColor: config.confirmColor,
             cancelButtonColor: config.cancelColor,
-            confirmButtonText: `<i class="${config.iconClass} mr-2"></i>${config.confirmText}`,
-            cancelButtonText: '<i class="fas fa-times mr-2"></i>' + config.cancelText,
+            confirmButtonText: 'Konfirmasi',
+            cancelButtonText: 'Batal',
             reverseButtons: true,
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -385,9 +374,9 @@
             message: message,
             subMessage: subMessage,
             iconClass: 'fas fa-save',
-            iconColor: 'var(--primary-blue-main)',
+            iconColor: 'var(--success-green)',
             confirmText: 'Ya, Simpan',
-            confirmColor: 'var(--primary-blue-main)',
+            confirmColor: 'var(--success-green)',
             cancelText: 'Batal',
             cancelColor: 'var(--neutral-600)',
             onConfirm: onConfirm,

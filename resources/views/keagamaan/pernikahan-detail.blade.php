@@ -252,8 +252,8 @@
                 <p class="text-xs text-gray-500 mt-1">Minimal 7 hari dari hari ini</p>
             </div>
             <div class="flex gap-3">
-                <button type="button" onclick="closeKonfirmasiModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300">Batal</button>
-                <button type="submit" id="konfirmasiSubmitBtn" class="flex-1 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-medium hover:from-green-700 hover:to-green-800">Konfirmasi</button>
+                <button type="button" onclick="closeKonfirmasiModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-xl font-medium hover:bg-gray-300">Batal</button>
+                <button type="submit" id="konfirmasiSubmitBtn" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700">Konfirmasi</button>
             </div>
         </form>
     </div>
@@ -278,8 +278,8 @@
                 <textarea name="catatan" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-xl" placeholder="Catatan tambahan..."></textarea>
             </div>
             <div class="flex gap-3">
-                <button type="button" onclick="closeTanggalModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300">Batal</button>
-                <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700">Simpan</button>
+                <button type="button" onclick="closeTanggalModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-xl font-medium hover:bg-gray-300">Batal</button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700">Simpan</button>
             </div>
         </form>
     </div>

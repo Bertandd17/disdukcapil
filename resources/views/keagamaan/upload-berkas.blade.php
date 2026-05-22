@@ -11,7 +11,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Upload Berkas Pernikahan</h1>
                 <p class="text-gray-500 text-sm">Kelola berkas persyaratan pernikahan</p>
             </div>
-            <a href="{{ route('keagamaan.pernikahan.index') }}" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+            <a href="{{ route('keagamaan.pernikahan.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl text-sm font-medium transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
             </a>
         </div>
@@ -77,7 +77,7 @@
                     <div class="p-4 bg-gray-50 border-t border-gray-100 flex gap-3">
                         @if(!$item->isDokumenLengkap())
                         <button onclick="openUploadModal('{{ $item->pernikahan_id }}')"
-                                class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
+                                class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700">
                             <i class="fas fa-upload mr-2"></i>Upload Berkas
                         </button>
                         @else
@@ -87,7 +87,7 @@
                         </button>
                         @endif
                         <a href="{{ route('keagamaan.pernikahan.show', $item->pernikahan_id) }}"
-                           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-300">
+                           class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
                             <i class="fas fa-eye"></i>
                         </a>
                     </div>
@@ -185,10 +185,10 @@
                 </div>
 
                 <div class="mt-6 flex gap-3">
-                    <button type="button" onclick="closeUploadModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300">
+                    <button type="button" onclick="closeUploadModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-xl font-medium hover:bg-gray-300">
                         Batal
                     </button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700">
+                    <button type="submit" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700">
                         <i class="fas fa-upload mr-2"></i>Upload
                     </button>
                 </div>

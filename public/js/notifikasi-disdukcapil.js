@@ -1,6 +1,6 @@
 /**
  * =====================================================================
- * notifikasi-disdukcapil.js — LAPISAN KOMPATIBILITAS
+ * notifikasi-disdukcapil.js â€” LAPISAN KOMPATIBILITAS
  * =====================================================================
  * Seluruh implementasi toast/notifikasi sekarang berada di
  * public/js/sweetalert-disdukcapil.js (desain top-end gradient baru).
@@ -16,10 +16,10 @@
     function S() { return window.SwalDisdukcapil || null; }
     function toastBy(type, message, timer) {
         if (!S()) {
-            if (window.Swal) window.Swal.fire({ toast: true, position: 'top-end', icon: type, title: message, timer: timer || 4000, showConfirmButton: false });
+            if (window.Swal) window.Swal.fire({ toast: true, position: 'top-end', icon: type, title: message, timer: 5000, showConfirmButton: false });
             return;
         }
-        S().fireToast({ type: type, icon: type, title: message || '', timer: timer || 4000 });
+        S().fireToast({ type: type, icon: type, title: message || '', timer: 5000 });
     }
 
     // --- Toast singkat lama ---
@@ -48,7 +48,7 @@
         });
     };
 
-    // --- Alias nama LAMA → fungsi BARU ---
+    // --- Alias nama LAMA â†’ fungsi BARU ---
     window.notifSuksesRegistrasi   = function (noReg, cb) { var p = window.notifSimpanBerhasil(noReg); if (cb) Promise.resolve(p).then(cb); };
     window.notifError              = function (pesan, cb) { var p = window.notifSimpanGagal(pesan);   if (cb) Promise.resolve(p).then(cb); };
     window.notifValidasiError      = function (errs, cb)  { var p = window.notifValidasiGagal(errs);  if (cb) Promise.resolve(p).then(cb); };

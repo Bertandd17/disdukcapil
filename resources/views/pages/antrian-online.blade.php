@@ -1,4 +1,4 @@
-﻿@extends('layouts.user')
+@extends('layouts.user')
 
 @section('content')
 @php
@@ -250,8 +250,8 @@
                                 <div id="uploadPlaceholder">
                                     <i class="fas fa-cloud-upload-alt text-5xl text-gray-400 mb-4"></i>
                                     <p class="text-gray-700 font-medium mb-1">Klik atau seret foto KTP ke sini</p>
-                                    <p class="text-sm text-gray-500">JPG, JPEG, atau PNG — maks. 5 MB</p>
-                                    <p id="uploadDebug" class="text-xs text-gray-400 mt-3">Status: <span id="uploadDebugValue">memuat…</span></p>
+                                    <p class="text-sm text-gray-500">JPG, JPEG, atau PNG ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â maks. 5 MB</p>
+                                    <p id="uploadDebug" class="text-xs text-gray-400 mt-3">Status: <span id="uploadDebugValue">memuatÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦</span></p>
                                 </div>
                                 <div id="previewContainer" class="hidden">
                                     <img id="imagePreview" src="" alt="Pratinjau KTP" class="max-h-56 mx-auto rounded-lg shadow-md object-contain">
@@ -264,9 +264,9 @@
                         </div>
 
 <button type="button" id="step1NextBtn" disabled
-    class="w-full py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+    class="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
     <i class="fas fa-arrow-right mr-2"></i>
-    Lanjut — kirim ke OCR
+    Lanjut ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â kirim ke OCR
 </button>
                     </div>
 
@@ -309,11 +309,11 @@
 
                         <div class="flex flex-col sm:flex-row gap-3">
                             <button type="button" id="step2PrevBtn"
-                                    class="flex-1 py-3 border-2 border-gray-300 text-gray-800 rounded-xl font-bold hover:bg-gray-50 transition">
+                                    class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition">
                                 <i class="fas fa-arrow-left mr-2"></i> Kembali
                             </button>
                             <button type="button" id="step2NextBtn"
-                                class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg">
+                                class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg">
                                 Lanjut ke konfirmasi <i class="fas fa-arrow-right ml-2"></i>
                             </button>
                         </div>
@@ -333,11 +333,11 @@
                         </div>
                         <div class="flex flex-col sm:flex-row gap-3">
                             <button type="button" id="step3PrevBtn"
-                                    class="flex-1 py-3 border-2 border-gray-300 text-gray-800 rounded-xl font-bold hover:bg-gray-50 transition">
+                                    class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition">
                                 <i class="fas fa-arrow-left mr-2"></i> Ubah data
                             </button>
                             <button type="submit" id="submitBtn"
-                                    class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg">
+                                    class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg">
                                 <i class="fas fa-check-circle mr-2"></i>
                                 Konfirmasi &amp; dapatkan nomor antrian
                             </button>
@@ -404,11 +404,11 @@
 
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">
-                        <button onclick="copyTicketNumber()" id="copyBtn" class="flex-1 py-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 rounded-xl font-bold hover:from-gray-200 hover:to-gray-300 transition-all shadow-md action-btn no-print">
+                        <button onclick="copyTicketNumber()" id="copyBtn" class="flex-1 py-3 bg-gray-200 text-gray-800 rounded-xl font-bold hover:bg-gray-300 transition-all shadow-md action-btn no-print">
                             <i class="fas fa-copy mr-2"></i>
                             Salin Nomor Antrian
                         </button>
-                        <button onclick="resetForm()" class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg action-btn no-print">
+                        <button onclick="resetForm()" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg action-btn no-print">
                             <i class="fas fa-plus mr-2"></i>
                             Ambil Lagi
                         </button>
@@ -445,7 +445,7 @@
                         </select>
                     </div>
                 </div>
-                <button type="button" id="btnCariAntrian" class="w-full py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all shadow-lg">
+                <button type="button" id="btnCariAntrian" class="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg">
                     <i class="fas fa-search mr-2"></i>
                     Cari Antrian
                 </button>
@@ -900,7 +900,7 @@
                 if (oldStatus && newStatus && oldStatus !== newStatus) {
                     changed = true;
                     if (window.SwalHelper && window.SwalHelper.info) {
-                        window.SwalHelper.info('Status Diperbarui', key + ': ' + oldStatus + ' → ' + newStatus);
+                        window.SwalHelper.info('Status Diperbarui', key + ': ' + oldStatus + ' ? ' + newStatus);
                     }
                 }
                 if (newStatus) window.__lacakPollState.lastStatuses[key] = newStatus;
@@ -1241,10 +1241,10 @@
                 ` : ''}
 
                 <div class="flex gap-2">
-                    <button onclick="window.copyNomorAntrianToClipboard('${pernikahan.nomor_antrian}'); Swal.close();" class="flex-1 py-2 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700">
+                    <button onclick="window.copyNomorAntrianToClipboard('${pernikahan.nomor_antrian}'); Swal.close();" class="flex-1 py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-700">
                         <i class="fas fa-copy mr-1"></i> Salin Nomor
                     </button>
-                    <button onclick="Swal.close()" class="flex-1 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-300">
+                    <button onclick="Swal.close()" class="flex-1 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold text-sm hover:bg-gray-300">
                         Tutup
                     </button>
                 </div>
@@ -1298,7 +1298,7 @@
             return;
         }
 
-        // Fallback: belum ada dokumen final → tampilkan modal detail
+        // Fallback: belum ada dokumen final ? tampilkan modal detail
         if (typeof window.showAntrianDetail === 'function') {
             window.showAntrianDetail(data);
         } else {
@@ -1447,9 +1447,9 @@
                 var df = antrian.pernikahan.dokumen_final;
                 var dfItems = [
                     { key: 'akta_pernikahan', label: 'Akta Pernikahan' },
-                    { key: 'kk_pasangan', label: 'KK Baru — Pasangan' },
-                    { key: 'kk_ortu_pria', label: 'KK Baru — Ortu Pria' },
-                    { key: 'kk_ortu_wanita', label: 'KK Baru — Ortu Wanita' }
+                    { key: 'kk_pasangan', label: 'KK Baru ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Pasangan' },
+                    { key: 'kk_ortu_pria', label: 'KK Baru ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Ortu Pria' },
+                    { key: 'kk_ortu_wanita', label: 'KK Baru ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Ortu Wanita' }
                 ];
                 var anyUploaded = dfItems.some(function(it) { return !!df[it.key]; });
 
@@ -1460,7 +1460,7 @@
                             var downloadUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
                             return '<div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 text-xs">' +
                                 '<span class="text-gray-700 font-medium"><i class="fas fa-file-pdf text-emerald-600 mr-2"></i>' + it.label + '</span>' +
-                                '<a href="' + downloadUrl + '" onclick="event.stopPropagation()" class="text-emerald-700 hover:text-emerald-900 font-semibold inline-flex items-center gap-1">' +
+                                '<a href="' + downloadUrl + '" onclick="event.stopPropagation()" class="text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1">' +
                                 '<i class="fas fa-download"></i> Download</a>' +
                                 '</div>';
                         }
@@ -1504,7 +1504,7 @@
                 timelineHtml +
                 dokumenFinalHtml +
                 '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
-                    '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
+                    '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
                         '<i class="fas fa-eye"></i><span>Lihat</span>' +
                     '</button>' +
                 '</div>' +
@@ -1550,7 +1550,7 @@
         }, duration / steps);
     }
 
-    // Pengiriman form & alur tiket: dihandle oleh public/js/antrian-ocr.js (draft → OCR → finalize).
+    // Pengiriman form & alur tiket: dihandle oleh public/js/antrian-ocr.js (draft ? OCR ? finalize).
 
     // Confetti Animation
     function createConfetti() {
@@ -1580,7 +1580,7 @@
                 icon: 'error',
                 title: 'Gagal Menyalin',
                 text: 'Nomor antrian tidak ditemukan',
-                confirmButtonColor: '#28A745',
+                confirmButtonColor: '#16a34a',
             });
             return;
         }
@@ -1630,7 +1630,7 @@
                     icon: 'error',
                     title: 'Gagal Menyalin',
                     text: 'Tidak dapat menyalin nomor antrian',
-                    confirmButtonColor: '#28A745',
+                    confirmButtonColor: '#16a34a',
                 });
             }
             document.body.removeChild(textarea);
@@ -1709,7 +1709,7 @@
                             '<p class="text-[10px] text-gray-400">' + it.tanggal + '</p>' +
                         '</div>' +
                     '</div>' +
-                    '<a href="' + viewUrl + '" target="_blank" rel="noopener" class="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white rounded-lg text-xs font-semibold shadow-sm inline-flex items-center gap-1 transition">' +
+                    '<a href="' + viewUrl + '" target="_blank" rel="noopener" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm inline-flex items-center gap-1 transition">' +
                         '<i class="fas fa-eye"></i> Lihat Dokumen' +
                     '</a>' +
                 '</div>';
@@ -1786,7 +1786,7 @@
                     '<button onclick="window.copyNomorAntrianToClipboard(\'' + nomorAntrian + '\'); Swal.close();" class="flex-1 py-2 bg-green-600 text-white rounded-lg font-semibold text-sm hover:bg-green-700">' +
                         '<i class="fas fa-copy mr-1"></i> Salin Nomor' +
                     '</button>' +
-                    '<button onclick="Swal.close()" class="flex-1 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-300">' +
+                    '<button onclick="Swal.close()" class="flex-1 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold text-sm hover:bg-gray-300">' +
                         'Tutup' +
                     '</button>' +
                 '</div>' +
@@ -1844,7 +1844,7 @@
                 icon: 'error',
                 title: 'Gagal Menyalin',
                 text: 'Tidak dapat menyalin nomor antrian',
-                confirmButtonColor: '#28A745',
+                confirmButtonColor: '#16a34a',
             });
         }
         document.body.removeChild(textarea);

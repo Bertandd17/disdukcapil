@@ -199,38 +199,6 @@
 
             {{-- Warning message displayed as toast via SwalHelper.warning() in DOMContentLoaded below --}}
 
-            @if (session('error'))
-                <div class="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-xl mb-6 shadow-md">
-                    <div class="flex items-start gap-3">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-sm font-semibold text-red-800 mb-2">Oops! Terjadi Kesalahan</h3>
-                            <p class="text-sm text-red-700 mb-2">{{ session('error') }}</p>
-                            @if(session('error_detail'))
-                            <div class="bg-red-100 rounded-lg p-3 mb-2">
-                                <p class="text-xs font-medium text-red-900 mb-1"><i class="fas fa-info-circle mr-1"></i>Detail Teknis:</p>
-                                <p class="text-xs text-red-800">{{ session('error_detail') }}</p>
-                            </div>
-                            @endif
-                            @if(session('error_location'))
-                            <p class="text-xs text-red-600 mb-2"><i class="fas fa-map-marker-alt mr-1"></i><strong>Lokasi:</strong> {{ session('error_location') }}</p>
-                            @endif
-                            @if(session('error_solution'))
-                            <div class="bg-green-50 rounded-lg p-3 border border-green-200">
-                                <p class="text-xs font-semibold text-green-900 mb-1"><i class="fas fa-lightbulb mr-1"></i>Cara Mengatasi:</p>
-                                <p class="text-xs text-green-800">{{ session('error_solution') }}</p>
-                            </div>
-                            @endif
-                            @if(session('error_code'))
-                            <p class="text-xs text-gray-500 mt-2">Error Code: {{ session('error_code') }}</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            @endif
-
             @yield('content')
         </div>
 
@@ -311,12 +279,12 @@
     if (typeof window.SwalHelper === 'undefined') {
         window.SwalHelper = {
 
-            _toast: function(icon, iconColor, timerMs, message, customClass) {
+            _toast: function(icon, iconColor, timerMs, title, customClass, message) {
                 Swal.mixin({
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
-                    timer: timerMs,
+                    timer: 5000,
                     timerProgressBar: true,
                     backdrop: false,
                     background: 'var(--neutral-white)',
@@ -325,15 +293,20 @@
                         toast.addEventListener('mouseenter', Swal.stopTimer);
                         toast.addEventListener('mouseleave', Swal.resumeTimer);
                     }
-                }).fire({ icon: icon, iconColor: iconColor, title: message });
+                }).fire({
+                    icon: icon,
+                    iconColor: iconColor,
+                    title: title,
+                    html: message ? '<p class="text-gray-600 text-sm mt-1">' + message + '</p>' : undefined
+                });
             },
 
             success: function(message) {
-                this._toast('success', 'var(--success-green)', 4000, message, 'swal2-toast');
+                this._toast('success', 'var(--success-green)', 5000, message, 'swal2-toast');
             },
 
-            error: function(message) {
-                this._toast('error', 'var(--danger-red)', 4000, message, 'swal2-toast');
+            error: function(title, message) {
+                this._toast('error', 'var(--danger-red)', 5000, title || 'Terjadi kesalahan', 'swal2-toast', message || 'Periksa data yang Anda masukkan, lalu coba lagi.');
             },
 
             info: function(message) {
@@ -341,17 +314,16 @@
             },
 
             warning: function(message) {
-                this._toast('warning', 'var(--warning-orange)', 3500, message, 'swal2-toast');
+                this._toast('warning', 'var(--warning-orange)', 5000, message, 'swal2-toast');
             },
 
             confirm: function(title, text, callback) {
                 Swal.fire({
                     title: title,
                     html: '<p class="text-gray-600">' + text + '</p>',
-                    icon: 'question',
                     showCancelButton: true,
-                    confirmButtonText: '<i class="fas fa-check mr-2"></i>Ya, Lanjutkan',
-                    cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
                     reverseButtons: true,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -368,15 +340,11 @@
             deleteConfirm: function(title, text, callback) {
                 Swal.fire({
                     title: title,
-                    html: '<div class="flex items-center gap-3 mb-4 p-4 bg-red-50 rounded-lg border border-red-200">'
-                        + '<i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>'
-                        + '<div><p class="font-semibold text-red-800">Peringatan</p>'
-                        + '<p class="text-sm text-red-600">Tindakan ini tidak dapat dibatalkan</p></div></div>'
-                        + '<p class="text-gray-600">' + text + '</p>',
+                    html: '<p class="text-gray-600">' + text + '</p>',
                     icon: false,
                     showCancelButton: true,
-                    confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus',
-                    cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
                     reverseButtons: true,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -409,10 +377,15 @@
                     showLoadingAfterConfirm: true
                 };
                 var cfg = Object.assign({}, defaults, options);
+                var confirmButtonClass = 'swal-btn-primary';
+                if (cfg.confirmColor === 'var(--danger-red)' || cfg.iconColor === 'var(--danger-red)') {
+                    confirmButtonClass = 'swal-btn-delete';
+                } else if (cfg.confirmColor === 'var(--success-green)' || cfg.iconColor === 'var(--success-green)') {
+                    confirmButtonClass = 'swal-btn-success';
+                }
 
                 var html = '<div class="text-center">'
-                    + '<div class="mb-4"><i class="' + cfg.iconClass + ' text-6xl" style="color:' + cfg.iconColor + '"></i></div>'
-                    + '<p class="text-gray-600 text-lg mb-2">' + cfg.message + '</p>';
+                    + '<p class="text-gray-600 text-sm mb-2">' + cfg.message + '</p>';
                 if (cfg.subMessage) html += '<p class="text-gray-500 text-sm">' + cfg.subMessage + '</p>';
                 html += '</div>';
 
@@ -421,14 +394,14 @@
                     html: html,
                     icon: false,
                     showCancelButton: true,
-                    confirmButtonText: '<i class="' + cfg.iconClass + ' mr-2"></i>' + cfg.confirmText,
-                    cancelButtonText: '<i class="fas fa-times mr-2"></i>' + cfg.cancelText,
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
                     reverseButtons: cfg.reverseButtons,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     customClass: {
                         popup: 'swal2-popup swal2-modal',
-                        confirmButton: 'swal-btn-primary',
+                        confirmButton: confirmButtonClass,
                         cancelButton: 'swal-btn-cancel'
                     }
                 }).then(function(result) {
@@ -486,8 +459,8 @@
                 var self = this;
                 this.customConfirm({
                     title: title, message: message, subMessage: subMessage,
-                    iconClass: 'fas fa-save', iconColor: 'var(--primary-blue-main)',
-                    confirmText: 'Ya, Simpan', confirmColor: 'var(--primary-blue-main)',
+                    iconClass: 'fas fa-save', iconColor: 'var(--success-green)',
+                    confirmText: 'Ya, Simpan', confirmColor: 'var(--success-green)',
                     loadingTitle: 'Menyimpan', loadingMessage: 'Sedang menyimpan data...',
                     onConfirm: onConfirm,
                     onCancel: function() { self._pauseResume(false); if (onCancel) onCancel(); }
@@ -610,21 +583,15 @@
         @endif
 
         @if($errors->any())
-            SwalHelper.error(@json($errors->first()));
+            SwalHelper.error('Gagal menyimpan data.', @json($errors->first() ?: 'Pastikan semua field wajib telah diisi dengan benar.'));
         @endif
 
         @if(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Terjadi Kesalahan',
-                html: '<div class="text-left"><p class="text-gray-700 mb-3">{{ e(session("error")) }}</p>'
-                    + '@if(session("error_detail"))<div class="bg-red-50 rounded-lg p-3 mb-3 border border-red-200"><p class="text-xs font-semibold text-red-900 mb-1"><i class=\"fas fa-info-circle mr-1\"></i>Detail Teknis:</p><p class="text-xs text-red-800">{{ e(session("error_detail")) }}</p></div>@endif'
-                    + '@if(session("error_solution"))<div class="bg-green-50 rounded-lg p-3 border border-green-200"><p class="text-xs font-semibold text-green-900 mb-1"><i class=\"fas fa-lightbulb mr-1\"></i>Cara Mengatasi:</p><p class="text-xs text-green-800">{{ e(session("error_solution")) }}</p></div>@endif'
-                    + '</div>',
-                confirmButtonText: 'OK',
-                confirmButtonColor: 'var(--danger-red)',
-                allowOutsideClick: false
-            });
+            @php($flashError = session('error'))
+            SwalHelper.error(
+                @json(is_array($flashError) ? ($flashError['title'] ?? 'Terjadi kesalahan') : 'Terjadi kesalahan'),
+                @json(session('error_solution') ?? (is_array($flashError) ? ($flashError['message'] ?? 'Periksa data yang Anda masukkan, lalu coba lagi.') : $flashError))
+            );
         @endif
 
         @if(session('info'))

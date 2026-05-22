@@ -183,8 +183,8 @@
             showCancelButton: true,
             confirmButtonText: 'Lanjutkan Sesi',
             cancelButtonText: 'Logout Sekarang',
-            confirmButtonColor: '#0052CC',
-            cancelButtonColor: '#ef4444',
+            confirmButtonColor: '#2563eb',
+            cancelButtonColor: '#dc2626',
             allowOutsideClick: false,
             allowEscapeKey: false,
             showClass: {

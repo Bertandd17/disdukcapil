@@ -71,16 +71,12 @@
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         title: 'Konfirmasi Logout',
-                        html: '<div class="text-center">' +
-                            '<div class="mb-4"><i class="fas fa-sign-out-alt text-6xl text-red-500"></i></div>' +
-                            '<p class="text-gray-600 text-lg mb-2">Apakah Anda yakin ingin keluar dari sistem?</p>' +
-                            '<p class="text-gray-500 text-sm">Session Anda akan diakhiri dan Anda akan kembali ke halaman login.</p>' +
-                            '</div>',
+                        html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
                         icon: false,
                         showCancelButton: true,
                         showDenyButton: false,
-                        confirmButtonText: '<i class="fas fa-sign-out-alt mr-2"></i>Ya, Keluar',
-                        cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+                        confirmButtonText: 'Konfirmasi',
+                        cancelButtonText: 'Batal',
                         reverseButtons: true,
                         buttonsStyling: false,
                         allowOutsideClick: false,

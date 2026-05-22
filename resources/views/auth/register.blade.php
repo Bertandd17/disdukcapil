@@ -190,7 +190,7 @@
                 </div>
 
                 <!-- Register Button -->
-                <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-green-700 transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2 relative overflow-hidden group border-2 border-emerald-300">
+                <button type="submit" class="w-full py-4 bg-green-600 text-white rounded-xl font-bold text-lg hover:bg-green-700 transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center gap-2 relative overflow-hidden group border-2 border-emerald-300">
                     <span class="relative z-10 flex items-center gap-2">
                         <i class="fas fa-user-plus"></i>
                         Daftar Sekarang
@@ -314,57 +314,18 @@
 
         // Tampilkan pesan error/success dari session (jika ada)
         @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Registrasi Gagal',
-            html: `
-                <div class="text-left">
-                    <p class="text-gray-700 mb-3">{{ session('error') }}</p>
-
-                    @if(session('error_detail'))
-                    <div class="bg-red-50 rounded-lg p-3 mb-3 border border-red-200">
-                        <p class="text-xs font-semibold text-red-900 mb-1">
-                            <i class="fas fa-info-circle mr-1"></i>Detail Teknis:
-                        </p>
-                        <p class="text-xs text-red-800">{{ session('error_detail') }}</p>
-                    </div>
-                    @endif
-
-                    @if(session('error_location'))
-                    <p class="text-xs text-red-600 mb-2">
-                        <i class="fas fa-map-marker-alt mr-1"></i>
-                        <strong>Lokasi:</strong> {{ session('error_location') }}
-                    </p>
-                    @endif
-
-                    @if(session('error_solution'))
-                    <div class="bg-green-50 rounded-lg p-3 border border-green-200">
-                        <p class="text-xs font-semibold text-green-900 mb-1">
-                            <i class="fas fa-lightbulb mr-1"></i>Cara Mengatasi:
-                        </p>
-                        <p class="text-xs text-green-800">{{ session('error_solution') }}</p>
-                    </div>
-                    @endif
-
-                    @if(session('error_code'))
-                    <p class="text-xs text-gray-500 mt-2">
-                        Error Code: {{ session('error_code') }}
-                    </p>
-                    @endif
-                </div>
-            `,
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#dc2626',
-            allowOutsideClick: false
-        });
+        SwalHelper.error(
+            'Registrasi gagal.',
+            @json(session('error_solution') ?? session('error') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.')
+        );
         @endif
 
         @if(session('success'))
-        SwalHelper.modalSuccess('Registrasi Berhasil', '{{ session('success') }}');
+        SwalHelper.success(@json(session('success')));
         @endif
 
         @if(session('warning'))
-        SwalHelper.modalWarning('Peringatan', '{{ session('warning') }}');
+        SwalHelper.warning(@json(session('warning')));
         @endif
     </script>
 

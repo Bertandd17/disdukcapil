@@ -204,12 +204,12 @@
                     function handleAlreadyLoggedInLogout() {
                         SwalHelper.customConfirm({
                             title: 'Konfirmasi Logout',
-                            message: 'Anda akan keluar dari akun: <strong>{{ auth()->user()->name }}</strong>',
-                            subMessage: 'Session Anda akan diakhiri.',
+                            message: 'Sesi akun {{ auth()->user()->name }} akan diakhiri.',
+                            subMessage: 'Apakah Anda yakin ingin melanjutkan?',
                             iconClass: 'fas fa-sign-out-alt',
-                            iconColor: '#ef4444',
-                            confirmText: 'Ya, Logout',
-                            confirmColor: '#ef4444',
+                            iconColor: '#dc2626',
+                            confirmText: 'Konfirmasi',
+                            confirmColor: '#dc2626',
                             loadingTitle: 'Memproses Logout',
                             loadingMessage: 'Sedang mengakhiri session...',
                             onConfirm: () => {
@@ -296,7 +296,7 @@
                 </div>
 
                 <!-- Login Button -->
-                <button type="submit" class="w-full py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold text-lg hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-[1.02] shadow-lg btn-ripple flex items-center justify-center gap-2">
+                <button type="submit" class="w-full py-4 bg-green-600 text-white rounded-xl font-bold text-lg hover:bg-green-700 transition-all transform hover:scale-[1.02] shadow-lg btn-ripple flex items-center justify-center gap-2">
                     <i class="fas fa-sign-in-alt"></i>
                     Masuk
                 </button>

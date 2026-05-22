@@ -1,4 +1,4 @@
-﻿@extends('layouts.user')
+@extends('layouts.user')
 
 @section('content')
 <main class="pt-0">
@@ -54,7 +54,7 @@
     {{-- Welcome Section --}}
     <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 md:p-12 text-white text-center reveal">
+            <div class="bg-blue-600 rounded-2xl p-8 md:p-12 text-white text-center reveal">
                 <h2 class="text-2xl md:text-3xl font-bold mb-3">Selamat Datang di Portal Disdukcapil</h2>
                 <p class="text-blue-100 text-lg max-w-3xl mx-auto">
                     Kabupaten Toba berkomitmen memberikan pelayanan administrasi kependudukan
@@ -422,7 +422,7 @@
                         {{-- ORGANIZATION CHART --}}
                         <style>
                             /* ============================================================
-                               Organization Chart â€” Elbow Tree
+                               Organization Chart — Elbow Tree
                                ============================================================ */
                             .org-viewport {
                                 width: 100%;
@@ -705,7 +705,7 @@
                         </div>
 
                         {{-- ============================================================
-                             DETAIL UNIT KERJA — Sub Bagian, Koordinator, Kelompok Fungsional
+                             DETAIL UNIT KERJA � Sub Bagian, Koordinator, Kelompok Fungsional
                              ditampilkan stacked vertical di bawah tree untuk hindari scroll horizontal
                              ============================================================ --}}
                         @php

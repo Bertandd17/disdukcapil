@@ -109,7 +109,7 @@
                         <div class="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-gray-100">
                             @if($item->file)
                                 <a href="{{ asset('storage/' . $item->file) }}" target="_blank" rel="noopener"
-                                    class="inline-flex items-center gap-1.5 text-xs text-emerald-600 hover:text-emerald-700 font-medium transition">
+                                    class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
                                     <i class="fas fa-eye"></i> Lihat File
                                 </a>
                                 <span class="text-gray-200 hidden sm:inline">|</span>
@@ -218,11 +218,11 @@
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <button type="button" onclick="closePenghargaanModal()"
-                    class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+                    class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">
                     Batal
                 </button>
                 <button type="submit"
-                    class="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-sm">
+                    class="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                     Simpan
                 </button>
             </div>

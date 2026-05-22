@@ -9,23 +9,23 @@
     --font-size-4xl: 2.25rem;
     --font-size-5xl: 3rem;
 
-    --primary-blue-dark: #003d80;
-    --primary-blue-main: #0052CC;
-    --primary-blue-light: #0066ff;
+    --primary-blue-dark: #1d4ed8;
+    --primary-blue-main: #2563eb;
+    --primary-blue-light: #3b82f6;
     --primary-blue-50: #f0f5ff;
     --primary-blue-100: #e0ebff;
 
-    --secondary-red: #D32F2F;
+    --secondary-red: #b91c1c;
     --secondary-yellow: #FBC02D;
-    --secondary-green: #388E3C;
+    --secondary-green: #15803d;
 
-    --success-green: #43A047;
-    --success-green-light: #e8f5e9;
+    --success-green: #16a34a;
+    --success-green-light: #f0fdf4;
     --warning-orange: #FB8C00;
     --warning-orange-light: #fff3e0;
-    --danger-red: #E53935;
-    --danger-red-light: #ffebee;
-    --info-blue: #1976D2;
+    --danger-red: #dc2626;
+    --danger-red-light: #fef2f2;
+    --info-blue: #2563eb;
     --info-blue-light: #e3f2fd;
 
     --neutral-white: #ffffff;
@@ -214,7 +214,7 @@ button:disabled.btn,
 .swal-btn-primary {
     background: var(--primary-blue-main) !important;
     color: var(--neutral-white) !important;
-    box-shadow: 0 2px 12px rgba(0, 82, 204, 0.2) !important;
+    box-shadow: 0 2px 12px rgba(37, 99, 235, 0.2) !important;
 }
 
 .btn-primary:hover,
@@ -222,7 +222,7 @@ button:disabled.btn,
 .swal-btn-primary:hover {
     background: var(--primary-blue-dark) !important;
     color: var(--neutral-white) !important;
-    box-shadow: 0 4px 16px rgba(0, 82, 204, 0.3) !important;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3) !important;
 }
 
 .btn-secondary,
@@ -264,14 +264,14 @@ button:disabled.btn,
 .swal-btn-delete {
     background: var(--danger-red) !important;
     color: var(--neutral-white) !important;
-    box-shadow: 0 2px 12px rgba(229, 57, 53, 0.2) !important;
+    box-shadow: 0 2px 12px rgba(220, 38, 38, 0.2) !important;
 }
 
 .btn-danger:hover,
 .swal-dd-btn-danger:hover,
 .swal-btn-delete:hover {
     background: var(--secondary-red) !important;
-    box-shadow: 0 4px 16px rgba(229, 57, 53, 0.3) !important;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3) !important;
 }
 
 .btn-success,
@@ -279,11 +279,9 @@ button:disabled.btn,
 .swal-dd-btn-success,
 .swal-btn-success {
     background-color: #16a34a !important;
-    background-image: linear-gradient(to right, #16a34a, #15803d) !important;
+    background-image: none !important;
     color: var(--neutral-white) !important;
     border-color: #16a34a !important;
-    border-radius: 0.75rem !important;
-    font-weight: 700 !important;
     box-shadow: 0 10px 15px -3px rgba(22, 163, 74, 0.22), 0 4px 6px -4px rgba(22, 163, 74, 0.22) !important;
 }
 
@@ -292,7 +290,7 @@ button:disabled.btn,
 .swal-dd-btn-success:hover,
 .swal-btn-success:hover {
     background-color: #15803d !important;
-    background-image: linear-gradient(to right, #15803d, #166534) !important;
+    background-image: none !important;
     color: var(--neutral-white) !important;
     border-color: #15803d !important;
     box-shadow: 0 12px 18px -5px rgba(22, 101, 52, 0.28), 0 6px 8px -6px rgba(22, 101, 52, 0.28) !important;
@@ -303,7 +301,7 @@ button:disabled.btn,
 .swal-dd-btn-success:disabled,
 .swal-btn-success:disabled {
     background-color: #16a34a !important;
-    background-image: linear-gradient(to right, #16a34a, #15803d) !important;
+    background-image: none !important;
     color: var(--neutral-white) !important;
     opacity: 0.5 !important;
     box-shadow: none !important;
@@ -828,6 +826,16 @@ button:disabled.btn,
     color: var(--neutral-600) !important;
     font-size: var(--font-size-sm) !important;
     line-height: 1.6 !important;
+}
+
+.swal2-popup.swal2-modal .swal2-cancel {
+    background: #e5e7eb !important;
+    color: #1f2937 !important;
+}
+
+.swal2-popup.swal2-modal .swal2-cancel:hover {
+    background: #d1d5db !important;
+    color: #1f2937 !important;
 }
 
 .bg-blue-600,

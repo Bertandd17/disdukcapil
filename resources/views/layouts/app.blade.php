@@ -162,7 +162,11 @@
             @endif
 
             @if(session('error'))
-                SwalHelper.error(@json(session('error')));
+                @php($flashError = session('error'))
+                SwalHelper.error(
+                    @json(is_array($flashError) ? ($flashError['title'] ?? 'Terjadi kesalahan') : 'Terjadi kesalahan'),
+                    @json(is_array($flashError) ? ($flashError['message'] ?? 'Periksa data yang Anda masukkan, lalu coba lagi.') : $flashError)
+                );
             @endif
 
             @if(session('info'))

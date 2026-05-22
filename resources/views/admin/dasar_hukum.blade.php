@@ -49,7 +49,7 @@
                         {{-- Lihat File --}}
                         @if ($item->file)
                             <a href="{{ asset('storage/' . $item->file) }}" target="_blank" rel="noopener"
-                                class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-600 hover:text-emerald-700 font-medium transition py-1">
+                                class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium transition py-1">
                                 <i class="fas fa-eye text-xs"></i>
                                 <span>Lihat File</span>
                             </a>
@@ -145,11 +145,11 @@
 
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <button type="button" onclick="closeDasarHukumModal()"
-                    class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+                    class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">
                     Batal
                 </button>
                 <button type="submit"
-                    class="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-sm">
+                    class="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                     Simpan
                 </button>
             </div>
@@ -166,7 +166,7 @@
     const methodEl = document.getElementById('dasarHukumMethod');
     const titleEl  = document.getElementById('dasarHukumModalTitle');
 
-    /* ── MODAL ── */
+    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ MODAL ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
     window.openDasarHukumModal = function (mode, item) {
         form.reset();
         methodEl.innerHTML = '';
@@ -197,7 +197,7 @@
         if (e.target === modal) closeDasarHukumModal();
     });
 
-    /* ── TOMBOL UBAH ── */
+    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ TOMBOL UBAH ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
     document.querySelectorAll('.dasar-hukum-edit-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const id = btn.getAttribute('data-dasar-hukum-id');
@@ -212,9 +212,9 @@
         });
     });
 
-    /* ── TOMBOL HAPUS ──
+    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ TOMBOL HAPUS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
        Tombol berada di dalam <form> langsung (tiru pola akta lahir).
-       Pakai click biasa — closest('form') langsung dapat formnya.
+       Pakai click biasa ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â closest('form') langsung dapat formnya.
     */
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.dasar-hukum-delete-btn').forEach(function (btn) {
@@ -238,7 +238,7 @@
         });
     });
 
-    /* ── AUTO-BUKA MODAL SAAT ADA ERROR VALIDASI ── */
+    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ AUTO-BUKA MODAL SAAT ADA ERROR VALIDASI ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
     @if ($errors->any())
         document.addEventListener('DOMContentLoaded', function () {
             titleEl.textContent = 'Tambah Dasar Hukum';

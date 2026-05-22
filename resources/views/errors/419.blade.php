@@ -187,11 +187,11 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4">
-                <button onclick="location.reload()" class="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                <button onclick="location.reload()" class="flex-1 px-6 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg flex items-center justify-center gap-2">
                     <i class="fas fa-sync-alt"></i>
                     Refresh Sekarang
                 </button>
-                <a href="{{ route('home') }}" class="flex-1 px-6 py-4 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 rounded-xl font-bold hover:from-gray-200 hover:to-gray-300 transition-all shadow-md flex items-center justify-center gap-2">
+                <a href="{{ route('home') }}" class="flex-1 px-6 py-4 bg-gray-200 text-gray-800 rounded-xl font-bold hover:bg-gray-300 transition-all shadow-md flex items-center justify-center gap-2">
                     <i class="fas fa-home"></i>
                     Beranda
                 </a>

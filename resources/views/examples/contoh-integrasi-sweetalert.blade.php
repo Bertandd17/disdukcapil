@@ -105,11 +105,11 @@
                 
                 <div class="flex justify-end gap-3 pt-4">
                     <button type="button" onclick="resetFormSimpan()"
-                            class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition">
+                            class="px-6 py-3 bg-gray-200 text-gray-800 rounded-xl font-semibold hover:bg-gray-300 transition">
                         <i class="fas fa-times mr-2"></i>Batal
                     </button>
                     <button type="submit"
-                            class="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition shadow-lg">
+                            class="px-8 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition shadow-lg">
                         <i class="fas fa-save mr-2"></i>Simpan Data
                     </button>
                 </div>
@@ -190,7 +190,7 @@ echo json_encode([
                 </div>
                 
                 <button type="button" id="btnUpload" onclick="uploadFileKTP()"
-                        class="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-8 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled>
                     <i class="fas fa-upload mr-2"></i>Unggah File
                 </button>
@@ -293,7 +293,7 @@ try {
                             <td class="px-4 py-3">Jl. Merdeka No. 1, Toba</td>
                             <td class="px-4 py-3 text-center">
                                 <button onclick="konfirmasiHapus('Budi Santoso', 1)"
-                                        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm font-semibold">
+                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold">
                                     <i class="fas fa-trash-alt mr-1"></i>Hapus
                                 </button>
                             </td>
@@ -305,7 +305,7 @@ try {
                             <td class="px-4 py-3">Jl. Sudirman No. 5, Toba</td>
                             <td class="px-4 py-3 text-center">
                                 <button onclick="konfirmasiHapus('Siti Aminah', 2)"
-                                        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm font-semibold">
+                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold">
                                     <i class="fas fa-trash-alt mr-1"></i>Hapus
                                 </button>
                             </td>
@@ -380,7 +380,7 @@ echo json_encode([
             
             <div class="mt-4">
                 <button type="button" onclick="ajalPengajuan()"
-                        class="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition shadow-lg">
+                        class="px-8 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition shadow-lg">
                     <i class="fas fa-paper-plane mr-2"></i>Ajukan Sekarang
                 </button>
             </div>
@@ -399,7 +399,7 @@ echo json_encode([
                 <input type="text" id="keywordCari" placeholder="Cari NIK atau nama..."
                        class="flex-1 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500">
                 <button type="button" onclick="cariData()"
-                        class="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition">
+                        class="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition">
                     <i class="fas fa-search mr-2"></i>Cari
                 </button>
             </div>

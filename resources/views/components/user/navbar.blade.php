@@ -118,25 +118,25 @@
         if (window.SwalHelper && typeof window.SwalHelper.customConfirm === 'function') {
             window.SwalHelper.customConfirm({
                 title: 'Konfirmasi Logout',
-                message: 'Anda akan keluar dari sesi ini.',
-                subMessage: 'Pastikan semua aktivitas sudah disimpan.',
+                message: 'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login.',
+                subMessage: 'Apakah Anda yakin ingin melanjutkan?',
                 iconClass: 'fas fa-sign-out-alt',
-                iconColor: '#ef4444',
-                confirmText: 'Ya, Logout',
-                confirmColor: '#ef4444',
+                iconColor: '#dc2626',
+                confirmText: 'Konfirmasi',
+                confirmColor: '#dc2626',
                 loadingTitle: 'Memproses Logout',
                 loadingMessage: 'Sedang mengakhiri sesi...',
                 onConfirm: function () { setTimeout(doSubmit, 600); }
             });
         } else if (window.Swal && typeof window.Swal.fire === 'function') {
             window.Swal.fire({
-                icon: 'warning',
+                icon: false,
                 title: 'Konfirmasi Logout',
-                text: 'Anda akan keluar dari sesi ini.',
+                html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Logout',
+                confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',
-                confirmButtonColor: '#ef4444',
+                confirmButtonColor: '#dc2626',
                 reverseButtons: true
             }).then(function (r) { if (r.isConfirmed) doSubmit(); });
         } else {

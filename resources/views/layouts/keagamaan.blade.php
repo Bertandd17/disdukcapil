@@ -186,42 +186,7 @@
         @include('components.keagamaan.navbar')
 
         <div class="p-6 flex-1 min-h-0">
-            @if (session('success'))
-                <div class="bg-green-50 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded-xl mb-6 shadow-md">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                        <span class="text-sm font-medium">{{ session('success') }}</span>
-                    </div>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-xl mb-6 shadow-md">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
-                        <span class="text-sm font-medium">{{ session('error') }}</span>
-                    </div>
-                </div>
-            @endif
-
-            @if (session('info'))
-                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 px-4 py-3 rounded-xl mb-6 shadow-md">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-info-circle text-blue-500 text-xl"></i>
-                        <span class="text-sm font-medium">{{ session('info') }}</span>
-                    </div>
-                </div>
-            @endif
-
-            @if (session('warning'))
-                <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 px-4 py-3 rounded-xl mb-6 shadow-md">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-exclamation-triangle text-yellow-500 text-xl"></i>
-                        <span class="text-sm font-medium">{{ session('warning') }}</span>
-                    </div>
-                </div>
-            @endif
-
+            {{-- Flash messages ditampilkan sebagai toast SweetAlert top-right pada DOMContentLoaded --}}
             @yield('content')
         </div>
 
@@ -274,7 +239,7 @@
     <script>
     if (typeof window.SwalHelper === 'undefined') {
         window.SwalHelper = {
-            _toast: function(icon, iconColor, timerMs, message, customClass) {
+            _toast: function(icon, iconColor, timerMs, title, customClass, message) {
                 Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -288,15 +253,20 @@
                         toast.addEventListener('mouseenter', Swal.stopTimer);
                         toast.addEventListener('mouseleave', Swal.resumeTimer);
                     }
-                }).fire({ icon: icon, iconColor: iconColor, title: message });
+                }).fire({
+                    icon: icon,
+                    iconColor: iconColor,
+                    title: title,
+                    html: message ? '<p class="text-gray-600 text-sm mt-1">' + message + '</p>' : undefined
+                });
             },
 
             success: function(message) {
-                this._toast('success', 'var(--success-green)', 4000, message, 'swal2-toast');
+                this._toast('success', 'var(--success-green)', 5000, message, 'swal2-toast');
             },
 
-            error: function(message) {
-                this._toast('error', 'var(--danger-red)', 4000, message, 'swal2-toast');
+            error: function(title, message) {
+                this._toast('error', 'var(--danger-red)', 5000, title || 'Terjadi kesalahan', 'swal2-toast', message || 'Periksa data yang Anda masukkan, lalu coba lagi.');
             },
 
             info: function(message) {
@@ -304,17 +274,16 @@
             },
 
             warning: function(message) {
-                this._toast('warning', 'var(--warning-orange)', 3500, message, 'swal2-toast');
+                this._toast('warning', 'var(--warning-orange)', 5000, message, 'swal2-toast');
             },
 
             confirm: function(title, text, callback) {
                 Swal.fire({
                     title: title,
                     html: '<p class="text-gray-600">' + text + '</p>',
-                    icon: 'question',
                     showCancelButton: true,
-                    confirmButtonText: '<i class="fas fa-check mr-2"></i>Ya, Lanjutkan',
-                    cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
                     reverseButtons: true,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -331,15 +300,11 @@
             deleteConfirm: function(title, text, callback) {
                 Swal.fire({
                     title: title,
-                    html: '<div class="flex items-center gap-3 mb-4 p-4 bg-red-50 rounded-lg border border-red-200">'
-                        + '<i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>'
-                        + '<div><p class="font-semibold text-red-800">Peringatan</p>'
-                        + '<p class="text-sm text-red-600">Tindakan ini tidak dapat dibatalkan</p></div></div>'
-                        + '<p class="text-gray-600">' + text + '</p>',
+                    html: '<p class="text-gray-600">' + text + '</p>',
                     icon: false,
                     showCancelButton: true,
-                    confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus',
-                    cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
                     reverseButtons: true,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -372,10 +337,15 @@
                     showLoadingAfterConfirm: true
                 };
                 var cfg = Object.assign({}, defaults, options);
+                var confirmButtonClass = 'swal-btn-primary';
+                if (cfg.confirmColor === 'var(--danger-red)' || cfg.iconColor === 'var(--danger-red)') {
+                    confirmButtonClass = 'swal-btn-delete';
+                } else if (cfg.confirmColor === 'var(--success-green)' || cfg.iconColor === 'var(--success-green)') {
+                    confirmButtonClass = 'swal-btn-success';
+                }
 
                 var html = '<div class="text-center">'
-                    + '<div class="mb-4"><i class="' + cfg.iconClass + ' text-6xl" style="color:' + cfg.iconColor + '"></i></div>'
-                    + '<p class="text-gray-600 text-lg mb-2">' + cfg.message + '</p>';
+                    + '<p class="text-gray-600 text-sm mb-2">' + cfg.message + '</p>';
                 if (cfg.subMessage) html += '<p class="text-gray-500 text-sm">' + cfg.subMessage + '</p>';
                 html += '</div>';
 
@@ -384,14 +354,14 @@
                     html: html,
                     icon: false,
                     showCancelButton: true,
-                    confirmButtonText: '<i class="' + cfg.iconClass + ' mr-2"></i>' + cfg.confirmText,
-                    cancelButtonText: '<i class="fas fa-times mr-2"></i>' + cfg.cancelText,
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
                     reverseButtons: cfg.reverseButtons,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     customClass: {
                         popup: 'swal2-popup swal2-modal',
-                        confirmButton: 'swal-btn-primary',
+                        confirmButton: confirmButtonClass,
                         cancelButton: 'swal-btn-cancel'
                     }
                 }).then(function(result) {
@@ -442,7 +412,11 @@
         @endif
 
         @if(session('error'))
-            SwalHelper.error(@json(session('error')));
+            @php($flashError = session('error'))
+            SwalHelper.error(
+                @json(is_array($flashError) ? ($flashError['title'] ?? 'Terjadi kesalahan') : 'Terjadi kesalahan'),
+                @json(is_array($flashError) ? ($flashError['message'] ?? 'Periksa data yang Anda masukkan, lalu coba lagi.') : $flashError)
+            );
         @endif
 
         @if(session('info'))

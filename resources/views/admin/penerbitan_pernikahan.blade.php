@@ -324,7 +324,7 @@
             </div>
 
             <div class="flex gap-3">
-                <button onclick="closeConfirmModal()" class="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                <button onclick="closeConfirmModal()" class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium text-gray-800 transition-colors">
                     Batal
                 </button>
                 <button id="confirmActionBtn" class="flex-1 px-4 py-3 rounded-xl font-medium text-white transition-colors">
@@ -352,7 +352,7 @@
             <div class="p-6 space-y-4">
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-800">
                     <i class="fas fa-info-circle mr-1"></i>
-                    Format yang didukung: <strong>PDF</strong> (maks. 5 MB per file). Anda dapat mengupload sebagian dokumen terlebih dahulu — status akan otomatis menjadi <strong>Selesai</strong> ketika ke-4 dokumen lengkap.
+                    Format yang didukung: <strong>PDF</strong> (maks. 5 MB per file). Anda dapat mengupload sebagian dokumen terlebih dahulu ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â status akan otomatis menjadi <strong>Selesai</strong> ketika ke-4 dokumen lengkap.
                 </div>
 
                 {{-- Akta Pernikahan --}}
@@ -367,7 +367,7 @@
 
                 {{-- KK Pasangan --}}
                 <div class="border border-gray-200 rounded-xl p-4">
-                    <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru — Pasangan Suami-Istri</label>
+                    <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Pasangan Suami-Istri</label>
                     <p class="text-xs text-gray-500 mb-2">KK baru untuk pasangan mempelai</p>
                     <input type="file" name="file_kk_pasangan" id="file_kk_pasangan"
                            accept="application/pdf,.pdf"
@@ -377,7 +377,7 @@
 
                 {{-- KK Ortu Pria --}}
                 <div class="border border-gray-200 rounded-xl p-4">
-                    <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru — Orang Tua Mempelai Pria</label>
+                    <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Orang Tua Mempelai Pria</label>
                     <p class="text-xs text-gray-500 mb-2">KK orang tua mempelai pria (setelah pengeluaran mempelai pria)</p>
                     <input type="file" name="file_kk_ortu_pria" id="file_kk_ortu_pria"
                            accept="application/pdf,.pdf"
@@ -387,7 +387,7 @@
 
                 {{-- KK Ortu Wanita --}}
                 <div class="border border-gray-200 rounded-xl p-4">
-                    <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru — Orang Tua Mempelai Wanita</label>
+                    <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Orang Tua Mempelai Wanita</label>
                     <p class="text-xs text-gray-500 mb-2">KK orang tua mempelai wanita (setelah pengeluaran mempelai wanita)</p>
                     <input type="file" name="file_kk_ortu_wanita" id="file_kk_ortu_wanita"
                            accept="application/pdf,.pdf"
@@ -398,11 +398,11 @@
 
             <div class="p-4 border-t border-gray-100 bg-gray-50 flex gap-3">
                 <button type="button" onclick="closeUploadDokumenFinalModal()"
-                        class="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-100">
+                        class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium text-gray-800">
                     Batal
                 </button>
                 <button type="submit" id="btnSubmitDokumenFinal"
-                        class="flex-1 px-4 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 inline-flex items-center justify-center gap-2">
+                        class="flex-1 px-4 py-3 rounded-xl font-semibold text-white bg-green-600 hover:bg-green-700 inline-flex items-center justify-center gap-2">
                     <i class="fas fa-cloud-upload-alt"></i> Simpan Dokumen
                 </button>
             </div>
@@ -864,9 +864,9 @@ async function showDetail(pernikahanId) {
         const p = result.data;
         currentPernikahanData = p;
 
-        // ── Status-based documents ──────────────────────────────────── //
-        // Status: Menunggu Persetujuan Tanggal → Tampilkan KTP files
-        // Status: Menunggu Verifikasi Dokumen → Tampilkan dokumen keagamaan
+        // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Status-based documents ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ //
+        // Status: Menunggu Persetujuan Tanggal ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Tampilkan KTP files
+        // Status: Menunggu Verifikasi Dokumen ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Tampilkan dokumen keagamaan
 
         let documentsHtml = '';
         const isMenungguTanggal = p.status === 'MENUNGGU_APPROVE_TANGGAL';
@@ -928,7 +928,7 @@ async function showDetail(pernikahanId) {
             `;
         }
 
-        // ── Build konten modal ──────────────────────────────────────── //
+        // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Build konten modal ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ //
         const contentDiv = document.getElementById('modalContent');
         const nomorAntrianEl = document.getElementById('modalNomorAntrian');
 
@@ -1246,7 +1246,7 @@ function showToast(type, message) {
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
-        timer: 3000,
+        timer: 5000,
         timerProgressBar: true,
         background: '#ffffff',
         backdrop: false,

@@ -11,7 +11,7 @@
             <h1 class="text-2xl font-bold text-gray-800"><i class="fas fa-newspaper mr-2"></i>Kelola Berita</h1>
             <p class="text-gray-600 mt-1">Tambah, ubah, dan hapus berita yang tampil di beranda publik</p>
         </div>
-        <button type="button" onclick="openBeritaModal('create')" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition shadow-sm">
+        <button type="button" onclick="openBeritaModal('create')" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition shadow-sm">
             <i class="fas fa-plus"></i>
             Tambah Berita
         </button>
@@ -112,8 +112,8 @@
                 </div>
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closeBeritaModal()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition">Batal</button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold hover:from-green-700 hover:to-green-800 transition shadow-sm">
+                <button type="button" onclick="closeBeritaModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
                     Simpan
                 </button>
             </div>
