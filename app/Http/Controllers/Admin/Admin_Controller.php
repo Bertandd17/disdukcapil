@@ -350,7 +350,7 @@ class Admin_Controller extends Controller
                 ->orderBy('created_at', 'asc')
                 ->get();
 
-            // Load layanan data secara manual untuk setiap item
+            // Load layanan data dan status upload file untuk setiap item
             foreach ($data_antrian as $antrian) {
                 try {
                     $layanan = \App\Models\Layanan_Model::find($antrian->layanan_id);
@@ -358,6 +358,18 @@ class Admin_Controller extends Controller
                 } catch (\Exception $e) {
                     \Log::warning('Gagal load layanan untuk antrian ' . $antrian->antrian_online_id . ': ' . $e->getMessage());
                     $antrian->layanan = null;
+                }
+
+                // E10: Check file upload status for each antrian
+                try {
+                    $berkasCount = Lacak_Berkas_Model::where('antrian_online_id', $antrian->antrian_online_id)
+                        ->whereNotNull('file_berkas')
+                        ->count();
+                    $antrian->berkas_count = $berkasCount;
+                    $antrian->has_uploads = $berkasCount > 0;
+                } catch (\Exception $e) {
+                    $antrian->berkas_count = 0;
+                    $antrian->has_uploads = false;
                 }
             }
 
@@ -451,14 +463,26 @@ class Admin_Controller extends Controller
         }
 
         // Cek apakah status sudah Dokumen Diterima
-        if ($antrian->status_antrian === 'Dokumen Diterima') {
+        if ($antrian->status_antrian === 'Diterima') {
             return response()->json([
                 'success' => false,
                 'message' => 'Dokumen sudah diterima sebelumnya',
             ], 400);
         }
 
-        $antrian->update(['status_antrian' => 'Dokumen Diterima']);
+        // E10: Check if user has uploaded files before allowing acceptance
+        $berkasCount = Lacak_Berkas_Model::where('antrian_online_id', $antrian->antrian_online_id)
+            ->whereNotNull('file_berkas')
+            ->count();
+
+        if ($berkasCount === 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengguna belum mengunggah berkas pengajuan. Minta pengguna untuk melengkapi berkas terlebih dahulu.',
+            ], 400);
+        }
+
+        $antrian->update(['status_antrian' => 'Diterima']);
 
         // Cek apakah sudah ada lacak berkas dengan status Dokumen Diterima
         $existing_lacak = Lacak_Berkas_Model::where('antrian_online_id', $antrian->antrian_online_id)

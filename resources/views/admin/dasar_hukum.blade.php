@@ -166,7 +166,7 @@
     const methodEl = document.getElementById('dasarHukumMethod');
     const titleEl  = document.getElementById('dasarHukumModalTitle');
 
-    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ MODAL ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+    /* ===== MODAL ===== */
     window.openDasarHukumModal = function (mode, item) {
         form.reset();
         methodEl.innerHTML = '';
@@ -197,7 +197,7 @@
         if (e.target === modal) closeDasarHukumModal();
     });
 
-    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ TOMBOL UBAH ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+    /* ===== TOMBOL UBAH ===== */
     document.querySelectorAll('.dasar-hukum-edit-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const id = btn.getAttribute('data-dasar-hukum-id');
@@ -212,9 +212,9 @@
         });
     });
 
-    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ TOMBOL HAPUS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+    /* ===== TOMBOL HAPUS =====
        Tombol berada di dalam <form> langsung (tiru pola akta lahir).
-       Pakai click biasa ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â closest('form') langsung dapat formnya.
+       Pakai click biasa — closest('form') langsung dapat formnya.
     */
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.dasar-hukum-delete-btn').forEach(function (btn) {
@@ -238,7 +238,7 @@
         });
     });
 
-    /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ AUTO-BUKA MODAL SAAT ADA ERROR VALIDASI ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+    /* ===== AUTO-BUKA MODAL SAAT ADA ERROR VALIDASI ===== */
     @if ($errors->any())
         document.addEventListener('DOMContentLoaded', function () {
             titleEl.textContent = 'Tambah Dasar Hukum';

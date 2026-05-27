@@ -54,12 +54,10 @@ class Antrian_Online_Model extends Model
 
     // Status constants
     public const STATUS_MENUNGGU = 'Menunggu';
-    public const STATUS_DOKUMEN_DITERIMA = 'Dokumen Diterima';
-    public const STATUS_VERIFIKASI = 'Verifikasi Data';
-    public const STATUS_PROSES_CETAK = 'Proses Cetak';
-    public const STATUS_SIAP_PENGAMBILAN = 'Siap Pengambilan';
+    public const STATUS_DIGUNAKAN = 'Digunakan';
+    public const STATUS_DITERIMA = 'Diterima';
     public const STATUS_DITOLAK = 'Ditolak';
-    public const STATUS_DIBATALKAN = 'Dibatalkan';
+    public const STATUS_SELESAI = 'Selesai';
 
     /**
      * Boot method untuk auto-generate UUID
@@ -173,26 +171,19 @@ class Antrian_Online_Model extends Model
     }
 
     /**
-     * Cek apakah antrian sudah digunakan
-     * Validasi: cek apakah sudah ada record di lacak_berkas dengan status 'Dokumen Diterima' atau lebih lanjut
-     * Status yang dianggap "used": Dokumen Diterima, Verifikasi Data, Proses Cetak, Siap Pengambilan, Selesai
+     * Cek apakah antrian sudah digunakan secara terminal.
+     * Hanya status terminal (ditolak/selesai) yang TIDAK bisa dipakai lagi.
+     * Status 'diterima' oleh admin TIDAK memblokir user — user tetap bisa pakai nomor
+     * di form layanan; blokir hanya terjadi saat submit form (status -> 'digunakan').
      */
     public function isAlreadyUsed(): bool
     {
-        // Status yang dianggap "sudah digunakan"
-        $usedStatuses = [
-            'Dokumen Diterima',
-            'Verifikasi Data',
-            'Proses Cetak',
-            'Siap Pengambilan',
-            'Selesai',
-            'Diterima',
-            'Selesaikan'
+        $blockedStatuses = [
+            self::STATUS_DITOLAK,
+            self::STATUS_SELESAI,
         ];
 
-        return $this->lacak_berkas()
-            ->whereIn('status', $usedStatuses)
-            ->exists();
+        return $this->status_antrian && in_array($this->status_antrian, $blockedStatuses, true);
     }
 
     /**
@@ -270,12 +261,12 @@ class Antrian_Online_Model extends Model
             ];
         }
 
-        // Cek apakah sudah digunakan (sudah ada lacak_berkas)
+        // Cek apakah sudah ditolak/dibatalkan (terminal status)
         if ($this->isAlreadyUsed()) {
             return [
                 'valid' => false,
-                'message' => 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.',
-                'problem' => 'Nomor antrian ini sudah digunakan.',
+                'message' => 'Nomor antrian ini sudah tidak aktif (ditolak atau dibatalkan).',
+                'problem' => 'Nomor antrian ini sudah tidak aktif.',
                 'solution' => 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
                 'error_code' => 'ALREADY_USED'
             ];

@@ -258,77 +258,36 @@ class PernikahanController extends Controller
             'tanggal_perkawinan' => $request->input('tanggal_perkawinan'),
         ]);
 
+        $nomorTrimmed = trim($request->input('nomor_antrian', ''));
+        $layananId = $request->input('layanan_id');
+
+        if ($nomorTrimmed && $layananId) {
+            $antrian = Antrian_Online_Model::with('layanan')
+                ->cariNomorExact($nomorTrimmed)
+                ->first();
+
+            if (!$antrian) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => 'NOT_FOUND',
+                    'message' => 'Nomor antrian tidak ditemukan dalam sistem.',
+                ], 422);
+            }
+
+            $validasiLayanan = $antrian->validateForLayanan($layananId);
+            if (!$validasiLayanan['valid']) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => $validasiLayanan['error_code'] ?? 'VALIDATION_ERROR',
+                    'message' => strip_tags($validasiLayanan['message']),
+                ], 422);
+            }
+        }
+
         // Validasi manual untuk mengontrol response JSON
         $validator = \Validator::make($request->all(), [
             'layanan_id' => 'required|string|exists:layanan,layanan_id',
-            'nomor_antrian' => [
-                'required',
-                'string',
-                function ($attribute, $value, $fail) use ($request) {
-                    $nomorTrimmed = trim($value);
-                    $nomorUpper = strtoupper($nomorTrimmed);
-                    $layananId = $request->input('layanan_id');
-
-                    Log::info('=== VALIDATING NOMOR ANTRIAN ===', [
-                        'original' => $value,
-                        'original_hex' => bin2hex($value),
-                        'trimmed' => $nomorTrimmed,
-                        'trimmed_hex' => bin2hex($nomorTrimmed),
-                        'upper' => $nomorUpper,
-                        'length' => strlen($nomorTrimmed),
-                        'layanan_id' => $layananId,
-                    ]);
-
-                    $antrian = Antrian_Online_Model::with('layanan')
-                        ->cariNomorExact($nomorTrimmed)
-                        ->first();
-
-                    Log::info('=== DIRECT QUERY RESULT ===', [
-                        'found' => $antrian ? true : false,
-                        'found_nomor' => $antrian ? $antrian->nomor_antrian : null,
-                        'found_nomor_hex' => $antrian ? bin2hex($antrian->nomor_antrian) : null,
-                        'total_count' => Antrian_Online_Model::count(),
-                    ]);
-
-                    if (!$antrian) {
-                        // Sample data for debug - dengan hex dump
-                        $allAntrian = Antrian_Online_Model::select('nomor_antrian')
-                            ->limit(10)
-                            ->get();
-
-                        $sampleData = [];
-                        foreach ($allAntrian as $a) {
-                            $sampleData[] = [
-                                'nomor' => $a->nomor_antrian,
-                                'hex' => bin2hex($a->nomor_antrian),
-                                'length' => strlen($a->nomor_antrian),
-                            ];
-                        }
-
-                        Log::warning('=== NOMOR ANTRIAN NOT FOUND ===', [
-                            'searched' => $nomorTrimmed,
-                            'searched_hex' => bin2hex($nomorTrimmed),
-                            'searched_upper' => $nomorUpper,
-                            'all_antrians' => $sampleData,
-                        ]);
-
-                        $fail('Nomor antrian tidak ditemukan dalam sistem.');
-                        return;
-                    }
-
-                    $validasiLayanan = $antrian->validateForLayanan($layananId);
-                    if (!$validasiLayanan['valid']) {
-                        Log::warning('=== NOMOR ANTRIAN INVALID FOR SERVICE ===', [
-                            'nomor_antrian' => $antrian->nomor_antrian,
-                            'layanan_antrian' => $antrian->layanan_id,
-                            'layanan_diminta' => $layananId,
-                            'error_code' => $validasiLayanan['error_code'] ?? null,
-                        ]);
-
-                        $fail(strip_tags($validasiLayanan['message']));
-                    }
-                },
-            ],
+            'nomor_antrian' => 'required|string',
             'nama_pemohon' => 'required|string',
             'nik_pemohon' => 'required|string|size:16',
             'alamat_pemohon' => 'required|string',
@@ -412,6 +371,17 @@ class PernikahanController extends Controller
                     // Update path file langsung ke tabel layanan_pernikahan
                     $pernikahan->$dbColumn = $path;
                     $pernikahan->save();
+                }
+            }
+
+            // Tandai nomor antrian sebagai digunakan
+            if ($nomorTrimmed && $layananId) {
+                $antrian = Antrian_Online_Model::with('layanan')
+                    ->cariNomorExact($nomorTrimmed)
+                    ->first();
+
+                if ($antrian) {
+                    $antrian->update(['status_antrian' => 'Digunakan']);
                 }
             }
 

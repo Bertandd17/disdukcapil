@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.browsermcp.io)",
+      "WebSearch",
+      "WebFetch(domain:docs.railway.com)",
+      "Bash(ls -la \"C:\\\\Users\\\\USER\\\\.codex\\\\memories\" 2>nul)",
+      "Read(//c/Users/USER/.codex/memories/**)",
+      "Bash(cd \"d:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\" && git status 2>nul)",
+      "Bash(cd \"d:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\" && git branch 2>nul)",
+      "Bash(cd \"d:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\" && git log --oneline -5 2>nul)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(python *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\" -Recurse -File)",
+      "Bash(Select-Object FullName, Length)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\USER\\\\.claude\\\\skills\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(node *)",
+      "Bash(python3 *)",
+      "Bash(ls \"D:\\\\\\\\Semester 6\\\\\\\\PA 3\\\\\\\\Project\\\\\\\\PA3\\\\\\\\resources\\\\\\\\views\\\\\\\\\")",
+      "Bash(xxd)",
+      "Bash(php artisan *)",
+      "Bash(php -r ' *)",
+      "Bash(git commit *)"
+    ],
+    "additionalDirectories": [
+      "d:\\Semester 6\\PA 3\\Project\\PA3"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "ruflo"
+  ]
+}

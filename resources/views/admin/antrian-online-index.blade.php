@@ -445,13 +445,23 @@
         const safeId = q.antrian_online_id.replace(/'/g, "\\'");
         let buttons = '';
 
-        // Hanya tampilkan tombol "Dimulai" untuk status Menunggu
+        // E10: Only show "Dimulai" button if user has uploaded files
+        // Hide button if berkas_count is 0 (no files uploaded yet)
         if (q.status_antrian === 'Menunggu') {
-            buttons = `
-                <button data-action="mulai-antrian" data-id="${safeId}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-bold hover:bg-green-700 shadow-md shadow-green-100 transition-all h-[44px] btn-mulai-antrian">
-                    <i class="fas fa-play mr-1"></i> Dimulai
-                </button>
-            `;
+            if (q.has_uploads || q.berkas_count > 0) {
+                buttons = `
+                    <button data-action="mulai-antrian" data-id="${safeId}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-bold hover:bg-green-700 shadow-md shadow-green-100 transition-all h-[44px] btn-mulai-antrian">
+                        <i class="fas fa-play mr-1"></i> Dimulai
+                    </button>
+                `;
+            } else {
+                // Show disabled button with tooltip explaining why it's disabled
+                buttons = `
+                    <button disabled class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-500 rounded-xl text-sm font-bold cursor-not-allowed h-[44px] btn-disabled" title="Pengguna belum mengunggah berkas">
+                        <i class="fas fa-clock mr-1"></i> Menunggu Upload
+                    </button>
+                `;
+            }
         }
 
         return buttons;
@@ -521,14 +531,22 @@
         console.log('Mulai antrian clicked for ID:', id);
         const route = BASE_URL + ROUTES.terima + id;
 
+        // E10: Find queue data to show file upload status
+        const queueItem = allQueueData.find(q => q.antrian_online_id === id);
+        const hasUploads = queueItem && (queueItem.has_uploads || queueItem.berkas_count > 0);
+
         if (typeof Swal !== 'undefined') {
-            // Konfirmasi SEDERHANA seperti logout popup
+            // E10: Show different confirmation based on upload status
+            const confirmationText = hasUploads
+                ? `Antrian ini memiliki ${queueItem.berkas_count} berkas yang sudah diunggah. Apakah Anda yakin ingin memulai proses antrian ini?`
+                : 'Pengguna belum mengunggah berkas apapun. Apakah Anda yakin ingin melanjutkan?';
+
             const result = await Swal.fire({
-                title: 'Mulai Antrian',
-                text: 'Apakah Anda yakin ingin memulai proses antrian ini? Status akan diubah menjadi "Dokumen Diterima" dan antrian akan masuk ke halaman layanan sesuai.',
-                icon: false,
+                title: hasUploads ? 'Mulai Antrian' : 'Konfirmasi - Belum Ada Upload',
+                text: confirmationText,
+                icon: hasUploads ? 'question' : 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#16a34a',
+                confirmButtonColor: hasUploads ? '#16a34a' : '#f59e0b',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',

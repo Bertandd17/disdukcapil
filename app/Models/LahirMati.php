@@ -36,6 +36,7 @@ class LahirMati extends Model
         
         'keterangan',
         'status',
+        'jenis_layanan',
         'alasan_penolakan',
     ];
 

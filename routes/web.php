@@ -16,6 +16,7 @@ use App\Http\Controllers\KartKeluargaController;
 use App\Http\Controllers\LahirMatiController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Pengguna_Controller;
+use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\SecureFileController;
 use App\Http\Controllers\StatistikPublikController;
 use App\Http\Controllers\DasarHukumController;
@@ -224,6 +225,13 @@ Route::get('logout', function () {
 })->name('logout.get');
 
 Route::post('logout', [Login_Controller::class, 'proses_logout'])->name('logout')->middleware('auth');
+
+// Pengajuan Status (D7 - Feedback after Akta Kematian submission)
+Route::get('/pengajuan/status/{id}', [PengajuanController::class, 'status'])
+    ->name('pengajuan.status');
+
+// Lacak Berkas route
+Route::get('/lacak-berkas', [Antrian_Online_Controller::class, 'Lacak_Berkas'])->name('lacak.berkas');
 
 /*
 |--------------------------------------------------------------------------

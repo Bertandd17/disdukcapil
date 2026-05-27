@@ -71,7 +71,8 @@ class LahirMatiController extends Controller
             ]);
             
             $data['status'] = 'Verifikasi Data';
-            
+            $data['jenis_layanan'] = 'lahir_mati';
+
             // 3. INI KUNCINYA: Timpa input asal-asalan pemohon dengan Token Resmi
             $data['nomor_antrian'] = $nomorAntrian;
 
@@ -166,11 +167,14 @@ class LahirMatiController extends Controller
               ->where('status_antrian', '!=', 'Menunggu');
         };
 
-        $query = LahirMati::query()->whereIn('nomor_antrian', $startedAntrianSubquery);
+        $query = LahirMati::query()
+            ->whereIn('jenis_layanan', ['lahir_mati'])
+            ->whereIn('nomor_antrian', $startedAntrianSubquery);
         if ($request->status) $query->where('status', $request->status);
         $dataLahirMati = $query->latest()->get();
 
-        $baseCount = LahirMati::whereIn('nomor_antrian', $startedAntrianSubquery);
+        $baseCount = LahirMati::whereIn('jenis_layanan', ['lahir_mati'])
+            ->whereIn('nomor_antrian', $startedAntrianSubquery);
         $jumlah             = (clone $baseCount)->count();
         $menungguVerifikasi = (clone $baseCount)->where('status', 'Verifikasi Data')->count();
         $dalamProses        = (clone $baseCount)->where('status', 'Proses Cetak')->count();

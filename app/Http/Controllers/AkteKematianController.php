@@ -44,8 +44,11 @@ class AkteKematianController extends Controller
                     'errors'  => $validator->errors(),
                 ], 422);
             }
-            return redirect()->back()
-                ->with('error', 'Validasi Gagal:<br>' . implode('<br>', $validator->errors()->all()))
+            return back()
+                ->with('error', [
+                    'title'   => 'Validasi Gagal.',
+                    'message' => $validator->errors()->first(),
+                ])
                 ->withInput();
         }
 
@@ -72,6 +75,7 @@ class AkteKematianController extends Controller
             ]);
             
             $data['status'] = 'Verifikasi Data';
+            $data['jenis_layanan'] = 'akta_kematian';
             
             // 3. INI KUNCINYA: Timpa input asal-asalan pemohon dengan Token Resmi
             $data['nomor_antrian'] = $nomorAntrian; 
@@ -100,7 +104,7 @@ class AkteKematianController extends Controller
             $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
             // 7. Update relasi
-            $akteKematian->update(['antrian_online_id' => $antrian->antrian_online_id]);
+            //$akteKematian->update(['antrian_online_id' => $antrian->antrian_online_id]);
 
             // 8. Create lacak berkas
             Lacak_Berkas_Model::create([
@@ -117,7 +121,10 @@ class AkteKematianController extends Controller
                     'nomor_antrian' => $nomorAntrian,
                 ]);
             }
-            return redirect()->back()->with('success', 'Permohonan Akte Kematian berhasil dikirim! Nomor Antrian Anda: ' . $nomorAntrian);
+
+            return redirect()
+                ->route('pengajuan.status', ['id' => $akteKematian->uuid])
+                ->with('success', 'Pengajuan berhasil disimpan. Nomor: ' . ($nomorAntrian ?? $akteKematian->uuid));
 
         } catch (\Exception $e) {
             $safeErrorMessage = htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
@@ -127,7 +134,12 @@ class AkteKematianController extends Controller
                     'message' => 'Terjadi kesalahan sistem: ' . $safeErrorMessage,
                 ], 500);
             }
-            return redirect()->back()->with('error', 'Terjadi kesalahan sistem: ' . $safeErrorMessage)->withInput();
+            return back()
+                ->with('error', [
+                    'title'   => 'Gagal menyimpan data',
+                    'message' => $e->getMessage(),
+                ])
+                ->withInput();
         }
     }
 
@@ -168,11 +180,14 @@ class AkteKematianController extends Controller
               ->where('status_antrian', '!=', 'Menunggu');
         };
 
-        $query = AkteKematian::query()->whereIn('nomor_antrian', $startedAntrianSubquery);
+        $query = AkteKematian::query()
+            ->whereIn('jenis_layanan', ['akta_kematian'])
+            ->whereIn('nomor_antrian', $startedAntrianSubquery);
         if ($request->status) $query->where('status', $request->status);
         $dataKematian = $query->latest()->get();
 
-        $baseCount = AkteKematian::whereIn('nomor_antrian', $startedAntrianSubquery);
+        $baseCount = AkteKematian::whereIn('jenis_layanan', ['akta_kematian'])
+            ->whereIn('nomor_antrian', $startedAntrianSubquery);
         $jumlah             = (clone $baseCount)->count();
         $menungguVerifikasi = (clone $baseCount)->where('status', 'Verifikasi Data')->count();
         $dalamProses        = (clone $baseCount)->where('status', 'Proses Cetak')->count();

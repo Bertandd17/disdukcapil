@@ -228,18 +228,23 @@ class Antrian_Online_Controller extends Controller
     public function Tambah_Antrian(Request $request)
     {
         try {
-            // Cek jam kerja terlebih dahulu
-            // $jam_kerja_check = $this->Cek_Jam_Kerja();
+            // Duplicate guard: cek antrian aktif berdasarkan NIK, layanan, dan tanggal
+            $existingAntrian = Antrian_Online_Model::where('nik', $request->nik)
+                ->where('layanan_id', $request->layanan_id)
+                ->whereDate('created_at', date('Y-m-d'))
+                ->whereNotIn('status_antrian', ['Ditolak', 'Dibatalkan'])
+                ->exists();
 
-            // if (! $jam_kerja_check['is_working_hours']) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => $jam_kerja_check['message'],
-            //         'error' => 'OUTSIDE_WORKING_HOURS',
-            //         'jam_kerja' => $jam_kerja_check['jam_kerja'],
-            //         'next_open' => $jam_kerja_check['next_open'] ?? null,
-            //     ], 403);
-            // }
+            if ($existingAntrian) {
+                $layanan = Layanan_Model::find($request->layanan_id);
+                $namaLayanan = $layanan ? $layanan->nama_layanan : $request->jenis_layanan ?? 'layanan ini';
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda masih memiliki antrian aktif untuk layanan "' . $namaLayanan . '" pada tanggal yang sama. Selesaikan antrian sebelumnya terlebih dahulu.',
+                    'error' => 'DUPLICATE_ANTRIAN',
+                ], 422);
+            }
 
             // Validasi input
             $validator = Validator::make($request->all(), [
@@ -745,6 +750,8 @@ class Antrian_Online_Controller extends Controller
             $q->orderBy('created_at', 'asc');
         }]);
 
+        // D8: Search all status (removed ->whereNotIn('status_antrian', ['selesai']))
+
         if ($isQueueNumber) {
             // Search by queue number
             $query->where(function ($q) use ($searchUpper, $searchClean) {
@@ -1187,6 +1194,44 @@ class Antrian_Online_Controller extends Controller
             ], 403);
         }
 
+        // Ambil data draft di luar transaksi untuk dapat NIK + layanan_id sebelum lock
+        /** @var AntrianOnline|null $draft */
+        $draft = AntrianOnline::query()
+            ->where('antrian_online_id', $antrianId)
+            ->first();
+        if (! $draft) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Draft antrian tidak ditemukan.',
+                'data' => null,
+            ], 404);
+        }
+
+        // E10: Cek duplicate — NIK belum ada di draft (null), jadi perlu di-step 2
+        // Jika request sudah membawa NIK, cek duplikat sebelum finalize
+        $nik = trim((string) $request->input('nik', ''));
+        if (strlen($nik) === 16) {
+            // Jangan cek diri sendiri (exclude draft saat ini)
+            $duplicate = Antrian_Online_Model::where('nik', $nik)
+                ->where('layanan_id', $draft->layanan_id)
+                ->whereDate('created_at', date('Y-m-d'))
+                ->whereNotIn('status_antrian', ['Ditolak', 'Dibatalkan'])
+                ->where('antrian_online_id', '!=', $antrianId)
+                ->first();
+            if ($duplicate) {
+                $layanan = Layanan_Model::find($draft->layanan_id);
+                $namaLayanan = $layanan ? $layanan->nama_layanan : 'layanan ini';
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda sudah memiliki antrian aktif untuk layanan "' . $namaLayanan . '" pada tanggal yang sama.',
+                    'error_code' => 'DUPLICATE_ANTRIAN',
+                    'problem' => 'Anda sudah memiliki antrian aktif untuk layanan "' . $namaLayanan . '" hari ini.',
+                    'solution' => 'Cek nomor antrian Anda di halaman Lacak Berkas, atau tunggu hingga status antrian sebelumnya berubah menjadi Selesai.',
+                ], 422);
+            }
+        }
+
         $validator = Validator::make($request->all(), [
             'nik' => 'required|string|digits:16',
             'nama_lengkap' => [
@@ -1544,7 +1589,7 @@ class Antrian_Online_Controller extends Controller
      * Validasi:
      * 1. Nomor antrian harus exists
      * 2. Nomor antrian belum digunakan (belum ada lacak_berkas dengan status Dokumen Diterima+)
-     * 3. Nomor antrian hanya valid untuk layanan yang sesuai
+     * 3. E8 FIX: Nomor antrian hanya valid untuk layanan yang sesuai (validasi layanan_id wajib)
      */
     public function getApiData(Request $request, $nomorAntrian): JsonResponse
     {
@@ -1580,14 +1625,23 @@ class Antrian_Online_Controller extends Controller
             Log::info('Antrian found', [
                 'nomor_antrian' => $antrian->nomor_antrian,
                 'antrian_online_id' => $antrian->antrian_online_id,
+                'layanan_id' => $antrian->layanan_id,
             ]);
 
-            // Validasi layanan: cek parameter layanan_id dari query string
+            // E8 FIX: Validasi layanan WAJIB dilakukan jika layanan_id diberikan
             $requestedLayananId = $request->query('layanan_id');
 
             if ($requestedLayananId) {
+                // Validasi kesesuaian jenis layanan
                 $validasiLayanan = $antrian->validateForLayanan($requestedLayananId);
                 if (!$validasiLayanan['valid']) {
+                    Log::warning('Service validation failed', [
+                        'nomor_antrian' => $antrian->nomor_antrian,
+                        'antrian_layanan_id' => $antrian->layanan_id,
+                        'requested_layanan_id' => $requestedLayananId,
+                        'error_code' => $validasiLayanan['error_code'] ?? 'UNKNOWN',
+                    ]);
+
                     unset($validasiLayanan['valid']);
                     $status = ($validasiLayanan['error_code'] ?? null) === 'UNKNOWN_SERVICE' ? 422 : 400;
 
@@ -1595,11 +1649,18 @@ class Antrian_Online_Controller extends Controller
                         'success' => false,
                     ], $validasiLayanan), $status);
                 }
+
+                Log::info('Service validation passed', [
+                    'nomor_antrian' => $antrian->nomor_antrian,
+                    'layanan_id' => $antrian->layanan_id,
+                ]);
             } elseif ($antrian->isAlreadyUsed()) {
+                // E9: Only blocked if terminal (ditolak/dibatalkan)
+                $layananNama = $antrian->layanan ? $antrian->layanan->nama_layanan : 'tidak diketahui';
                 return response()->json([
                     'success' => false,
-                    'message' => 'Nomor antrian ini sudah digunakan. Setiap nomor antrian hanya dapat digunakan satu kali.',
-                    'problem' => 'Nomor antrian ini sudah digunakan.',
+                    'message' => 'Nomor antrian ini sudah tidak aktif (ditolak atau dibatalkan).',
+                    'problem' => 'Nomor antrian ini sudah tidak aktif.',
                     'solution' => 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
                     'error_code' => 'ALREADY_USED'
                 ], 400);

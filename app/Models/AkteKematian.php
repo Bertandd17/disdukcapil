@@ -16,7 +16,6 @@ class AkteKematian extends Model
     protected $fillable = [
         'uuid',
         'layanan_id',
-        'antrian_online_id',
         'nomor_antrian',
         
         // Data Pemohon
@@ -37,6 +36,7 @@ class AkteKematian extends Model
         
         // Status
         'status',
+        'jenis_layanan',
         'alasan_penolakan',
     ];
 
@@ -44,28 +44,11 @@ class AkteKematian extends Model
         'deleted_at',
     ];
 
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
+    // Hapus $incrementing = false dan $keyType = 'string'
+    // karena id adalah auto increment integer biasa
 
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
-     * Daftar sensitive fields yang akan di-encrypt
-     *
-     * @return array
-     */
     public function getSensitiveFields(): array
     {
-        // Gabungan dari local dan remote
         return [
             'nik_pemohon',
             'nomor_kk_pemohon',
@@ -77,42 +60,23 @@ class AkteKematian extends Model
         ];
     }
 
-    /**
-     * Boot function from Laravel.
-     */
     protected static function boot()
     {
         parent::boot();
         
-        // UUID generation dari remote
         self::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
+            // Hapus bagian $model->id = Str::uuid()
+            // biarkan auto increment yang handle
             if (empty($model->uuid)) {
                 $model->uuid = (string) Str::uuid();
             }
         });
 
-        // Encrypt sensitive data dari local
         static::bootEncryptsSensitiveData();
     }
 
-    /**
-     * Relasi dengan layanan
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function layanan()
     {
         return $this->belongsTo(Layanan_Model::class, 'layanan_id', 'layanan_id');
-    }
-
-    /**
-     * Relasi ke Antrian Online
-     */
-    public function antrian_online()
-    {
-        return $this->belongsTo(Antrian_Online_Model::class, 'antrian_online_id', 'antrian_online_id');
     }
 }

@@ -705,7 +705,7 @@
                         </div>
 
                         {{-- ============================================================
-                             DETAIL UNIT KERJA — Sub Bagian, Koordinator, Kelompok Fungsional
+                             DETAIL UNIT KERJA ï¿½ Sub Bagian, Koordinator, Kelompok Fungsional
                              ditampilkan stacked vertical di bawah tree untuk hindari scroll horizontal
                              ============================================================ --}}
                         @php

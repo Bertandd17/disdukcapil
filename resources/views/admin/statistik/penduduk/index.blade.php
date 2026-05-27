@@ -123,11 +123,11 @@
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-        <form id="formData" method="POST" class="p-6 space-y-4">
+        <form id="formData" method="POST">
             @csrf
             <input type="hidden" name="_method" id="formMethod" value="POST">
-            
-            <div>
+
+            <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Kecamatan <span class="text-red-500">*</span></label>
                 <select name="kecamatan_id" id="field_kecamatan" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">-- Pilih Kecamatan --</option>
@@ -137,7 +137,7 @@
                 </select>
             </div>
 
-            <div>
+            <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun <span class="text-red-500">*</span></label>
                 <select name="tahun" id="field_tahun" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     @for($y = date('Y'); $y >= date('Y') - 10; $y--)
@@ -146,18 +146,35 @@
                 </select>
             </div>
 
-            <div>
+            <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Total Penduduk <span class="text-red-500">*</span></label>
                 <input type="number" name="total_penduduk" id="field_total" required min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan jumlah penduduk">
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
-                <button type="submit" id="btnSubmit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
-                    <span id="btnText">Simpan</span>
+                <button type="button" id="btnBukaKonfirmasi" onclick="showKonfirmasiSimpan()" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
+                    <span>Simpan</span>
                 </button>
             </div>
         </form>
+    </div>
+</div>
+
+{{-- Modal Konfirmasi Simpan --}}
+<div id="modalKonfirmasi" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center">
+        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="bi bi-question-octagon-fill text-yellow-500 text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">Konfirmasi Penyimpanan</h3>
+        <p class="text-sm text-gray-600 mb-6">Apakah Anda yakin ingin menyimpan data ini?</p>
+        <div class="flex gap-3">
+            <button type="button" onclick="closeKonfirmasiModal()" class="flex-1 px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
+            <button type="button" id="btnKonfirmasiSimpan" class="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
+                <span id="btnKonfirmasiText">Ya, Simpan</span>
+            </button>
+        </div>
     </div>
 </div>
 @endsection
@@ -166,10 +183,10 @@
 <script>
 (function () {
     const modal = document.getElementById('modalForm');
+    const konfirmasiModal = document.getElementById('modalKonfirmasi');
     const form = document.getElementById('formData');
     const titleEl = document.getElementById('modalTitle');
     const methodEl = document.getElementById('formMethod');
-    const btnTextEl = document.getElementById('btnText');
     const baseUrl = '{{ url("/admin/statistik-penduduk") }}';
     const storeUrl = '{{ route("admin.statistik-penduduk.store") }}';
 
@@ -182,12 +199,10 @@
         if (mode === 'create') {
             titleEl.textContent = 'Tambah Data';
             methodEl.value = 'POST';
-            btnTextEl.textContent = 'Simpan';
             form.action = storeUrl;
         } else if (item) {
             titleEl.textContent = 'Ubah Data';
             methodEl.value = 'PUT';
-            btnTextEl.textContent = 'Update';
             form.action = baseUrl + '/' + item.id;
             document.getElementById('field_kecamatan').value = item.kecamatan_id;
             document.getElementById('field_tahun').value = item.tahun;
@@ -205,62 +220,47 @@
         document.body.style.overflow = '';
     };
 
+    window.closeKonfirmasiModal = function () {
+        konfirmasiModal.classList.add('hidden');
+        konfirmasiModal.classList.remove('flex');
+    };
+
     modal.addEventListener('click', function (e) {
         if (e.target === modal) closeModal();
     });
 
-    // Form submit handler
+    // E5 FIX: showKonfirmasiSimpan hanya tampilkan modal, TANPA submit langsung
+    window.showKonfirmasiSimpan = function () {
+        // Validasi form dulu
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        // Tampilkan modal konfirmasi
+        konfirmasiModal.classList.remove('hidden');
+        konfirmasiModal.classList.add('flex');
+    };
+
+    // E5 FIX: Submit HANYA terjadi saat tombol konfirmasi diklik
+    document.getElementById('btnKonfirmasiSimpan').addEventListener('click', function() {
+        closeKonfirmasiModal();
+
+        const btnTextEl = document.getElementById('btnKonfirmasiText');
+        btnTextEl.textContent = 'Menyimpan...';
+
+        // Submit form secara langsung (bukan via event listener)
+        form.submit();
+    });
+
+    // E5 FIX: Hapus event listener submit yang auto-submit tanpa konfirmasi
+    // Form submit handler - TETAP ada tapi hanya dipanggil dari tombol konfirmasi
     form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('btnSubmit');
-        const btnText = document.getElementById('btnText');
-        btn.disabled = true;
-        btnText.textContent = 'Menyimpan...';
-        
-        // Create FormData with proper method override
-        const formData = new FormData(form);
-        const isPut = methodEl.value === 'PUT';
-        
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json'
-            }
-        })
-        .then(r => r.json())
-        .then(r => {
-            if (r.success) {
-                closeModal();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: r.message,
-                    confirmButtonColor: '#16a34a'
-                }).then(() => {
-                    window.location.reload();
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: r.message || 'Terjadi kesalahan'
-                });
-                btn.disabled = false;
-                btnText.textContent = isPut ? 'Update' : 'Simpan';
-            }
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: 'Terjadi kesalahan koneksi'
-            });
-            btn.disabled = false;
-            btnText.textContent = isPut ? 'Update' : 'Simpan';
-        });
+        const btnTextEl = document.getElementById('btnKonfirmasiText');
+        btnTextEl.textContent = 'Menyimpan...';
+
+        // Biarkan form submit secara natural (tidak e.preventDefault())
+        // sehingga redirect ke server dan session flash muncul
     });
 
     document.querySelectorAll('.delete-form').forEach(function (f) {
@@ -299,6 +299,26 @@
             });
         });
     });
+
+    // E5 FIX: SweetAlert sukses HANYA dari session flash (server-side)
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        toast: true,
+        position: 'top-end',
+        timer: 5000
+    });
+    @endif
+
+    @if(session('error'))
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}'
+    });
+    @endif
 })();
 </script>
 @endpush

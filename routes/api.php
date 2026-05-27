@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\EasyOcrController;
+use App\Http\Controllers\Api\KtpOcrController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OcrController;
 use App\Http\Controllers\Api\PernikahanController;
@@ -78,6 +79,9 @@ Route::prefix('ocr')->group(function () {
 
     // Test endpoint
     Route::post('/v2/test', [OcrController::class, 'test']);
+
+    // KTP OCR extraction pipeline (new dedicated endpoint)
+    Route::post('/ktp/extract', [KtpOcrController::class, 'extract']);
 });
 
 /*

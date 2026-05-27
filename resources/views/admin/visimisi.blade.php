@@ -108,71 +108,7 @@
                     Batal
                 </button>
                 <button type="submit"
-                    class="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-sm">
-                    Simpan
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-        <form id="penghargaanForm" method="post" enctype="multipart/form-data" class="p-6 space-y-4">
-            @csrf
-            <div id="penghargaanMethod"></div>
-            <div>   
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penghargaan <span class="text-red-500">*</span></label>
-                <input type="text" name="nama" id="field_nama" required maxlength="200"
-                    placeholder="Contoh: Penghargaan Kualitas Pelayanan Publik"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-            </div>
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Instansi Pemberi <span class="text-red-500">*</span></label>
-                <input type="text" name="instansi" id="field_instansi" required maxlength="200"
-                    placeholder="Contoh: Kementerian PANRB"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-            </div>
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi <span class="text-red-500">*</span></label>
-                <textarea name="deskripsi_singkat" id="field_deskripsi_singkat" required rows="3"
-                    placeholder="Tuliskan deskripsi singkat penghargaan..."
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"></textarea>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Tingkat <span class="text-red-500">*</span></label>
-                    <select name="tingkat" id="field_tingkat" required
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                        <option value="">Pilih Tingkat</option>
-                        <option value="Nasional">Nasional</option>
-                        <option value="Provinsi">Provinsi</option>
-                        <option value="Kabupaten">Kabupaten</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun <span class="text-red-500">*</span></label>
-                    <input type="number" name="tahun" id="field_tahun" required
-                        min="2000" max="{{ date('Y') }}" placeholder="{{ date('Y') }}"
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Lokasi</label>
-                    <input type="text" name="lokasi" id="field_lokasi" maxlength="100"
-                        placeholder="Contoh: Jakarta"
-                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                </div>
-            </div>
-            <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">File PDF</label>
-                <input type="file" name="file" id="field_file" accept=".pdf"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                <p class="text-xs text-gray-400 mt-1">Format: PDF &bull; Maksimal: 512 KB. Kosongkan jika tidak ingin mengganti file.</p>
-            </div>
-            <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closePenghargaanModal()"
-                    class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">
-                    Batal
-                </button>
-                <button type="submit"
-                    class="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-sm">
+                    class="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                     Simpan
                 </button>
             </div>

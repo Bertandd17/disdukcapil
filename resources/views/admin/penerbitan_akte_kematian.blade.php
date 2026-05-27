@@ -41,7 +41,7 @@
             <option value="Siap Pengambilan" {{ request('status') == 'Siap Pengambilan' ? 'selected' : '' }}>Siap Pengambilan</option>
             <option value="Tolak" {{ request('status') == 'Tolak' ? 'selected' : '' }}>Ditolak</option>
         </select>
-        <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm">
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition">
             Terapkan
         </button>
     </div>
@@ -87,7 +87,7 @@
                     <td class="p-4">
                         <div class="flex flex-row gap-2 items-center justify-center flex-wrap">
                             <a href="{{ route('admin.akte-kematian.detail', $data->uuid) }}"
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm font-semibold text-sm h-[44px]">
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm font-semibold text-sm h-11">
                                 <i class="fas fa-expand-alt text-xs"></i> <span>Detail</span>
                             </a>
                             @if($data->status == 'Proses Cetak')
@@ -121,7 +121,7 @@
             <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <h3 class="font-bold text-slate-800 text-base">
                     <i class="fas fa-upload text-emerald-600 mr-2"></i>
-                    Upload Berkas â€” Akta Kematian
+                    Upload Berkas &mdash; Akta Kematian
                 </h3>
                 <button type="button" onclick="closeUploadModal()" class="text-slate-400 hover:text-red-500 transition">
                     <i class="fas fa-times text-lg"></i>
@@ -137,7 +137,7 @@
                     <span class="text-sm font-semibold text-slate-700">File Berkas <span class="text-red-500">*</span></span>
                     <input type="file" name="file_berkas" required accept="application/pdf,.pdf"
                         class="mt-2 block w-full text-sm border border-slate-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                    <span class="text-xs text-slate-500 mt-1 block">Format: PDF â€¢ Maksimal 5 MB</span>
+                    <span class="text-xs text-slate-500 mt-1 block">Format: PDF Maksimal 5 MB</span>
                 </label>
             </div>
             <div class="p-4 bg-slate-50 flex justify-end gap-2 border-t border-slate-100">

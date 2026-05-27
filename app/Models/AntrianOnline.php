@@ -76,6 +76,10 @@ class AntrianOnline extends Model
 
     public const STATUS_DIBATALKAN = 'Dibatalkan';
 
+    public const STATUS_DIGUNAKAN = 'Digunakan';
+
+    public const STATUS_SELESAI = 'Selesai';
+
     protected static function boot(): void
     {
         parent::boot();
@@ -95,6 +99,16 @@ class AntrianOnline extends Model
     public function scopeMenunggu(Builder $query): Builder
     {
         return $query->where('status_antrian', self::STATUS_MENUNGGU);
+    }
+
+    public function scopeDigunakan(Builder $query): Builder
+    {
+        return $query->where('status_antrian', self::STATUS_DIGUNAKAN);
+    }
+
+    public function scopeSelesai(Builder $query): Builder
+    {
+        return $query->where('status_antrian', self::STATUS_SELESAI);
     }
 
     /**

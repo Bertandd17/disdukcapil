@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-05-23T03:07:50.981Z",
+  "mode": "headless",
+  "workerType": "document",
+  "model": "haiku",
+  "durationMs": 17,
+  "executionId": "document_1779505670964_qysq91",
+  "success": false,
+  "findings": null,
+  "rawOutputPreview": "",
+  "rawOutputLength": 0
+}

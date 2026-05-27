@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-23T04:40:59.020Z",
+  "projectRoot": "D:\\Semester 6\\PA 3\\Project\\PA3",
+  "structure": {
+    "hasPackageJson": false,
+    "hasTsConfig": false,
+    "hasClaudeConfig": true,
+    "hasClaudeFlow": true
+  },
+  "scannedAt": 1779511259021
+}

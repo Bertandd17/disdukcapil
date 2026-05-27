@@ -118,7 +118,7 @@
             <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <h3 class="font-bold text-slate-800 text-base">
                     <i class="fas fa-upload text-emerald-600 mr-2"></i>
-                    Upload Berkas â€” Surat Keterangan Lahir Mati
+                    Upload Berkas — Surat Keterangan Lahir Mati
                 </h3>
                 <button type="button" onclick="closeUploadModal()" class="text-slate-400 hover:text-red-500 transition">
                     <i class="fas fa-times text-lg"></i>
@@ -134,7 +134,7 @@
                     <span class="text-sm font-semibold text-slate-700">File Berkas <span class="text-red-500">*</span></span>
                     <input type="file" name="file_berkas" required accept="application/pdf,.pdf"
                         class="mt-2 block w-full text-sm border border-slate-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                    <span class="text-xs text-slate-500 mt-1 block">Format: PDF â€¢ Maksimal 5 MB</span>
+                    <span class="text-xs text-slate-500 mt-1 block">Format: PDF - Maksimal 5 MB</span>
                 </label>
             </div>
             <div class="p-4 bg-slate-50 flex justify-end gap-2 border-t border-slate-100">

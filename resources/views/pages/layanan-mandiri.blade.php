@@ -826,7 +826,7 @@ function openServiceModal(config, serviceName) {
     console.log('serviceForm.action set to:', document.getElementById('serviceForm').action);
 
     document.getElementById('infoLayanan').textContent =
-        `Layanan ${serviceName} adalah layanan kependudukan yang dapat diajukan secara online melalui portal Disdukcapil Kabupaten Toba. Proses verifikasi dilakukan oleh petugas dalam 2ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“3 hari kerja.`;
+        `Layanan ${serviceName} adalah layanan kependudukan yang dapat diajukan secara online melalui portal Disdukcapil Kabupaten Toba. Proses verifikasi dilakukan oleh petugas dalam 2–3 hari kerja.`;
 
     document.getElementById('listPersyaratan').innerHTML = config.persyaratan.map((p, i) => `
         <li class="flex items-start gap-3 bg-white border border-gray-100 rounded-xl p-3">
@@ -1043,7 +1043,7 @@ function goToStep(step) {
             if (line) line.className = 'flex-1 h-0.5 rounded mb-5 transition-all duration-500 ' + (i < step ? 'bg-green-400' : 'bg-gray-200');
         }
     }
-    document.getElementById('modalStepLabel').textContent = `Langkah ${step} dari 5 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ${labels[step-1]}`;
+    document.getElementById('modalStepLabel').textContent = `Langkah ${step} dari 5 – ${labels[step-1]}`;
     document.getElementById('modalContent').scrollTop = 0;
     if (step === 5) buildSummary();
 }
@@ -1233,21 +1233,21 @@ function autoFillFromAntrian(nomorAntrian) {
 
                 if (nikInput && data.data.nik) {
                     nikInput.value = data.data.nik;
-                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ NIK filled:', data.data.nik);
+                    console.log('✓ NIK filled:', data.data.nik);
                 } else {
-                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬â€ NIK field not found or no data');
+                    console.log('✗ NIK field not found or no data');
                 }
                 if (namaInput && data.data.nama_lengkap) {
                     namaInput.value = data.data.nama_lengkap;
-                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Nama filled:', data.data.nama_lengkap);
+                    console.log('✓ Nama filled:', data.data.nama_lengkap);
                 } else {
-                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬â€ Nama field not found or no data');
+                    console.log('✗ Nama field not found or no data');
                 }
                 if (alamatInput && data.data.alamat) {
                     alamatInput.value = data.data.alamat;
-                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Alamat filled:', data.data.alamat);
+                    console.log('✓ Alamat filled:', data.data.alamat);
                 } else {
-                    console.log('ÃƒÂ¢Ã…â€œÃ¢â‚¬â€ Alamat field not found or no data');
+                    console.log('✗ Alamat field not found or no data');
                 }
 
                 showToast('Data berhasil diambil dari nomor antrian', 'success');
@@ -1302,7 +1302,7 @@ function updateBlinkUI() {
             dot.innerHTML = '<i class="fas fa-check text-xs"></i>';
         }
     }
-    setOverlay(`Kedipan ${blinkCount}/${BLINK_TARGET} terdeteksiÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦`);
+    setOverlay(`Kedipan ${blinkCount}/${BLINK_TARGET} terdeteksi...`);
 }
 function onLivenessPassed() {
     const video  = document.getElementById('video');
@@ -1324,7 +1324,7 @@ function onLivenessPassed() {
     preview.id = 'foto-preview';
     video.style.display = 'none';
     video.parentNode.insertBefore(preview, video);
-    document.getElementById('liveness-overlay').textContent = 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Foto berhasil diambil!';
+    document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
     document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
     showToast('Verifikasi wajah berhasil! Foto tersimpan.', 'success');
     setTimeout(() => goToStep(5), 900);
@@ -1345,16 +1345,16 @@ function startLiveness() {
         faceMeshInstance.setOptions({ maxNumFaces:1, refineLandmarks:true, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
         faceMeshInstance.onResults((results) => {
             if (!results.multiFaceLandmarks || !results.multiFaceLandmarks.length) {
-                setOverlay('Wajah tidak terdeteksi ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â pastikan wajah terlihat jelas'); return;
+                setOverlay('Wajah tidak terdeteksi – pastikan wajah terlihat jelas'); return;
             }
-            setOverlay('Kedipkan mata 2 kali secara naturalÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦');
+            setOverlay('Kedipkan mata 2 kali secara natural...');
             detectBlink(results.multiFaceLandmarks[0]);
         });
         mpCamera = new Camera(video, {
             onFrame: async () => { if (faceMeshInstance) await faceMeshInstance.send({ image: video }); },
             width: 640, height: 480
         });
-        mpCamera.start().then(() => setOverlay('Kedipkan mata 2 kali secara naturalÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦'))
+        mpCamera.start().then(() => setOverlay('Kedipkan mata 2 kali secara natural...'))
             .catch(err => {
                 errEl.textContent = 'Gagal render MediaPipe: ' + (err.message || err);
                 errEl.classList.remove('hidden');
