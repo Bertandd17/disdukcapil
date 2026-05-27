@@ -1,9 +1,9 @@
 [phases.setup]
-nixPkgs = ["php84", "php84Extensions.pdo", "php84Extensions.pdo_mysql", "php84Extensions.mbstring", "php84Extensions.tokenizer", "php84Extensions.xml", "php84Extensions.ctype", "php84Extensions.fileinfo", "php84Extensions.zip", "php84Extensions.gd", "composer"]
+nixPkgs = ["php", "phpExtensions.pdo_mysql", "phpExtensions.mbstring", "composer"]
 
 [phases.build]
 cmds = [
-    "composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist",
+    "composer install --optimize-autoloader --no-dev --no-interaction",
     "mkdir -p bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache storage/logs",
     "chmod -R 775 bootstrap/cache storage",
 ]
