@@ -15,3 +15,8 @@ scripts/__pycache__/
 *.bak
 *.pyc
 .phpunit.result.cache
+/vendor
+/node_modules
+.env
+/storage/*.key
+/public/storage
