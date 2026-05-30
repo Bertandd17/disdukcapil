@@ -70,19 +70,21 @@ trait EncryptsSensitiveData
 
         foreach ($fields as $field) {
             if (isset($this->attributes[$field]) && ! empty($this->attributes[$field])) {
-                try {
-                    $value = $this->attributes[$field];
+                $value = $this->attributes[$field];
 
-                    if ($this->isAlreadyEncrypted($value)) {
+                if ($this->isAlreadyEncrypted($value)) {
+                    try {
                         $decrypted = Crypt::decryptString($value);
                         $this->attributes[$field] = $decrypted;
+                    } catch (\Exception $e) {
+                        // APP_KEY changed — treat raw value as plain text if it's readable
+                        // (data was likely encrypted with a different APP_KEY)
+                        Log::warning('Decryption failed, treating as plain text', [
+                            'model' => get_class($this),
+                            'field' => $field,
+                            'error' => $e->getMessage(),
+                        ]);
                     }
-                } catch (\Exception $e) {
-                    Log::error('Failed to decrypt sensitive field', [
-                        'model' => get_class($this),
-                        'field' => $field,
-                        'error' => $e->getMessage(),
-                    ]);
                 }
             }
         }
