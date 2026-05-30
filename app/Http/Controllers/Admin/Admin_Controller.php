@@ -30,7 +30,16 @@ class Admin_Controller extends Controller
      */
     public function dashboard()
     {
-        if (!Auth::user()->hasRole('Admin')) {
+        $user = Auth::user();
+        Log::info('Admin dashboard access', [
+            'user_id' => $user->id,
+            'username' => $user->username,
+            'roles' => $user->roles->pluck('name')->toArray(),
+            'hasRole_Admin' => $user->hasRole('Admin'),
+            'hasRole_admin' => $user->hasRole('admin'),
+        ]);
+
+        if (!$user->hasRole('Admin')) {
             abort(403, 'Anda tidak memiliki akses.');
         }
 
