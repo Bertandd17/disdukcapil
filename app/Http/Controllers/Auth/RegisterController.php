@@ -137,13 +137,6 @@ class RegisterController extends Controller
 
         $user = User::find($request->user_id);
 
-        Log::info('Security question verification attempt', [
-            'user_id' => $user->id,
-            'username' => $user->username,
-            'current_auth_user' => Auth::check() ? Auth::id() : 'not_logged_in',
-            'session_user_id' => $request->session()->get('security_question_user_id'),
-        ]);
-
         if (! $user) {
             Log::warning('Security question verification - user not found', [
                 'user_id' => $request->user_id,
@@ -154,7 +147,29 @@ class RegisterController extends Controller
                 ->withErrors(['login_error' => 'Sesi telah kedaluwarsa. Silakan login kembali.']);
         }
 
-        $storedAnswer = $user->security_question_answer;
+        Log::info('Security question verification attempt', [
+            'user_id' => $user->id,
+            'username' => $user->username,
+            'current_auth_user' => Auth::check() ? Auth::id() : 'not_logged_in',
+            'session_user_id' => $request->session()->get('security_question_user_id'),
+        ]);
+
+        $storedAnswerRaw = $user->getAttributes()['security_question_answer'] ?? null;
+        $storedAnswer = null;
+
+        if (is_string($storedAnswerRaw) && $storedAnswerRaw !== '') {
+            try {
+                $storedAnswer = \Illuminate\Support\Facades\Crypt::decryptString($storedAnswerRaw);
+            } catch (\Exception $e) {
+                $storedAnswer = $storedAnswerRaw;
+                Log::warning('Security answer decryption failed, falling back to raw value', [
+                    'user_id' => $user->id,
+                    'username' => $user->username,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
         $userAnswer = trim($request->security_answer);
 
         if ($storedAnswer === null || $storedAnswer === '') {
@@ -198,11 +213,12 @@ class RegisterController extends Controller
                     Auth::logout();
                 }
 
-                Auth::login($user, $remember = false);
-                $request->session()->regenerate(true);
-
-                // Refresh roles dari database agar middleware dapat mendeteksi role dengan benar
+                $user->setRememberToken(null);
                 $user->load('roles');
+
+                $request->session()->regenerate(true);
+                Auth::login($user, false);
+                $request->session()->migrate(true);
 
                 Log::info('Admin login successful with security question', [
                     'username' => $user->username,
@@ -210,10 +226,24 @@ class RegisterController extends Controller
                     'ip' => $request->ip(),
                     'user_agent' => $request->userAgent(),
                     'session_id' => $request->session()->getId(),
+                    'auth_check_after' => Auth::check(),
+                    'auth_id_after' => Auth::id(),
                 ]);
 
-                // Pesan detail untuk notifikasi (title sudah berisi nama user)
                 $loginMessage = "Verifikasi pertanyaan keamanan telah berhasil.";
+
+                if (! Auth::check() || Auth::id() !== $user->id) {
+                    Log::error('Auth state lost after login', [
+                        'expected_id' => $user->id,
+                        'auth_id' => Auth::id(),
+                        'auth_check' => Auth::check(),
+                    ]);
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+
+                    return redirect()->route('login')
+                        ->withErrors(['login_error' => 'Sesi login tidak valid. Silakan coba lagi.']);
+                }
 
                 return redirect()->route('admin.dashboard')
                     ->with('login_success', $loginMessage);
