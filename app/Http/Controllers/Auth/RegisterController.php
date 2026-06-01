@@ -201,6 +201,9 @@ class RegisterController extends Controller
                 Auth::login($user, $remember = false);
                 $request->session()->regenerate(true);
 
+                // Refresh roles dari database agar middleware dapat mendeteksi role dengan benar
+                $user->load('roles');
+
                 Log::info('Admin login successful with security question', [
                     'username' => $user->username,
                     'id' => $user->id,

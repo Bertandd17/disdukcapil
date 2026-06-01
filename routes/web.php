@@ -247,7 +247,9 @@ Route::prefix('admin')->group(function () {
         ->name('admin.register.submit');
 
     // Verifikasi Pertanyaan Keamanan
-    Route::get('/verify/{user_id}', [Login_Controller::class, 'showVerifyQuestion'])->name('admin.verify.question');
+    // GET tanpa {user_id} — user_id disimpan di session untuk mencegah
+    // user enumeration via manipulasi URL (CWE-639 IDOR).
+    Route::get('/verify', [Login_Controller::class, 'showVerifyQuestion'])->name('admin.verify.question');
     Route::post('/verify', [RegisterController::class, 'verifySecurityQuestion'])
         ->middleware('throttle:10,1')
         ->name('admin.verify.submit');

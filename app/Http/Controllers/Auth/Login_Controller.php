@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 
 class Login_Controller extends Controller
 {
@@ -46,25 +47,66 @@ class Login_Controller extends Controller
             'password' => 'required|string',
         ]);
 
-        Log::info('Login attempt for username: '.$request->username);
+        $rawUsername = $request->username;
+        $username = preg_replace('/\s+/', ' ', trim((string) $rawUsername));
+        $usernameLower = mb_strtolower($username, 'UTF-8');
 
-        $user = User::where('username', $request->username)->first();
+        Log::info('Login attempt', [
+            'username_hash' => sha1($usernameLower),
+            'ip' => $request->ip(),
+        ]);
 
-        if (! $user) {
-            Log::warning('Login failed - user not found: '.$request->username);
+        $throttleKey = 'login:'.sha1($usernameLower.'|'.$request->ip());
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            Log::warning('Login lockout triggered', [
+                'username_hash' => sha1($usernameLower),
+                'ip' => $request->ip(),
+                'retry_after_seconds' => $seconds,
+            ]);
 
             return back()->withErrors([
-                'username' => 'Username atau password salah.',
+                'username' => "Terlalu banyak percobaan login. Silakan coba lagi dalam {$seconds} detik.",
             ])->onlyInput('username');
+        }
+
+        $user = User::whereRaw('LOWER(username) = ?', [$usernameLower])->first();
+
+        if (! $user && $username !== $rawUsername) {
+            $user = User::where('username', $rawUsername)->first();
+        }
+
+        $genericError = ['username' => 'Username atau password salah.'];
+
+        if (! $user) {
+            // Equalize timing: run Hash::check against a dummy hash so the missing-user
+            // path takes roughly the same time as the wrong-password path.
+            Hash::check($request->password, '$2y$12$'.str_repeat('a', 53));
+
+            Log::warning('Login failed - user not found', [
+                'username_hash' => sha1($usernameLower),
+                'ip' => $request->ip(),
+            ]);
+
+            RateLimiter::hit($throttleKey, 900);
+
+            return back()->withErrors($genericError)->onlyInput('username');
         }
 
         if (! Hash::check($request->password, $user->password)) {
-            Log::warning('Login failed - invalid password for: '.$request->username);
+            Log::warning('Login failed - invalid password', [
+                'username_hash' => sha1($usernameLower),
+                'ip' => $request->ip(),
+            ]);
 
-            return back()->withErrors([
-                'username' => 'Username atau password salah.',
-            ])->onlyInput('username');
+            RateLimiter::hit($throttleKey, 900);
+
+            return back()->withErrors($genericError)->onlyInput('username');
         }
+
+        RateLimiter::clear($throttleKey);
 
         // Jika Admin, cek security question dan arahkan ke verifikasi
         if ($user->hasRole('Admin')) {
@@ -105,26 +147,46 @@ class Login_Controller extends Controller
 
         // Jika Keagamaan, cek status akun
         if ($user->hasRole('Keagamaan')) {
-            // Cek status akun keagamaan
+            // Cek status akun keagamaan — gunakan pesan generik untuk mencegah
+            // enumerasi akun non-aktif via response yang berbeda.
             if ($user->detail_keagamaan && $user->detail_keagamaan->status === 'non-aktif') {
-                Log::warning('Keagamaan login failed - account inactive: '.$request->username);
+                Log::warning('Keagamaan login blocked - account inactive', [
+                    'username_hash' => sha1($usernameLower),
+                ]);
 
-                return back()->withErrors([
-                    'username' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi administrator.',
-                ])->onlyInput('username');
+                RateLimiter::hit($throttleKey, 900);
+
+                return back()->withErrors($genericError)->onlyInput('username');
             }
 
             // Load roles sebelum login untuk memastikan role tersimpan di session
             $user->load('roles');
 
-            // Login langsung untuk Keagamaan
-            Auth::login($user, true);
+            // Regenerate session SEBELUM Auth::login untuk mencegah session fixation
             $request->session()->regenerate(true);
+
+            try {
+                // Login langsung untuk Keagamaan
+                Auth::login($user, true);
+            } catch (\Throwable $e) {
+                Log::error('Keagamaan login - Auth::login failed', [
+                    'username' => $user->username,
+                    'id' => $user->id,
+                    'error' => $e->getMessage(),
+                ]);
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withErrors([
+                    'username' => 'Terjadi kesalahan saat login. Silakan coba lagi.',
+                ])->onlyInput('username');
+            }
 
             Log::info('Keagamaan login successful for: '.$user->username.' (ID: '.$user->id.')');
             Log::info('User roles after login: ' . json_encode($user->roles->pluck('name')->toArray()));
 
-            $loginMessage = "Anda telah berhasil login sebagai Petugas Keagamaan.";
+            $loginMessage = 'Anda telah berhasil login sebagai Petugas Keagamaan.';
 
             return redirect()->route('keagamaan.dashboard')
                 ->with('login_success', $loginMessage);
@@ -138,29 +200,22 @@ class Login_Controller extends Controller
         ])->onlyInput('username');
     }
 
-    public function showVerifyQuestion(Request $request, $user_id)
+    public function showVerifyQuestion(Request $request)
     {
-        $user = User::find($user_id);
+        $userId = $request->session()->get('security_question_user_id');
 
-        if (! $user) {
-            Log::warning('Security question page - user not found', [
-                'user_id' => $user_id,
-            ]);
-
+        if (! $userId) {
             return redirect()->route('login')
-                ->withErrors(['login_error' => 'Sesi telah kedaluwarsa. Silakan login kembali.']);
+                ->withErrors(['login_error' => 'Sesi verifikasi telah berakhir. Silakan login ulang.']);
         }
 
-        $currentUser = $request->session()->get('security_question_user_id');
+        $user = User::find($userId);
 
-        if ($currentUser !== $user_id) {
-            Log::warning('Security question page - session mismatch', [
-                'session_user_id' => $currentUser,
-                'requested_user_id' => $user_id,
-            ]);
+        if (! $user) {
+            $request->session()->forget('security_question_user_id');
 
             return redirect()->route('login')
-                ->withErrors(['login_error' => 'Sesi tidak valid. Silakan login kembali.']);
+                ->withErrors(['login_error' => 'Sesi verifikasi tidak valid. Silakan login ulang.']);
         }
 
         $user->load('securityQuestion');
@@ -189,7 +244,6 @@ class Login_Controller extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        $request->session()->flush();
 
         return redirect()->route('login')
             ->with('logout_success', 'Terima kasih, '.$userName.'. Anda telah berhasil logout dari sistem.');
