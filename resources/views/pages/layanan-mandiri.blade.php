@@ -391,9 +391,10 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     @endphp
 
                     <button
+                        data-style-guide-skip
                         onclick='openKategoriModal({{ $layananListJson }}, {{ json_encode($namaKategori) }}, {{ json_encode($c) }}, {{ json_encode($kategoriConfig["icon"]) }})'
                         class="group bg-white rounded-2xl p-5 text-left border-2 border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
-                        style="min-height: 140px;"
+                        style="min-height: 140px; background: #ffffff;"
                         onmouseover="this.style.borderColor='{{ $c['border'] }}'"
                         onmouseout="this.style.borderColor='#F3F4F6'">
 
@@ -1504,15 +1505,27 @@ function clearFileInput(fieldName) {
     input.value = '';
     handleFileSelect(input, fieldName);
 }
-function showToast(message, type = 'error') {
-    // Delegasi ke sistem notifikasi global (sweetalert-disdukcapil.js) agar konsisten dengan toast gradient top-end di seluruh project.
-    var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'info';
-    if (typeof window.fireToast === 'function') {
-        return window.fireToast({ type: t, icon: t, title: message || '', timer: 5000 });
-    }
-    if (window.Swal && typeof window.Swal.fire === 'function') {
-        return window.Swal.fire({ toast: true, icon: t, title: message || '', timer: 5000, position: 'top-end', showConfirmButton: false, timerProgressBar: true });
-    }
+function showToast(message, type = 'info') {
+    const iconMap = {
+        success: 'success',
+        error: 'error',
+        warning: 'warning',
+        info: 'info'
+    };
+    const icon = iconMap[type] || 'info';
+    Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        icon: icon,
+        title: message,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    }).fire();
 }
 function closeModal() {
     stopCamera();
@@ -1566,6 +1579,9 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Memeriksa...',
             text: 'Mohon tunggu sebentar',
             allowOutsideClick: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
             didOpen: () => Swal.showLoading()
         });
 
@@ -1629,6 +1645,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Memproses...',
                 text: 'Mohon tunggu sebentar',
                 allowOutsideClick: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
                 didOpen: () => Swal.showLoading()
             });
 
@@ -1646,6 +1665,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Memproses...',
                 text: 'Mohon tunggu sebentar',
                 allowOutsideClick: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
                 didOpen: () => Swal.showLoading()
             });
         }
@@ -1655,6 +1677,9 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Memproses...',
             text: 'Mohon tunggu sebentar',
             allowOutsideClick: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
             didOpen: () => Swal.showLoading()
         });
     }
