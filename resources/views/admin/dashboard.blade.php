@@ -152,8 +152,8 @@
         <h3 class="text-lg font-bold text-gray-800 mb-4">Aksi Cepat</h3>
         <div class="space-y-3">
             <a href="{{ route('admin.antrian-online') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition group">
-                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-500 transition">
-                    <i class="fas fa-ticket-alt text-blue-600 group-hover:text-white transition"></i>
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition">
+                    <i class="fas fa-ticket-alt text-blue-600 group-hover:text-blue-700 transition"></i>
                 </div>
                 <div class="flex-1">
                     <p class="font-semibold text-gray-800 text-sm">Antrian Online</p>
@@ -162,48 +162,48 @@
                 <i class="fas fa-chevron-right text-gray-400 group-hover:text-blue-600 transition"></i>
             </a>
 
-            <a href="{{ route('admin.berita') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition group">
-                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-500 transition">
-                    <i class="fas fa-newspaper text-purple-600 group-hover:text-white transition"></i>
+            <a href="{{ route('admin.berita') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition group">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition">
+                    <i class="fas fa-newspaper text-purple-600 group-hover:text-purple-700 transition"></i>
                 </div>
                 <div class="flex-1">
                     <p class="font-semibold text-gray-800 text-sm">Kelola Berita</p>
                     <p class="text-xs text-gray-500">Tambah/edit berita</p>
                 </div>
-                <i class="fas fa-chevron-right text-gray-400 group-hover:text-purple-600 transition"></i>
+                <i class="fas fa-chevron-right text-gray-400 group-hover:text-blue-600 transition"></i>
             </a>
 
-            <a href="{{ route('admin.manajemen-akun') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition group">
-                <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-500 transition">
-                    <i class="fas fa-users-cog text-orange-600 group-hover:text-white transition"></i>
+            <a href="{{ route('admin.manajemen-akun') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition group">
+                <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition">
+                    <i class="fas fa-users-cog text-orange-600 group-hover:text-orange-700 transition"></i>
                 </div>
                 <div class="flex-1">
                     <p class="font-semibold text-gray-800 text-sm">Manajemen Akun</p>
                     <p class="text-xs text-gray-500">Kelola akun admin</p>
                 </div>
-                <i class="fas fa-chevron-right text-gray-400 group-hover:text-orange-600 transition"></i>
+                <i class="fas fa-chevron-right text-gray-400 group-hover:text-blue-600 transition"></i>
             </a>
 
-            <a href="{{ route('admin.visualisasi-data') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-indigo-500 hover:bg-indigo-50 transition group">
-                <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-500 transition">
-                    <i class="fas fa-chart-line text-indigo-600 group-hover:text-white transition"></i>
+            <a href="{{ route('admin.visualisasi-data') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition group">
+                <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-200 transition">
+                    <i class="fas fa-chart-line text-indigo-600 group-hover:text-indigo-700 transition"></i>
                 </div>
                 <div class="flex-1">
                     <p class="font-semibold text-gray-800 text-sm">Visualisasi Data</p>
                     <p class="text-xs text-gray-500">Lihat statistik</p>
                 </div>
-                <i class="fas fa-chevron-right text-gray-400 group-hover:text-indigo-600 transition"></i>
+                <i class="fas fa-chevron-right text-gray-400 group-hover:text-blue-600 transition"></i>
             </a>
 
-            <a href="{{ route('admin.penerbitan-kk') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition group">
-                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-500 transition">
-                    <i class="fas fa-file-export text-green-600 group-hover:text-white transition"></i>
+            <a href="{{ route('admin.penerbitan-kk') }}" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition group">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition">
+                    <i class="fas fa-file-export text-green-600 group-hover:text-green-700 transition"></i>
                 </div>
                 <div class="flex-1">
                     <p class="font-semibold text-gray-800 text-sm">Penerbitan KK</p>
                     <p class="text-xs text-gray-500">Proses KK</p>
                 </div>
-                <i class="fas fa-chevron-right text-gray-400 group-hover:text-green-600 transition"></i>
+                <i class="fas fa-chevron-right text-gray-400 group-hover:text-blue-600 transition"></i>
             </a>
         </div>
     </div>

@@ -20,4 +20,41 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-/__pycache__/
+/__pycache____
+
+# Snippet/typo artefacts di root (bukan kode valid)
+/$urutanStart++
+/'required
+/2
+/40)
+/800)
+/No
+/count()
+/detail_keagamaan
+/exists()
+/expectsJson()
+/get(['id'
+/getAttributes()['security_question_answer']
+/getMessage()
+/hasRole('Admin')
+/ip()
+/middleware('permission
+/prepareBindings($bindings)
+/previous()
+/uuid
+/with('login_success'
+/with('logout_success'
+/{
+/{,+
+/{,-
+/{},+
+/{},-
+/ruvector.db
+/public/test-sweetalert-fix.html
+
+# Claude runtime (jangan commit)
+/.claude/memories/
+/.claude/worktrees/
+
+# Catatan fix (sudah ada di git history)
+/SWEETALERT_FIX_SUMMARY.txt

@@ -75,10 +75,9 @@ class AkteKematianController extends Controller
             ]);
             
             $data['status'] = 'Verifikasi Data';
-            $data['jenis_layanan'] = 'akta_kematian';
-            
+
             // 3. INI KUNCINYA: Timpa input asal-asalan pemohon dengan Token Resmi
-            $data['nomor_antrian'] = $nomorAntrian; 
+            $data['nomor_antrian'] = $nomorAntrian;
 
             // 4. Handle file uploads
             $fileUploads = [
@@ -181,12 +180,12 @@ class AkteKematianController extends Controller
         };
 
         $query = AkteKematian::query()
-            ->whereIn('jenis_layanan', ['akta_kematian'])
+            ->where('layanan_id', 'akta_kematian')
             ->whereIn('nomor_antrian', $startedAntrianSubquery);
         if ($request->status) $query->where('status', $request->status);
         $dataKematian = $query->latest()->get();
 
-        $baseCount = AkteKematian::whereIn('jenis_layanan', ['akta_kematian'])
+        $baseCount = AkteKematian::where('layanan_id', 'akta_kematian')
             ->whereIn('nomor_antrian', $startedAntrianSubquery);
         $jumlah             = (clone $baseCount)->count();
         $menungguVerifikasi = (clone $baseCount)->where('status', 'Verifikasi Data')->count();

@@ -68,26 +68,13 @@
                 e.stopPropagation();
                 e.stopImmediatePropagation();
 
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: 'Konfirmasi Logout',
-                        html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
-                        icon: false,
-                        showCancelButton: true,
-                        showDenyButton: false,
-                        confirmButtonText: 'Konfirmasi',
-                        cancelButtonText: 'Batal',
-                        reverseButtons: true,
-                        buttonsStyling: false,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        customClass: {
-                            popup: 'swal-dd-modal',
-                            confirmButton: 'swal-dd-btn swal-dd-btn-danger',
-                            cancelButton: 'swal-dd-btn swal-dd-btn-cancel'
-                        },
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                if (typeof SwalHelper !== 'undefined' && window.SwalHelper && typeof window.SwalHelper.konfirmasiDisdukcapil === 'function') {
+                    window.SwalHelper.konfirmasiDisdukcapil({
+                        judul: 'Konfirmasi Logout',
+                        pesan: 'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?',
+                        tipe: 'warning',
+                        labelOk: 'Konfirmasi',
+                        onKonfirmasi: function() {
                             Swal.fire({
                                 title: 'Memproses Logout',
                                 html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>' +

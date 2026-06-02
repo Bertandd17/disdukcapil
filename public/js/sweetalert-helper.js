@@ -148,8 +148,10 @@
             icon: 'success',
             title: title,
             html: message,
-            confirmButtonText: '<i class="fas fa-check mr-2"></i>OK',
-            confirmButtonColor: 'var(--success-green)',
+            confirmButtonText: '<i class="fas fa-check mr-2"></i>Konfirmasi',
+            confirmButtonColor: '#43A047',
+            cancelButtonColor: '#e5e7eb',
+            reverseButtons: true,
             zIndex: 9999
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
@@ -174,8 +176,10 @@
             icon: 'warning',
             title: title,
             html: message,
-            confirmButtonText: '<i class="fas fa-exclamation-triangle mr-2"></i>OK',
-            confirmButtonColor: 'var(--warning-orange)',
+            confirmButtonText: '<i class="fas fa-exclamation-triangle mr-2"></i>Konfirmasi',
+            confirmButtonColor: '#43A047',
+            cancelButtonColor: '#e5e7eb',
+            reverseButtons: true,
             zIndex: 9999
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
@@ -187,8 +191,10 @@
             icon: 'info',
             title: title,
             html: message,
-            confirmButtonText: '<i class="fas fa-info-circle mr-2"></i>OK',
-            confirmButtonColor: 'var(--info-blue)',
+            confirmButtonText: '<i class="fas fa-info-circle mr-2"></i>Konfirmasi',
+            confirmButtonColor: '#43A047',
+            cancelButtonColor: '#e5e7eb',
+            reverseButtons: true,
             zIndex: 9999
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
@@ -200,48 +206,32 @@
     // =====================================================
 
     function confirmDialog(title, text, callback) {
-        Swal.fire({
-            title: title,
-            html: `<p>${text}</p>`,
-            showCancelButton: true,
-            confirmButtonText: 'Konfirmasi',
-            cancelButtonText: 'Batal',
-            reverseButtons: true,
-            confirmButtonColor: 'var(--success-green)',
-            cancelButtonColor: 'var(--neutral-600)'
-        }).then((result) => {
-            if (result.isConfirmed && callback) callback();
+        konfirmasiDisdukcapil({
+            judul: title,
+            pesan: text || 'Apakah Anda yakin ingin melanjutkan?',
+            tipe: 'konfirmasi',
+            labelOk: 'Konfirmasi',
+            onKonfirmasi: () => { if (callback) callback(); }
         });
     }
 
     function deleteConfirm(title, text, callback) {
-        Swal.fire({
-            title: title,
-            html: `<p>${text || 'Data yang dihapus tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?'}</p>`,
-            icon: false,
-            showCancelButton: true,
-            confirmButtonText: 'Konfirmasi',
-            cancelButtonText: 'Batal',
-            reverseButtons: true,
-            confirmButtonColor: 'var(--danger-red)',
-            cancelButtonColor: 'var(--neutral-600)'
-        }).then((result) => {
-            if (result.isConfirmed && callback) callback();
+        konfirmasiDisdukcapil({
+            judul: title,
+            pesan: text || 'Data yang dihapus tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?',
+            tipe: 'hapus',
+            labelOk: 'Hapus',
+            onKonfirmasi: () => { if (callback) callback(); }
         });
     }
 
     function saveConfirm(title, text, callback) {
-        Swal.fire({
-            title: title,
-            html: `<p>${text}</p>`,
-            showCancelButton: true,
-            confirmButtonText: 'Konfirmasi',
-            cancelButtonText: 'Batal',
-            reverseButtons: true,
-            confirmButtonColor: 'var(--primary-blue-main)',
-            cancelButtonColor: 'var(--neutral-600)'
-        }).then((result) => {
-            if (result.isConfirmed && callback) callback();
+        konfirmasiDisdukcapil({
+            judul: title,
+            pesan: text || 'Pastikan data sudah benar sebelum disimpan.',
+            tipe: 'konfirmasi',
+            labelOk: 'Simpan',
+            onKonfirmasi: () => { if (callback) callback(); }
         });
     }
 
@@ -269,36 +259,25 @@
 
         const config = Object.assign({}, defaults, options);
 
-        let htmlContent = `
-            <div class="text-center">
-                <p class="text-gray-600 text-sm mb-2">${config.message}</p>
-        `;
-
+        let pesan = `<p class="text-gray-600 text-sm mb-2">${config.message}</p>`;
         if (config.subMessage) {
-            htmlContent += `<p class="text-gray-500 text-sm">${config.subMessage}</p>`;
+            pesan += `<p class="text-gray-500 text-sm">${config.subMessage}</p>`;
         }
 
-        htmlContent += '</div>';
+        let tipe = 'konfirmasi';
+        if (/E53935|var\(--danger-red\)|fa-trash/i.test(config.confirmColor + ' ' + config.iconClass)) {
+            tipe = 'hapus';
+        } else if (/FB8C00|var\(--warning-orange\)/i.test(config.confirmColor + ' ' + config.iconClass)) {
+            tipe = 'warning';
+        }
 
-        Swal.fire({
-            title: config.title,
-            html: htmlContent,
-            icon: false,
-            showCancelButton: true,
-            confirmButtonColor: config.confirmColor,
-            cancelButtonColor: config.cancelColor,
-            confirmButtonText: 'Konfirmasi',
-            cancelButtonText: 'Batal',
-            reverseButtons: true,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            customClass: {
-                popup: 'rounded-2xl shadow-2xl',
-                confirmButton: 'rounded-lg px-6 py-3',
-                cancelButton: 'rounded-lg px-6 py-3'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
+        konfirmasiDisdukcapil({
+            judul: config.title,
+            pesan: pesan,
+            tipe: tipe,
+            labelOk: config.confirmText,
+            labelBatal: config.cancelText,
+            onKonfirmasi: () => {
                 if (config.showLoadingAfterConfirm) {
                     Swal.fire({
                         title: config.loadingTitle,
@@ -315,7 +294,8 @@
                 if (config.onConfirm && typeof config.onConfirm === 'function') {
                     config.onConfirm();
                 }
-            } else {
+            },
+            onBatal: () => {
                 if (config.onCancel && typeof config.onCancel === 'function') {
                     config.onCancel();
                 }
@@ -430,57 +410,191 @@
     }
 
     // =====================================================
+    // TEMPLATE KONFIRMASI STANDAR DISDUKCAPIL
+    // =====================================================
+    // Selalu 2 tombol: Batal (kiri) + Konfirmasi (kanan).
+    // Konteks judul & pesan menyesuaikan pemanggil.
+    // =====================================================
+
+    function konfirmasiDisdukcapil({
+        judul        = 'Konfirmasi Aksi',
+        pesan        = 'Apakah Anda yakin ingin melanjutkan?',
+        html         = null,
+        tipe         = 'konfirmasi',
+        labelOk      = 'Konfirmasi',
+        labelBatal   = 'Batal',
+        onKonfirmasi = () => {},
+        onBatal      = () => {},
+        confirmButtonColor = null,
+        cancelButtonColor  = null,
+        allowOutsideClick  = false,
+        allowEscapeKey     = true
+    } = {}) {
+
+        const config = {
+            konfirmasi: {
+                icon      : 'question',
+                iconColor : '#43A047',
+                iconBg    : '#e8f5e9',
+                okColor   : '#43A047',
+                okHover   : '#388E3C'
+            },
+            hapus: {
+                icon      : 'warning',
+                iconColor : '#E53935',
+                iconBg    : '#ffebee',
+                okColor   : '#E53935',
+                okHover   : '#d32f2f'
+            },
+            warning: {
+                icon      : 'warning',
+                iconColor : '#FB8C00',
+                iconBg    : '#fff3e0',
+                okColor   : '#FB8C00',
+                okHover   : '#ef6c00'
+            }
+        };
+
+        const c = config[tipe] || config.konfirmasi;
+        const bodyHtml = html !== null && html !== undefined
+            ? html
+            : `<span style="font-size:0.875rem;color:#6b7280;line-height:1.6">${pesan}</span>`;
+
+        return Swal.fire({
+            title              : `<span style="font-size:1.1rem;font-weight:700;color:#1f2937">${judul}</span>`,
+            html               : bodyHtml,
+
+            icon               : c.icon,
+            iconColor          : c.iconColor,
+
+            customClass        : {
+                popup        : 'swal-disdukcapil-popup',
+                title        : 'swal-disdukcapil-title',
+                actions      : 'swal-disdukcapil-actions',
+                confirmButton: 'swal-btn-konfirmasi',
+                cancelButton : 'swal-btn-batal'
+            },
+
+            showConfirmButton  : true,
+            confirmButtonText  : labelOk,
+            confirmButtonColor : confirmButtonColor || c.okColor,
+
+            showCancelButton   : true,
+            cancelButtonText   : labelBatal,
+            cancelButtonColor  : cancelButtonColor || '#e5e7eb',
+
+            showDenyButton     : false,
+
+            reverseButtons     : true,
+
+            allowOutsideClick  : allowOutsideClick,
+            allowEscapeKey     : allowEscapeKey,
+            focusCancel        : true
+        }).then((result) => {
+            if (result.isConfirmed) onKonfirmasi(result);
+            else                    onBatal(result);
+            return result;
+        });
+    }
+
+    // CSS inline untuk override SweetAlert default (disuntik sekali)
+    const swalStyle = document.createElement('style');
+    swalStyle.textContent = `
+    .swal-disdukcapil-popup {
+        border-radius : 14px !important;
+        padding       : 1.5rem !important;
+        font-family   : 'Plus Jakarta Sans', sans-serif !important;
+        box-shadow    : 0 20px 40px rgba(0,0,0,0.12) !important;
+        max-width     : 400px !important;
+    }
+    .swal-disdukcapil-actions {
+        gap           : 0.75rem !important;
+        margin-top    : 1.25rem !important;
+        width         : 100% !important;
+    }
+    .swal-btn-konfirmasi,
+    .swal-btn-batal {
+        flex          : 1 !important;
+        border-radius : 10px !important;
+        font-weight   : 600 !important;
+        font-size     : 0.875rem !important;
+        padding       : 0.75rem 1.5rem !important;
+        border        : none !important;
+        transition    : all 0.2s ease !important;
+        min-width     : 120px !important;
+    }
+    .swal-btn-batal {
+        color         : #374151 !important;
+    }
+    .swal-btn-konfirmasi:hover { filter: brightness(0.9) !important; }
+    .swal-btn-batal:hover      { background: #d1d5db !important; }
+    `;
+    if (!document.getElementById('swal-disdukcapil-style')) {
+        swalStyle.id = 'swal-disdukcapil-style';
+        document.head.appendChild(swalStyle);
+    }
+
+    // =====================================================
     // NOTIFIKASI SPESIAL
     // =====================================================
 
     function notifySuccess(title, message, subMessage, callback) {
-        customConfirm({
+        Swal.fire({
+            icon: 'success',
             title: title,
-            message: message,
-            subMessage: subMessage,
-            iconClass: 'fas fa-check-circle',
-            iconColor: 'var(--success-green)',
-            confirmText: 'OK',
-            confirmColor: 'var(--success-green)',
-            cancelText: 'Tutup',
-            cancelColor: 'var(--neutral-600)',
-            showLoadingAfterConfirm: false,
-            onConfirm: callback,
-            onCancel: callback
+            html: `<div class="text-center">
+                <p class="text-gray-600 text-sm mb-2">${message}</p>
+                ${subMessage ? `<p class="text-gray-500 text-sm">${subMessage}</p>` : ''}
+            </div>`,
+            confirmButtonText: 'OK',
+            confirmButtonColor: 'var(--success-green)',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'rounded-2xl shadow-2xl',
+                confirmButton: 'rounded-lg px-6 py-3'
+            }
+        }).then((result) => {
+            if (callback && typeof callback === 'function') callback(result);
         });
     }
 
     function notifyError(title, message, subMessage, callback) {
-        customConfirm({
+        Swal.fire({
+            icon: 'error',
             title: title,
-            message: message,
-            subMessage: subMessage,
-            iconClass: 'fas fa-times-circle',
-            iconColor: 'var(--danger-red)',
-            confirmText: 'OK',
-            confirmColor: 'var(--danger-red)',
-            cancelText: 'Tutup',
-            cancelColor: 'var(--neutral-600)',
-            showLoadingAfterConfirm: false,
-            onConfirm: callback,
-            onCancel: callback
+            html: `<div class="text-center">
+                <p class="text-gray-600 text-sm mb-2">${message}</p>
+                ${subMessage ? `<p class="text-gray-500 text-sm">${subMessage}</p>` : ''}
+            </div>`,
+            confirmButtonText: 'OK',
+            confirmButtonColor: 'var(--danger-red)',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'rounded-2xl shadow-2xl',
+                confirmButton: 'rounded-lg px-6 py-3'
+            }
+        }).then((result) => {
+            if (callback && typeof callback === 'function') callback(result);
         });
     }
 
     function notifyWarning(title, message, subMessage, callback) {
-        customConfirm({
+        Swal.fire({
+            icon: 'warning',
             title: title,
-            message: message,
-            subMessage: subMessage,
-            iconClass: 'fas fa-exclamation-triangle',
-            iconColor: 'var(--warning-orange)',
-            confirmText: 'OK',
-            confirmColor: 'var(--warning-orange)',
-            cancelText: 'Tutup',
-            cancelColor: 'var(--neutral-600)',
-            showLoadingAfterConfirm: false,
-            onConfirm: callback,
-            onCancel: callback
+            html: `<div class="text-center">
+                <p class="text-gray-600 text-sm mb-2">${message}</p>
+                ${subMessage ? `<p class="text-gray-500 text-sm">${subMessage}</p>` : ''}
+            </div>`,
+            confirmButtonText: 'OK',
+            confirmButtonColor: 'var(--warning-orange)',
+            allowOutsideClick: false,
+            customClass: {
+           popup: 'rounded-2xl shadow-2xl',
+                confirmButton: 'rounded-lg px-6 py-3'
+            }
+        }).then((result) => {
+            if (callback && typeof callback === 'function') callback(result);
         });
     }
 
@@ -553,6 +667,7 @@
         confirmSave,
         confirmUpdate,
         confirmLogout,
+        konfirmasiDisdukcapil,
 
         // Notifikasi
         notifySuccess,

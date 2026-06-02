@@ -470,17 +470,12 @@
         f.addEventListener('submit', function (e) {
             e.preventDefault();
             const t = f.getAttribute('data-title') || 'data ini';
-            Swal.fire({
-                title: 'Hapus Data?',
-                html: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
-                icon: false,
-                showCancelButton: true,
-                confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#e5e7eb',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
+            window.SwalHelper.konfirmasiDisdukcapil({
+                judul: 'Hapus Data?',
+                pesan: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
+                tipe: 'hapus',
+                labelOk: 'Hapus',
+                onKonfirmasi: function () {
                     fetch(f.action, {
                         method: 'DELETE',
                         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' }

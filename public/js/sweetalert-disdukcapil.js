@@ -541,22 +541,12 @@
      */
     function notifKonfirmasiHapus(namaPenduduk, onHapus) {
         var nm = escapeHtml(namaPenduduk || 'data ini');
-        return window.Swal.fire({
-            title: 'Konfirmasi Hapus Data',
-            html: '<p style="color:var(--neutral-600);font-size:14px;margin:6px 0 0;">Data <strong>' + nm + '</strong> akan dihapus dan tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?</p>',
-            showCancelButton: true,
-            confirmButtonText: 'Konfirmasi',
-            cancelButtonText: 'Batal',
-            reverseButtons: true,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            customClass: {
-                popup: 'swal-dd-modal',
-                confirmButton: 'swal-dd-btn swal-dd-btn-danger',
-                cancelButton: 'swal-dd-btn swal-dd-btn-cancel'
-            }
-        }).then(function (r) {
-            if (r.isConfirmed && typeof onHapus === 'function') onHapus();
+        return window.SwalHelper.konfirmasiDisdukcapil({
+            judul: 'Konfirmasi Hapus Data',
+            pesan: 'Data <strong>' + nm + '</strong> akan dihapus dan tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?',
+            tipe: 'hapus',
+            labelOk: 'Hapus',
+            onKonfirmasi: function () { if (typeof onHapus === 'function') onHapus(); }
         });
     }
 
@@ -633,23 +623,13 @@
      * @param {Function} [onBatal]
      */
     function notifKonfirmasi(pesan, onSetuju, onBatal) {
-        return window.Swal.fire({
-            title: 'Konfirmasi',
-            html: '<p style="color:var(--neutral-600);font-size:14px;margin:6px 0 0;">' + escapeHtml(pesan || 'Apakah Anda yakin?') + '</p>',
-            showCancelButton: true,
-            confirmButtonText: 'Konfirmasi',
-            cancelButtonText: 'Batal',
-            reverseButtons: true,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            customClass: {
-                popup: 'swal-dd-modal',
-                confirmButton: 'swal-dd-btn swal-dd-btn-success',
-                cancelButton: 'swal-dd-btn swal-dd-btn-cancel'
-            }
-        }).then(function (r) {
-            if (r.isConfirmed) { if (typeof onSetuju === 'function') onSetuju(); }
-            else { if (typeof onBatal === 'function') onBatal(); }
+        return window.SwalHelper.konfirmasiDisdukcapil({
+            judul: 'Konfirmasi',
+            pesan: escapeHtml(pesan || 'Apakah Anda yakin?'),
+            tipe: 'konfirmasi',
+            labelOk: 'Konfirmasi',
+            onKonfirmasi: function () { if (typeof onSetuju === 'function') onSetuju(); },
+            onBatal: function () { if (typeof onBatal === 'function') onBatal(); }
         });
     }
 
@@ -738,7 +718,10 @@
                         icon: icon,
                         title: title || '',
                         html: message ? ('<p style="color:var(--neutral-600);font-size:14px;margin:6px 0 0;">' + escapeHtml(message) + '</p>') : undefined,
-                        confirmButtonText: 'OK',
+                        confirmButtonText: 'Konfirmasi',
+                        confirmButtonColor: '#43A047',
+                        cancelButtonColor: '#e5e7eb',
+                        reverseButtons: true,
                         allowOutsideClick: false,
                         customClass: { popup: 'swal-dd-modal', confirmButton: 'swal-dd-btn ' + btnClass }
                     }).then(function (r) { if (typeof callback === 'function') callback(r); });

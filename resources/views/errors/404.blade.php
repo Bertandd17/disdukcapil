@@ -36,172 +36,225 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Animated Background */
-        .bg-animated {
-            background: linear-gradient(-45deg, #0052CC, #0066FF, #0047B3, #003D9A);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+        body {
+            background: #0066FF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-y: auto;
         }
 
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
+        .error-wrapper {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-            50% {
-                background-position: 100% 50%;
-            }
+        .error-number {
+            font-size: clamp(4rem, 15vw, 8rem);
+            font-weight: 800;
+            color: var(--neutral-white);
+            line-height: 1;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
 
-            100% {
-                background-position: 0% 50%;
+        .error-title {
+            font-size: clamp(1.25rem, 4vw, 1.875rem);
+            color: var(--neutral-white);
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+            text-align: center;
+        }
+
+        .error-desc {
+            font-size: var(--font-size-sm);
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .error-card {
+            width: 100%;
+            max-height: calc(100vh - 18rem);
+            overflow-y: auto;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl) var(--spacing-lg);
+            box-shadow: var(--shadow-xl);
+            background: var(--neutral-white);
+        }
+
+        .action-list-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-100);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: var(--radius-md);
+        }
+
+        .action-text {
+            flex: 1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+        }
+
+        .action-buttons .btn-action {
+            flex: 1;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary-solid {
+            background: #0066FF;
+            color: var(--neutral-white);
+        }
+
+        .btn-primary-solid:hover {
+            background: #0052CC;
+        }
+
+        .btn-secondary-solid {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .btn-secondary-solid:hover {
+            background: #d1d5db;
+        }
+
+        .error-footer {
+            margin-top: var(--spacing-lg);
+            font-size: var(--font-size-xs);
+            color: rgba(255, 255, 255, 0.65);
+            text-align: center;
+        }
+
+        @media (max-height: 600px) {
+            .error-number {
+                font-size: 3rem;
+            }
+            .error-card {
+                padding: var(--spacing-md);
+            }
+            .action-list-item {
+                padding: var(--spacing-sm);
             }
         }
 
-        /* Float Animation */
-        @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0px);
+        @media (max-width: 480px) {
+            .error-card {
+                margin: 0 var(--spacing-sm);
             }
-
-            50% {
-                transform: translateY(-20px);
+            .action-buttons {
+                flex-direction: column;
             }
-        }
-
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        /* Pulse Animation */
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(0.8);
-                opacity: 1;
+            .error-number {
+                font-size: clamp(3rem, 20vw, 5rem);
             }
-
-            100% {
-                transform: scale(1.3);
-                opacity: 0;
-            }
-        }
-
-        .pulse-ring {
-            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-
-        /* Bounce Animation */
-        @keyframes bounce-slow {
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .animate-bounce-slow {
-            animation: bounce-slow 2s ease-in-out infinite;
-        }
-
-        /* Floating Shapes */
-        .floating-shapes {
-            position: absolute;
-            width: 64px;
-            height: 64px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite;
         }
     </style>
 </head>
 
-<body class="bg-animated min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+<body>
 @include('components.page-loading')
 
-    <!-- Background Particles -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="floating-shapes" style="top: 20%; left: 10%;"></div>
-        <div class="floating-shapes" style="top: 60%; right: 20%; animation-delay: 2s;"></div>
-        <div class="floating-shapes" style="bottom: 20%; left: 30%; animation-delay: 4s;"></div>
-    </div>
-
-    <!-- Error Container -->
-    <div class="relative z-10 max-w-2xl w-full mx-auto">
-        <!-- Logo & Icon -->
-        <div class="text-center mb-8">
-            <div class="relative inline-flex items-center justify-center">
-                <div class="absolute w-32 h-32 bg-blue-400/30 rounded-full pulse-ring"></div>
-                <div class="w-24 h-24 bg-white rounded-2xl shadow-xl mb-6 float-animation overflow-hidden border-4 border-white/30 flex items-center justify-center mx-auto">
-                    <img src="{{ asset('images/logo_toba.jpeg') }}" alt="Logo Kabupaten Toba" class="w-full h-full object-contain">
-                </div>
-            </div>
-
-            <h1 class="text-9xl font-black text-white mb-4 animate-bounce-slow">404</h1>
-            <p class="text-2xl md:text-3xl font-bold text-white mb-2">Halaman Tidak Ditemukan</p>
-            <p class="text-blue-100 text-lg">Maaf, halaman yang Anda cari tidak dapat ditemukan.</p>
+    <div class="error-wrapper">
+        <div class="action-icon" style="background: rgba(255,255,255,0.15); width: 64px; height: 64px; margin-bottom: var(--spacing-md);">
+            <i class="fas fa-map-marker-alt" style="color: var(--neutral-white); font-size: 2rem;"></i>
         </div>
 
-        <!-- Error Card -->
-        <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 mb-8">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-search text-4xl text-red-600"></i>
+        <h1 class="error-number">404</h1>
+        <p class="error-title">Halaman Tidak Ditemukan</p>
+        <p class="error-desc">Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.</p>
+
+        <div class="error-card">
+            <div style="text-align: center; margin-bottom: var(--spacing-lg);">
+                <div class="action-icon" style="background: #DBEAFE; margin: 0 auto var(--spacing-md); width: 56px; height: 56px;">
+                    <i class="fas fa-search" style="color: #2563EB; font-size: 1.5rem;"></i>
                 </div>
-                <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">Apa yang Anda Cari?</h3>
-                <p class="text-gray-600 mb-6">Halaman yang Anda minta tidak tersedia atau telah dipindahkan.</p>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin-bottom: var(--spacing-xs);">Halaman Tidak Tersedia</h3>
+                <p style="font-size: var(--font-size-sm); color: #4b5563;">Alamat yang Anda akses tidak ditemukan. Coba periksa kembali URL atau kembali ke beranda.</p>
             </div>
 
-            <div class="space-y-4 mb-8">
-                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-blue-50 transition">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-link text-blue-600"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-800">Periksa URL</p>
-                        <p class="text-sm text-gray-600">Pastikan alamat URL yang Anda masukkan sudah benar.</p>
-                    </div>
+            <div class="action-list-item">
+                <div class="action-icon" style="background: #FEF3C7;">
+                    <i class="fas fa-link" style="color: #D97706;"></i>
                 </div>
-
-                <div class="group flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-blue-50 transition">
-                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-home text-purple-600"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-800 group-hover:text-blue-600 transition">Kembali ke Beranda</p>
-                        <p class="text-sm text-gray-600">Halaman mungkin telah dipindahkan ke lokasi lain.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-blue-50 transition">
-                    <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-history text-amber-600"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-800">Halaman Kadaluarsa</p>
-                        <p class="text-sm text-gray-600">Halaman yang Anda cari mungkin sudah tidak tersedia lagi.</p>
-                    </div>
+                <div class="action-text">
+                    <p style="font-weight: 600; color: #1f2937; margin: 0;">Periksa URL</p>
+                    <p style="font-size: var(--font-size-sm); color: #4b5563; margin: 0;">Pastikan alamat yang Anda masukkan sudah benar dan lengkap.</p>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4">
-                <a href="{{ url()->previous() }}" class="flex-1 px-6 py-4 bg-gray-200 text-gray-800 rounded-xl font-bold hover:bg-gray-300 transition-all shadow-md flex items-center justify-center gap-2">
-                    <i class="fas fa-arrow-left"></i>
-                    Kembali
-                </a>
-                <a href="{{ route('home') }}" class="flex-1 px-6 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg flex items-center justify-center gap-2">
+            <div class="action-list-item">
+                <div class="action-icon" style="background: #F3E8FF;">
+                    <i class="fas fa-clock" style="color: #7C3AED;"></i>
+                </div>
+                <div class="action-text">
+                    <p style="font-weight: 600; color: #1f2937; margin: 0;">Halaman Mungkin Dipindahkan</p>
+                    <p style="font-size: var(--font-size-sm); color: #4b5563; margin: 0;">Konten mungkin telah dipindahkan atau dihapus oleh administrator.</p>
+                </div>
+            </div>
+
+            <div class="action-list-item" style="margin-bottom: 0;">
+                <div class="action-icon" style="background: #D1FAE5;">
+                    <i class="fas fa-home" style="color: #059669;"></i>
+                </div>
+                <div class="action-text">
+                    <p style="font-weight: 600; color: #1f2937; margin: 0;">Kembali ke Beranda</p>
+                    <p style="font-size: var(--font-size-sm); color: #4b5563; margin: 0;">Arahkan ke halaman utama untuk menemukan apa yang Anda cari.</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{{ route('home') }}" class="btn-action btn-primary-solid">
                     <i class="fas fa-home"></i>
                     Beranda
                 </a>
+                <button onclick="history.back()" class="btn-action btn-secondary-solid">
+                    <i class="fas fa-arrow-left"></i>
+                    Kembali
+                </button>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="text-center text-blue-100 text-sm">
+        <div class="error-footer">
             <p>&copy; {{ date('Y') }} Disdukcapil Kabupaten Toba. Hak Cipta Dilindungi.</p>
-            <p class="text-blue-200 mt-1">Hubungi kami jika masalah berlanjut</p>
+            <p style="margin-top: 0.25rem;">Sistem Informasi Kependudukan</p>
         </div>
     </div>
 

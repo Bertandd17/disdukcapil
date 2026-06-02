@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             Antrian_Online_Seeder::class,
             Status_Lacak_Berkas_Seeder::class,
             StatistikSeeder::class,
+            OrganisasiSeeder::class,
         ]);
     }
 }

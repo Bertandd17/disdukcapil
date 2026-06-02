@@ -87,13 +87,13 @@
                     <td class="p-4">
                         <div class="flex flex-row gap-2 items-center justify-center flex-wrap">
                             <a href="{{ route('admin.akte-kematian.detail', $data->uuid) }}"
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm font-semibold text-sm h-11">
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm font-semibold text-sm h-[44px]">
                                 <i class="fas fa-expand-alt text-xs"></i> <span>Detail</span>
                             </a>
                             @if($data->status == 'Proses Cetak')
                                 <button type="button"
                                     onclick='openUploadModal("{{ $data->uuid }}", {!! json_encode($data->nama_pemohon) !!})'
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-all h-[44px]">
                                     <i class="fas fa-upload"></i> Upload Berkas
                                 </button>
                             @endif

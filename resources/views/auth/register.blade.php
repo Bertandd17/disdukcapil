@@ -206,11 +206,11 @@
                 <div class="flex-1 h-px bg-gray-200"></div>
             </div>
 
-            <!-- Back to Login -->
-            <div class="text-center">
-                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition">
+            <!-- Back to Home -->
+            <div class="text-center mt-6">
+                <a href="{{ route('home') }}" data-style-guide-skip class="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition">
                     <i class="fas fa-arrow-left"></i>
-                    Kembali ke Login
+                    Kembali ke Beranda
                 </a>
             </div>
         </div>
