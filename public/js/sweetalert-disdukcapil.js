@@ -278,8 +278,7 @@
             customClass: Object.assign({
                 popup: 'swal-dd-modal',
                 confirmButton: 'swal-dd-btn swal-dd-btn-primary',
-                cancelButton: 'swal-dd-btn swal-dd-btn-cancel',
-                denyButton: 'swal-dd-btn swal-dd-btn-cancel'
+                cancelButton: 'swal-dd-btn swal-dd-btn-cancel'
             }, opts.customClass || {})
         };
         delete opts.customClass;
