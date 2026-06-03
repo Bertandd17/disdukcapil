@@ -380,14 +380,12 @@
 
         window.Swal.fire({
             title: 'Mengunggah ' + nf + '...',
-            html: '<div style="display:flex;justify-content:center;margin-top:8px;">' +
-                  '<i class="fas fa-cloud-upload-alt" style="font-size:42px;color:var(--primary-blue-main);"></i>' +
-                  '</div>' +
-                  '<p style="margin-top:14px;color:var(--neutral-500);font-size:13.5px;">Mohon tunggu, file sedang diunggah ke server.</p>',
+            text: 'Mohon tunggu, file sedang diunggah ke server.',
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
-            customClass: { popup: 'swal-dd-modal' },
+            showDenyButton: false,
+            showCancelButton: false,
             didOpen: function () { window.Swal.showLoading(); }
         });
 
@@ -461,11 +459,12 @@
 
         window.Swal.fire({
             title: 'Memproses pengajuan ' + jd + '...',
-            html: '<p style="color:var(--neutral-500);font-size:13.5px;margin-top:10px;">Mohon tunggu, sistem sedang memvalidasi data.</p>',
+            text: 'Mohon tunggu, sistem sedang memvalidasi data.',
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
-            customClass: { popup: 'swal-dd-modal' },
+            showDenyButton: false,
+            showCancelButton: false,
             didOpen: function () { window.Swal.showLoading(); }
         });
 

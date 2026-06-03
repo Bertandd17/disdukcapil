@@ -444,6 +444,10 @@ echo json_encode([
                 title: 'Menyimpan data...',
                 text: 'Mohon tunggu sebentar',
                 allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
                 didOpen: () => {
                     Swal.showLoading();
                 }
@@ -548,6 +552,10 @@ echo json_encode([
                 title: 'Mengunggah file...',
                 text: selectedFile.name,
                 allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
                 didOpen: () => {
                     Swal.showLoading();
                 }

@@ -41,10 +41,13 @@
         if (window.SwalHelper && typeof window.SwalHelper.loading === 'function') return window.SwalHelper.loading(message);
         if (window.Swal) window.Swal.fire({
             title: message || 'Memproses...',
-            html: '<i class="fas fa-circle-notch fa-spin" style="font-size:32px;color:#0052CC"></i>',
-            showConfirmButton: false,
+            text: 'Mohon tunggu sebentar...',
             allowOutsideClick: false,
-            customClass: { popup: 'swal-dd-modal' }
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            didOpen: () => Swal.showLoading()
         });
     };
 

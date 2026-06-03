@@ -562,10 +562,12 @@
             Swal.fire({
                 title: 'Memproses...',
                 text: 'Mohon tunggu sebentar',
-                icon: 'info',
-                showConfirmButton: false,
                 allowOutsideClick: false,
-                allowEscapeKey: false
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                didOpen: () => Swal.showLoading()
             });
 
             try {

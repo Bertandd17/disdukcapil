@@ -287,8 +287,11 @@
                                 <p class="mt-4 text-gray-600">${config.loadingMessage}</p>
                             </div>
                         `,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
                         showConfirmButton: false,
-                        allowOutsideClick: false
+                        showDenyButton: false,
+                        showCancelButton: false
                     });
                 }
                 if (config.onConfirm && typeof config.onConfirm === 'function') {
@@ -605,15 +608,13 @@
     function showLoading(message = 'Memproses...') {
         return Swal.fire({
             title: message,
-            html: `
-                <div class="text-center">
-                    <i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i>
-                    <p class="mt-4 text-gray-600">Mohon tunggu sebentar...</p>
-                </div>
-            `,
-            showConfirmButton: false,
+            text: 'Mohon tunggu sebentar...',
             allowOutsideClick: false,
-            allowEscapeKey: false
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            didOpen: () => Swal.showLoading()
         });
     }
 

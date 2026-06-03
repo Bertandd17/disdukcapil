@@ -390,7 +390,10 @@
                                 html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                                     + '<p class="text-gray-600 mt-4">' + cfg.loadingMessage + '</p>',
                                 allowOutsideClick: false,
+                                allowEscapeKey: false,
                                 showConfirmButton: false,
+                                showDenyButton: false,
+                                showCancelButton: false,
                                 customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                             });
                         }
@@ -537,7 +540,10 @@
                     html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                         + '<p class="text-gray-600 mt-4">Mohon tunggu sebentar...</p>',
                     allowOutsideClick: false,
+                    allowEscapeKey: false,
                     showConfirmButton: false,
+                    showDenyButton: false,
+                    showCancelButton: false,
                     customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                 });
             },

@@ -312,6 +312,8 @@
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
+                    showDenyButton: false,
+                    showCancelButton: false,
                     customClass: {
                         popup: 'swal2-modal-popup',
                         htmlContainer: 'swal2-html-container'

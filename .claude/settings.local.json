@@ -91,7 +91,27 @@
       "Bash(\"C:/Users/USER/.claude/skills/claude-office-skills/venv/Scripts/python.exe\" -m pip install openpyxl --quiet)",
       "Bash(ls -la *.xlsx *.db *.txt)",
       "Bash(ls -la public/test-sweetalert-fix.html)",
-      "Bash(awk '{print $9}')"
+      "Bash(awk '{print $9}')",
+      "Bash(git config *)",
+      "Read(//c/Program Files/Git/mingw64/libexec/git-core/**)",
+      "Read(//c/Program Files \\(x86\\)/Git/mingw64/libexec/git-core/**)",
+      "Bash(git help *)",
+      "Bash(GIT_EXEC_PATH=\"C:/Program Files/Git/mingw64/libexec/git-core\" git push origin main)",
+      "Bash(ls resources/lang/ lang/)",
+      "Bash(grep -rln '\"No\"\\\\|'\"'\"'No'\"'\"'' resources/lang/ lang/)",
+      "Bash(echo \"EXIT $?\")",
+      "Bash(git stash *)",
+      "Bash(git worktree *)",
+      "Bash(awk 'NR>=555 && NR<=660' resources/views/admin/antrian-online-index.blade.php)",
+      "Bash(awk 'NR>=370 && NR<=470' resources/views/admin/statistik/dokumen/index.blade.php)",
+      "Bash(awk 'NR>=370 && NR<=395' resources/views/admin/statistik/dokumen/index.blade.php)",
+      "Bash(awk 'NR>=300 && NR<=325' resources/views/layouts/user.blade.php)",
+      "Bash(awk 'NR>=340 && NR<=400' resources/views/layouts/keagamaan.blade.php)",
+      "Bash(awk 'NR>=60 && NR<=100' resources/views/components/admin/sidebar.blade.php)",
+      "Bash(awk 'NR>=150 && NR<=200' resources/views/components/admin/sidebar.blade.php)",
+      "Bash(awk 'NR>=60 && NR<=110' resources/views/components/keagamaan/sidebar.blade.php)",
+      "Bash(awk 'NR>=120 && NR<=170' resources/views/components/user/navbar.blade.php)",
+      "Bash(awk -F: '{print $1}')"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
