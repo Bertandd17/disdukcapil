@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50">
- {{- Page Header -}}
+ {{--Page Header --}}
  <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-6 md:p-8 text-white mb-6 reveal shadow-lg">
  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
  <div>
@@ -24,7 +24,7 @@
  </div>
  </div>
 
- {{- Quick Stats -}}
+ {{--Quick Stats --}}
  @php
  $statistics = [
  'total' => \App\Models\LayananPernikahan::count(),
@@ -62,80 +62,80 @@
  @endphp
 
  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
- <div class="stat-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('', event)">
+ <div class="stat-card bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('', event)">
  <div class="flex items-center justify-between mb-2">
- <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
- <i class="fas fa-file-alt text-gray-600"></i>
+ <div class="w-10 h-10 bg-gray-200 rounded-xl flex items-center justify-center">
+ <i class="fas fa-file-alt text-gray-700"></i>
  </div>
  </div>
  <h3 class="text-2xl font-extrabold text-gray-800">{{ $statistics['total'] }}</h3>
- <p class="text-xs text-gray-600 font-medium">Total</p>
+ <p class="text-xs text-gray-700 font-medium">Total</p>
  </div>
 
- <div class="stat-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('MENUNGGU_KONFIRMASI_KEAGAMAAN', event)">
+ <div class="stat-card bg-gradient-to-br from-orange-50 to-orange-100/60 rounded-xl border border-orange-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('MENUNGGU_KONFIRMASI_KEAGAMAAN', event)">
  <div class="flex items-center justify-between mb-2">
- <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
- <i class="fas fa-users text-orange-600"></i>
+ <div class="w-10 h-10 bg-orange-200 rounded-xl flex items-center justify-center">
+ <i class="fas fa-users text-orange-700"></i>
  </div>
  </div>
- <h3 class="text-2xl font-extrabold text-orange-600">{{ $statistics['pending_keagamaan'] }}</h3>
- <p class="text-xs text-gray-600 font-medium">Pending Keagamaan</p>
+ <h3 class="text-2xl font-extrabold text-orange-700">{{ $statistics['pending_keagamaan'] }}</h3>
+ <p class="text-xs text-orange-800 font-medium">Pending Keagamaan</p>
  </div>
 
- <div class="stat-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('MENUNGGU_APPROVE_TANGGAL', event)">
+ <div class="stat-card bg-gradient-to-br from-blue-50 to-blue-100/60 rounded-xl border border-blue-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('MENUNGGU_APPROVE_TANGGAL', event)">
  <div class="flex items-center justify-between mb-2">
- <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
- <i class="fas fa-user-clock text-blue-600"></i>
+ <div class="w-10 h-10 bg-blue-200 rounded-xl flex items-center justify-center">
+ <i class="fas fa-user-clock text-blue-700"></i>
  </div>
  </div>
- <h3 class="text-2xl font-extrabold text-blue-600">{{ $statistics['pending_admin'] }}</h3>
- <p class="text-xs text-gray-600 font-medium">Pending Admin</p>
+ <h3 class="text-2xl font-extrabold text-blue-700">{{ $statistics['pending_admin'] }}</h3>
+ <p class="text-xs text-blue-800 font-medium">Pending Admin</p>
  </div>
 
- <div class="stat-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('TANGGAL_DISETUJUI', event)">
+ <div class="stat-card bg-gradient-to-br from-cyan-50 to-cyan-100/60 rounded-xl border border-cyan-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('TANGGAL_DISETUJUI', event)">
  <div class="flex items-center justify-between mb-2">
- <div class="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
- <i class="fas fa-upload text-cyan-600"></i>
+ <div class="w-10 h-10 bg-cyan-200 rounded-xl flex items-center justify-center">
+ <i class="fas fa-upload text-cyan-700"></i>
  </div>
  </div>
- <h3 class="text-2xl font-extrabold text-cyan-600">{{ $statistics['upload'] }}</h3>
- <p class="text-xs text-gray-600 font-medium">Upload Dokumen</p>
+ <h3 class="text-2xl font-extrabold text-cyan-700">{{ $statistics['upload'] }}</h3>
+ <p class="text-xs text-cyan-800 font-medium">Upload Dokumen</p>
  </div>
 
- <div class="stat-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI', event)">
+ <div class="stat-card bg-gradient-to-br from-purple-50 to-purple-100/60 rounded-xl border border-purple-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI', event)">
  <div class="flex items-center justify-between mb-2">
- <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
- <i class="fas fa-search text-purple-600"></i>
+ <div class="w-10 h-10 bg-purple-200 rounded-xl flex items-center justify-center">
+ <i class="fas fa-search text-purple-700"></i>
  </div>
  </div>
- <h3 class="text-2xl font-extrabold text-purple-600">{{ $statistics['verifikasi'] }}</h3>
- <p class="text-xs text-gray-600 font-medium">Verifikasi</p>
+ <h3 class="text-2xl font-extrabold text-purple-700">{{ $statistics['verifikasi'] }}</h3>
+ <p class="text-xs text-purple-800 font-medium">Verifikasi</p>
  </div>
 
- <div class="stat-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('SELESAI', event)">
+ <div class="stat-card bg-gradient-to-br from-green-50 to-green-100/60 rounded-xl border border-green-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('SELESAI', event)">
  <div class="flex items-center justify-between mb-2">
- <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
- <i class="fas fa-check-circle text-green-600"></i>
+ <div class="w-10 h-10 bg-green-200 rounded-xl flex items-center justify-center">
+ <i class="fas fa-check-circle text-green-700"></i>
  </div>
  </div>
- <h3 class="text-2xl font-extrabold text-green-600">{{ $statistics['selesai'] }}</h3>
- <p class="text-xs text-gray-600 font-medium">Selesai</p>
+ <h3 class="text-2xl font-extrabold text-green-700">{{ $statistics['selesai'] }}</h3>
+ <p class="text-xs text-green-800 font-medium">Selesai</p>
  </div>
 
- <div class="stat-card bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('ditolak', event)">
+ <div class="stat-card bg-gradient-to-br from-red-50 to-red-100/60 rounded-xl border border-red-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="filterByStatus('ditolak', event)">
  <div class="flex items-center justify-between mb-2">
- <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
- <i class="fas fa-times-circle text-red-600"></i>
+ <div class="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center">
+ <i class="fas fa-times-circle text-red-700"></i>
  </div>
  </div>
- <h3 class="text-2xl font-extrabold text-red-600">{{ $statistics['ditolak'] }}</h3>
- <p class="text-xs text-gray-600 font-medium">Ditolak</p>
+ <h3 class="text-2xl font-extrabold text-red-700">{{ $statistics['ditolak'] }}</h3>
+ <p class="text-xs text-red-800 font-medium">Ditolak</p>
  </div>
  </div>
 
- {{- Main Content: Calendar & List -}}
+ {{--Main Content: Calendar & List --}}
  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
- {{- Calendar View -}}
+ {{--Calendar View --}}
  <div class="lg:col-span-1">
  <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
  <div class="p-4 border-b border-gray-100 flex items-center justify-between">
@@ -165,7 +165,7 @@
  </div>
  </div>
 
- {{- List View -}}
+ {{--List View --}}
  <div class="lg:col-span-1">
  <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
  <div class="p-4 border-b border-gray-100">
@@ -176,7 +176,7 @@
  </div>
  </div>
 
- {{- Tabs -}}
+ {{--Tabs --}}
  <div class="flex flex-wrap gap-0 border-b border-gray-100 text-xs">
  <button class="tab-btn flex-1 min-w-fit px-3 py-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-center" data-status="">
  Semua
@@ -198,7 +198,7 @@
  </button>
  </div>
 
- {{- List -}}
+ {{--List --}}
  <div id="pernikahanList" class="divide-y divide-gray-100 max-h-[500px] overflow-y-auto">
  @php
  $currentStatus = request('status', '');
@@ -231,26 +231,33 @@
  \App\Models\LayananPernikahan::STATUS_SELESAI,
  ]);
  @endphp
- <div class="p-3 hover:bg-gray-50 transition-colors cursor-pointer"
+ <div class="p-3 hover:bg-gray-50 transition-colors cursor-pointer border-l-4
+ @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) border-cyan-400
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI) border-purple-400
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) border-green-400
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL) border-blue-400
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN) border-orange-400
+ @elseif($isRejected) border-red-400
+ @else border-yellow-400 @endif"
  data-status="{{ $item->status }}"
  data-is-rejected="{{ $isRejected ? '1' : '0' }}"
  onclick="showDetail('{{ $item->pernikahan_id }}')">
  <div class="flex items-start gap-3">
  <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
- @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) bg-cyan-100
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI) bg-purple-100
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) bg-green-100
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL) bg-blue-100
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN) bg-orange-100
- @elseif($isRejected) bg-red-100
- @else bg-yellow-100 @endif">
- <i class="fas @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) fa-upload text-cyan-600
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI) fa-search text-purple-600
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) fa-check text-green-600
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL) fa-user-clock text-blue-600
- @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN) fa-users text-orange-600
- @elseif($isRejected) fa-times text-red-600
- @else fa-clock text-yellow-600 @endif text-xs"></i>
+ @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) bg-cyan-200
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI) bg-purple-200
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) bg-green-200
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL) bg-blue-200
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN) bg-orange-200
+ @elseif($isRejected) bg-red-200
+ @else bg-yellow-200 @endif">
+ <i class="fas @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) fa-upload text-cyan-700
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI) fa-search text-purple-700
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) fa-check text-green-700
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL) fa-user-clock text-blue-700
+ @elseif($item->status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN) fa-users text-orange-700
+ @elseif($isRejected) fa-times text-red-700
+ @else fa-clock text-yellow-700 @endif text-xs"></i>
  </div>
  <div class="flex-1 min-w-0">
  <p class="font-medium text-gray-800 text-sm truncate">{{ $item->nama_mempelai_pria }}</p>
@@ -292,7 +299,7 @@
  </div>
 </div>
 
-{{- Modal Detail -}}
+{{--Modal Detail --}}
 <div id="detailModal" class="fixed inset-0 bg-black/50 z-50 items-center justify-center p-4" style="display:none;">
  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
  <div class="p-6 border-b border-gray-100 flex items-center justify-between">
@@ -305,12 +312,12 @@
  </button>
  </div>
  <div id="modalContent" class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
- {{- Content will be loaded dynamically -}}
+ {{--Content will be loaded dynamically --}}
  </div>
  </div>
 </div>
 
-{{- Modal Konfirmasi -}}
+{{--Modal Konfirmasi --}}
 <div id="confirmModal" class="fixed inset-0 z-50 items-center justify-center p-4" style="display:none;">
  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
  <div class="p-6 text-center">
@@ -335,7 +342,7 @@
  </div>
 </div>
 
-{{- Modal Upload Dokumen Final -}}
+{{--Modal Upload Dokumen Final --}}
 <div id="uploadDokumenFinalModal" class="fixed inset-0 bg-black/50 z-50 items-center justify-center p-4" style="display:none;">
  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
  <div class="p-6 border-b border-gray-100 flex items-center justify-between">
@@ -355,7 +362,7 @@
  Format yang didukung: <strong>PDF</strong> (maks. 5 MB per file). Anda dapat mengupload sebagian dokumen terlebih dahulu - status akan otomatis menjadi <strong>Selesai</strong> ketika ke-4 dokumen lengkap.
  </div>
 
- {{- Akta Pernikahan -}}
+ {{--Akta Pernikahan --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Akta Pernikahan</label>
  <p class="text-xs text-gray-500 mb-2">Akta resmi pencatatan perkawinan</p>
@@ -365,7 +372,7 @@
  <div id="preview_akta_pernikahan" class="mt-2 text-xs"></div>
  </div>
 
- {{- KK Pasangan -}}
+ {{--KK Pasangan --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru - Pasangan Suami-Istri</label>
  <p class="text-xs text-gray-500 mb-2">KK baru untuk pasangan mempelai</p>
@@ -375,7 +382,7 @@
  <div id="preview_kk_pasangan" class="mt-2 text-xs"></div>
  </div>
 
- {{- KK Ortu Pria -}}
+ {{--KK Ortu Pria --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru - Orang Tua Mempelai Pria</label>
  <p class="text-xs text-gray-500 mb-2">KK orang tua mempelai pria (setelah pengeluaran mempelai pria)</p>
@@ -385,7 +392,7 @@
  <div id="preview_kk_ortu_pria" class="mt-2 text-xs"></div>
  </div>
 
- {{- KK Ortu Wanita -}}
+ {{--KK Ortu Wanita --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru - Orang Tua Mempelai Wanita</label>
  <p class="text-xs text-gray-500 mb-2">KK orang tua mempelai wanita (setelah pengeluaran mempelai wanita)</p>

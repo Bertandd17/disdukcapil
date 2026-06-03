@@ -111,7 +111,10 @@
       "Bash(awk 'NR>=150 && NR<=200' resources/views/components/admin/sidebar.blade.php)",
       "Bash(awk 'NR>=60 && NR<=110' resources/views/components/keagamaan/sidebar.blade.php)",
       "Bash(awk 'NR>=120 && NR<=170' resources/views/components/user/navbar.blade.php)",
-      "Bash(awk -F: '{print $1}')"
+      "Bash(awk -F: '{print $1}')",
+      "Bash(gh run *)",
+      "Bash(php -d display_errors=1 -r ' *)",
+      "Bash(php _probe_pernikahan.php)"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
