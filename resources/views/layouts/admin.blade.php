@@ -27,14 +27,18 @@
     <!-- SweetAlert2 — hanya dimuat SEKALI di sini -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- SweetAlert Helper -->
+    <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
+
     <!-- SweetAlert2 Disdukcapil Notification System -->
     <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
 
     <!-- Notifikasi Disdukcapil Helper -->
     <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
 
-    <!-- SweetAlert Global Fix untuk Admin -->
-    <script src="{{ asset('js/admin-sweetalert-fix.js') }}"></script>
+    <!-- SweetAlert Final Fix (Batal kiri, Konfirmasi kanan; deny button hilang; loading bersih; toast top-end) -->
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>

@@ -658,6 +658,9 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 </div>
 
 @push('styles')
+{{-- SWEETALERT2 ASSETS — jangan ubah urutan --}}
+<link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+
 <style>
     /* ═══════════════════════════════════════════════════════════
        NUCLEAR CSS OVERRIDE — Sembunyikan SEMUA tombol saat loading
@@ -780,6 +783,12 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 @endpush
 
 @push('scripts')
+{{-- SWEETALERT2 ASSETS — jangan ubah urutan --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/sweetalert-helper.js') }}"></script>
+<script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
+<script src="{{ asset('js/swal-final-fix.js') }}"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 
@@ -1596,6 +1605,38 @@ function showToast(message, type) {
     }).fire();
 }
 
+function formatValidationErrors(errors) {
+    if (!errors || typeof errors !== 'object') return '';
+
+    var messages = [];
+    Object.keys(errors).forEach(function(key) {
+        var value = errors[key];
+        if (Array.isArray(value)) {
+            value.forEach(function(item) { messages.push(item); });
+        } else if (typeof value === 'string') {
+            messages.push(value);
+        }
+    });
+
+    if (!messages.length) return '';
+
+    return '<ul class="text-left list-disc pl-5 space-y-1">' +
+        messages.map(function(item) { return '<li>' + item + '</li>'; }).join('') +
+        '</ul>';
+}
+
+function showValidationAlert(message, errors) {
+    var htmlErrors = formatValidationErrors(errors);
+
+    return Swal.fire({
+        icon              : 'error',
+        title             : 'Data belum valid',
+        html              : htmlErrors || (message || 'Periksa kembali data yang Anda isi.'),
+        confirmButtonText : 'Periksa Lagi',
+        confirmButtonColor: '#dc2626'
+    });
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    Close modal
    ═══════════════════════════════════════════════════════════════════ */
@@ -1620,6 +1661,20 @@ async function handleKirimPengajuan() {
         goToStep(4);
         return;
     }
+
+    var confirmResult = await Swal.fire({
+        icon              : 'question',
+        title             : 'Kirim Pengajuan?',
+        text              : 'Pastikan data dan berkas yang Anda isi sudah benar.',
+        showCancelButton  : true,
+        confirmButtonText : 'Ya, Kirim',
+        cancelButtonText  : 'Cek Lagi',
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor : '#6b7280',
+        reverseButtons    : true
+    });
+
+    if (!confirmResult.isConfirmed) return;
 
     var form           = document.getElementById('serviceForm');
     var nikInput       = document.querySelector('[name="nik_pemohon"]');
@@ -1679,23 +1734,44 @@ async function handleKirimPengajuan() {
     fetch(form.action, {
         method  : 'POST',
         body    : formData,
-        headers : { 'X-Requested-With': 'XMLHttpRequest' }
+        headers : {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept'          : 'application/json'
+        }
     })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
+    .then(function(response) {
+        return response.json().then(function(data) {
+            return { ok: response.ok, status: response.status, data: data };
+        });
+    })
+    .then(function(result) {
+        var data = result.data || {};
         Swal.close();
         if (btnSubmit) btnSubmit.disabled = false;
-        if (data.success) {
-            /* ── Toast sukses kanan atas ── */
-            showToast('Pengajuan Dokumen Berhasil dilakukan', 'success');
-            form.reset();
-            closeModal();
-            goToStep(1);
-            document.getElementById('liveness_passed').value = '0';
-            document.getElementById('foto_wajah').value = '';
-        } else {
-            showToast(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'error');
+
+        if (result.ok && data.success) {
+            Swal.fire({
+                icon              : 'success',
+                title             : 'Pengajuan Berhasil',
+                text              : data.message || 'Pengajuan dokumen berhasil dilakukan.',
+                confirmButtonText : 'OK',
+                confirmButtonColor: '#16a34a'
+            }).then(function() {
+                form.reset();
+                closeModal();
+                goToStep(1);
+                document.getElementById('liveness_passed').value = '0';
+                document.getElementById('foto_wajah').value = '';
+            });
+            return;
         }
+
+        if (result.status === 422 || data.errors) {
+            showValidationAlert(data.message, data.errors);
+            return;
+        }
+
+        showToast(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'error');
     })
     .catch(function(error) {
         Swal.close();

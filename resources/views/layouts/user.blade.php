@@ -44,6 +44,10 @@
     <!-- Notifikasi Disdukcapil Helper -->
     <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
 
+    <!-- SweetAlert Final Fix (Batal kiri, Konfirmasi kanan; deny button hilang; loading bersih; toast top-end) -->
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 

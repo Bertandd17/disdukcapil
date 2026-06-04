@@ -1,3 +1,10 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/sweetalert-helper.js') }}"></script>
+<script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
+
+<link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+<script src="{{ asset('js/swal-final-fix.js') }}"></script>
+
 {{-- Admin Sidebar --}}
 <aside class="sidebar fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 z-50 shadow-lg">
     {{-- Logo --}}

@@ -1,6 +1,13 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/sweetalert-helper.js') }}"></script>
+<script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+<script src="{{ asset('js/swal-final-fix.js') }}"></script>
+
 @php
     $adminBelumAda = ! \App\Models\User::whereHas('roles', function ($q) { $q->where('name', 'Admin'); })->exists();
 @endphp
+
 {{-- Header Navigation --}}
 <header class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300" id="mainHeader">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,10 +38,9 @@
                     <i class="fas fa-chart-line mr-2"></i>Statistik
                 </a>
                 @auth
-                    <a href="{{ route('logout') }}"
-                        data-style-guide-skip
-                        class="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
-                        onclick="event.preventDefault(); handleUserLogout('logoutForm');">
+                    <a href="{{ route('logout') }}" data-style-guide-skip
+                       class="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
+                       onclick="event.preventDefault(); handleUserLogout('logoutForm');">
                         <i class="fas fa-sign-out-alt"></i>Logout
                     </a>
                     <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="hidden">
@@ -76,14 +82,15 @@
                 <i class="fas fa-chart-line mr-2"></i>Statistik
             </a>
             @auth
-        <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="inline">
-            @csrf
-            <button type="button" id="sidebarLogoutBtn"
-                class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all">
-                <i class="fas fa-sign-out-alt w-5"></i>
-                <span class="sidebar-text font-medium">Logout</span>
-            </button>
-        </form>
+                <form method="POST" action="{{ route('logout') }}" id="logoutFormMobile" class="inline">
+                    @csrf
+                    <button type="button" id="sidebarLogoutBtn"
+                        class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
+                        onclick="handleUserLogout('logoutFormMobile');">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span class="sidebar-text font-medium">Logout</span>
+                    </button>
+                </form>
             @else
                 @if($adminBelumAda)
                     <a href="{{ route('admin.register') }}" class="block px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('admin.register') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">
@@ -102,50 +109,41 @@
 <div class="h-16"></div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     // Mobile Menu Toggle
-    document.addEventListener('DOMContentLoaded', function() {
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-    });
-
-    // Logout konfirmasi (konsisten dengan admin/keagamaan/login)
-    function handleUserLogout(formId) {
-        var doSubmit = function () {
-            var f = document.getElementById(formId);
-            if (f) f.submit();
-        };
-        if (window.SwalHelper && typeof window.SwalHelper.customConfirm === 'function') {
-            window.SwalHelper.customConfirm({
-                title: 'Konfirmasi Logout',
-                message: 'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login.',
-                subMessage: 'Apakah Anda yakin ingin melanjutkan?',
-                iconClass: 'fas fa-sign-out-alt',
-                iconColor: '#dc2626',
-                confirmText: 'Konfirmasi',
-                confirmColor: '#dc2626',
-                loadingTitle: 'Memproses Logout',
-                loadingMessage: 'Sedang mengakhiri sesi...',
-                onConfirm: function () { setTimeout(doSubmit, 600); }
-            });
-        } else if (window.Swal && typeof window.Swal.fire === 'function') {
-            window.Swal.fire({
-                icon: false,
-                title: 'Konfirmasi Logout',
-                html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
-                showCancelButton: true,
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#dc2626',
-                reverseButtons: true
-            }).then(function (r) { if (r.isConfirmed) doSubmit(); });
-        } else {
-            doSubmit();
-        }
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
     }
+});
+
+// Logout with SweetAlert2
+function handleUserLogout(formId) {
+    var doSubmit = function() {
+        var f = document.getElementById(formId);
+        if (f) f.submit();
+    };
+    if (window.SwalHelper && typeof window.SwalHelper.confirm === 'function') {
+        SwalHelper.confirm(
+            'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin?',
+            doSubmit
+        );
+    } else if (window.Swal && typeof window.Swal.fire === 'function') {
+        Swal.fire({
+            title: 'Konfirmasi Logout',
+            html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Konfirmasi',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#dc2626',
+            reverseButtons: true
+        }).then(function(r) { if (r.isConfirmed) doSubmit(); });
+    } else {
+        doSubmit();
+    }
+}
 </script>

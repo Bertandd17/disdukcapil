@@ -2,6 +2,7 @@
 
 @section('title', 'Penerbitan Akta Pernikahan')
 
+
 @section('content')
 <div class="min-h-screen bg-gray-50">
     {{-- Page Header --}}
@@ -269,12 +270,10 @@
             <h3 id="confirmTitle" class="text-xl font-bold text-gray-800 mb-2"></h3>
             <p id="confirmMessage" class="text-gray-600 mb-4"></p>
 
-            @if(request()->has('show_reason'))
-            <div class="text-left mb-4">
+            <div id="confirmReasonWrapper" class="text-left mb-4 hidden">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Alasan <span class="text-red-500">*</span></label>
                 <textarea id="confirmReason" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Tuliskan alasan..."></textarea>
             </div>
-            @endif
 
             <div class="flex gap-3">
                 <button onclick="closeConfirmModal()" class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium text-gray-800 transition-colors">
@@ -291,75 +290,164 @@
 <input type="hidden" id="currentPernikahanId">
 <input type="hidden" id="currentAction">
 
+{{-- ==== SWEETALERT2 ASSETS — khusus view ini, jangan ubah urutan ==== --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/sweetalert-helper.js') }}"></script>
+<script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+<script src="{{ asset('js/swal-final-fix.js') }}"></script>
+
 {{-- ==== SWEETALERT HELPER FALLBACK (defensive) ==== --}}
-{{-- Jika SwalHelper belum terdefinisi dari layout, gunakan template standar
-     sesuai memory: 3 flag false (confirm/deny/cancel) + Swal.showLoading() --}}
 <script>
-if (typeof window.SwalHelper === 'undefined') {
-    window.SwalHelper = {
-        loading: function(title, html) {
-            return Swal.fire({
-                title: title || 'Memproses...',
-                html : html  || 'Mohon tunggu sebentar...',
-                allowOutsideClick: false,
-                allowEscapeKey   : false,
-                showConfirmButton: false,
-                showDenyButton   : false,
-                showCancelButton : false,
-                didOpen          : () => Swal.showLoading()
-            });
-        },
-        close: function() {
-            Swal.close();
-        },
-        success: function(message, title) {
-            Swal.fire({
-                icon : 'success',
-                title: title || 'Berhasil!',
-                text : message,
-                showConfirmButton: false,
-                timer: 2500,
-                timerProgressBar: true,
-                toast: true,
-                position: 'top-end'
-            });
-        },
-        error: function(message, title) {
-            Swal.fire({
-                icon : 'error',
-                title: title || 'Gagal!',
-                text : message,
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#dc2626',
-                showConfirmButton: true
-            });
-        },
-        warning: function(message, title) {
-            Swal.fire({
-                icon : 'warning',
-                title: title || 'Peringatan!',
-                text : message,
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#d97706',
-                showConfirmButton: true
-            });
-        },
-        confirm: function(message, onYes, onNo, title) {
-            return Swal.fire({
-                title: title || 'Konfirmasi',
-                text : message,
-                icon : 'question',
-                showCancelButton : true,
-                showConfirmButton: true,
-                confirmButtonText: 'Ya, Lanjutkan',
-                cancelButtonText : 'Batal',
-                confirmButtonColor: '#0052CC',
-                cancelButtonColor : '#6b7280',
-                reverseButtons    : true
-            }).then((r) => { if (r.isConfirmed && onYes) onYes(); else if (r.isDismissed && onNo) onNo(); });
-        }
+(function installSweetAlertHelper() {
+    'use strict';
+
+    if (typeof window.Swal === 'undefined') {
+        console.error('SweetAlert2 belum termuat. Pastikan CDN sweetalert2@11 dapat diakses.');
+        return;
+    }
+
+    if (!window.Swal.__loadingInterceptorInstalled) {
+        const originalFire = window.Swal.fire.bind(window.Swal);
+
+        window.Swal.fire = function(config) {
+            if (config && typeof config === 'object') {
+                const title = String(config.title || '').toLowerCase();
+                const isLoading =
+                    config.showLoading === true ||
+                    (typeof config.didOpen === 'function' && config.didOpen.toString().includes('showLoading')) ||
+                    ['memproses', 'memuat', 'menyimpan', 'mengirim', 'memeriksa', 'mengupload', 'loading', 'tunggu'].some(k => title.includes(k));
+
+                if (isLoading) {
+                    config.showConfirmButton = false;
+                    config.showDenyButton = false;
+                    config.showCancelButton = false;
+                    config.allowOutsideClick = false;
+                    config.allowEscapeKey = false;
+                }
+            }
+
+            return originalFire(config);
+        };
+
+        window.Swal.__loadingInterceptorInstalled = true;
+    }
+
+    if (typeof window.SwalHelper === 'undefined') {
+        window.SwalHelper = {};
+    }
+
+    window.SwalHelper.loading = window.SwalHelper.loading || function(title, html) {
+        return Swal.fire({
+            title: title || 'Memproses...',
+            html : html  || 'Mohon tunggu sebentar...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            didOpen: function() {
+                Swal.showLoading();
+            }
+        });
     };
-}
+
+    window.SwalHelper.close = window.SwalHelper.close || function() {
+        Swal.close();
+    };
+
+    window.SwalHelper.success = window.SwalHelper.success || function(message, title) {
+        return Swal.fire({
+            icon: 'success',
+            title: title || 'Berhasil!',
+            text: message || 'Operasi berhasil dilakukan.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'swal-toast-success'
+            }
+        });
+    };
+
+    window.SwalHelper.error = window.SwalHelper.error || function(message, title) {
+        return Swal.fire({
+            icon: 'error',
+            title: title || 'Gagal!',
+            text: message || 'Operasi gagal dilakukan.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#dc2626'
+        });
+    };
+
+    window.SwalHelper.warning = window.SwalHelper.warning || function(message, title) {
+        return Swal.fire({
+            icon: 'warning',
+            title: title || 'Peringatan!',
+            text: message || 'Periksa kembali data Anda.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d97706'
+        });
+    };
+
+    window.SwalHelper.info = window.SwalHelper.info || function(message, title) {
+        return Swal.fire({
+            icon: 'info',
+            title: title || 'Informasi',
+            text: message || '',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#2563eb'
+        });
+    };
+
+    window.SwalHelper.confirm = window.SwalHelper.confirm || function(message, onYes, onNo, title) {
+        return Swal.fire({
+            title: title || 'Konfirmasi',
+            text: message || 'Apakah Anda yakin ingin melanjutkan?',
+            icon: 'question',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#0052CC',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then(function(result) {
+            if (result.isConfirmed && typeof onYes === 'function') onYes();
+            if (result.isDismissed && typeof onNo === 'function') onNo();
+            return result;
+        });
+    };
+
+    window.SwalHelper.confirmReason = window.SwalHelper.confirmReason || function(options) {
+        options = options || {};
+
+        return Swal.fire({
+            title: options.title || 'Konfirmasi',
+            html: options.html || options.message || 'Tuliskan alasan untuk melanjutkan.',
+            icon: options.icon || 'warning',
+            input: 'textarea',
+            inputPlaceholder: options.placeholder || 'Tuliskan alasan...',
+            inputAttributes: {
+                'aria-label': 'Alasan'
+            },
+            inputValidator: function(value) {
+                if (!value || !value.trim()) {
+                    return options.requiredMessage || 'Alasan harus diisi.';
+                }
+                return null;
+            },
+            showCancelButton: true,
+            confirmButtonText: options.confirmText || 'Ya, Lanjutkan',
+            cancelButtonText: options.cancelText || 'Batal',
+            confirmButtonColor: options.confirmColor || '#dc2626',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        });
+    };
+})();
 </script>
 
 <style>
@@ -401,6 +489,12 @@ if (typeof window.SwalHelper === 'undefined') {
 </style>
 
 <script>
+// Global state untuk auto-refresh dan kalender
+let autoRefreshInterval = null;
+let isChecking = false;
+let lastCheckTime = new Date().toISOString();
+let knownStatuses = new Map();
+
 // Calendar
 let currentDate = new Date();
 let calendarData = {};
@@ -679,123 +773,190 @@ function closeModal() {
 
 // Confirm Modal
 function showConfirm(action, id) {
-    const modal = document.getElementById('confirmModal');
-    const icon = document.getElementById('confirmIcon');
-    const title = document.getElementById('confirmTitle');
-    const message = document.getElementById('confirmMessage');
-    const btn = document.getElementById('confirmActionBtn');
-    const reasonInput = document.getElementById('confirmReason');
-
     document.getElementById('currentPernikahanId').value = id;
     document.getElementById('currentAction').value = action;
 
     if (action === 'approve') {
-        icon.className = 'w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 bg-green-100';
-        icon.innerHTML = '<i class="fas fa-check text-3xl text-green-600"></i>';
-        title.textContent = 'Setujui Tanggal Pernikahan?';
-        message.textContent = 'Tanggal perkawinan akan disetujui dan keagamaan dapat mengupload dokumen.';
-        btn.className = 'flex-1 px-4 py-3 rounded-xl font-medium text-white bg-green-600 hover:bg-green-700 transition-colors';
-        btn.textContent = 'Ya, Setujui';
-        reasonInput.parentElement.classList.add('hidden');
-    } else if (action === 'reject' || action === 'reject_doc') {
-        icon.className = 'w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 bg-red-100';
-        icon.innerHTML = '<i class="fas fa-times text-3xl text-red-600"></i>';
-        title.textContent = action === 'reject' ? 'Tolak Tanggal Pernikahan?' : 'Tolak Dokumen?';
-        message.textContent = action === 'reject'
-            ? 'Tanggal perkawinan akan ditolak. Keagamaan perlu mengajukan tanggal baru.'
-            : 'Dokumen ditolak dan memerlukan perbaikan dari keagamaan.';
-        btn.className = 'flex-1 px-4 py-3 rounded-xl font-medium text-white bg-red-600 hover:bg-red-700 transition-colors';
-        btn.textContent = 'Ya, Tolak';
-        reasonInput.parentElement.classList.remove('hidden');
-        reasonInput.required = true;
+        return Swal.fire({
+            title: 'Setujui Tanggal Pernikahan?',
+            text: 'Tanggal perkawinan akan disetujui dan keagamaan dapat mengupload dokumen.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Setujui',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#16a34a',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                executeConfirm();
+            }
+        });
     }
 
-    btn.onclick = () => executeConfirm();
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    if (action === 'reject' || action === 'reject_doc') {
+        const isRejectDoc = action === 'reject_doc';
+
+        return SwalHelper.confirmReason({
+            title: isRejectDoc ? 'Tolak Dokumen?' : 'Tolak Tanggal Pernikahan?',
+            html: isRejectDoc
+                ? 'Dokumen ditolak dan memerlukan perbaikan dari keagamaan.'
+                : 'Tanggal perkawinan akan ditolak. Keagamaan perlu mengajukan tanggal baru.',
+            icon: 'warning',
+            placeholder: 'Tuliskan alasan penolakan...',
+            confirmText: isRejectDoc ? 'Ya, Tolak Dokumen' : 'Ya, Tolak Tanggal',
+            confirmColor: '#dc2626'
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                document.getElementById('confirmReason').value = result.value || '';
+                executeConfirm();
+            }
+        });
+    }
 }
 
 function closeConfirmModal() {
     const modal = document.getElementById('confirmModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.getElementById('confirmReason').value = '';
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    const reason = document.getElementById('confirmReason');
+    if (reason) reason.value = '';
 }
 
 async function executeConfirm() {
     const id = document.getElementById('currentPernikahanId').value;
     const action = document.getElementById('currentAction').value;
-    const reason = document.getElementById('confirmReason').value;
+    const reasonEl = document.getElementById('confirmReason');
+    const reason = reasonEl ? reasonEl.value : '';
 
     if ((action === 'reject' || action === 'reject_doc') && !reason.trim()) {
-        if (typeof SwalHelper !== 'undefined' && SwalHelper.warning) {
-            SwalHelper.warning('Alasan harus diisi');
-        }
+        SwalHelper.warning('Alasan harus diisi');
         return;
     }
 
     try {
-        let url, method, body;
+        let url, method, body, loadingTitle;
 
         if (action === 'approve') {
             url = '{{ route('api.pernikahan.keagamaan.approve', ':id') }}'.replace(':id', id);
             method = 'POST';
             body = JSON.stringify({});
+            loadingTitle = 'Menyetujui tanggal...';
         } else if (action === 'reject') {
             url = '{{ route('api.pernikahan.keagamaan.reject', ':id') }}'.replace(':id', id);
             method = 'POST';
             body = JSON.stringify({ alasan: reason });
+            loadingTitle = 'Menolak tanggal...';
         } else if (action === 'reject_doc') {
             url = '{{ route('api.pernikahan.keagamaan.reject-doc', ':id') }}'.replace(':id', id);
             method = 'POST';
             body = JSON.stringify({ alasan: reason });
+            loadingTitle = 'Menolak dokumen...';
+        } else {
+            SwalHelper.error('Aksi tidak valid.');
+            return;
         }
+
+        SwalHelper.loading(loadingTitle, 'Mohon tunggu, sistem sedang memproses data.');
 
         const response = await fetch(url, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: body
         });
 
-        const result = await response.json();
+        const result = await response.json().catch(function() {
+            return {
+                success: false,
+                message: 'Response server tidak valid.'
+            };
+        });
 
-        if (result.success) {
+        SwalHelper.close();
+
+        if (response.ok && result.success) {
             closeConfirmModal();
             closeModal();
-            SwalHelper.success(result.message || 'Operasi berhasil');
-            setTimeout(() => window.location.reload(), 1500);
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: result.message || 'Operasi berhasil diproses.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#16a34a'
+            });
+
+            window.location.reload();
         } else {
-            SwalHelper.error(result.message || 'Operasi gagal');
+            SwalHelper.error(result.message || 'Operasi gagal.');
         }
     } catch (error) {
-        SwalHelper.error('Terjadi kesalahan');
+        SwalHelper.close();
+        SwalHelper.error('Terjadi kesalahan saat memproses permintaan.');
     }
 }
 
 async function verifyAllDocuments(id) {
+    const confirmation = await Swal.fire({
+        title: 'Verifikasi Semua Dokumen?',
+        text: 'Semua dokumen yang diupload akan ditandai valid.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Verifikasi',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor: '#6b7280',
+        reverseButtons: true
+    });
+
+    if (!confirmation.isConfirmed) return;
+
     try {
+        SwalHelper.loading('Memverifikasi dokumen...', 'Mohon tunggu, sistem sedang memproses data.');
+
         const response = await fetch('{{ route('api.pernikahan.keagamaan.verify-all', ':id') }}'.replace(':id', id), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
 
-        const result = await response.json();
+        const result = await response.json().catch(function() {
+            return {
+                success: false,
+                message: 'Response server tidak valid.'
+            };
+        });
 
-        if (result.success) {
+        SwalHelper.close();
+
+        if (response.ok && result.success) {
             closeModal();
-            SwalHelper.success('Semua dokumen diverifikasi');
-            setTimeout(() => window.location.reload(), 1500);
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Dokumen Diverifikasi',
+                text: result.message || 'Semua dokumen berhasil diverifikasi.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#16a34a'
+            });
+
+            window.location.reload();
         } else {
-            SwalHelper.error(result.message || 'Verifikasi gagal');
+            SwalHelper.error(result.message || 'Verifikasi gagal.');
         }
     } catch (error) {
-        SwalHelper.error('Terjadi kesalahan');
+        SwalHelper.close();
+        SwalHelper.error('Terjadi kesalahan saat memverifikasi dokumen.');
     }
 }
 
@@ -805,11 +966,13 @@ async function handleFileUpload(input, id, type) {
 
     if (file.size > 5 * 1024 * 1024) {
         SwalHelper.error('Ukuran file maksimal 5MB');
+        input.value = '';
         return;
     }
 
     if (file.type !== 'application/pdf') {
         SwalHelper.error('File harus berformat PDF');
+        input.value = '';
         return;
     }
 
@@ -823,15 +986,21 @@ async function handleFileUpload(input, id, type) {
         const response = await fetch('{{ route('api.pernikahan.keagamaan.upload-berkas', ':id') }}'.replace(':id', id), {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
             },
             body: formData
         });
 
-        const result = await response.json();
+        const result = await response.json().catch(function() {
+            return {
+                success: false,
+                message: 'Response server tidak valid.'
+            };
+        });
         SwalHelper.close();
 
-        if (result.success) {
+        if (response.ok && result.success) {
             SwalHelper.success('Berkas berhasil diupload');
             showDetail(id);
         } else {
