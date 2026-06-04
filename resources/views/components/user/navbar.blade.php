@@ -37,10 +37,10 @@
                 <a href="{{ route('statistik') }}" class="px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('statistik') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }} transition">
                     <i class="fas fa-chart-line mr-2"></i>Statistik
                 </a>
+
                 @auth
-                    <a href="{{ route('logout') }}" data-style-guide-skip
-                       class="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
-                       onclick="event.preventDefault(); handleUserLogout('logoutForm');">
+                    <a href="#" class="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
+                       onclick="handleUserLogout('logoutForm')">
                         <i class="fas fa-sign-out-alt"></i>Logout
                     </a>
                     <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="hidden">
@@ -81,12 +81,12 @@
             <a href="{{ route('statistik') }}" class="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50">
                 <i class="fas fa-chart-line mr-2"></i>Statistik
             </a>
+
             @auth
                 <form method="POST" action="{{ route('logout') }}" id="logoutFormMobile" class="inline">
                     @csrf
-                    <button type="button" id="sidebarLogoutBtn"
-                        class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
-                        onclick="handleUserLogout('logoutFormMobile');">
+                    <button type="button" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
+                            onclick="handleUserLogout('logoutFormMobile')">
                         <i class="fas fa-sign-out-alt w-5"></i>
                         <span class="sidebar-text font-medium">Logout</span>
                     </button>
@@ -114,34 +114,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
+        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     }
 });
 
-// Logout with SweetAlert2
+// Logout dengan SweetAlert2 full
 function handleUserLogout(formId) {
-    var doSubmit = function() {
-        var f = document.getElementById(formId);
+    const doSubmit = () => {
+        const f = document.getElementById(formId);
         if (f) f.submit();
     };
-    if (window.SwalHelper && typeof window.SwalHelper.confirm === 'function') {
-        SwalHelper.confirm(
-            'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin?',
-            doSubmit
-        );
-    } else if (window.Swal && typeof window.Swal.fire === 'function') {
+
+    const message = 'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?';
+
+    if (window.SwalHelper && typeof SwalHelper.confirm === 'function') {
+        SwalHelper.confirm(message, doSubmit);
+    } else if (window.Swal && typeof Swal.fire === 'function') {
         Swal.fire({
             title: 'Konfirmasi Logout',
-            html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
+            html: `<p class="text-gray-600 text-sm">${message}</p>`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             confirmButtonColor: '#dc2626',
             reverseButtons: true
-        }).then(function(r) { if (r.isConfirmed) doSubmit(); });
+        }).then(r => { if (r.isConfirmed) doSubmit(); });
     } else {
         doSubmit();
     }
