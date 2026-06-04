@@ -76,15 +76,14 @@
                 <i class="fas fa-chart-line mr-2"></i>Statistik
             </a>
             @auth
-                <a href="{{ route('logout') }}"
-                    data-style-guide-skip
-                    class="block px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700"
-                    onclick="event.preventDefault(); handleUserLogout('logoutFormMobile');">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                </a>
-                <form method="POST" action="{{ route('logout') }}" id="logoutFormMobile" class="hidden">
-                    @csrf
-                </form>
+        <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="inline">
+            @csrf
+            <button type="button" id="sidebarLogoutBtn"
+                class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span class="sidebar-text font-medium">Logout</span>
+            </button>
+        </form>
             @else
                 @if($adminBelumAda)
                     <a href="{{ route('admin.register') }}" class="block px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('admin.register') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">

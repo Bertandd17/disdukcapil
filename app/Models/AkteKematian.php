@@ -36,7 +36,6 @@ class AkteKematian extends Model
         
         // Status
         'status',
-        // 'jenis_layanan',
         'alasan_penolakan',
     ];
 

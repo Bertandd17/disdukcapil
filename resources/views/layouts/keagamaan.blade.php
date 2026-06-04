@@ -278,43 +278,26 @@
             },
 
             confirm: function(title, text, callback) {
-                Swal.fire({
-                    title: title,
-                    html: '<p class="text-gray-600">' + text + '</p>',
-                    showCancelButton: true,
-                    confirmButtonText: 'Konfirmasi',
-                    cancelButtonText: 'Batal',
-                    reverseButtons: true,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                        popup: 'swal2-popup swal2-modal',
-                        confirmButton: 'swal-btn-primary',
-                        cancelButton: 'swal-btn-cancel'
+                window.SwalHelper.konfirmasiDisdukcapil({
+                    judul: title,
+                    pesan: text,
+                    tipe: 'konfirmasi',
+                    labelOk: 'Konfirmasi',
+                    onKonfirmasi: function() {
+                        if (callback) callback();
                     }
-                }).then(function(result) {
-                    if (result.isConfirmed && callback) callback();
                 });
             },
 
             deleteConfirm: function(title, text, callback) {
-                Swal.fire({
-                    title: title,
-                    html: '<p class="text-gray-600">' + text + '</p>',
-                    icon: false,
-                    showCancelButton: true,
-                    confirmButtonText: 'Konfirmasi',
-                    cancelButtonText: 'Batal',
-                    reverseButtons: true,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                        popup: 'swal2-popup swal2-modal',
-                        confirmButton: 'swal-btn-delete',
-                        cancelButton: 'swal-btn-cancel'
+                window.SwalHelper.konfirmasiDisdukcapil({
+                    judul: title,
+                    pesan: text,
+                    tipe: 'hapus',
+                    labelOk: 'Hapus',
+                    onKonfirmasi: function() {
+                        if (callback) callback();
                     }
-                }).then(function(result) {
-                    if (result.isConfirmed && callback) callback();
                 });
             },
 
@@ -344,40 +327,39 @@
                     confirmButtonClass = 'swal-btn-success';
                 }
 
-                var html = '<div class="text-center">'
-                    + '<p class="text-gray-600 text-sm mb-2">' + cfg.message + '</p>';
-                if (cfg.subMessage) html += '<p class="text-gray-500 text-sm">' + cfg.subMessage + '</p>';
-                html += '</div>';
+                var pesanHtml = '<p class="text-gray-600 text-sm mb-2">' + cfg.message + '</p>';
+                if (cfg.subMessage) pesanHtml += '<p class="text-gray-500 text-sm">' + cfg.subMessage + '</p>';
 
-                Swal.fire({
-                    title: cfg.title,
-                    html: html,
-                    icon: false,
-                    showCancelButton: true,
-                    confirmButtonText: 'Konfirmasi',
-                    cancelButtonText: 'Batal',
-                    reverseButtons: cfg.reverseButtons,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    customClass: {
-                        popup: 'swal2-popup swal2-modal',
-                        confirmButton: confirmButtonClass,
-                        cancelButton: 'swal-btn-cancel'
-                    }
-                }).then(function(result) {
-                    if (result.isConfirmed) {
+                var tipe = 'konfirmasi';
+                if (cfg.confirmColor === 'var(--danger-red)' || cfg.iconColor === 'var(--danger-red)' || /fa-trash/.test(cfg.iconClass || '')) {
+                    tipe = 'hapus';
+                } else if (cfg.confirmColor === 'var(--warning-orange)' || cfg.iconColor === 'var(--warning-orange)') {
+                    tipe = 'warning';
+                }
+
+                window.SwalHelper.konfirmasiDisdukcapil({
+                    judul: cfg.title,
+                    pesan: pesanHtml,
+                    tipe: tipe,
+                    labelOk: cfg.confirmText || 'Konfirmasi',
+                    labelBatal: cfg.cancelText || 'Batal',
+                    onKonfirmasi: function() {
                         if (cfg.showLoadingAfterConfirm) {
                             Swal.fire({
                                 title: cfg.loadingTitle,
                                 html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                                     + '<p class="text-gray-600 mt-4">' + cfg.loadingMessage + '</p>',
                                 allowOutsideClick: false,
+                                allowEscapeKey: false,
                                 showConfirmButton: false,
+                                showDenyButton: false,
+                                showCancelButton: false,
                                 customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                             });
                         }
                         if (typeof cfg.onConfirm === 'function') cfg.onConfirm();
-                    } else {
+                    },
+                    onBatal: function() {
                         if (typeof cfg.onCancel === 'function') cfg.onCancel();
                     }
                 });
@@ -389,7 +371,10 @@
                     html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                         + '<p class="text-gray-600 mt-4">Mohon tunggu sebentar...</p>',
                     allowOutsideClick: false,
+                    allowEscapeKey: false,
                     showConfirmButton: false,
+                    showDenyButton: false,
+                    showCancelButton: false,
                     customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                 });
             },

@@ -198,18 +198,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({ icon: 'info', title: 'Tidak ada langkah berikutnya', text: 'Permohonan ini sudah berada di tahap akhir.', confirmButtonColor: '#2563eb' });
                 return;
             }
-            Swal.fire({
-                icon: false,
-                title: 'Konfirmasi Penerimaan',
-                html: 'Lanjutkan permohonan ke tahap <strong>' + statusBerikut + '</strong>?',
-                showCancelButton: true,
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#e5e7eb',
-                reverseButtons: true
-            }).then((res) => {
-                if (res.isConfirmed) {
+            window.SwalHelper.konfirmasiDisdukcapil({
+                judul: 'Konfirmasi Penerimaan',
+                pesan: 'Lanjutkan permohonan ke tahap <strong>' + statusBerikut + '</strong>?',
+                tipe: 'konfirmasi',
+                labelOk: 'Konfirmasi',
+                onKonfirmasi: function () {
                     inputStatus.value = statusBerikut;
                     inputAlasan.value = '';
                     formStatus.submit();

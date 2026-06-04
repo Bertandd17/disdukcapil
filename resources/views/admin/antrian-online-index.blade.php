@@ -541,21 +541,20 @@
                 ? `Antrian ini memiliki ${queueItem.berkas_count} berkas yang sudah diunggah. Apakah Anda yakin ingin memulai proses antrian ini?`
                 : 'Pengguna belum mengunggah berkas apapun. Apakah Anda yakin ingin melanjutkan?';
 
-            const result = await Swal.fire({
-                title: hasUploads ? 'Mulai Antrian' : 'Konfirmasi - Belum Ada Upload',
-                text: confirmationText,
-                icon: hasUploads ? 'question' : 'warning',
-                showCancelButton: true,
-                confirmButtonColor: hasUploads ? '#16a34a' : '#f59e0b',
-                cancelButtonColor: '#e5e7eb',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal',
-                reverseButtons: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false
+            const tipe = hasUploads ? 'konfirmasi' : 'warning';
+            let confirmed = false;
+
+            await SwalHelper.konfirmasiDisdukcapil({
+                judul: hasUploads ? 'Mulai Antrian' : 'Konfirmasi - Belum Ada Upload',
+                pesan: confirmationText,
+                tipe: tipe,
+                labelOk: 'Konfirmasi',
+                labelBatal: 'Batal',
+                onKonfirmasi: () => { confirmed = true; },
+                onBatal: () => { confirmed = false; }
             });
 
-            if (!result.isConfirmed) {
+            if (!confirmed) {
                 return;
             }
 
@@ -563,10 +562,12 @@
             Swal.fire({
                 title: 'Memproses...',
                 text: 'Mohon tunggu sebentar',
-                icon: 'info',
-                showConfirmButton: false,
                 allowOutsideClick: false,
-                allowEscapeKey: false
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                didOpen: () => Swal.showLoading()
             });
 
             try {

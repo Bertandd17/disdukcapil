@@ -276,31 +276,21 @@
     async function notifUploadProses(namaFile, onSuccess, onError) {
         // Tampilkan loading modal
         Swal.fire({
-            title: '<span style="font-weight: 700;">Mengunggah File...</span>',
-            html: `
-                <div style="text-align: center; padding: 20px 0;">
-                    <div class="swal2-loader" style="margin-bottom: 20px;"></div>
-                    <p style="margin: 0; color: #6b7280; font-size: 14px;">
-                        <i class="fas fa-file-upload" style="margin-right: 8px;"></i>
-                        ${namaFile}
-                    </p>
-                    <p style="margin: 12px 0 0 0; color: #9ca3af; font-size: 12px;">
-                        Mohon tunggu, sedang mengunggah...
-                    </p>
-                </div>
-            `,
+            title: 'Mengunggah ' + namaFile + '...',
+            text: 'Mohon tunggu, sedang mengunggah...',
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
-            background: '#ffffff',
+            showDenyButton: false,
+            showCancelButton: false,
             didOpen: async () => {
                 try {
                     // Jalankan callback upload
                     const result = await onSuccess();
-                    
+
                     // Loading element
                     const loader = Swal.getContainer().querySelector('.swal2-loader');
-                    
+
                     // Tutup loading dan tampilkan toast success
                     Swal.fire({
                         toast: true,
@@ -419,6 +409,8 @@
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
             background: '#ffffff',
             didOpen: () => {
                 Swal.showLoading();
@@ -884,6 +876,8 @@
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
             background: '#ffffff'
         }).fire();
     }

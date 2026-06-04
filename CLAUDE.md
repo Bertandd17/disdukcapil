@@ -1227,3 +1227,4 @@ python scripts/easyocr_ktp.py --input image.jpg       # Run EasyOCR
 ```bash
 php artisan test && echo "All tests passed"
 ```
+

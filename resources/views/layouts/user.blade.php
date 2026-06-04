@@ -280,55 +280,26 @@
 
             // Confirm Dialog
             confirm: function(title, text, callback) {
-                Swal.fire({
-                    title: title,
-                    html: '<p class="text-gray-600 text-sm">' + text + '</p>',
-                    showCancelButton: true,
-                    confirmButtonColor: 'var(--success-green)',
-                    cancelButtonColor: 'var(--neutral-600)',
-                    confirmButtonText: 'Konfirmasi',
-                    cancelButtonText: 'Batal',
-                    showClass: {
-                        popup: 'swal2-show',
-                        backdrop: 'swal2-backdrop-show',
-                        icon: 'swal2-icon-show'
-                    },
-                    hideClass: {
-                        popup: 'swal2-hide',
-                        backdrop: 'swal2-backdrop-hide',
-                        icon: 'swal2-icon-hide'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed && callback) {
-                        callback();
+                window.SwalHelper.konfirmasiDisdukcapil({
+                    judul: title,
+                    pesan: text,
+                    tipe: 'konfirmasi',
+                    labelOk: 'Konfirmasi',
+                    onKonfirmasi: () => {
+                        if (callback) callback();
                     }
                 });
             },
 
             // Delete Confirm
             deleteConfirm: function(title, text, callback) {
-                Swal.fire({
-                    title: title,
-                    html: '<p class="text-gray-600 text-sm">' + text + '</p>',
-                    icon: false,
-                    showCancelButton: true,
-                    confirmButtonColor: 'var(--danger-red)',
-                    cancelButtonColor: 'var(--neutral-600)',
-                    confirmButtonText: 'Konfirmasi',
-                    cancelButtonText: 'Batal',
-                    showClass: {
-                        popup: 'swal2-show',
-                        backdrop: 'swal2-backdrop-show',
-                        icon: 'swal2-icon-show'
-                    },
-                    hideClass: {
-                        popup: 'swal2-hide',
-                        backdrop: 'swal2-backdrop-hide',
-                        icon: 'swal2-icon-hide'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed && callback) {
-                        callback();
+                window.SwalHelper.konfirmasiDisdukcapil({
+                    judul: title,
+                    pesan: text,
+                    tipe: 'hapus',
+                    labelOk: 'Hapus',
+                    onKonfirmasi: () => {
+                        if (callback) callback();
                     }
                 });
             },
@@ -341,6 +312,8 @@
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
+                    showDenyButton: false,
+                    showCancelButton: false,
                     customClass: {
                         popup: 'swal2-modal-popup',
                         htmlContainer: 'swal2-html-container'

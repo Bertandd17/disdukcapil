@@ -74,7 +74,47 @@
       "Bash(mv \"resources/views/layouts/keagaan-backup.blade.php\" \"resources/views/layouts/keagaan-backup.blade.php\")",
       "Bash(ren \"resources/views/layouts/keagaan-backup.blade.php\" \"keagaan-backup.blade.php\")",
       "Bash(grep -v \"^\\\\\\\\.\")",
-      "Bash(grep -v \"^\\\\\\\\.\\\\\\\\.\")"
+      "Bash(grep -v \"^\\\\\\\\.\\\\\\\\.\")",
+      "Bash(git clean *)",
+      "Bash(grep -n \"redirect\\\\|dashboard\\\\|role\\\\|Auth\" \"D:\\\\\\\\Semester 6\\\\\\\\PA 3\\\\\\\\Project\\\\\\\\PA3\\\\\\\\app\\\\\\\\Http\\\\\\\\Controllers\\\\\\\\Auth\\\\\\\\Login_Controller.php\")",
+      "Bash(grep -n \"admin.dashboard\\\\|middleware.*admin\" \"D:\\\\\\\\Semester 6\\\\\\\\PA 3\\\\\\\\Project\\\\\\\\PA3\\\\\\\\routes\\\\\\\\web.php\")",
+      "Bash(grep -n \"dashboard\\\\|redirect\\\\|role\" \"D:\\\\\\\\Semester 6\\\\\\\\PA 3\\\\\\\\Project\\\\\\\\PA3\\\\\\\\app\\\\\\\\Http\\\\\\\\Controllers\\\\\\\\Admin_Controller.php\")",
+      "Bash(grep -n \"dashboard\\\\|redirect\\\\|role\\\\|Auth\" \"D:\\\\\\\\Semester 6\\\\\\\\PA 3\\\\\\\\Project\\\\\\\\PA3\\\\\\\\app\\\\\\\\Http\\\\\\\\Controllers\\\\\\\\Admin\\\\\\\\Admin_Controller.php\")",
+      "Bash(grep *)",
+      "Bash(npx ruflo *)",
+      "Bash(ruflo --help)",
+      "Bash(ruflo status *)",
+      "Bash(ruflo mcp *)",
+      "Bash(claude mcp *)",
+      "Bash(venv/Scripts/python.exe -c ' *)",
+      "Bash(C:/Users/USER/.claude/skills/claude-office-skills/venv/Scripts/python.exe -c ' *)",
+      "Bash(\"C:/Users/USER/.claude/skills/claude-office-skills/venv/Scripts/python.exe\" -m pip install openpyxl --quiet)",
+      "Bash(ls -la *.xlsx *.db *.txt)",
+      "Bash(ls -la public/test-sweetalert-fix.html)",
+      "Bash(awk '{print $9}')",
+      "Bash(git config *)",
+      "Read(//c/Program Files/Git/mingw64/libexec/git-core/**)",
+      "Read(//c/Program Files \\(x86\\)/Git/mingw64/libexec/git-core/**)",
+      "Bash(git help *)",
+      "Bash(GIT_EXEC_PATH=\"C:/Program Files/Git/mingw64/libexec/git-core\" git push origin main)",
+      "Bash(ls resources/lang/ lang/)",
+      "Bash(grep -rln '\"No\"\\\\|'\"'\"'No'\"'\"'' resources/lang/ lang/)",
+      "Bash(echo \"EXIT $?\")",
+      "Bash(git stash *)",
+      "Bash(git worktree *)",
+      "Bash(awk 'NR>=555 && NR<=660' resources/views/admin/antrian-online-index.blade.php)",
+      "Bash(awk 'NR>=370 && NR<=470' resources/views/admin/statistik/dokumen/index.blade.php)",
+      "Bash(awk 'NR>=370 && NR<=395' resources/views/admin/statistik/dokumen/index.blade.php)",
+      "Bash(awk 'NR>=300 && NR<=325' resources/views/layouts/user.blade.php)",
+      "Bash(awk 'NR>=340 && NR<=400' resources/views/layouts/keagamaan.blade.php)",
+      "Bash(awk 'NR>=60 && NR<=100' resources/views/components/admin/sidebar.blade.php)",
+      "Bash(awk 'NR>=150 && NR<=200' resources/views/components/admin/sidebar.blade.php)",
+      "Bash(awk 'NR>=60 && NR<=110' resources/views/components/keagamaan/sidebar.blade.php)",
+      "Bash(awk 'NR>=120 && NR<=170' resources/views/components/user/navbar.blade.php)",
+      "Bash(awk -F: '{print $1}')",
+      "Bash(gh run *)",
+      "Bash(php -d display_errors=1 -r ' *)",
+      "Bash(php _probe_pernikahan.php)"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
@@ -82,6 +122,8 @@
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "ruflo"
+    "ruflo",
+    "claude-flow",
+    "figma"
   ]
 }
