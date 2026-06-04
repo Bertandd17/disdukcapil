@@ -442,6 +442,17 @@ Route::prefix('keagamaan')->name('keagamaan.')->group(function () {
             Route::post('/{id}/upload-dokumen', [KeagamaanPernikahanController::class, 'uploadDokumen'])->name('upload')->whereUuid('id');
             Route::get('/{id}', [KeagamaanPernikahanController::class, 'show'])->name('show')->whereUuid('id');
         });
+
+        // API Pernikahan Keagamaan (untuk AJAX di view keagamaan.pernikahan)
+        Route::prefix('pernikahan')->name('api.pernikahan.keagamaan.')->group(function () {
+            Route::get('/calendar', [KeagamaanPernikahanController::class, 'getCalendar'])->name('calendar');
+            Route::get('/{id}/detail', [KeagamaanPernikahanController::class, 'detailDokumen'])->name('detail')->whereUuid('id');
+            Route::post('/{id}/approve', [KeagamaanPernikahanController::class, 'konfirmasiJemaat'])->name('approve')->whereUuid('id');
+            Route::post('/{id}/reject', [KeagamaanPernikahanController::class, 'rejectJemaat'])->name('reject')->whereUuid('id');
+            Route::post('/{id}/reject-doc', [KeagamaanPernikahanController::class, 'rejectDokumen'])->name('reject-doc')->whereUuid('id');
+            Route::post('/{id}/verify-all', [KeagamaanPernikahanController::class, 'verifyAllDocuments'])->name('verify-all')->whereUuid('id');
+            Route::post('/{id}/upload-berkas', [KeagamaanPernikahanController::class, 'uploadDokumen'])->name('upload-berkas')->whereUuid('id');
+        });
     });
 });
 
