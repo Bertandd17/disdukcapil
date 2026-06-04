@@ -163,7 +163,7 @@
                         </div>
                         
                         @if($berkas->{$dok['field']})
-                            <a href="{{ asset('storage/'.$berkas->{$dok['field']}) }}" target="_blank"
+                            <a href="{{ route('admin.lihat-berkas-kematian', ['uuid' => $berkas->uuid, 'field' => $dok['field']]) }}" target="_blank"
                             class="w-full bg-green-600 text-white hover:bg-green-700 py-2 rounded-lg text-sm font-semibold transition text-center flex items-center justify-center">
                                 <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
                             </a>

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="min-h-screen bg-gray-50">
- {{- Page Header -}}
+ {{-- Page Header --}}
  <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-6 md:p-8 text-white mb-6 reveal shadow-lg">
  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
  <div>
@@ -15,7 +15,7 @@
  <div class="flex items-center gap-2">
  <i class="fas fa-calendar-alt"></i>
  <span id="currentDate">{{ now()->isoFormat('dddd, D MMMM Y') }}</span>
- </div>
+ </div>     
  <div class="flex items-center gap-2">
  <i class="fas fa-clock"></i>
  <span id="currentTime">{{ now()->format('H:i') }} WIB</span>
@@ -24,7 +24,7 @@
  </div>
  </div>
 
- {{- Quick Stats -}}
+ {{-- Quick Stats --}}
  @php
  $statistics = [
  'total' => \App\Models\LayananPernikahan::count(),
@@ -133,9 +133,9 @@
  </div>
  </div>
 
- {{- Main Content: Calendar & List -}}
+ {{-- Main Content: Calendar & List --}}
  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
- {{- Calendar View -}}
+ {{-- Calendar View --}}
  <div class="lg:col-span-1">
  <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
  <div class="p-4 border-b border-gray-100 flex items-center justify-between">
@@ -165,7 +165,7 @@
  </div>
  </div>
 
- {{- List View -}}
+ {{-- List View --}}
  <div class="lg:col-span-1">
  <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
  <div class="p-4 border-b border-gray-100">
@@ -176,29 +176,7 @@
  </div>
  </div>
 
- {{- Tabs -}}
- <div class="flex flex-wrap gap-0 border-b border-gray-100 text-xs">
- <button class="tab-btn flex-1 min-w-fit px-3 py-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-center" data-status="">
- Semua
- </button>
- <button class="tab-btn flex-1 min-w-fit px-3 py-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-center" data-status="MENUNGGU_APPROVE_TANGGAL">
- Pending Admin
- </button>
- <button class="tab-btn flex-1 min-w-fit px-3 py-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-center" data-status="TANGGAL_DISETUJUI">
- Upload Dokumen
- </button>
- <button class="tab-btn flex-1 min-w-fit px-3 py-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-center" data-status="DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI">
- Verifikasi
- </button>
- <button class="tab-btn flex-1 min-w-fit px-3 py-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-center" data-status="SELESAI">
- Selesai
- </button>
- <button class="tab-btn flex-1 min-w-fit px-3 py-2 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-center" data-status="ditolak">
- Ditolak
- </button>
- </div>
-
- {{- List -}}
+ {{-- List --}}
  <div id="pernikahanList" class="divide-y divide-gray-100 max-h-[500px] overflow-y-auto">
  @php
  $currentStatus = request('status', '');
@@ -292,7 +270,7 @@
  </div>
 </div>
 
-{{- Modal Detail -}}
+{{-- Modal Detail --}}
 <div id="detailModal" class="fixed inset-0 bg-black/50 z-50 items-center justify-center p-4" style="display:none;">
  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
  <div class="p-6 border-b border-gray-100 flex items-center justify-between">
@@ -305,12 +283,12 @@
  </button>
  </div>
  <div id="modalContent" class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
- {{- Content will be loaded dynamically -}}
+ {{-- Content will be loaded dynamically --}}
  </div>
  </div>
 </div>
 
-{{- Modal Konfirmasi -}}
+{{-- Modal Konfirmasi --}}
 <div id="confirmModal" class="fixed inset-0 z-50 items-center justify-center p-4" style="display:none;">
  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
  <div class="p-6 text-center">
@@ -335,7 +313,7 @@
  </div>
 </div>
 
-{{- Modal Upload Dokumen Final -}}
+{{-- Modal Upload Dokumen Final --}}
 <div id="uploadDokumenFinalModal" class="fixed inset-0 bg-black/50 z-50 items-center justify-center p-4" style="display:none;">
  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
  <div class="p-6 border-b border-gray-100 flex items-center justify-between">
@@ -355,7 +333,7 @@
  Format yang didukung: <strong>PDF</strong> (maks. 5 MB per file). Anda dapat mengupload sebagian dokumen terlebih dahulu - status akan otomatis menjadi <strong>Selesai</strong> ketika ke-4 dokumen lengkap.
  </div>
 
- {{- Akta Pernikahan -}}
+ {{-- Akta Pernikahan --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Akta Pernikahan</label>
  <p class="text-xs text-gray-500 mb-2">Akta resmi pencatatan perkawinan</p>
@@ -365,7 +343,7 @@
  <div id="preview_akta_pernikahan" class="mt-2 text-xs"></div>
  </div>
 
- {{- KK Pasangan -}}
+ {{-- KK Pasangan --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru - Pasangan Suami-Istri</label>
  <p class="text-xs text-gray-500 mb-2">KK baru untuk pasangan mempelai</p>
@@ -375,7 +353,7 @@
  <div id="preview_kk_pasangan" class="mt-2 text-xs"></div>
  </div>
 
- {{- KK Ortu Pria -}}
+ {{-- KK Ortu Pria --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru - Orang Tua Mempelai Pria</label>
  <p class="text-xs text-gray-500 mb-2">KK orang tua mempelai pria (setelah pengeluaran mempelai pria)</p>
@@ -385,7 +363,7 @@
  <div id="preview_kk_ortu_pria" class="mt-2 text-xs"></div>
  </div>
 
- {{- KK Ortu Wanita -}}
+ {{-- KK Ortu Wanita --}}
  <div class="border border-gray-200 rounded-xl p-4">
  <label class="block text-sm font-semibold text-gray-800 mb-1">Kartu Keluarga Baru - Orang Tua Mempelai Wanita</label>
  <p class="text-xs text-gray-500 mb-2">KK orang tua mempelai wanita (setelah pengeluaran mempelai wanita)</p>
@@ -458,11 +436,9 @@
  font-weight: 700;
  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
-/* Icon checkmark untuk tanggal yang ada event */
 .calendar-day.has-event .event-icon {
  display: flex !important;
 }
-/* Jika hari ini ADA EVENT, gunakan warna hijau dengan border biru */
 .calendar-day.today.has-event {
  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
  color: white;
@@ -506,19 +482,66 @@
 </style>
 
 <script>
+const DOKUMEN_LABEL_MAP = {
+ // Surat keterangan
+ 'surat_keterangan':             'Surat Keterangan Gereja',
+ 'surat_keterangan_gereja':      'Surat Keterangan Gereja',
+ 'surat_keterangan_belum_menikah': 'Surat Keterangan Belum Menikah',
+
+ // KTP
+ 'ktp_mempelai':                 'KTP Mempelai',
+ 'ktp_mempelai_pria':            'KTP Mempelai Pria',
+ 'ktp_mempelai_wanita':          'KTP Mempelai Wanita',
+ 'ktp_saksi':                    'KTP Saksi',
+ 'ktp_saksi_1':                  'KTP Saksi 1',
+ 'ktp_saksi_2':                  'KTP Saksi 2',
+
+ // Kartu Keluarga
+ 'kartu_keluarga':               'Kartu Keluarga',
+ 'kartu_keluarga_pria':          'Kartu Keluarga Mempelai Pria',
+ 'kartu_keluarga_wanita':        'Kartu Keluarga Mempelai Wanita',
+ 'kk':                           'Kartu Keluarga',
+ 'kk_pria':                      'Kartu Keluarga Mempelai Pria',
+ 'kk_wanita':                    'Kartu Keluarga Mempelai Wanita',
+
+ // Surat baptis
+ 'surat_baptis':                 'Surat Baptis',
+ 'surat_baptis_pria':            'Surat Baptis Mempelai Pria',
+ 'surat_baptis_wanita':          'Surat Baptis Mempelai Wanita',
+
+ // Dokumen lainnya
+ 'surat_izin_ortu':              'Surat Izin Orang Tua',
+ 'surat_izin_orang_tua':         'Surat Izin Orang Tua',
+ 'surat_cerai':                  'Surat Cerai',
+ 'akta_kematian':                'Akta Kematian Pasangan',
+ 'pas_foto':                     'Pas Foto',
+ 'ijazah':                       'Ijazah',
+ 'akta_kelahiran':               'Akta Kelahiran',
+ 'akta_kelahiran_pria':          'Akta Kelahiran Mempelai Pria',
+ 'akta_kelahiran_wanita':        'Akta Kelahiran Mempelai Wanita',
+};
+
+function getDokumenLabel(d) {
+ const raw = d.jenis_dokumen_label || d.jenis_dokumen || '';
+ if (DOKUMEN_LABEL_MAP[raw]) {
+ return DOKUMEN_LABEL_MAP[raw];
+ }
+ // Fallback: ubah snake_case menjadi Title Case
+ return raw
+ .replace(/_/g, ' ')
+ .replace(/\b\w/g, c => c.toUpperCase());
+}
+
 // Set active tab on page load
 document.addEventListener('DOMContentLoaded', function() {
  const currentStatus = '{{ request('status', '') }}';
 
- // Reset all tabs
  document.querySelectorAll('.tab-btn').forEach(btn => {
  btn.classList.remove('active');
- // Remove inline active styles
  btn.classList.remove('border-blue-600', 'text-blue-600');
  btn.classList.add('border-transparent', 'text-gray-500');
  });
 
- // Set active tab based on current status
  let activeTab = null;
  document.querySelectorAll('.tab-btn').forEach(btn => {
  if (btn.dataset.status === currentStatus) {
@@ -526,7 +549,6 @@ document.addEventListener('DOMContentLoaded', function() {
  }
  });
 
- // Default to first tab if no match
  if (!activeTab) {
  activeTab = document.querySelector('.tab-btn[data-status=""]');
  }
@@ -542,15 +564,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Calendar
 let currentDate = new Date();
-// Data kalender di-render dari PHP (server-side) seperti keagamaan
 let calendarData = @json($calendarData);
-
-// DEBUG: Log initial calendar data
-console.log('=== INITIAL CALENDAR DATA FROM PHP ===');
-console.log('calendarData:', calendarData);
-console.log('Event dates:', Object.keys(calendarData));
-console.log('Number of events:', Object.keys(calendarData).length);
-// ===========================================
 
 function renderCalendar() {
  const grid = document.getElementById('calendarGrid');
@@ -571,13 +585,8 @@ function renderCalendar() {
 
  let html = '';
 
- // DEBUG: Log calendarData untuk debugging
- console.log('renderCalendar called - calendarData:', calendarData);
- const eventDates = Object.keys(calendarData).filter(k => calendarData[k].length > 0);
- console.log('Dates with events:', eventDates);
-
  // Days from previous month
- for (let i = firstDay - 1; i >= 0; i-) {
+ for (let i = firstDay - 1; i >= 0; i--) {
  html += `<div class="calendar-day other-month">${daysInPrevMonth - i}</div>`;
  }
 
@@ -590,34 +599,25 @@ function renderCalendar() {
  const hasEvent = calendarData[dateKey] && calendarData[dateKey].length > 0;
  const eventCount = hasEvent ? calendarData[dateKey].length : 0;
 
- // DEBUG: Log untuk tanggal yang memiliki event
- if (hasEvent) {
- console.log(`Date ${dateKey} has ${eventCount} event(s):`, calendarData[dateKey]);
- }
-
  let classes = 'calendar-day';
  if (isToday) classes += ' today';
  if (hasEvent) classes += ' has-event';
 
- // Icon checkmark untuk tanggal yang ada event
  const eventIcon = hasEvent
  ? `<div class="event-icon absolute bottom-1 right-1 w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
  <i class="fas fa-check text-white text-[8px]"></i>
  </div>`
  : '';
 
- // Badge jumlah event jika lebih dari 1
  const countBadge = eventCount > 1
  ? `<span class="absolute top-1 right-1 bg-white text-green-600 rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold">${eventCount}</span>`
  : '';
 
- let dayHtml = `<div class="${classes}" ${hasEvent ? `onclick="showDateEvents('${dateKey}')"` : ''}>
+ html += `<div class="${classes}" ${hasEvent ? `onclick="showDateEvents('${dateKey}')"` : ''}>
  <span class="relative z-10">${day}</span>
  ${eventIcon}
  ${countBadge}
  </div>`;
-
- html += dayHtml;
  }
 
  // Days from next month
@@ -638,14 +638,12 @@ function changeMonth(delta) {
 async function loadCalendarData() {
  const year = currentDate.getFullYear();
  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
- const currentMonth = currentDate.getMonth(); // 0-11
+ const currentMonth = currentDate.getMonth();
  const currentYear = currentDate.getFullYear();
 
- // Cek apakah ini adalah bulan saat ini (May 2026)
  const now = new Date();
  const isCurrentMonth = now.getMonth() === currentMonth && now.getFullYear() === currentYear;
 
- // Simpan data awal dari PHP agar tidak hilang
  if (!window.initialCalendarData) {
  window.initialCalendarData = @json($calendarData);
  window.initialCalendarMonth = now.getMonth();
@@ -653,18 +651,13 @@ async function loadCalendarData() {
  }
 
  if (isCurrentMonth) {
- // Gunakan data awal dari PHP untuk bulan saat ini
  calendarData = window.initialCalendarData;
- console.log('Using initial calendar data from PHP for current month:', calendarData);
  renderCalendar();
  return;
  }
 
- // Untuk bulan lain, fetch dari server
  try {
  const url = `{{ route('admin.pernikahan.calendar-data') }}?year=${year}&month=${month}`;
- console.log('Fetching calendar data from:', url);
-
  const response = await fetch(url, {
  method: 'GET',
  headers: {
@@ -674,28 +667,18 @@ async function loadCalendarData() {
  credentials: 'same-origin'
  });
 
- console.log('Response status:', response.status, response.statusText);
-
- if (!response.ok) {
- console.error('Response not OK:', response.status, response.statusText);
- throw new Error('Failed to load: ' + response.status);
- }
+ if (!response.ok) throw new Error('Failed to load: ' + response.status);
 
  const data = await response.json();
- console.log('API Response:', data);
 
  if (data.success && data.data) {
  calendarData = data.data;
- console.log('Calendar data loaded for', year, month, ':', calendarData);
- console.log('Event dates:', Object.keys(calendarData));
  } else {
- console.warn('API returned success=false or no data');
  calendarData = {};
  }
  renderCalendar();
  } catch (error) {
  console.error('Error loading calendar:', error);
- // Jika fetch gagal, gunakan data kosong untuk bulan lain
  calendarData = {};
  renderCalendar();
  }
@@ -706,9 +689,7 @@ function showDateEvents(dateKey) {
  if (events.length === 1) {
  showDetail(events[0].id);
  } else if (events.length > 1) {
- const modal = document.getElementById('detailModal');
  const content = document.getElementById('modalContent');
-
  content.innerHTML = `
  <h4 class="font-bold text-gray-800 mb-4">Pernikahan pada ${dateKey}</h4>
  <div class="space-y-3">
@@ -721,7 +702,6 @@ function showDateEvents(dateKey) {
  `).join('')}
  </div>
  `;
-
  modalShow('detailModal');
  }
 }
@@ -730,7 +710,6 @@ function showDateEvents(dateKey) {
 function filterByStatus(status, event) {
  if (event) event.stopPropagation();
 
- // Update active tab
  document.querySelectorAll('.tab-btn').forEach(btn => {
  btn.classList.remove('active');
  btn.classList.remove('border-blue-600', 'text-blue-600');
@@ -743,15 +722,11 @@ function filterByStatus(status, event) {
  }
  });
 
- // Filter the list
  const listItems = document.querySelectorAll('#pernikahanList > div');
  let visibleCount = 0;
 
  listItems.forEach(item => {
- if (item.classList.contains('text-center')) {
- // Skip "no data" message
- return;
- }
+ if (item.classList.contains('text-center')) return;
 
  const itemStatus = item.dataset.status || '';
  const isRejected = item.dataset.isRejected === '1';
@@ -769,14 +744,12 @@ function filterByStatus(status, event) {
  if (shouldShow) visibleCount++;
  });
 
- // Show/hide no data message
  const noDataMsg = document.querySelector('#pernikahanList .text-center');
  if (noDataMsg) {
  noDataMsg.style.display = visibleCount === 0 ? '' : 'none';
  }
 }
 
-// Tab click handlers
 document.querySelectorAll('.tab-btn').forEach(btn => {
  btn.addEventListener('click', (e) => {
  e.preventDefault();
@@ -797,11 +770,6 @@ document.getElementById('searchInput').addEventListener('input', function() {
  }, 300);
 });
 
-// -
-// HELPER FUNCTIONS
-// -
-
-// Escape HTML untuk mencegah XSS
 function escHtml(str) {
  if (!str) return '';
  return String(str)
@@ -812,32 +780,25 @@ function escHtml(str) {
  .replace(/'/g, '&#039;');
 }
 
-// Tampilkan modal dengan style="display:flex/none"
 function modalShow(modalId) {
  const modal = document.getElementById(modalId);
- if (modal) {
- modal.style.display = 'flex';
- }
+ if (modal) modal.style.display = 'flex';
 }
 
-// Sembunyikan modal
 function modalHide(modalId) {
  const modal = document.getElementById(modalId);
- if (modal) {
- modal.style.display = 'none';
- }
+ if (modal) modal.style.display = 'none';
 }
 
-// -
-// DETAIL MODAL - Style Baru
-// -
+// ============================================================
+// DETAIL MODAL
+// ============================================================
 
 let currentPernikahanData = null;
 
 async function showDetail(pernikahanId) {
  if (!pernikahanId) return;
 
- // Tampilkan loading dengan SwalHelper
  SwalHelper.loading('Memuat detail...');
 
  try {
@@ -864,11 +825,6 @@ async function showDetail(pernikahanId) {
  const p = result.data;
  currentPernikahanData = p;
 
- // - Status-based documents - //
- // Status: Menunggu Persetujuan Tanggal - Tampilkan KTP files
- // Status: Menunggu Verifikasi Dokumen - Tampilkan dokumen keagamaan
- // Status: Menunggu Verifikasi Dokumen --- Tampilkan dokumen keagamaan
-
  let documentsHtml = '';
  const isMenungguTanggal = p.status === 'MENUNGGU_APPROVE_TANGGAL';
  const isVerifikasiDokumen = p.status === 'DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI' ||
@@ -877,7 +833,6 @@ async function showDetail(pernikahanId) {
  p.status === 'SELESAI';
 
  if (isMenungguTanggal) {
- // Tampilkan KTP files untuk status Menunggu Persetujuan Tanggal
  const ktpEntries = [
  { key: 'mempelai_pria', label: 'KTP Mempelai Pria' },
  { key: 'mempelai_wanita', label: 'KTP Mempelai Wanita' },
@@ -904,12 +859,14 @@ async function showDetail(pernikahanId) {
  </div>
  `;
  }
+
  } else if (isVerifikasiDokumen && p.dokumen_keagamaan && p.dokumen_keagamaan.length > 0) {
- // Tampilkan dokumen keagamaan untuk status Menunggu Verifikasi Dokumen
- const dokumenHtml = p.dokumen_keagamaan.map(d => `
+ const dokumenHtml = p.dokumen_keagamaan.map(d => {
+ const label = getDokumenLabel(d);
+ return `
  <div class="border rounded-lg p-3 bg-gray-50">
  <div class="flex items-center justify-between">
- <p class="text-sm font-medium text-gray-700">${escHtml(d.jenis_dokumen_label)}</p>
+ <p class="text-sm font-medium text-gray-700">${escHtml(label)}</p>
  ${d.file_url ? `
  <a href="${escHtml(d.file_url)}" target="_blank"
  class="px-2 py-1 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 text-xs inline-flex items-center">
@@ -919,7 +876,8 @@ async function showDetail(pernikahanId) {
  </div>
  ${d.catatan_verifikasi ? `<p class="text-xs text-red-600 mt-2">${escHtml(d.catatan_verifikasi)}</p>` : ''}
  </div>
- `).join('');
+ `;
+ }).join('');
 
  documentsHtml = `
  <div class="border-t pt-3">
@@ -929,7 +887,6 @@ async function showDetail(pernikahanId) {
  `;
  }
 
- // - Build konten modal - //
  const contentDiv = document.getElementById('modalContent');
  const nomorAntrianEl = document.getElementById('modalNomorAntrian');
 
@@ -937,19 +894,16 @@ async function showDetail(pernikahanId) {
 
  contentDiv.innerHTML = `
  <div class="space-y-4">
- <!- Status Badge ->
  <div class="flex items-center justify-between">
  <span class="text-sm text-gray-500">Status</span>
  <span class="px-3 py-1 rounded-full text-xs font-medium ${escHtml(p.status_color)}">${escHtml(p.status_label)}</span>
  </div>
 
- <!- Nomor Antrian ->
  <div class="bg-gray-50 rounded-xl p-3">
  <p class="text-xs text-gray-500 mb-1">Nomor Antrian</p>
  <p class="font-mono font-bold text-blue-600">${escHtml(p.nomor_antrian)}</p>
  </div>
 
- <!- Pemohon ->
  ${p.nama_pemohon ? `
  <div class="border-t pt-3">
  <p class="text-xs text-gray-500 mb-1">Pemohon</p>
@@ -958,10 +912,8 @@ async function showDetail(pernikahanId) {
  </div>
  ` : ''}
 
- <!- Documents (KTP or Dokumen Keagamaan based on status) ->
  ${documentsHtml}
 
- <!- Tanggal & Gereja ->
  <div class="border-t pt-3 space-y-2">
  <div class="flex justify-between items-center">
  <span class="text-sm text-gray-500">Tanggal Pernikahan</span>
@@ -973,7 +925,6 @@ async function showDetail(pernikahanId) {
  </div>
  </div>
 
- <!- Catatan Keagamaan ->
  ${p.catatan_keagamaan ? `
  <div class="border-t pt-3">
  <p class="text-xs text-gray-500 mb-1">Catatan Keagamaan</p>
@@ -981,7 +932,6 @@ async function showDetail(pernikahanId) {
  </div>
  ` : ''}
 
- <!- Alasan Ditolak ->
  ${p.alasan_ditolak ? `
  <div class="border-t pt-3">
  <p class="text-xs text-gray-500 mb-1">Alasan Ditolak</p>
@@ -990,7 +940,6 @@ async function showDetail(pernikahanId) {
  ` : ''}
  </div>
 
- <!- Action Buttons ->
  ${p.can_konfirmasi ? `
  <div class="flex gap-3 mt-6">
  <button onclick="openTolakModal('${escHtml(p.pernikahan_id)}', '${escHtml(p.status)}')"
@@ -1003,12 +952,7 @@ async function showDetail(pernikahanId) {
  </button>
  </div>
  ` : ''}
-
-
  `;
-
- // Simpan data pernikahan untuk digunakan saat verifikasi
- currentPernikahanData = p;
 
  modalShow('detailModal');
 
@@ -1023,7 +967,6 @@ async function showDetail(pernikahanId) {
 function openTolakModal(pernikahanId, status) {
  modalHide('detailModal');
 
- const modal = document.getElementById('confirmModal');
  const icon = document.getElementById('confirmIcon');
  const title = document.getElementById('confirmTitle');
  const message = document.getElementById('confirmMessage');
@@ -1038,21 +981,18 @@ function openTolakModal(pernikahanId, status) {
  icon.className = 'w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 bg-red-100';
  icon.innerHTML = '<i class="fas fa-times text-3xl text-red-600"></i>';
 
- // Tampilkan pesan berbeda berdasarkan status
  if (status === 'MENUNGGU_APPROVE_TANGGAL') {
  title.textContent = 'Tolak Tanggal Pernikahan?';
  message.textContent = 'Tanggal perkawinan akan ditolak. Keagamaan perlu mengajukan tanggal baru.';
- btn.textContent = 'Ya, Tolak';
  } else if (status === 'DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI') {
  title.textContent = 'Tolak Dokumen?';
  message.textContent = 'Dokumen akan ditolak dan keagamaan perlu mengupload ulang dokumen yang diperbaiki.';
- btn.textContent = 'Ya, Tolak';
  } else {
  title.textContent = 'Tolak?';
  message.textContent = 'Apakah Anda yakin ingin menolak permintaan ini?';
- btn.textContent = 'Ya, Tolak';
  }
 
+ btn.textContent = 'Ya, Tolak';
  btn.className = 'flex-1 px-4 py-3 rounded-xl font-medium text-white bg-red-600 hover:bg-red-700 transition-colors';
  reasonContainer.classList.remove('hidden');
  reasonInput.required = true;
@@ -1066,7 +1006,6 @@ function openTolakModal(pernikahanId, status) {
 function openKonfirmasiModal(pernikahanId, status) {
  modalHide('detailModal');
 
- const modal = document.getElementById('confirmModal');
  const icon = document.getElementById('confirmIcon');
  const title = document.getElementById('confirmTitle');
  const message = document.getElementById('confirmMessage');
@@ -1080,7 +1019,6 @@ function openKonfirmasiModal(pernikahanId, status) {
  icon.className = 'w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 bg-green-100';
  icon.innerHTML = '<i class="fas fa-check text-3xl text-green-600"></i>';
 
- // Tampilkan pesan berbeda berdasarkan status
  if (status === 'MENUNGGU_APPROVE_TANGGAL') {
  title.textContent = 'Setujui Tanggal Pernikahan?';
  message.textContent = 'Tanggal perkawinan akan disetujui dan keagamaan dapat mengupload dokumen.';
@@ -1106,22 +1044,13 @@ function closeModal() {
  modalHide('detailModal');
 }
 
-function setupModalActions(id) {
- // Setup tombol approve/reject jika ada
- const approveBtn = document.querySelector('[data-action="approve"]');
- const rejectBtn = document.querySelector('[data-action="reject"]');
-
- if (approveBtn) {
- approveBtn.addEventListener('click', () => showConfirm('approve', id));
- }
- if (rejectBtn) {
- rejectBtn.addEventListener('click', () => showConfirm('reject', id));
- }
+function closeConfirmModal() {
+ modalHide('confirmModal');
+ document.getElementById('confirmReason').value = '';
 }
 
-// Confirm Modal
+// Confirm Modal (legacy)
 function showConfirm(action, id) {
- const modal = document.getElementById('confirmModal');
  const icon = document.getElementById('confirmIcon');
  const title = document.getElementById('confirmTitle');
  const message = document.getElementById('confirmMessage');
@@ -1157,11 +1086,6 @@ function showConfirm(action, id) {
  modalShow('confirmModal');
 }
 
-function closeConfirmModal() {
- modalHide('confirmModal');
- document.getElementById('confirmReason').value = '';
-}
-
 async function executeConfirm() {
  const id = document.getElementById('currentPernikahanId').value;
  const action = document.getElementById('currentAction').value;
@@ -1181,27 +1105,18 @@ async function executeConfirm() {
  let url, body;
 
  if (action === 'approve') {
- // Tentukan endpoint berdasarkan status
  if (status === 'DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI') {
- // Verifikasi dokumen - ambil semua dokumen dari data yang ditampilkan
  const dokumenData = currentPernikahanData?.dokumen_keagamaan || [];
  if (dokumenData.length === 0) {
  showToast('error', 'Tidak ada dokumen untuk diverifikasi');
  return;
  }
-
- // Siapkan data verifikasi
  const dokumenIds = dokumenData.map(d => d.id);
  const statuses = dokumenData.map(() => 'DIVERIFIKASI');
 
  url = '{{ url('/admin/pernikahan') }}/' + id + '/verifikasi';
- body = JSON.stringify({
- dokumen_id: dokumenIds,
- status: statuses,
- catatan: []
- });
+ body = JSON.stringify({ dokumen_id: dokumenIds, status: statuses, catatan: [] });
  } else {
- // Approve tanggal (default)
  url = '{{ url('/admin/pernikahan') }}/' + id + '/approve-tanggal';
  body = JSON.stringify({});
  }
@@ -1227,10 +1142,7 @@ async function executeConfirm() {
  if (result.success) {
  closeConfirmModal();
  closeModal();
-
  showToast('success', result.message || 'Operasi berhasil');
-
- // Update daftar dan kalender tanpa reload
  await updateUIAfterAction(id, action);
  } else {
  showToast('error', result.message || 'Operasi gagal');
@@ -1241,7 +1153,6 @@ async function executeConfirm() {
  }
 }
 
-// Toast helper tanpa backdrop
 function showToast(type, message) {
  const Toast = Swal.mixin({
  toast: true,
@@ -1251,14 +1162,8 @@ function showToast(type, message) {
  timerProgressBar: true,
  background: '#ffffff',
  backdrop: false,
- showClass: {
- popup: 'swal2-show',
- backdrop: ''
- },
- hideClass: {
- popup: 'swal2-hide',
- backdrop: ''
- }
+ showClass: { popup: 'swal2-show', backdrop: '' },
+ hideClass: { popup: 'swal2-hide', backdrop: '' }
  });
 
  Toast.fire({
@@ -1268,28 +1173,16 @@ function showToast(type, message) {
  });
 }
 
-// Update UI setelah approve/reject tanpa reload halaman
 async function updateUIAfterAction(pernikahanId, action) {
  try {
- // 1. Reload kalender data dari server dulu untuk sinkronisasi
  await loadCalendarData();
 
- // 2. Jika approve, pastikan event ditambahkan ke kalender
  if (action === 'approve' && currentPernikahanData && currentPernikahanData.tanggal_perkawinan_raw) {
- const tanggal = currentPernikahanData.tanggal_perkawinan_raw; // format YYYY-MM-DD
- console.log('Approve action - tanggal:', tanggal, 'pernikahanId:', pernikahanId);
- console.log('currentPernikahanData:', currentPernikahanData);
+ const tanggal = currentPernikahanData.tanggal_perkawinan_raw;
  if (tanggal && calendarData) {
- // Cek apakah event sudah ada di calendarData (dari server)
  const eventExists = calendarData[tanggal] && calendarData[tanggal].some(e => e.id === pernikahanId);
- console.log('Event exists in calendarData:', eventExists, 'calendarData[tanggal]:', calendarData[tanggal]);
-
- // Jika belum ada, tambahkan secara manual
  if (!eventExists) {
- if (!calendarData[tanggal]) {
- calendarData[tanggal] = [];
- }
- // Tambahkan event ke calendarData
+ if (!calendarData[tanggal]) calendarData[tanggal] = [];
  const newEvent = {
  id: pernikahanId,
  nama_pria: currentPernikahanData.nama_mempelai_pria,
@@ -1297,37 +1190,25 @@ async function updateUIAfterAction(pernikahanId, action) {
  gereja: currentPernikahanData.nama_gereja
  };
  calendarData[tanggal].push(newEvent);
- console.log('Event added manually to calendarData:', calendarData[tanggal]);
 
- // Juga tambahkan ke initialCalendarData agar persisten
  if (window.initialCalendarData) {
- if (!window.initialCalendarData[tanggal]) {
- window.initialCalendarData[tanggal] = [];
- }
- // Cek duplikat di initial data juga
+ if (!window.initialCalendarData[tanggal]) window.initialCalendarData[tanggal] = [];
  const existsInInitial = window.initialCalendarData[tanggal].some(e => e.id === pernikahanId);
- if (!existsInInitial) {
- window.initialCalendarData[tanggal].push(newEvent);
- console.log('Event also added to initialCalendarData:', window.initialCalendarData[tanggal]);
+ if (!existsInInitial) window.initialCalendarData[tanggal].push(newEvent);
  }
  }
- }
- // Re-render kalender untuk menampilkan penanda baru
  renderCalendar();
  }
  }
 
- // 3. Update/remove item dari list
  const listItem = document.querySelector(`[onclick="showDetail('${pernikahanId}')"]`);
  if (listItem && action === 'approve') {
- // Jika approve, update status visual item tersebut
  const statusLabel = listItem.querySelector('.text-blue-600, .text-cyan-600');
  if (statusLabel) {
  statusLabel.classList.remove('text-blue-600');
  statusLabel.classList.add('text-cyan-600');
  statusLabel.textContent = 'Tanggal Disetujui';
  }
- // Update icon
  const iconContainer = listItem.querySelector('.bg-blue-100');
  if (iconContainer) {
  iconContainer.classList.remove('bg-blue-100');
@@ -1339,7 +1220,6 @@ async function updateUIAfterAction(pernikahanId, action) {
  }
  }
  } else if (listItem && action === 'reject') {
- // Jika reject, update visual ke status rejected
  listItem.setAttribute('data-is-rejected', '1');
  const statusLabel = listItem.querySelector('.text-blue-600');
  if (statusLabel) {
@@ -1359,7 +1239,6 @@ async function updateUIAfterAction(pernikahanId, action) {
  }
  }
 
- // 4. Refresh list dari server untuk data terbaru
  const listResponse = await fetch(window.location.href);
  const listText = await listResponse.text();
  const parser = new DOMParser();
@@ -1367,7 +1246,6 @@ async function updateUIAfterAction(pernikahanId, action) {
  const newList = newDoc.getElementById('pernikahanList');
  if (newList) {
  document.getElementById('pernikahanList').innerHTML = newList.innerHTML;
- // Re-attach event listeners untuk tab
  document.querySelectorAll('.tab-btn').forEach(btn => {
  btn.addEventListener('click', (e) => {
  e.preventDefault();
@@ -1380,20 +1258,6 @@ async function updateUIAfterAction(pernikahanId, action) {
  console.error('Error updating UI:', error);
  }
 }
-
-async function verifyAllDocuments(id) {
- // Untuk sementara, gunakan approve
- SwalHelper.info('Fitur verifikasi akan segera tersedia');
-}
-
-async function handleFileUpload(input, id, type) {
- // Untuk sementara
- SwalHelper.info('Fitur upload berkas akan segera tersedia');
-}
-
-// ============================================================
-// UPLOAD DOKUMEN FINAL (Akta Pernikahan + 3 KK Baru)
-// ============================================================
 
 function renderDokumenFinalList(df) {
  if (!df) return '';
@@ -1441,7 +1305,6 @@ function renderDokumenFinalList(df) {
 function openUploadDokumenFinalModal(pernikahanId) {
  document.getElementById('currentPernikahanId').value = pernikahanId;
 
- // Reset form & preview
  const form = document.getElementById('uploadDokumenFinalForm');
  form.reset();
  ['akta_pernikahan', 'kk_pasangan', 'kk_ortu_pria', 'kk_ortu_wanita'].forEach(k => {
@@ -1457,7 +1320,6 @@ function closeUploadDokumenFinalModal() {
  modalHide('uploadDokumenFinalModal');
 }
 
-// Preview nama file yang dipilih
 ['file_akta_pernikahan', 'file_kk_pasangan', 'file_kk_ortu_pria', 'file_kk_ortu_wanita'].forEach(inputId => {
  document.addEventListener('change', function (e) {
  if (e.target && e.target.id === inputId) {
@@ -1475,7 +1337,6 @@ function closeUploadDokumenFinalModal() {
  });
 });
 
-// Submit form
 document.getElementById('uploadDokumenFinalForm').addEventListener('submit', async function (e) {
  e.preventDefault();
 
@@ -1487,7 +1348,6 @@ document.getElementById('uploadDokumenFinalForm').addEventListener('submit', asy
 
  const formData = new FormData(this);
 
- // Cek minimal ada satu file
  const fields = ['file_akta_pernikahan', 'file_kk_pasangan', 'file_kk_ortu_pria', 'file_kk_ortu_wanita'];
  const hasAnyFile = fields.some(f => {
  const input = document.getElementById(f);
@@ -1537,7 +1397,6 @@ document.getElementById('uploadDokumenFinalForm').addEventListener('submit', asy
  showToast('success', result.message || 'Dokumen final tersimpan');
  closeUploadDokumenFinalModal();
 
- // Refresh list
  if (typeof updateUIAfterAction === 'function') {
  await updateUIAfterAction(pernikahanId, 'upload_final');
  }
@@ -1550,7 +1409,6 @@ document.getElementById('uploadDokumenFinalForm').addEventListener('submit', asy
  }
 });
 
-// Tutup modal saat klik backdrop
 document.getElementById('uploadDokumenFinalModal').addEventListener('click', function (e) {
  if (e.target === this) closeUploadDokumenFinalModal();
 });
@@ -1567,8 +1425,7 @@ updateDateTime();
 setInterval(updateDateTime, 1000);
 
 // Reveal animation
-const reveals = document.querySelectorAll('.reveal');
-reveals.forEach(function(reveal) {
+document.querySelectorAll('.reveal').forEach(function(reveal) {
  reveal.classList.add('active');
 });
 

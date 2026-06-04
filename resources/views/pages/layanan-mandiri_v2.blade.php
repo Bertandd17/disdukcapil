@@ -679,63 +679,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
     }
 
     /* ═══════════════════════════════════════════════════════════
-       TOAST COLORS — Hijau/Kuning/Merah/Biru sesuai tipe
-       Class disuntik via customClass.popup = swal-toast-{type}
-       dari helper showToast() di bawah.
-       ═══════════════════════════════════════════════════════════ */
-    .swal-toast-success {
-        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #15803d !important;
-    }
-    .swal-toast-success .swal2-title,
-    .swal-toast-success .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-success .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-warning {
-        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b45309 !important;
-    }
-    .swal-toast-warning .swal2-title,
-    .swal-toast-warning .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-warning .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-error {
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b91c1c !important;
-    }
-    .swal-toast-error .swal2-title,
-    .swal-toast-error .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-error .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-info {
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #1d4ed8 !important;
-    }
-    .swal-toast-info .swal2-title,
-    .swal-toast-info .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-info .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
        General styles
        ═══════════════════════════════════════════════════════════ */
     .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
@@ -1199,7 +1142,7 @@ function validateAndGoStep3() {
         .querySelectorAll('input[required],textarea[required],select[required]');
     var valid = true;
     var hasEmpty = false;
-    var errMsg = 'Ada Dokumen yang Perlu dilengkapi';
+    var errMsg = 'Ada kolom yang wajib diisi';
     inputs.forEach(function(input) {
         input.style.borderColor = '';
         var val = input.value.trim();
@@ -1210,8 +1153,8 @@ function validateAndGoStep3() {
             errMsg = 'Nomor harus tepat 16 angka!';
         }
     });
-    if (hasEmpty) errMsg = 'Ada Dokumen yang Perlu dilengkapi';
-    if (!valid) { showToast(errMsg, 'warning'); return; }
+    if (hasEmpty) errMsg = 'Ada kolom yang wajib diisi';
+    if (!valid) { showToast(errMsg, 'error'); return; }
     goToStep(3);
 }
 
@@ -1231,7 +1174,7 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) { showToast('Ada Dokumen yang Perlu dilengkapi', 'warning'); return; }
+    if (!valid) { showToast('Ada kolom yang wajib diisi', 'error'); return; }
     goToStep(4);
 }
 
@@ -1317,7 +1260,7 @@ function onLivenessPassed() {
     video.parentNode.insertBefore(preview, video);
     document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
     document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
-    showToast('Verifikasi Wajah Berhasil', 'success');
+    showToast('Verifikasi wajah berhasil! Foto tersimpan.', 'success');
     setTimeout(function() { goToStep(5); }, 900);
 }
 function setOverlay(text) { document.getElementById('liveness-overlay').textContent = text; }
@@ -1516,7 +1459,7 @@ function autoFillFromAntrian(nomorAntrian) {
                 if (nikInput    && data.data.nik)          nikInput.value    = data.data.nik;
                 if (namaInput   && data.data.nama_lengkap) namaInput.value   = data.data.nama_lengkap;
                 if (alamatInput && data.data.alamat)       alamatInput.value = data.data.alamat;
-                showToast('Berhasil Mengambil Data dari Nomor Antrian', 'success');
+                showToast('Data berhasil diambil dari nomor antrian', 'success');
             }
         })
         .catch(function(error) {
@@ -1588,7 +1531,6 @@ function showToast(message, type) {
         timerProgressBar  : true,
         icon              : iconMap[type] || 'info',
         title             : message,
-        customClass       : { popup: 'swal-toast-' + (type || 'info') },
         didOpen           : function(toast) {
             toast.addEventListener('mouseenter', Swal.stopTimer);
             toast.addEventListener('mouseleave', Swal.resumeTimer);
@@ -1687,7 +1629,7 @@ async function handleKirimPengajuan() {
         if (btnSubmit) btnSubmit.disabled = false;
         if (data.success) {
             /* ── Toast sukses kanan atas ── */
-            showToast('Pengajuan Dokumen Berhasil dilakukan', 'success');
+            showToast(data.message || 'Pengajuan berkas berhasil dikirim!', 'success');
             form.reset();
             closeModal();
             goToStep(1);

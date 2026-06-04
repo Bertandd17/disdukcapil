@@ -22,7 +22,7 @@ class LahirMatiController extends Controller
             'nama_pemohon'                => 'required|string',
             'alamat_pemohon'              => 'required|string',
             'hubungan_pemohon'            => 'required|string',
-            
+
             'ktp_pemohon'                 => 'nullable|file|mimes:pdf|max:2048',
             'kartu_keluarga_pemohon'      => 'nullable|file|mimes:pdf|max:2048',
             'ktp_saksi1'                  => 'nullable|file|mimes:pdf|max:2048',
@@ -32,7 +32,7 @@ class LahirMatiController extends Controller
         ], [
             'digits' => 'Pastikan nomor NIK/KK tepat 16 angka!',
             'mimes'  => 'Berkas yang diunggah harus berformat PDF!',
-            'max'    => 'Ukuran berkas maksimal adalah 5MB.'
+            'max'    => 'Ukuran berkas maksimal adalah 2MB.',
         ]);
 
         if ($validator->fails()) {
@@ -43,8 +43,11 @@ class LahirMatiController extends Controller
                     'errors'  => $validator->errors(),
                 ], 422);
             }
-            return redirect()->back()
-                ->with('error', 'Validasi Gagal:<br>' . implode('<br>', $validator->errors()->all()))
+            return back()
+                ->with('error', [
+                    'title'   => 'Validasi Gagal.',
+                    'message' => $validator->errors()->first(),
+                ])
                 ->withInput();
         }
 
@@ -64,19 +67,19 @@ class LahirMatiController extends Controller
         try {
             $nomorAntrian = $antrian->nomor_antrian;
 
-            // 2. Ambil data teks
+            // Ambil data teks, kecualikan field file
             $data = $request->except([
-                'ktp_pemohon', 'kartu_keluarga_pemohon', 'ktp_saksi1', 
-                'ktp_saksi2', 'formulir_f201', 'surat_keterangan_lahir_mati'
+                'ktp_pemohon', 'kartu_keluarga_pemohon', 'ktp_saksi1',
+                'ktp_saksi2', 'formulir_f201', 'surat_keterangan_lahir_mati',
             ]);
-            
-            $data['status'] = 'Verifikasi Data';
-            $data['jenis_layanan'] = 'lahir_mati';
 
-            // 3. INI KUNCINYA: Timpa input asal-asalan pemohon dengan Token Resmi
+            $data['status']     = 'Verifikasi Data';
+            $data['layanan_id'] = 'lahir_mati';
+
+            // Timpa nomor antrian dengan nilai resmi dari DB
             $data['nomor_antrian'] = $nomorAntrian;
 
-            // 4. Handle file uploads 
+            // Handle file uploads ke disk 'private'
             $fileUploads = [
                 'ktp_pemohon'                 => 'lahir_mati/pemohon',
                 'kartu_keluarga_pemohon'      => 'lahir_mati/kk',
@@ -88,20 +91,20 @@ class LahirMatiController extends Controller
 
             foreach ($fileUploads as $inputName => $storagePath) {
                 if ($request->hasFile($inputName)) {
-                    $data[$inputName] = $request->file($inputName)->store($storagePath, 'public');
+                    $data[$inputName] = $request->file($inputName)->store($storagePath, 'private');
                 }
             }
 
-            // 5. Simpan ke Database
+            // Simpan ke tabel lahir_mati
             $lahirMati = LahirMati::create($data);
 
-            // 6. Tandai nomor antrian yang sudah ada sebagai mulai diproses
-            $antrian->update(['status_antrian' => 'Verifikasi Data']);
-
-            // 7. Update record Lahir Mati
+            // Update antrian_online_id pada record lahir mati
             $lahirMati->update(['antrian_online_id' => $antrian->antrian_online_id]);
 
-            // 8. Create lacak berkas record
+            // Update status antrian
+            $antrian->update(['status_antrian' => 'Verifikasi Data']);
+
+            // Buat lacak berkas
             Lacak_Berkas_Model::create([
                 'antrian_online_id' => $antrian->antrian_online_id,
                 'status'            => 'Verifikasi Data',
@@ -116,6 +119,7 @@ class LahirMatiController extends Controller
                     'nomor_antrian' => $nomorAntrian,
                 ]);
             }
+
             return redirect()->back()->with('success', 'Permohonan Lahir Mati berhasil dikirim! Nomor Antrian Anda: ' . $nomorAntrian);
 
         } catch (\Exception $e) {
@@ -123,26 +127,16 @@ class LahirMatiController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Gagal menyimpan data: ' . $safeErrorMessage,
+                    'message' => 'Terjadi kesalahan sistem: ' . $safeErrorMessage,
                 ], 500);
             }
-            return redirect()->back()->with('error', 'Gagal menyimpan data: ' . $safeErrorMessage)->withInput();
+            return back()
+                ->with('error', [
+                    'title'   => 'Gagal menyimpan data',
+                    'message' => $e->getMessage(),
+                ])
+                ->withInput();
         }
-    }
-
-    private function generateNomorAntrian()
-    {
-        // Format wajib Antrian Online: 3 Huruf - 3 Angka - 3 Angka (Contoh: LMT-106-001)
-        $huruf = 'LMT'; // 3 Huruf penanda Lahir Mati
-        
-        // 3 Angka bagian tengah: Mengambil urutan hari dalam setahun (001 - 365)
-        $hariKe = str_pad(date('z') + 1, 3, '0', STR_PAD_LEFT); 
-        
-        // 3 Angka bagian akhir: Urutan pendaftar hari ini
-        $count = LahirMati::whereDate('created_at', now())->count() + 1;
-        $urutan = str_pad($count, 3, '0', STR_PAD_LEFT);
-        
-        return "{$huruf}-{$hariKe}-{$urutan}";
     }
 
     private function invalidAntrianResponse(Request $request, string $message)
@@ -154,13 +148,14 @@ class LahirMatiController extends Controller
             ], 422);
         }
 
-        return redirect()->back()->with('error', $message)->withInput();
+        return back()->with('error', [
+            'title'   => 'Nomor Antrian Tidak Valid.',
+            'message' => $message,
+        ])->withInput();
     }
 
-    // ... method daftar, detail, dan updateStatus tetap sama ...
     public function daftar(Request $request)
     {
-        // Hanya tampilkan data yang antriannya sudah dimulai admin (status_antrian != 'Menunggu')
         $startedAntrianSubquery = function ($q) {
             $q->select('nomor_antrian')
               ->from('antrian_online')
@@ -168,13 +163,16 @@ class LahirMatiController extends Controller
         };
 
         $query = LahirMati::query()
-            ->whereIn('jenis_layanan', ['lahir_mati'])
+            ->whereIn('layanan_id', ['lahir_mati'])
             ->whereIn('nomor_antrian', $startedAntrianSubquery);
-        if ($request->status) $query->where('status', $request->status);
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
         $dataLahirMati = $query->latest()->get();
 
-        $baseCount = LahirMati::whereIn('jenis_layanan', ['lahir_mati'])
-            ->whereIn('nomor_antrian', $startedAntrianSubquery);
+        $baseCount          = LahirMati::whereIn('layanan_id', ['lahir_mati'])->whereIn('nomor_antrian', $startedAntrianSubquery);
         $jumlah             = (clone $baseCount)->count();
         $menungguVerifikasi = (clone $baseCount)->where('status', 'Verifikasi Data')->count();
         $dalamProses        = (clone $baseCount)->where('status', 'Proses Cetak')->count();
@@ -194,10 +192,14 @@ class LahirMatiController extends Controller
         $lahirMati = LahirMati::where('uuid', $uuid)->firstOrFail();
         $lahirMati->status = $request->status;
         $alasan = $request->input('alasan_penolakan') ?? $request->input('alasan');
-        if ($request->status == 'Tolak') $lahirMati->alasan_penolakan = $alasan;
+        if ($request->status == 'Tolak') {
+            $lahirMati->alasan_penolakan = $alasan;
+        }
         $lahirMati->save();
 
-        $antrianId = $lahirMati->antrian_online_id ?? Antrian_Online_Model::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
+        $antrianId = $lahirMati->antrian_online_id
+            ?? Antrian_Online_Model::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
+
         if ($antrianId) {
             $statusAntrian = $request->status === 'Tolak' ? 'Ditolak' : $request->status;
             Antrian_Online_Model::where('antrian_online_id', $antrianId)->update(['status_antrian' => $statusAntrian]);
@@ -235,7 +237,9 @@ class LahirMatiController extends Controller
         $filename = 'lahir-mati-' . Str::slug($lahirMati->nama_pemohon ?? 'pemohon') . '-' . time() . '.' . $ext;
         $path     = $file->storeAs('berkas-final/lahir-mati', $filename, 'private');
 
-        $antrianId = $lahirMati->antrian_online_id ?? Antrian_Online_Model::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
+        $antrianId = $lahirMati->antrian_online_id
+            ?? Antrian_Online_Model::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
+
         if ($antrianId) {
             Lacak_Berkas_Model::create([
                 'antrian_online_id' => $antrianId,
@@ -250,5 +254,20 @@ class LahirMatiController extends Controller
         $lahirMati->update(['status' => 'Selesai']);
 
         return redirect()->back()->with('success', 'Berkas berhasil diunggah dan dapat diunduh oleh pemohon.');
+    }
+
+    /**
+     * Lihat berkas dari private disk
+     */
+    public function lihatBerkas($uuid, $field)
+    {
+        $berkas = LahirMati::where('uuid', $uuid)->firstOrFail();
+        $path   = $berkas->$field;
+
+        if (!$path || !Storage::disk('private')->exists($path)) {
+            abort(404);
+        }
+
+        return Storage::disk('private')->response($path);
     }
 }

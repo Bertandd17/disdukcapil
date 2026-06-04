@@ -272,7 +272,7 @@ $serviceConfig = [
             'Kirim pengajuan dan tunggu konfirmasi dari pihak keagamaan',
         ],
         'is_multi_step' => true,
-        'is_pernikahan' => true,
+        'is_pernikahan' => true, // Flag khusus untuk pernikahan
         'steps' => [
             ['label' => 'Informasi', 'icon' => 'fa-info-circle'],
             ['label' => 'Data', 'icon' => 'fa-user'],
@@ -373,6 +373,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                         $c = $colorMap[$kategoriConfig['color']] ?? $colorMap['blue'];
                         $jumlah = count($kategoriConfig['layanan']);
 
+                        // Kumpulkan data layanan untuk modal
                         $layananList = [];
                         foreach ($kategoriConfig['layanan'] as $lid) {
                             $layanan = $layananById[$lid] ?? null;
@@ -449,11 +450,11 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
     </section>
 </main>
 
-{{-- Modal Kategori --}}
 <div id="kategoriModal" class="fixed inset-0 z-40 hidden overflow-y-auto">
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeKategoriModal()"></div>
     <div class="flex items-start sm:items-center justify-center min-h-screen p-3 sm:p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md relative z-10 overflow-hidden" style="animation: popIn 0.2s ease;">
+            {{-- Header --}}
             <div id="km-header" class="p-5 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -468,6 +469,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     </button>
                 </div>
             </div>
+            {{-- Daftar Layanan --}}
             <div id="km-list" class="p-3 space-y-1 max-h-[60vh] overflow-y-auto"></div>
             <div class="px-5 py-3 border-t border-gray-100">
                 <p class="text-xs text-gray-400 text-center">Siapkan berkas pendukung pada halaman selanjutnya dalam format PDF dengan ukuran maksimal 200 KB per file.</p>
@@ -476,7 +478,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
     </div>
 </div>
 
-{{-- Modal Service --}}
 <div id="serviceModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
     <div class="flex items-start sm:items-center justify-center min-h-screen p-2 sm:p-4">
@@ -526,7 +527,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 @csrf
                 <input type="hidden" name="foto_wajah" id="foto_wajah">
 
-                {{-- Step 1: Informasi --}}
                 <div id="step1" class="step-content p-5 space-y-5">
                     <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4">
                         <div class="flex items-center gap-2 mb-2">
@@ -559,7 +559,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     </button>
                 </div>
 
-                {{-- Step 2: Data --}}
                 <div id="step2" class="step-content p-5 space-y-4 hidden">
                     <p class="text-sm text-gray-500 mb-1">Lengkapi data Anda dengan benar sesuai dokumen resmi.</p>
                     <div id="formFields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -575,7 +574,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     </div>
                 </div>
 
-                {{-- Step 3: Berkas --}}
                 <div id="step3" class="step-content p-5 space-y-4 hidden">
                     <p id="step3Description" class="text-sm text-gray-500 mb-1">Upload berkas persyaratan dalam format <strong>PDF</strong>. Pastikan dokumen terbaca dengan jelas.</p>
                     <div id="fileFields" class="space-y-4"></div>
@@ -591,7 +589,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     </div>
                 </div>
 
-                {{-- Step 4: Verifikasi --}}
                 <div id="step4" class="step-content p-5 space-y-4 hidden">
                     <h3 class="font-bold text-lg text-gray-800">Verifikasi Wajah</h3>
                     <p class="text-sm text-gray-500">Kedipkan mata <strong>2 kali</strong> di depan kamera untuk membuktikan Anda bukan robot.</p>
@@ -626,7 +623,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                     </div>
                 </div>
 
-                {{-- Step 5: Konfirmasi --}}
                 <div id="step5" class="step-content p-5 space-y-4 hidden">
                     <div class="bg-green-50 border border-green-200 rounded-2xl p-4 text-center">
                         <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -646,7 +642,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                                 class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
-                        <button type="button" id="btnSubmit" onclick="handleKirimPengajuan()"
+                        <button type="submit" id="btnSubmit" form="serviceForm"
                                 class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fas fa-paper-plane text-sm"></i> Kirim Pengajuan
                         </button>
@@ -659,85 +655,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 
 @push('styles')
 <style>
-    /* ═══════════════════════════════════════════════════════════
-       NUCLEAR CSS OVERRIDE — Sembunyikan SEMUA tombol saat loading
-       (Tidak bisa dilewati meskipun JS gagal)
-       ═══════════════════════════════════════════════════════════ */
-    .swal2-loading .swal2-actions,
-    .swal2-loading .swal2-confirm,
-    .swal2-loading .swal2-deny,
-    .swal2-loading .swal2-cancel,
-    .swal2-loading .swal2-styled,
-    .swal2-show.swal2-loading .swal2-actions {
-        display: none !important;
-    }
-    .swal2-container .swal2-loading + .swal2-actions {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        overflow: hidden !important;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       TOAST COLORS — Hijau/Kuning/Merah/Biru sesuai tipe
-       Class disuntik via customClass.popup = swal-toast-{type}
-       dari helper showToast() di bawah.
-       ═══════════════════════════════════════════════════════════ */
-    .swal-toast-success {
-        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #15803d !important;
-    }
-    .swal-toast-success .swal2-title,
-    .swal-toast-success .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-success .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-warning {
-        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b45309 !important;
-    }
-    .swal-toast-warning .swal2-title,
-    .swal-toast-warning .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-warning .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-error {
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b91c1c !important;
-    }
-    .swal-toast-error .swal2-title,
-    .swal-toast-error .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-error .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-info {
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #1d4ed8 !important;
-    }
-    .swal-toast-info .swal2-title,
-    .swal-toast-info .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-info .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       General styles
-       ═══════════════════════════════════════════════════════════ */
     .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -763,18 +680,50 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
         background-position: right 0.5rem center;
         background-size: 1.2rem;
     }
+
+    /* Layanan item hover */
     .layanan-item { transition: background 0.15s; }
     .layanan-item:hover { background: #f9fafb; }
 
     @media (max-width: 640px) {
-        #modalHeader { padding: 1rem; }
-        #modalIcon, #km-icon { flex-shrink: 0; }
-        #modalTitle, #km-title { overflow-wrap: anywhere; }
-        #modalHeader .step-label { display: none; }
-        #modalHeader .step-indicator { width: 1.8rem; height: 1.8rem; margin-bottom: 0; }
-        #serviceModal .step-content { padding: 1rem; }
-        #summaryData .flex { align-items: flex-start; gap: 0.75rem; }
-        #summaryData span:last-child { max-width: 55%; white-space: normal; overflow-wrap: anywhere; }
+        #modalHeader {
+            padding: 1rem;
+        }
+
+        #modalIcon,
+        #km-icon {
+            flex-shrink: 0;
+        }
+
+        #modalTitle,
+        #km-title {
+            overflow-wrap: anywhere;
+        }
+
+        #modalHeader .step-label {
+            display: none;
+        }
+
+        #modalHeader .step-indicator {
+            width: 1.8rem;
+            height: 1.8rem;
+            margin-bottom: 0;
+        }
+
+        #serviceModal .step-content {
+            padding: 1rem;
+        }
+
+        #summaryData .flex {
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        #summaryData span:last-child {
+            max-width: 55%;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
     }
 </style>
 @endpush
@@ -782,115 +731,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-
 <script>
-/* ═══════════════════════════════════════════════════════════════════
-   INTERCEPTOR GLOBAL — Paksa SEMUA loading modal tanpa tombol OK/No/Cancel
-   (FASE 4 — Ditempatkan setelah SweetAlert2, sebelum @stack('scripts'))
-   ═══════════════════════════════════════════════════════════════════ */
-(function installSwalLoadingInterceptor() {
-    function patchSwal(Swal) {
-        if (!Swal || Swal.__loadingInterceptorInstalled) return;
-
-        var _originalFire = Swal.fire.bind(Swal);
-
-        Swal.fire = function(config) {
-            if (!config || typeof config !== 'object') {
-                return _originalFire.apply(this, arguments);
-            }
-
-            var isLoading = (
-                (typeof config.didOpen === 'function' &&
-                    config.didOpen.toString().includes('showLoading')) ||
-                config.showLoading === true ||
-                (config.title && (
-                    config.title.toString().includes('Memproses') ||
-                    config.title.toString().includes('Memuat') ||
-                    config.title.toString().includes('Menyimpan') ||
-                    config.title.toString().includes('Mengirim') ||
-                    config.title.toString().includes('Memeriksa') ||
-                    config.title.toString().includes('Loading') ||
-                    config.title.toString().includes('Tunggu')
-                ))
-            );
-
-            if (isLoading) {
-                config.showConfirmButton = false;
-                config.showDenyButton    = false;
-                config.showCancelButton  = false;
-                config.allowOutsideClick = false;
-                config.allowEscapeKey    = false;
-            }
-
-            return _originalFire(config);
-        };
-
-        /* Patch mixin juga (penting untuk Swal.mixin({...}).fire()) */
-        var _originalMixin = Swal.mixin.bind(Swal);
-        Swal.mixin = function(defaults) {
-            var mixinInstance = _originalMixin(defaults);
-            var _mixinFire    = mixinInstance.fire.bind(mixinInstance);
-
-            mixinInstance.fire = function(config) {
-                if (!config || typeof config !== 'object') {
-                    return _mixinFire.apply(this, arguments);
-                }
-                var isLoading = (
-                    (typeof config.didOpen === 'function' &&
-                        config.didOpen.toString().includes('showLoading')) ||
-                    config.showLoading === true ||
-                    (config.title && (
-                        config.title.toString().includes('Memproses') ||
-                        config.title.toString().includes('Memuat') ||
-                        config.title.toString().includes('Menyimpan') ||
-                        config.title.toString().includes('Mengirim') ||
-                        config.title.toString().includes('Memeriksa') ||
-                        config.title.toString().includes('Loading') ||
-                        config.title.toString().includes('Tunggu')
-                    ))
-                );
-                if (isLoading) {
-                    config.showConfirmButton = false;
-                    config.showDenyButton    = false;
-                    config.showCancelButton  = false;
-                    config.allowOutsideClick = false;
-                    config.allowEscapeKey    = false;
-                }
-                return _mixinFire(config);
-            };
-
-            return mixinInstance;
-        };
-
-        Swal.__loadingInterceptorInstalled = true;
-    }
-
-    /* Coba pasang sekarang (jika Swal sudah ada), lalu ulang saat DOM ready */
-    if (typeof window.Swal !== 'undefined') patchSwal(window.Swal);
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof window.Swal !== 'undefined') patchSwal(window.Swal);
-    });
-})();
-
-/* ═══════════════════════════════════════════════════════════════════
-   Helper — Loading Modal TANPA TOMBOL (FASE 3)
-   ═══════════════════════════════════════════════════════════════════ */
-function showLoadingModal(title, text) {
-    return Swal.fire({
-        title             : title  || 'Memproses...',
-        text              : text   || 'Mohon tunggu sebentar',
-        allowOutsideClick : false,
-        allowEscapeKey    : false,
-        showConfirmButton : false,
-        showDenyButton    : false,
-        showCancelButton  : false,
-        didOpen           : function() { Swal.showLoading(); }
-    });
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   State variables
-   ═══════════════════════════════════════════════════════════════════ */
 let currentStep        = 1;
 let currentConfig      = {};
 let currentServiceName = '';
@@ -914,11 +755,8 @@ const routeMap = {
     'layanan-pernikahan': "{{ route('pernikahan.store.layanan-mandiri') }}"
 };
 
-/* ═══════════════════════════════════════════════════════════════════
-   Reveal on scroll
-   ═══════════════════════════════════════════════════════════════════ */
 function reveal() {
-    document.querySelectorAll('.reveal').forEach(function(el) {
+    document.querySelectorAll('.reveal').forEach(el => {
         if (el.getBoundingClientRect().top < window.innerHeight - 50)
             el.classList.add('active');
     });
@@ -926,37 +764,34 @@ function reveal() {
 window.addEventListener('scroll', reveal);
 window.addEventListener('load', reveal);
 
-/* ═══════════════════════════════════════════════════════════════════
-   Modal Kategori
-   ═══════════════════════════════════════════════════════════════════ */
 function openKategoriModal(layananList, namaKategori, colors, iconClass) {
     document.getElementById('km-title').textContent = namaKategori;
     document.getElementById('km-sub').textContent   = layananList.length + ' layanan tersedia';
 
-    var iconEl = document.getElementById('km-icon');
+    const iconEl = document.getElementById('km-icon');
     iconEl.style.background = colors.icon_bg;
-    iconEl.innerHTML = '<i class="fas ' + iconClass + ' text-lg" style="color:' + colors.text + '"></i>';
+    iconEl.innerHTML = `<i class="fas ${iconClass} text-lg" style="color:${colors.text}"></i>`;
 
-    var list = document.getElementById('km-list');
-    list.innerHTML = layananList.map(function(item) {
-        return '<div class="layanan-item flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer"' +
-               ' onclick=\'selectLayanan(' + JSON.stringify(item.config) + ', ' + JSON.stringify(item.name) + ')\'>' +
-               '<div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"' +
-               ' style="background: ' + colors.icon_bg + '">' +
-               '<i class="fas ' + item.icon + ' text-sm" style="color:' + colors.text + '"></i>' +
-               '</div>' +
-               '<div class="flex-1 min-w-0">' +
-               '<p class="text-sm font-semibold text-gray-800 leading-tight">' + item.name + '</p>' +
-               '<p class="text-xs text-gray-400 mt-0.5 truncate">' + item.desc + '</p>' +
-               '</div>' +
-               '<div class="flex-shrink-0">' +
-               '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"' +
-               ' style="background: ' + colors.badge_bg + '; color: ' + colors.badge_text + '">' +
-               'Pilih <i class="fas fa-chevron-right text-[9px]"></i>' +
-               '</span>' +
-               '</div>' +
-               '</div>';
-    }).join('');
+    const list = document.getElementById('km-list');
+    list.innerHTML = layananList.map(item => `
+        <div class="layanan-item flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer"
+             onclick='selectLayanan(${JSON.stringify(item.config)}, ${JSON.stringify(item.name)})'>
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                 style="background: ${colors.icon_bg}">
+                <i class="fas ${item.icon} text-sm" style="color:${colors.text}"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-800 leading-tight">${item.name}</p>
+                <p class="text-xs text-gray-400 mt-0.5 truncate">${item.desc}</p>
+            </div>
+            <div class="flex-shrink-0">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
+                      style="background: ${colors.badge_bg}; color: ${colors.badge_text}">
+                    Pilih <i class="fas fa-chevron-right text-[9px]"></i>
+                </span>
+            </div>
+        </div>
+    `).join('');
 
     document.getElementById('kategoriModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -968,152 +803,171 @@ function closeKategoriModal() {
         document.body.style.overflow = 'auto';
     }
 }
-
 function selectLayanan(config, serviceName) {
     closeKategoriModal();
     openServiceModal(config, serviceName);
 }
-
-/* ═══════════════════════════════════════════════════════════════════
-   Modal Service
-   ═══════════════════════════════════════════════════════════════════ */
 function openServiceModal(config, serviceName) {
     currentConfig      = config;
     currentServiceName = serviceName;
 
     document.getElementById('modalTitle').textContent = serviceName;
-    var icon = document.getElementById('modalIcon');
+    const icon = document.getElementById('modalIcon');
     icon.style.background = getColorBadgeBg(config.color);
-    icon.innerHTML = '<i class="fas ' + config.icon + ' text-xl" style="color:' + getColorText(config.color) + '"></i>';
+    icon.innerHTML = `<i class="fas ${config.icon} text-xl" style="color:${getColorText(config.color)}"></i>`;
+
+    // DEBUG: Log config dan route
+    console.log('=== openServiceModal ===');
+    console.log('config.id:', config.id);
+    console.log('serviceName:', serviceName);
+    console.log('routeMap[config.id]:', routeMap[config.id]);
+    console.log('Full routeMap:', routeMap);
 
     document.getElementById('serviceForm').action = routeMap[config.id] || '#';
+    console.log('serviceForm.action set to:', document.getElementById('serviceForm').action);
 
     document.getElementById('infoLayanan').textContent =
-        'Layanan ' + serviceName + ' adalah layanan kependudukan yang dapat diajukan secara online melalui portal Disdukcapil Kabupaten Toba. Proses verifikasi dilakukan oleh petugas dalam 2–3 hari kerja.';
+        `Layanan ${serviceName} adalah layanan kependudukan yang dapat diajukan secara online melalui portal Disdukcapil Kabupaten Toba. Proses verifikasi dilakukan oleh petugas dalam 2–3 hari kerja.`;
 
-    document.getElementById('listPersyaratan').innerHTML = config.persyaratan.map(function(p, i) {
-        return '<li class="flex items-start gap-3 bg-white border border-gray-100 rounded-xl p-3">' +
-               '<div class="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">' +
-               '<span class="text-orange-600 font-bold text-[10px]">' + (i+1) + '</span>' +
-               '</div>' +
-               '<span class="text-sm text-gray-700 leading-relaxed">' + p + '</span>' +
-               '</li>';
-    }).join('');
+    document.getElementById('listPersyaratan').innerHTML = config.persyaratan.map((p, i) => `
+        <li class="flex items-start gap-3 bg-white border border-gray-100 rounded-xl p-3">
+            <div class="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-orange-600 font-bold text-[10px]">${i+1}</span>
+            </div>
+            <span class="text-sm text-gray-700 leading-relaxed">${p}</span>
+        </li>`).join('');
 
-    document.getElementById('listPenjelasan').innerHTML = config.penjelasan.map(function(p, i) {
-        return '<li class="flex items-start gap-3">' +
-               '<div class="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">' +
-               '<span class="text-white font-bold text-[10px]">' + (i+1) + '</span>' +
-               '</div>' +
-               '<span class="text-sm text-gray-700 leading-relaxed">' + p + '</span>' +
-               '</li>';
-    }).join('');
+    document.getElementById('listPenjelasan').innerHTML = config.penjelasan.map((p, i) => `
+        <li class="flex items-start gap-3">
+            <div class="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-white font-bold text-[10px]">${i+1}</span>
+            </div>
+            <span class="text-sm text-gray-700 leading-relaxed">${p}</span>
+        </li>`).join('');
 
-    var hiddenAndText = config.fields.filter(function(f) { return f.type !== 'file'; });
-    document.getElementById('formFields').innerHTML = hiddenAndText.map(function(field) {
+    const hiddenAndText = config.fields.filter(f => f.type !== 'file');
+    document.getElementById('formFields').innerHTML = hiddenAndText.map(field => {
         if (field.type === 'hidden')
-            return '<input type="hidden" name="' + field.name + '" value="' + field.value + '">';
+            return `<input type="hidden" name="${field.name}" value="${field.value}">`;
         if (field.type === 'heading')
-            return '<div class="col-span-1 md:col-span-2 mt-4 mb-1 border-b border-gray-200 pb-2">' +
-                   '<h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider">' + field.label + '</h3>' +
-                   '</div>';
-        var fullWidth = field.type === 'textarea' ? 'md:col-span-2' : '';
-        return '<div class="' + fullWidth + '">' +
-               '<label class="block text-xs font-semibold text-gray-600 mb-1">' +
-               field.label + ' <span class="text-red-400">*</span>' +
-               '</label>' +
-               renderField(field) +
-               '</div>';
+            return `<div class="col-span-1 md:col-span-2 mt-4 mb-1 border-b border-gray-200 pb-2">
+                        <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider">${field.label}</h3>
+                    </div>`;
+        const fullWidth = field.type === 'textarea' ? 'md:col-span-2' : '';
+        return `<div class="${fullWidth}">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">
+                ${field.label} <span class="text-red-400">*</span>
+            </label>
+            ${renderField(field)}
+        </div>`;
     }).join('');
 
+    // Khusus untuk pernikahan: render form agama, tempat keagamaan, tanggal sebelum file upload
     if (config.is_pernikahan) {
-        document.getElementById('fileFields').innerHTML =
-            '<div class="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">' +
-            '<h4 class="font-semibold text-purple-800 text-sm mb-3 flex items-center gap-2">' +
-            '<i class="fas fa-church"></i> Data Pernikahan</h4>' +
-            '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">' +
-            '<div>' +
-            '<label class="block text-xs font-semibold text-gray-700 mb-1">Pilih Agama <span class="text-red-400">*</span></label>' +
-            '<select name="jenis_agama" id="jenisAgamaSelect" class="form-input" required onchange="loadKeagamaanByAgama(this.value)">' +
-            '<option value="">Pilih Agama...</option>' +
-            '</select>' +
-            '</div>' +
-            '<div>' +
-            '<label class="block text-xs font-semibold text-gray-700 mb-1">Nama Tempat Keagamaan <span class="text-red-400">*</span></label>' +
-            '<select name="keagamaan_id" id="keagamaanSelect" class="form-input" required disabled>' +
-            '<option value="">Pilih agama terlebih dahulu...</option>' +
-            '</select>' +
-            '</div>' +
-            '<div>' +
-            '<label class="block text-xs font-semibold text-gray-700 mb-1">Tanggal Perkawinan (Rencana) <span class="text-red-400">*</span></label>' +
-            '<input type="date" name="tanggal_perkawinan" class="form-input" required min="' + getMinDate() + '">' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '<h4 class="font-semibold text-gray-700 text-sm mb-3 flex items-center gap-2">' +
-            '<i class="fas fa-file-upload text-blue-500"></i> Upload KTP</h4>' +
-            '<div class="grid grid-cols-2 gap-4">' +
-            config.files.map(function(file) {
-                var reqLabel = file.required !== false
-                    ? '<span class="text-red-400">*</span>'
-                    : '<span class="text-gray-400 font-normal">(opsional)</span>';
-                return '<div>' +
-                       '<label class="block text-xs font-semibold text-gray-600 mb-1">' + file.label + ' ' + reqLabel + '</label>' +
-                       '<div class="relative">' +
-                       '<button type="button" id="clear-' + file.name + '"' +
-                       ' class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"' +
-                       ' title="Hapus file" onclick="event.preventDefault(); event.stopPropagation(); clearFileInput(\'' + file.name + '\')">' +
-                       '<i class="fas fa-times"></i></button>' +
-                       '<label class="flex flex-col items-center justify-center w-full px-3 py-4' +
-                       ' border-2 border-dashed border-gray-300 rounded-xl bg-gray-50' +
-                       ' hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">' +
-                       '<i class="fas fa-file-image text-xl text-gray-400 mb-1" id="icon-' + file.name + '"></i>' +
-                       '<p class="text-xs font-semibold text-gray-600">Pilih File</p>' +
-                       '<p class="text-[9px] text-gray-400 mt-1">PDF/Gambar, maks. 2MB</p>' +
-                       '<input type="file" name="' + file.name + '" accept=".pdf,.jpg,.jpeg,.png"' +
-                       (file.required !== false ? ' required' : '') +
-                       ' class="hidden" onchange="handleFileSelect(this,\'' + file.name + '\')">' +
-                       '</label>' +
-                       '</div>' +
-                       '<div id="name-' + file.name + '" class="mt-1 px-2 text-[10px] text-blue-600 font-medium hidden">' +
-                       '<i class="fas fa-check-circle mr-1"></i><span class="file-label"></span>' +
-                       '</div>' +
-                       '</div>';
-            }).join('') +
-            '</div>';
-
+        document.getElementById('fileFields').innerHTML = `
+            <div class="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
+                <h4 class="font-semibold text-purple-800 text-sm mb-3 flex items-center gap-2">
+                    <i class="fas fa-church"></i> Data Pernikahan
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">
+                            Pilih Agama <span class="text-red-400">*</span>
+                        </label>
+                        <select name="jenis_agama" id="jenisAgamaSelect" class="form-input" required onchange="loadKeagamaanByAgama(this.value)">
+                            <option value="">Pilih Agama...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">
+                            Nama Tempat Keagamaan <span class="text-red-400">*</span>
+                        </label>
+                        <select name="keagamaan_id" id="keagamaanSelect" class="form-input" required disabled>
+                            <option value="">Pilih agama terlebih dahulu...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">
+                            Tanggal Perkawinan (Rencana) <span class="text-red-400">*</span>
+                        </label>
+                        <input type="date" name="tanggal_perkawinan" class="form-input" required min="${getMinDate()}">
+                    </div>
+                </div>
+            </div>
+            <h4 class="font-semibold text-gray-700 text-sm mb-3 flex items-center gap-2">
+                <i class="fas fa-file-upload text-blue-500"></i> Upload KTP
+            </h4>
+            <div class="grid grid-cols-2 gap-4">
+                ${config.files.map(file => `
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">
+                            ${file.label}
+                            ${file.required !== false
+                                ? '<span class="text-red-400">*</span>'
+                                : '<span class="text-gray-400 font-normal">(opsional)</span>'}
+                        </label>
+                        <div class="relative">
+                            <button type="button" id="clear-${file.name}"
+                                    class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"
+                                    title="Hapus file"
+                                    onclick="event.preventDefault(); event.stopPropagation(); clearFileInput('${file.name}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <label class="flex flex-col items-center justify-center w-full px-3 py-4
+                                          border-2 border-dashed border-gray-300 rounded-xl bg-gray-50
+                                          hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">
+                                <i class="fas fa-file-image text-xl text-gray-400 mb-1" id="icon-${file.name}"></i>
+                                <p class="text-xs font-semibold text-gray-600">Pilih File</p>
+                                <p class="text-[9px] text-gray-400 mt-1">PDF/Gambar, maks. 2MB</p>
+                                <input type="file" name="${file.name}" accept=".pdf,.jpg,.jpeg,.png"
+                                       ${file.required !== false ? 'required' : ''}
+                                       class="hidden" onchange="handleFileSelect(this,'${file.name}')">
+                            </label>
+                        </div>
+                        <div id="name-${file.name}" class="mt-1 px-2 text-[10px] text-blue-600 font-medium hidden">
+                            <i class="fas fa-check-circle mr-1"></i><span class="file-label"></span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        // Load jenis agama saat modal dibuka
         loadJenisAgama();
     } else {
-        document.getElementById('fileFields').innerHTML = config.files.map(function(file) {
-            var reqLabel = file.required !== false
-                ? '<span class="text-red-400">*</span>'
-                : '<span class="text-gray-400 font-normal">(opsional)</span>';
-            return '<div>' +
-                   '<label class="block text-xs font-semibold text-gray-600 mb-1">' + file.label + ' ' + reqLabel + '</label>' +
-                   '<div class="relative">' +
-                   '<button type="button" id="clear-' + file.name + '"' +
-                   ' class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"' +
-                   ' title="Hapus file" onclick="event.preventDefault(); event.stopPropagation(); clearFileInput(\'' + file.name + '\')">' +
-                   '<i class="fas fa-times"></i></button>' +
-                   '<label class="flex flex-col items-center justify-center w-full px-4 py-5' +
-                   ' border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50' +
-                   ' hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">' +
-                   '<i class="fas fa-file-pdf text-2xl text-gray-400 mb-2" id="icon-' + file.name + '"></i>' +
-                   '<p class="text-sm font-semibold text-gray-600">Pilih File PDF</p>' +
-                   '<p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Format: PDF, maks. 2MB</p>' +
-                   '<input type="file" name="' + file.name + '" accept=".pdf"' +
-                   (file.required !== false ? ' required' : '') +
-                   ' class="hidden" onchange="handleFileSelect(this,\'' + file.name + '\')">' +
-                   '</label>' +
-                   '</div>' +
-                   '<div id="name-' + file.name + '" class="mt-1.5 px-2 text-[11px] text-blue-600 font-medium hidden">' +
-                   '<i class="fas fa-check-circle mr-1"></i><span class="file-label"></span>' +
-                   '</div>' +
-                   '</div>';
-        }).join('');
+        document.getElementById('fileFields').innerHTML = config.files.map(file => `
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">
+                    ${file.label}
+                    ${file.required !== false
+                        ? '<span class="text-red-400">*</span>'
+                        : '<span class="text-gray-400 font-normal">(opsional)</span>'}
+                </label>
+                <div class="relative">
+                    <button type="button" id="clear-${file.name}"
+                            class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"
+                            title="Hapus file"
+                            onclick="event.preventDefault(); event.stopPropagation(); clearFileInput('${file.name}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <label class="flex flex-col items-center justify-center w-full px-4 py-5
+                                  border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50
+                                  hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">
+                        <i class="fas fa-file-pdf text-2xl text-gray-400 mb-2" id="icon-${file.name}"></i>
+                        <p class="text-sm font-semibold text-gray-600">Pilih File PDF</p>
+                        <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Format: PDF, maks. 2MB</p>
+                        <input type="file" name="${file.name}" accept=".pdf"
+                               ${file.required !== false ? 'required' : ''}
+                               class="hidden" onchange="handleFileSelect(this,'${file.name}')">
+                    </label>
+                </div>
+                <div id="name-${file.name}" class="mt-1.5 px-2 text-[11px] text-blue-600 font-medium hidden">
+                    <i class="fas fa-check-circle mr-1"></i><span class="file-label"></span>
+                </div>
+            </div>`).join('');
     }
 
-    var step3Desc = document.getElementById('step3Description');
+    // Ubah deskripsi step 3 untuk pernikahan
+    const step3Desc = document.getElementById('step3Description');
     if (config.is_pernikahan) {
         step3Desc.innerHTML = 'Pilih agama dan tempat keagamaan, tentukan tanggal perkawinan, lalu upload <strong>KTP</strong> mempelai dan saksi.';
     } else {
@@ -1127,23 +981,25 @@ function openServiceModal(config, serviceName) {
 }
 
 function getColorText(color) {
-    var map = { blue:'#1D4ED8', green:'#15803D', orange:'#C2410C', purple:'#7E22CE', red:'#BE123C' };
+    const map = { blue:'#1D4ED8', green:'#15803D', orange:'#C2410C', purple:'#7E22CE', red:'#BE123C' };
     return map[color] || map.blue;
 }
 function getColorBadgeBg(color) {
-    var map = { blue:'#DBEAFE', green:'#DCFCE7', orange:'#FFEDD5', purple:'#F3E8FF', red:'#FFE4E6' };
+    const map = { blue:'#DBEAFE', green:'#DCFCE7', orange:'#FFEDD5', purple:'#F3E8FF', red:'#FFE4E6' };
     return map[color] || map.blue;
 }
 
 function renderField(field) {
-    var cls = 'form-input';
-    var extraAttr = '';
-    var fieldId = '';
-    var fieldEvents = '';
+    const cls = 'form-input';
+    let extraAttr = '';
+    let fieldId = '';
+    let fieldEvents = '';
 
+    // Tambahkan ID khusus untuk field tertentu
     if (field.name === 'nomor_antrian') {
         fieldId = 'id="nomorAntrianInput"';
-        fieldEvents = 'onchange="autoFillFromAntrian(this.value)"';
+        // Gunakan onchange agar ter-trigger setelah user selesai input
+        fieldEvents = `onchange="autoFillFromAntrian(this.value)"`;
     } else if (field.name === 'nik_pemohon') {
         fieldId = 'id="nikPemohonInput"';
     } else if (field.name === 'nama_pemohon') {
@@ -1153,128 +1009,282 @@ function renderField(field) {
     }
 
     if (field.name && (field.name.toLowerCase().includes('nik') || field.name.toLowerCase().includes('nomor_kk'))) {
-        extraAttr = 'oninput="this.value = this.value.replace(/[^0-9]/g, \'\').slice(0, 16);" maxlength="16"';
+        extraAttr = `oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16);" maxlength="16"`;
     }
     if (field.type === 'textarea')
-        return '<textarea name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + cls + ' h-24 resize-none" ' + fieldId + ' required></textarea>';
+        return `<textarea name="${field.name}" placeholder="${field.placeholder||''}" class="${cls} h-24 resize-none" ${fieldId} required></textarea>`;
     if (field.type === 'select')
-        return '<select name="' + field.name + '" class="' + cls + '" ' + fieldId + ' required>' +
-               '<option value="">Pilih...</option>' +
-               (field.options||[]).map(function(o){ return '<option value="' + o + '">' + o + '</option>'; }).join('') +
-               '</select>';
-    return '<input type="' + field.type + '" name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + cls + '" ' + fieldId + ' ' + extraAttr + ' ' + fieldEvents + ' ' + (field.required !== false ? 'required' : '') + '>';
+        return `<select name="${field.name}" class="${cls}" ${fieldId} required>
+            <option value="">Pilih...</option>
+            ${(field.options||[]).map(o=>`<option value="${o}">${o}</option>`).join('')}
+        </select>`;
+    return `<input type="${field.type}" name="${field.name}" placeholder="${field.placeholder||''}" class="${cls}" ${fieldId} ${extraAttr} ${fieldEvents} ${field.required !== false ? 'required' : ''}>`;
 }
-
 function goToStep(step) {
     currentStep = step;
-    document.querySelectorAll('.step-content').forEach(function(el) { el.classList.add('hidden'); });
-    var active = document.getElementById('step' + step);
+    document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+    const active = document.getElementById('step' + step);
     if (active) {
         active.classList.remove('hidden');
         active.style.animation = 'none';
         active.offsetHeight;
         active.style.animation = '';
     }
-    var labels = ['Informasi','Data','Berkas','Verifikasi','Konfirmasi'];
-    for (var i = 1; i <= 5; i++) {
-        var dot = document.getElementById('stepDot' + i);
-        var lbl = document.getElementById('stepLabel' + i);
+    const labels = ['Informasi','Data','Berkas','Verifikasi','Konfirmasi'];
+    for (let i = 1; i <= 5; i++) {
+        const dot = document.getElementById('stepDot' + i);
+        const lbl = document.getElementById('stepLabel' + i);
         dot.className = 'step-indicator w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-1 transition-all duration-300';
         lbl.className = 'text-[9px] font-semibold step-label text-gray-400';
         if (i < step)        { dot.classList.add('done');   dot.innerHTML = '<i class="fas fa-check text-[10px]"></i>'; lbl.classList.add('done'); }
         else if (i === step) { dot.classList.add('active'); dot.textContent = i; lbl.classList.add('active'); }
         else                 { dot.textContent = i; }
         if (i < 5) {
-            var line = document.getElementById('stepLine' + i);
+            const line = document.getElementById('stepLine' + i);
             if (line) line.className = 'flex-1 h-0.5 rounded mb-5 transition-all duration-500 ' + (i < step ? 'bg-green-400' : 'bg-gray-200');
         }
     }
-    document.getElementById('modalStepLabel').textContent = 'Langkah ' + step + ' dari 5 – ' + labels[step-1];
+    document.getElementById('modalStepLabel').textContent = `Langkah ${step} dari 5 – ${labels[step-1]}`;
     document.getElementById('modalContent').scrollTop = 0;
     if (step === 5) buildSummary();
 }
 
 function validateAndGoStep3() {
-    var inputs = document.getElementById('step2')
+    const inputs = document.getElementById('step2')
         .querySelectorAll('input[required],textarea[required],select[required]');
-    var valid = true;
-    var hasEmpty = false;
-    var errMsg = 'Ada Dokumen yang Perlu dilengkapi';
-    inputs.forEach(function(input) {
+    let valid = true;
+    let hasEmpty = false;
+    let errMsg = 'Ada kolom yang wajib diisi';
+    inputs.forEach(input => {
         input.style.borderColor = '';
-        var val = input.value.trim();
+        let val = input.value.trim();
         if (!val) { input.style.borderColor = '#ef4444'; valid = false; hasEmpty = true; }
         else if (val && (input.name.toLowerCase().includes('nik') || input.name.toLowerCase().includes('nomor_kk')) && val.length !== 16) {
             input.style.borderColor = '#ef4444';
             valid = false;
-            errMsg = 'Nomor harus tepat 16 angka!';
+            errMsg = `Nomor harus tepat 16 angka!`;
         }
     });
-    if (hasEmpty) errMsg = 'Ada Dokumen yang Perlu dilengkapi';
-    if (!valid) { showToast(errMsg, 'warning'); return; }
+    if (hasEmpty) errMsg = 'Ada kolom yang wajib diisi';
+    if (!valid) { showToast(errMsg, 'error'); return; }
     goToStep(3);
 }
 
 function validateAndGoStep4() {
-    var valid = true;
-    var missingLabel = '';
-    currentConfig.files.forEach(function(file) {
+    let valid = true;
+    let missingLabel = '';
+    currentConfig.files.forEach(file => {
         if (file.required === false) return;
-        var input = document.querySelector('input[name="' + file.name + '"]');
+        const input = document.querySelector(`input[name="${file.name}"]`);
         if (!input || !input.files || input.files.length === 0) {
             if (!missingLabel) missingLabel = file.label;
             valid = false;
-            var lbl = input ? input.closest('label') : null;
+            const lbl = input ? input.closest('label') : null;
             if (lbl) {
                 lbl.classList.add('border-red-400', 'bg-red-50');
-                input.addEventListener('change', function() { lbl.classList.remove('border-red-400','bg-red-50'); }, { once: true });
+                input.addEventListener('change', () => lbl.classList.remove('border-red-400','bg-red-50'), { once: true });
             }
         }
     });
-    if (!valid) { showToast('Ada Dokumen yang Perlu dilengkapi', 'warning'); return; }
+    if (!valid) { showToast('Ada kolom yang wajib diisi', 'error'); return; }
     goToStep(4);
 }
 
 function buildSummary() {
-    var html = '';
-    currentConfig.fields.forEach(function(f) {
+    let html = '';
+    currentConfig.fields.forEach(f => {
         if (f.type === 'hidden' || f.type === 'file' || f.type === 'heading') return;
-        var el  = document.querySelector('[name="' + f.name + '"]');
-        var val = el ? el.value : '-';
-        html += '<div class="flex justify-between py-1.5 border-b border-gray-100 last:border-0">' +
-                '<span class="text-gray-500 text-xs">' + f.label + '</span>' +
-                '<span class="font-semibold text-gray-800 text-xs text-right max-w-[60%] truncate">' + (val||'-') + '</span>' +
-                '</div>';
+        const el  = document.querySelector(`[name="${f.name}"]`);
+        const val = el ? el.value : '-';
+        html += `<div class="flex justify-between py-1.5 border-b border-gray-100 last:border-0">
+            <span class="text-gray-500 text-xs">${f.label}</span>
+            <span class="font-semibold text-gray-800 text-xs text-right max-w-[60%] truncate">${val||'-'}</span>
+        </div>`;
     });
-    currentConfig.files.forEach(function(f) {
-        var el  = document.querySelector('[name="' + f.name + '"]');
-        var val = el && el.files[0] ? el.files[0].name : '(belum dipilih)';
-        html += '<div class="flex justify-between py-1.5 border-b border-gray-100 last:border-0">' +
-                '<span class="text-gray-500 text-xs">' + f.label + '</span>' +
-                '<span class="font-semibold text-xs text-right max-w-[60%] truncate ' + (el&&el.files[0]?'text-green-600':'text-gray-400') + '">' + val + '</span>' +
-                '</div>';
+    currentConfig.files.forEach(f => {
+        const el  = document.querySelector(`[name="${f.name}"]`);
+        const val = el && el.files[0] ? el.files[0].name : '(belum dipilih)';
+        html += `<div class="flex justify-between py-1.5 border-b border-gray-100 last:border-0">
+            <span class="text-gray-500 text-xs">${f.label}</span>
+            <span class="font-semibold text-xs text-right max-w-[60%] truncate ${el&&el.files[0]?'text-green-600':'text-gray-400'}">${val}</span>
+        </div>`;
     });
     document.getElementById('summaryData').innerHTML = html;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   Liveness Detection
-   ═══════════════════════════════════════════════════════════════════ */
-var LEFT_EYE_IDX  = [33, 160, 158, 133, 153, 144];
-var RIGHT_EYE_IDX = [362, 385, 387, 263, 373, 380];
+const LEFT_EYE_IDX  = [33, 160, 158, 133, 153, 144];
+const RIGHT_EYE_IDX = [362, 385, 387, 263, 373, 380];
+
+function stripToastHtml(message) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = message || '';
+    return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
+}
+
+function showErrorToast(problem, solution, title = 'Terjadi kesalahan', timer = 6000) {
+    const cleanProblem = stripToastHtml(problem || 'Terjadi kesalahan saat memproses permintaan.');
+    const cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
+
+    if (typeof window.fireToast === 'function') {
+        return window.fireToast({
+            type: 'error',
+            icon: 'error',
+            title: title,
+            problem: cleanProblem,
+            solution: cleanSolution,
+            timer: timer
+        });
+    }
+
+    return showToast(`${cleanProblem} ${cleanSolution}`, 'error');
+}
+
+// Fungsi autofill data pemohon dari nomor antrian
+function autoFillFromAntrian(nomorAntrian) {
+    console.log('=== autoFillFromAntrian DEBUG ===');
+    console.log('Raw input:', nomorAntrian);
+    console.log('Input type:', typeof nomorAntrian);
+    console.log('Input length:', nomorAntrian ? nomorAntrian.length : 'null');
+
+    if (!nomorAntrian || nomorAntrian.trim().length < 5) {
+        console.log('Nomor antrian terlalu pendek atau kosong');
+        return;
+    }
+
+    // Tampilkan loading state
+    const input = document.getElementById('nomorAntrianInput');
+    if (!input) {
+        console.log('Input nomor antrian tidak ditemukan');
+        return;
+    }
+
+    input.classList.add('loading');
+
+    // Tambahkan parameter layanan_id untuk validasi
+    const layananId = currentConfig?.fields?.find(f => f.name === 'layanan_id')?.value || '';
+    console.log('Layanan ID:', layananId);
+
+    const apiUrl = '/api/antrian/' + encodeURIComponent(nomorAntrian) + (layananId ? '?layanan_id=' + encodeURIComponent(layananId) : '');
+    console.log('API URL:', apiUrl);
+    console.log('Encoded nomor antrian:', encodeURIComponent(nomorAntrian));
+
+    fetch(apiUrl)
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response OK:', response.ok);
+            return response.json();
+        })
+        .then(data => {
+            console.log('=== API RESPONSE ===');
+            console.log('Full data:', data);
+            console.log('Success:', data.success);
+            console.log('Error code:', data.error_code);
+            console.log('Message:', data.message);
+
+            // Handle error responses - SEMUA menggunakan toast di kanan atas
+            if (!data.success) {
+                const errorCode = data.error_code;
+
+                if (errorCode === 'NOT_FOUND') {
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
+                        data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.',
+                        'Nomor antrian tidak ditemukan'
+                    );
+                    input.value = ''; // Clear input
+                } else if (errorCode === 'ALREADY_USED') {
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
+                        data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
+                        'Nomor antrian sudah digunakan'
+                    );
+                    input.value = ''; // Clear input
+                } else if (errorCode === 'INVALID_SERVICE') {
+                    const layananAsal = data.layanan_asal_nama || 'layanan lain';
+                    const layananTujuan = data.layanan_tujuan_nama || 'layanan yang dipilih';
+                    showErrorToast(
+                        data.problem || `Nomor antrian tidak sesuai dengan layanan yang dipilih. Nomor ini berlaku untuk layanan ${layananAsal}.`,
+                        data.solution || `Pilih layanan ${layananAsal}, atau buat nomor antrian baru untuk layanan ${layananTujuan}.`,
+                        'Nomor antrian tidak sesuai layanan',
+                        7000
+                    );
+                    input.value = ''; // Clear input
+                } else {
+                    showErrorToast(
+                        data.problem || data.message || 'Gagal mengambil data antrian.',
+                        data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.',
+                        'Gagal mengambil data antrian'
+                    );
+                }
+                return;
+            }
+
+            if (data.success && data.data) {
+                console.log('=== SUCCESS CASE ===');
+                // Isi field secara otomatis
+                const nikInput = document.getElementById('nikPemohonInput');
+                const namaInput = document.getElementById('namaPemohonInput');
+                const alamatInput = document.getElementById('alamatPemohonInput')
+                    || document.querySelector('[name="alamat_pemohon"]')
+                    || document.querySelector('[name="alamat"]');
+
+                console.log('nikInput found:', !!nikInput, 'data.nik:', data.data.nik);
+                console.log('namaInput found:', !!namaInput, 'data.nama_lengkap:', data.data.nama_lengkap);
+                console.log('alamatInput found:', !!alamatInput, 'data.alamat:', data.data.alamat);
+
+                if (nikInput && data.data.nik) {
+                    nikInput.value = data.data.nik;
+                    console.log('✓ NIK filled:', data.data.nik);
+                } else {
+                    console.log('✗ NIK field not found or no data');
+                }
+                if (namaInput && data.data.nama_lengkap) {
+                    namaInput.value = data.data.nama_lengkap;
+                    console.log('✓ Nama filled:', data.data.nama_lengkap);
+                } else {
+                    console.log('✗ Nama field not found or no data');
+                }
+                if (alamatInput && data.data.alamat) {
+                    alamatInput.value = data.data.alamat;
+                    console.log('✓ Alamat filled:', data.data.alamat);
+                } else {
+                    console.log('✗ Alamat field not found or no data');
+                }
+
+                showToast('Data berhasil diambil dari nomor antrian', 'success');
+            } else {
+                console.log('=== NO SUCCESS AND NO DATA ===');
+                console.log('data.success:', data.success);
+                console.log('data.data:', data.data);
+            }
+        })
+        .catch(error => {
+            console.error('=== AUTOFILL CATCH ERROR ===');
+            console.error('Error:', error);
+            if (input) input.classList.remove('loading');
+            showErrorToast(
+                'Sistem gagal mengambil data antrian.',
+                'Periksa koneksi internet, lalu masukkan nomor antrian kembali.',
+                'Gagal mengambil data antrian'
+            );
+        })
+        .finally(() => {
+            if (input) input.classList.remove('loading');
+        });
+}
 
 function computeEAR(p1,p2,p3,p4,p5,p6) {
-    var d = function(a,b) { return Math.hypot(a.x-b.x, a.y-b.y); };
+    const d = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
     return (d(p2,p6) + d(p3,p5)) / (2 * d(p1,p4));
 }
 function getEAR(lm) {
-    var l = function(i) { return lm[i]; };
-    var earL = computeEAR(l(LEFT_EYE_IDX[0]),l(LEFT_EYE_IDX[1]),l(LEFT_EYE_IDX[2]),l(LEFT_EYE_IDX[3]),l(LEFT_EYE_IDX[4]),l(LEFT_EYE_IDX[5]));
-    var earR = computeEAR(l(RIGHT_EYE_IDX[0]),l(RIGHT_EYE_IDX[1]),l(RIGHT_EYE_IDX[2]),l(RIGHT_EYE_IDX[3]),l(RIGHT_EYE_IDX[4]),l(RIGHT_EYE_IDX[5]));
+    const l = (i) => lm[i];
+    const earL = computeEAR(l(LEFT_EYE_IDX[0]),l(LEFT_EYE_IDX[1]),l(LEFT_EYE_IDX[2]),l(LEFT_EYE_IDX[3]),l(LEFT_EYE_IDX[4]),l(LEFT_EYE_IDX[5]));
+    const earR = computeEAR(l(RIGHT_EYE_IDX[0]),l(RIGHT_EYE_IDX[1]),l(RIGHT_EYE_IDX[2]),l(RIGHT_EYE_IDX[3]),l(RIGHT_EYE_IDX[4]),l(RIGHT_EYE_IDX[5]));
     return (earL + earR) / 2;
 }
 function detectBlink(landmarks) {
-    var ear = getEAR(landmarks);
+    const ear = getEAR(landmarks);
     if (ear < BLINK_THRESHOLD && !eyeClosed) { eyeClosed = true; }
     else if (ear >= BLINK_THRESHOLD && eyeClosed) {
         eyeClosed = false;
@@ -1285,29 +1295,29 @@ function detectBlink(landmarks) {
 }
 function updateBlinkUI() {
     document.getElementById('blinkCount').textContent = blinkCount;
-    for (var i = 1; i <= BLINK_TARGET; i++) {
-        var dot = document.getElementById('blink-dot-' + i);
+    for (let i = 1; i <= BLINK_TARGET; i++) {
+        const dot = document.getElementById(`blink-dot-${i}`);
         if (!dot) continue;
         if (i <= blinkCount) {
             dot.className = 'w-8 h-8 rounded-full border-2 border-green-500 bg-green-500 flex items-center justify-center text-xs font-bold text-white';
             dot.innerHTML = '<i class="fas fa-check text-xs"></i>';
         }
     }
-    setOverlay('Kedipan ' + blinkCount + '/' + BLINK_TARGET + ' terdeteksi...');
+    setOverlay(`Kedipan ${blinkCount}/${BLINK_TARGET} terdeteksi...`);
 }
 function onLivenessPassed() {
-    var video  = document.getElementById('video');
-    var canvas = document.getElementById('canvas');
+    const video  = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
     canvas.width  = video.videoWidth  || 640;
     canvas.height = video.videoHeight || 480;
-    var ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     ctx.translate(canvas.width, 0); ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     document.getElementById('foto_wajah').value = canvas.toDataURL('image/jpeg', 0.85);
     stopCamera();
     document.getElementById('liveness_passed').value = '1';
     document.getElementById('btnStartLiveness').disabled = true;
-    var preview = document.createElement('img');
+    const preview = document.createElement('img');
     preview.src = document.getElementById('foto_wajah').value;
     preview.className = 'w-full rounded-xl';
     preview.style.maxHeight = '260px';
@@ -1317,24 +1327,24 @@ function onLivenessPassed() {
     video.parentNode.insertBefore(preview, video);
     document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
     document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
-    showToast('Verifikasi Wajah Berhasil', 'success');
-    setTimeout(function() { goToStep(5); }, 900);
+    showToast('Verifikasi wajah berhasil! Foto tersimpan.', 'success');
+    setTimeout(() => goToStep(5), 900);
 }
 function setOverlay(text) { document.getElementById('liveness-overlay').textContent = text; }
 function startLiveness() {
     if (livenessStarted) return;
     livenessStarted = true;
-    var errEl = document.getElementById('liveness-error');
+    const errEl = document.getElementById('liveness-error');
     errEl.classList.add('hidden');
     document.getElementById('btnStartLiveness').disabled = true;
     setOverlay('Meminta izin kamera...');
-    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-        stream.getTracks().forEach(function(t) { t.stop(); });
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        stream.getTracks().forEach(t => t.stop());
         setOverlay('Mengaktifkan algoritma wajah...');
-        var video = document.getElementById('video');
-        faceMeshInstance = new FaceMesh({ locateFile: function(f) { return 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/' + f; } });
+        const video = document.getElementById('video');
+        faceMeshInstance = new FaceMesh({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${f}` });
         faceMeshInstance.setOptions({ maxNumFaces:1, refineLandmarks:true, minDetectionConfidence:0.5, minTrackingConfidence:0.5 });
-        faceMeshInstance.onResults(function(results) {
+        faceMeshInstance.onResults((results) => {
             if (!results.multiFaceLandmarks || !results.multiFaceLandmarks.length) {
                 setOverlay('Wajah tidak terdeteksi – pastikan wajah terlihat jelas'); return;
             }
@@ -1342,18 +1352,18 @@ function startLiveness() {
             detectBlink(results.multiFaceLandmarks[0]);
         });
         mpCamera = new Camera(video, {
-            onFrame: async function() { if (faceMeshInstance) await faceMeshInstance.send({ image: video }); },
+            onFrame: async () => { if (faceMeshInstance) await faceMeshInstance.send({ image: video }); },
             width: 640, height: 480
         });
-        mpCamera.start().then(function() { setOverlay('Kedipkan mata 2 kali secara natural...'); })
-            .catch(function(err) {
+        mpCamera.start().then(() => setOverlay('Kedipkan mata 2 kali secara natural...'))
+            .catch(err => {
                 errEl.textContent = 'Gagal render MediaPipe: ' + (err.message || err);
                 errEl.classList.remove('hidden');
                 setOverlay('Gagal mengakses kamera');
                 livenessStarted = false;
                 document.getElementById('btnStartLiveness').disabled = false;
             });
-    }).catch(function(err) {
+    }).catch(err => {
         errEl.textContent = 'Kamera diblokir. Cek izin browser. (' + err.name + ')';
         errEl.classList.remove('hidden');
         setOverlay('Izin kamera ditolak');
@@ -1364,7 +1374,7 @@ function startLiveness() {
 function stopCamera() { if (mpCamera) { mpCamera.stop(); mpCamera = null; } }
 function resetLiveness() {
     blinkCount = 0; eyeClosed = false; livenessStarted = false; faceMeshInstance = null;
-    var old = document.getElementById('foto-preview');
+    const old = document.getElementById('foto-preview');
     if (old) old.remove();
     document.getElementById('video').style.display = '';
     document.getElementById('foto_wajah').value = '';
@@ -1372,61 +1382,66 @@ function resetLiveness() {
     document.getElementById('liveness_passed').value = '0';
     document.getElementById('liveness-overlay').textContent = 'Tekan "Mulai Verifikasi" untuk mengaktifkan kamera';
     document.getElementById('liveness-overlay').className = 'absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center py-2 text-sm font-semibold';
-    var btn = document.getElementById('btnStartLiveness');
+    const btn = document.getElementById('btnStartLiveness');
     if (btn) btn.disabled = false;
-    for (var i = 1; i <= BLINK_TARGET; i++) {
-        var dot = document.getElementById('blink-dot-' + i);
+    for (let i = 1; i <= BLINK_TARGET; i++) {
+        const dot = document.getElementById(`blink-dot-${i}`);
         if (dot) { dot.className = 'w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-400'; dot.textContent = i; }
     }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   Helpers
-   ═══════════════════════════════════════════════════════════════════ */
+// Fungsi untuk mendapatkan tanggal minimum (hari ini + 7 hari)
 function getMinDate() {
-    var today = new Date();
-    var minDate = new Date(today);
+    const today = new Date();
+    const minDate = new Date(today);
     minDate.setDate(today.getDate() + 7);
     return minDate.toISOString().split('T')[0];
 }
 
+// Fungsi untuk load jenis agama dari API
 function loadJenisAgama() {
     fetch("{{ route('api.pernikahan.jenis-agama') }}")
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
+        .then(response => response.json())
+        .then(data => {
             if (data.success && data.data) {
-                var select = document.getElementById('jenisAgamaSelect');
+                const select = document.getElementById('jenisAgamaSelect');
                 if (select) {
                     select.innerHTML = '<option value="">Pilih Agama...</option>';
-                    data.data.forEach(function(item) {
-                        select.innerHTML += '<option value="' + item.jenis_keagamaan_id + '">' + item.nama_jenis_keagamaan + '</option>';
+                    data.data.forEach(item => {
+                        select.innerHTML += `<option value="${item.jenis_keagamaan_id}">${item.nama_jenis_keagamaan}</option>`;
                     });
                 }
             }
         })
-        .catch(function(error) { console.error('Gagal load jenis agama:', error); });
+        .catch(error => {
+            console.error('Gagal load jenis agama:', error);
+        });
 }
 
+// Fungsi untuk load keagamaan berdasarkan jenis agama yang dipilih
 function loadKeagamaanByAgama(jenisAgamaId) {
-    var keagamaanSelect = document.getElementById('keagamaanSelect');
+    const keagamaanSelect = document.getElementById('keagamaanSelect');
     if (!keagamaanSelect) return;
+
     if (!jenisAgamaId) {
         keagamaanSelect.innerHTML = '<option value="">Pilih agama terlebih dahulu...</option>';
         keagamaanSelect.disabled = true;
         return;
     }
+
     keagamaanSelect.innerHTML = '<option value="">Memuat data...</option>';
     keagamaanSelect.disabled = true;
-    fetch("{{ route('api.pernikahan.keagamaan') }}?jenis_keagamaan_id=" + jenisAgamaId)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
+
+    fetch(`{{ route('api.pernikahan.keagamaan') }}?jenis_keagamaan_id=${jenisAgamaId}`)
+        .then(response => response.json())
+        .then(data => {
             if (data.success && data.data) {
                 keagamaanSelect.innerHTML = '<option value="">Pilih Tempat Keagamaan...</option>';
                 if (data.data.length === 0) {
                     keagamaanSelect.innerHTML = '<option value="">Tidak ada data keagamaan untuk agama ini</option>';
                 } else {
-                    data.data.forEach(function(item) {
-                        keagamaanSelect.innerHTML += '<option value="' + item.keagamaan_id + '">' + item.nama_tempat + ' - ' + item.alamat + '</option>';
+                    data.data.forEach(item => {
+                        keagamaanSelect.innerHTML += `<option value="${item.keagamaan_id}">${item.nama_tempat} - ${item.alamat}</option>`;
                     });
                 }
                 keagamaanSelect.disabled = false;
@@ -1434,112 +1449,18 @@ function loadKeagamaanByAgama(jenisAgamaId) {
                 keagamaanSelect.innerHTML = '<option value="">Gagal memuat data</option>';
             }
         })
-        .catch(function(error) {
+        .catch(error => {
             console.error('Gagal load keagamaan:', error);
             keagamaanSelect.innerHTML = '<option value="">Gagal memuat data</option>';
         });
 }
 
-function stripToastHtml(message) {
-    var tmp = document.createElement('div');
-    tmp.innerHTML = message || '';
-    return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
-}
-
-function showErrorToast(problem, solution, title, timer) {
-    title = title || 'Terjadi kesalahan';
-    timer = timer || 6000;
-    var cleanProblem  = stripToastHtml(problem  || 'Terjadi kesalahan saat memproses permintaan.');
-    var cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
-    return showToast(cleanProblem + ' ' + cleanSolution, 'error');
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   Auto-fill dari nomor antrian
-   ═══════════════════════════════════════════════════════════════════ */
-function autoFillFromAntrian(nomorAntrian) {
-    if (!nomorAntrian || nomorAntrian.trim().length < 5) return;
-    var input = document.getElementById('nomorAntrianInput');
-    if (!input) return;
-    input.classList.add('loading');
-
-    var layananId = '';
-    if (currentConfig && currentConfig.fields) {
-        var hiddenField = currentConfig.fields.find(function(f) { return f.name === 'layanan_id'; });
-        if (hiddenField) layananId = hiddenField.value || '';
-    }
-
-    var apiUrl = '/api/antrian/' + encodeURIComponent(nomorAntrian) + (layananId ? '?layanan_id=' + encodeURIComponent(layananId) : '');
-
-    fetch(apiUrl)
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            if (!data.success) {
-                var errorCode = data.error_code;
-                if (errorCode === 'NOT_FOUND') {
-                    showErrorToast(
-                        data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
-                        data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.',
-                        'Nomor antrian tidak ditemukan'
-                    );
-                    input.value = '';
-                } else if (errorCode === 'ALREADY_USED') {
-                    showErrorToast(
-                        data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
-                        data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
-                        'Nomor antrian sudah digunakan'
-                    );
-                    input.value = '';
-                } else if (errorCode === 'INVALID_SERVICE') {
-                    showErrorToast(
-                        data.problem || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.',
-                        data.solution || 'Pilih layanan yang sesuai atau buat nomor antrian baru.',
-                        'Nomor antrian tidak sesuai layanan',
-                        7000
-                    );
-                    input.value = '';
-                } else {
-                    showErrorToast(
-                        data.problem || data.message || 'Gagal mengambil data antrian.',
-                        data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.',
-                        'Gagal mengambil data antrian'
-                    );
-                }
-                return;
-            }
-            if (data.success && data.data) {
-                var nikInput    = document.getElementById('nikPemohonInput');
-                var namaInput   = document.getElementById('namaPemohonInput');
-                var alamatInput = document.getElementById('alamatPemohonInput')
-                    || document.querySelector('[name="alamat_pemohon"]')
-                    || document.querySelector('[name="alamat"]');
-                if (nikInput    && data.data.nik)          nikInput.value    = data.data.nik;
-                if (namaInput   && data.data.nama_lengkap) namaInput.value   = data.data.nama_lengkap;
-                if (alamatInput && data.data.alamat)       alamatInput.value = data.data.alamat;
-                showToast('Berhasil Mengambil Data dari Nomor Antrian', 'success');
-            }
-        })
-        .catch(function(error) {
-            console.error('autoFillFromAntrian error:', error);
-            showErrorToast(
-                'Sistem gagal mengambil data antrian.',
-                'Periksa koneksi internet, lalu masukkan nomor antrian kembali.',
-                'Gagal mengambil data antrian'
-            );
-        })
-        .finally(function() {
-            if (input) input.classList.remove('loading');
-        });
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   File handling
-   ═══════════════════════════════════════════════════════════════════ */
 function handleFileSelect(input, fieldName) {
     if (!validateSelectedFile(input)) return;
-    var displayDiv = document.getElementById('name-' + fieldName);
-    var icon       = document.getElementById('icon-' + fieldName);
-    var clearBtn   = document.getElementById('clear-' + fieldName);
+
+    const displayDiv = document.getElementById(`name-${fieldName}`);
+    const icon       = document.getElementById(`icon-${fieldName}`);
+    const clearBtn   = document.getElementById(`clear-${fieldName}`);
     if (input.files && input.files[0]) {
         displayDiv.querySelector('.file-label').textContent = input.files[0].name;
         displayDiv.classList.remove('hidden');
@@ -1551,54 +1472,61 @@ function handleFileSelect(input, fieldName) {
         if (clearBtn) clearBtn.classList.add('hidden');
     }
 }
+
 function isPdfOnlyInput(input) {
-    var accept = (input.getAttribute('accept') || '').toLowerCase();
+    const accept = (input.getAttribute('accept') || '').toLowerCase();
     return accept.includes('.pdf') && !accept.includes('image') && !accept.includes('.jpg') && !accept.includes('.jpeg') && !accept.includes('.png');
 }
+
 function validateSelectedFile(input) {
-    var file = input.files && input.files[0] ? input.files[0] : null;
+    const file = input.files && input.files[0] ? input.files[0] : null;
     if (!file) return true;
+
     if (isPdfOnlyInput(input)) {
-        var isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-        if (!isPdf) { input.value = ''; showToast('Hanya file PDF yang diperbolehkan', 'error'); return false; }
+        const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        if (!isPdf) {
+            input.value = '';
+            showToast('Hanya file PDF yang diperbolehkan', 'error');
+            return false;
+        }
     }
-    if (file.size > 2 * 1024 * 1024) { input.value = ''; showToast('Maksimal ukuran file: 2MB', 'error'); return false; }
+
+    if (file.size > 2 * 1024 * 1024) {
+        input.value = '';
+        showToast('Maksimal ukuran file: 2MB', 'error');
+        return false;
+    }
+
     return true;
 }
 function clearFileInput(fieldName) {
-    var input = document.querySelector('input[type="file"][name="' + fieldName + '"]');
+    const input = document.querySelector(`input[type="file"][name="${fieldName}"]`);
     if (!input) return;
     input.value = '';
     handleFileSelect(input, fieldName);
 }
-
-/* ═══════════════════════════════════════════════════════════════════
-   Toast helper
-   ═══════════════════════════════════════════════════════════════════ */
-function showToast(message, type) {
-    type = type || 'info';
-    var iconMap = { success:'success', error:'error', warning:'warning', info:'info' };
+function showToast(message, type = 'info') {
+    const iconMap = {
+        success: 'success',
+        error: 'error',
+        warning: 'warning',
+        info: 'info'
+    };
+    const icon = iconMap[type] || 'info';
     Swal.mixin({
-        toast             : true,
-        position          : 'top-end',
-        showConfirmButton : false,
-        showDenyButton    : false,
-        showCancelButton  : false,
-        timer             : 4000,
-        timerProgressBar  : true,
-        icon              : iconMap[type] || 'info',
-        title             : message,
-        customClass       : { popup: 'swal-toast-' + (type || 'info') },
-        didOpen           : function(toast) {
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        icon: icon,
+        title: message,
+        didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer);
             toast.addEventListener('mouseleave', Swal.resumeTimer);
         }
     }).fire();
 }
-
-/* ═══════════════════════════════════════════════════════════════════
-   Close modal
-   ═══════════════════════════════════════════════════════════════════ */
 function closeModal() {
     stopCamera();
     resetLiveness();
@@ -1606,127 +1534,291 @@ function closeModal() {
     document.body.style.overflow = 'auto';
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   handleKirimPengajuan — Kirim via fetch TANPA native form submit
-   (menghindari popup OK/No/Cancel dari browser extension / layout)
-   ═══════════════════════════════════════════════════════════════════ */
-async function handleKirimPengajuan() {
-    var livenessInput = document.getElementById('liveness_passed');
-    var livenessValue = (livenessInput && livenessInput.value) ? livenessInput.value : '0';
+// Pastikan DOM sudah dimuat sebelum memasang event listener
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== DOM LOADED - Attaching submit listener ===');
 
-    /* Guard: verifikasi wajah harus selesai */
-    if (livenessValue !== '1') {
-        showToast('Harap selesaikan verifikasi wajah terlebih dahulu.', 'error');
-        goToStep(4);
-        return;
-    }
+    const serviceForm = document.getElementById('serviceForm');
+    const livenessInput = document.getElementById('liveness_passed');
+    console.log('serviceForm found:', !!serviceForm);
+    console.log('liveness_passed element found:', !!livenessInput);
+    console.log('liveness_passed initial value:', livenessInput?.value);
 
-    var form           = document.getElementById('serviceForm');
-    var nikInput       = document.querySelector('[name="nik_pemohon"]');
-    var layananIdInput = document.querySelector('[name="layanan_id"]');
-    var nik            = nikInput      ? nikInput.value.trim()      : '';
-    var layananId      = layananIdInput ? layananIdInput.value.trim() : '';
+    if (serviceForm) {
+        serviceForm.addEventListener('submit', async function(e) {
+            console.log('=== FORM SUBMIT EVENT TRIGGERED ===');
+            console.log('liveness_passed value:', livenessInput?.value);
 
-    /* Disable tombol supaya tidak double-submit */
-    var btnSubmit = document.getElementById('btnSubmit');
-    if (btnSubmit) btnSubmit.disabled = true;
+            // Cek verifikasi wajah dengan aman
+            const livenessValue = livenessInput?.value || '0';
+            if (livenessValue !== '1') {
+                console.warn('=== VERIFIKASI WAJAH BELUM LULUS ===');
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                showToast('Harap selesaikan verifikasi wajah terlebih dahulu.', 'error');
+                goToStep(4);
+                return;
+            }
 
+            e.preventDefault();
+            console.log('=== PREVENTING DEFAULT SUBMIT, PROCEEDING WITH FETCH ===');
+
+    const form = this;
+
+    // Ambil NIK dan layanan_id dari form
+    const nikInput = document.querySelector('[name="nik_pemohon"]');
+    const layananIdInput = document.querySelector('[name="layanan_id"]');
+
+    const nik = nikInput ? nikInput.value.trim() : '';
+    const layananId = layananIdInput ? layananIdInput.value.trim() : '';
+
+    // Validasi daily limit sebelum submit (dengan timeout 10 detik)
     if (nik && layananId) {
-        /* ── Cek daily limit ── */
-        showLoadingModal('Memeriksa...', 'Mohon tunggu sebentar');
+        // Show loading untuk cek daily limit
+        Swal.fire({
+            title: 'Memeriksa...',
+            text: 'Mohon tunggu sebentar',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            didOpen: () => Swal.showLoading()
+        });
 
         try {
-            var controller = new AbortController();
-            var timeoutId  = setTimeout(function() { controller.abort(); }, 10000);
+            // Tambah timeout 10 detik untuk mencegah hang forever
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-            var checkResponse = await fetch(
-                '/api/antrian/check-daily-limit?nik=' + encodeURIComponent(nik) + '&layanan_id=' + encodeURIComponent(layananId),
-                { signal: controller.signal }
-            );
+            const checkResponse = await fetch(`/api/antrian/check-daily-limit?nik=${encodeURIComponent(nik)}&layanan_id=${encodeURIComponent(layananId)}`, {
+                signal: controller.signal
+            });
             clearTimeout(timeoutId);
 
-            if (!checkResponse.ok) throw new Error('HTTP ' + checkResponse.status);
+            if (!checkResponse.ok) {
+                throw new Error(`HTTP ${checkResponse.status}`);
+            }
 
-            var checkData = await checkResponse.json();
+            const checkData = await checkResponse.json();
+            console.log('Daily limit check result:', checkData);
 
             if (!checkData.success) {
                 Swal.close();
-                if (btnSubmit) btnSubmit.disabled = false;
+
+                // SEMUA error pakai toast di kanan atas
                 if (checkData.error_code === 'DAILY_LIMIT_EXCEEDED') {
-                    showToast(checkData.message || 'Anda sudah mengajukan layanan ini hari ini.', 'warning');
+                    Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true,
+                        icon: 'warning',
+                        title: 'Batas Harian Tercapai',
+                        html: checkData.message || 'Anda sudah mengajukan layanan ini hari ini.',
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+                        }
+                    }).fire();
                 } else {
-                    showToast(checkData.message || 'Terjadi kesalahan validasi', 'error');
+                    Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true,
+                        icon: 'error',
+                        title: 'Validasi Gagal',
+                        text: checkData.message || 'Terjadi kesalahan validasi',
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+                        }
+                    }).fire();
                 }
                 return;
             }
 
-            /* Daily limit OK — lanjut submit */
-            showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
+            // Lanjut submit jika daily limit OK
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Mohon tunggu sebentar',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                didOpen: () => Swal.showLoading()
+            });
 
         } catch (error) {
             Swal.close();
             console.error('Daily limit check error:', error);
-            /* Jika timeout, fail open dan lanjut submit */
-            showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
+
+            // Jika timeout, langsung lanjut submit (fail open)
+            if (error.name === 'AbortError') {
+                console.warn('Daily limit check timeout, proceeding with submission');
+            }
+
+            // Show loading untuk submit
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Mohon tunggu sebentar',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                didOpen: () => Swal.showLoading()
+            });
         }
     } else {
-        showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
+        // Show loading jika tidak ada nik/layanan_id
+        Swal.fire({
+            title: 'Memproses...',
+            text: 'Mohon tunggu sebentar',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            didOpen: () => Swal.showLoading()
+        });
     }
 
-    /* ── Submit form via fetch (TANPA native submit — bypass semua interceptor) ── */
-    var formData = new FormData(form);
+    const formData = new FormData(form);
+
+    // DEBUG: Log URL yang akan digunakan
+    console.log('=== SUBMITTING FORM TO ===');
+    console.log('form.action:', form.action);
+    console.log('form.method:', form.method);
+    console.log('formData keys:', [...formData.keys()]);
 
     fetch(form.action, {
-        method  : 'POST',
-        body    : formData,
-        headers : { 'X-Requested-With': 'XMLHttpRequest' }
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
     })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
+    .then(response => response.json())
+    .then(data => {
         Swal.close();
-        if (btnSubmit) btnSubmit.disabled = false;
+
         if (data.success) {
-            /* ── Toast sukses kanan atas ── */
-            showToast('Pengajuan Dokumen Berhasil dilakukan', 'success');
+            // SweetAlert toast di kanan atas
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true,
+                icon: 'success',
+                title: 'Berhasil!',
+                text: data.message || 'Pengajuan berkas berhasil dikirim',
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            }).fire();
+
+            // Reset form dan tutup modal
             form.reset();
             closeModal();
             goToStep(1);
+
+            // Reset liveness
             document.getElementById('liveness_passed').value = '0';
             document.getElementById('foto_wajah').value = '';
+
         } else {
-            showToast(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'error');
+            // Error handling pakai toast di kanan atas
+            Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true,
+                icon: 'error',
+                title: 'Gagal!',
+                text: data.message || 'Terjadi kesalahan saat mengirim pengajuan',
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            }).fire();
         }
     })
-    .catch(function(error) {
+    .catch(error => {
         Swal.close();
-        if (btnSubmit) btnSubmit.disabled = false;
-        console.error('Submit error:', error);
-        showToast('Gagal mengirim pengajuan. Silakan coba lagi.', 'error');
+        console.error('Error:', error);
+        // Error catch pakai toast di kanan atas
+        Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            icon: 'error',
+            title: 'Terjadi Kesalahan!',
+            text: 'Gagal mengirim pengajuan. Silakan coba lagi.',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        }).fire();
     });
-}
+        }); // End submit event listener
 
-/* ═══════════════════════════════════════════════════════════════════
-   DOM Ready — session flash + block native submit sebagai fallback
-   ═══════════════════════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', function() {
-    /* Block native form submit sepenuhnya — semua submit lewat handleKirimPengajuan() */
-    var serviceForm = document.getElementById('serviceForm');
-    if (serviceForm) {
-        serviceForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-        }, true); /* capture phase — mencegat sebelum listener lain */
+        // Debug: Add click listener to submit button
+        const btnSubmit = document.getElementById('btnSubmit');
+        if (btnSubmit) {
+            console.log('btnSubmit found, attaching click listener for debug');
+            btnSubmit.addEventListener('click', function(e) {
+                console.log('=== SUBMIT BUTTON CLICKED ===');
+                console.log('liveness_passed at click:', livenessInput?.value);
+            });
+        } else {
+            console.error('btnSubmit NOT FOUND!');
+        }
+    } else {
+        console.error('serviceForm NOT FOUND!');
     }
-
-    @if(session('error'))
-    showToast('{!! addslashes(session("error")) !!}', 'error');
-    @endif
-
-    @if(session('success'))
-    showToast('{{ addslashes(session("success")) }}', 'success');
-    @endif
-
-}); /* end DOMContentLoaded */
+}); // End DOMContentLoaded
+@if(session('error'))
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            icon: 'error',
+            title: 'Gagal Memproses!',
+            html: '{!! session("error") !!}',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        }).fire();
+    });
+@endif
+@if(session('success'))
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            icon: 'success',
+            title: 'Berhasil Terkirim!',
+            text: '{{ session("success") }}',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        }).fire();
+    });
+@endif
 </script>
 @endpush
 @endsection

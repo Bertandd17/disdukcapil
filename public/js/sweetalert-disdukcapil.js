@@ -803,9 +803,17 @@
         function __ddDecorateToastOpts(opt, mode) {
             if (!opt || typeof opt !== 'object') return opt;
 
-            // Cabang MODAL â€” bila bukan toast, suntik swal-dd-modal untuk konsistensi putih.
+            // Skip loading modal (showConfirmButton: false & bukan toast)
+            if (opt.toast !== true && opt.showConfirmButton === false && !opt.showDenyButton) {
+                if (!opt.customClass) opt.customClass = {};
+                if (typeof opt.customClass === 'object' && !opt.customClass.popup) {
+                    opt.customClass.popup = 'swal-dd-modal';
+                }
+                return opt;
+            }
+
+            // Cabang MODAL
             if (opt.toast !== true) {
-                // Skip jika sudah ditandai eksplisit oleh helper internal.
                 var existingPopup = '';
                 if (opt.customClass) {
                     if (typeof opt.customClass === 'string') existingPopup = opt.customClass;
@@ -818,21 +826,20 @@
                     } else {
                         opt.customClass.popup = (existingPopup ? existingPopup + ' ' : '') + 'swal-dd-modal';
                     }
-                    // Tombol gradient otomatis bila belum dispesifikkan
                     if (typeof opt.customClass === 'object') {
-                        if (!opt.customClass.confirmButton) {
+                        if (opt.showConfirmButton !== false && !opt.customClass.confirmButton) {
                             var btn = 'swal-dd-btn swal-dd-btn-primary';
                             if (opt.icon === 'success') btn = 'swal-dd-btn swal-dd-btn-success';
                             else if (opt.icon === 'error') btn = 'swal-dd-btn swal-dd-btn-danger';
                             else if (opt.icon === 'warning') btn = 'swal-dd-btn swal-dd-btn-warning';
                             opt.customClass.confirmButton = btn;
                         }
-                        if (opt.showCancelButton && !opt.customClass.cancelButton) {
+                        if (opt.showCancelButton === true && !opt.customClass.cancelButton) {
                             opt.customClass.cancelButton = 'swal-dd-btn swal-dd-btn-cancel';
                         }
                     }
                 }
-                if (typeof opt.customClass === 'object') {
+                if (typeof opt.customClass === 'object' && opt.showConfirmButton !== false) {
                     var confirmText = opt.confirmButtonText || '';
                     if (isPositiveActionText(confirmText)) {
                         var currentConfirm = opt.customClass.confirmButton || 'swal-dd-btn swal-dd-btn-primary';

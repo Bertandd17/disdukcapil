@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container-fluid p-6 bg-gray-50 min-h-screen">
-    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
             <h1 class="text-2xl font-bold text-gray-800">
@@ -13,15 +12,14 @@
             <p class="text-gray-600 mt-1">Data statistik penduduk per kecamatan</p>
         </div>
         @if($canCreate)
-        <button type="button" onclick="openModal('create')" 
-                class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition shadow-sm">
+        <button data-style-guide-skip type="button" onclick="openModal('create')" 
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:scale-95 transition-all">
             <i class="bi bi-plus-circle"></i>
             Tambah Data
         </button>
         @endif
     </div>
 
-    <!-- Filter -->
     <form method="GET" class="mb-6">
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-wrap items-center gap-4">
             <div class="flex items-center gap-2">
@@ -83,8 +81,8 @@
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 @if($canEdit)
-                                <button type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_penduduk_id, "kecamatan_id" => $row->kecamatan_id, "tahun" => $row->tahun, "total_penduduk" => $row->total_penduduk, "nama_kecamatan" => $row->kecamatan->nama_kecamatan ?? ""]) }})' 
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition text-xs">
+                                <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_penduduk_id, "kecamatan_id" => $row->kecamatan_id, "tahun" => $row->tahun, "total_penduduk" => $row->total_penduduk, "nama_kecamatan" => $row->kecamatan->nama_kecamatan ?? ""]) }})' 
+                                        class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
                                     <i class="bi bi-pencil"></i> Ubah
                                 </button>
                                 @endif
@@ -92,7 +90,7 @@
                                 <form action="{{ route('admin.statistik-penduduk.destroy', $row->statistik_penduduk_id) }}" method="POST" class="inline-block delete-form" data-title="{{ $row->kecamatan->nama_kecamatan ?? '' }} {{ $row->tahun }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg font-medium transition text-xs">
+                                    <button data-style-guide-skip type="submit" class="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
                                         <i class="bi bi-trash"></i> Hapus
                                     </button>
                                 </form>
@@ -119,7 +117,7 @@
     <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white rounded-t-2xl">
             <h2 id="modalTitle" class="text-lg font-bold text-gray-800">Tambah Data</h2>
-            <button type="button" onclick="closeModal()" class="w-10 h-10 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-500 transition">
+            <button data-style-guide-skip type="button" onclick="closeModal()" class="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center text-gray-500 transition">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -152,8 +150,8 @@
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
-                <button type="button" id="btnBukaKonfirmasi" onclick="showKonfirmasiSimpan()" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
+                <button data-style-guide-skip type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">Batal</button>
+                <button data-style-guide-skip type="button" id="btnBukaKonfirmasi" onclick="showKonfirmasiSimpan()" class="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                     <span>Simpan</span>
                 </button>
             </div>
@@ -170,8 +168,8 @@
         <h3 class="text-lg font-bold text-gray-800 mb-2">Konfirmasi Penyimpanan</h3>
         <p class="text-sm text-gray-600 mb-6">Apakah Anda yakin ingin menyimpan data ini?</p>
         <div class="flex gap-3">
-            <button type="button" onclick="closeKonfirmasiModal()" class="flex-1 px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
-            <button type="button" id="btnKonfirmasiSimpan" class="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
+            <button data-style-guide-skip type="button" onclick="closeKonfirmasiModal()" class="flex-1 px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">Batal</button>
+            <button data-style-guide-skip type="button" id="btnKonfirmasiSimpan" class="flex-1 px-4 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                 <span id="btnKonfirmasiText">Ya, Simpan</span>
             </button>
         </div>

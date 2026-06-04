@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StatistikPendudukRequest;
 use App\Models\Kecamatan;
 use App\Models\StatistikPenduduk;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -82,7 +82,7 @@ class StatistikPendudukController extends Controller
     /**
      * Store a newly created statistik penduduk.
      */
-    public function store(StatistikPendudukRequest $request): JsonResponse
+    public function store(StatistikPendudukRequest $request): RedirectResponse
     {
         try {
             // Cek apakah data sudah ada
@@ -91,10 +91,10 @@ class StatistikPendudukController extends Controller
                 ->exists();
 
             if ($exists) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Data statistik untuk kecamatan dan tahun ini sudah ada. Gunakan fitur edit untuk mengubah data.',
-                ], 422);
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'Data statistik untuk kecamatan dan tahun ini sudah ada. Gunakan fitur edit untuk mengubah data.');
             }
 
             $statistik = StatistikPenduduk::create([
@@ -110,37 +110,34 @@ class StatistikPendudukController extends Controller
                 'tahun' => $request->tahun,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Data statistik penduduk berhasil disimpan.',
-                'data' => $statistik,
-            ], 201);
+            return redirect()
+                ->route('admin.statistik-penduduk.index')
+                ->with('success', 'Data statistik penduduk berhasil disimpan.');
 
         } catch (\Throwable $e) {
             Log::error('Admin: Gagal menyimpan statistik penduduk', [
                 'error' => $e->getMessage(),
             ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan data.',
-            ], 500);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
     }
 
     /**
      * Update the specified statistik penduduk.
      */
-    public function update(StatistikPendudukRequest $request, string $id): JsonResponse
+    public function update(StatistikPendudukRequest $request, string $id): RedirectResponse
     {
         try {
             $statistik = StatistikPenduduk::find($id);
 
             if (!$statistik) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Data statistik tidak ditemukan.',
-                ], 404);
+                return redirect()
+                    ->back()
+                    ->with('error', 'Data statistik tidak ditemukan.');
             }
 
             $exists = StatistikPenduduk::where('kecamatan_id', $request->kecamatan_id)
@@ -149,10 +146,10 @@ class StatistikPendudukController extends Controller
                 ->exists();
 
             if ($exists) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Data statistik untuk kecamatan dan tahun ini sudah ada.',
-                ], 422);
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'Data statistik untuk kecamatan dan tahun ini sudah ada.');
             }
 
             $statistik->update([
@@ -165,11 +162,9 @@ class StatistikPendudukController extends Controller
                 'id' => $statistik->statistik_penduduk_id,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Data statistik penduduk berhasil diperbarui.',
-                'data' => $statistik->fresh(),
-            ]);
+            return redirect()
+                ->route('admin.statistik-penduduk.index')
+                ->with('success', 'Data statistik penduduk berhasil diperbarui.');
 
         } catch (\Throwable $e) {
             Log::error('Admin: Gagal update statistik penduduk', [
@@ -177,26 +172,25 @@ class StatistikPendudukController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat memperbarui data.',
-            ], 500);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat memperbarui data.');
         }
     }
 
     /**
      * Remove the specified statistik penduduk.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id): RedirectResponse
     {
         try {
             $statistik = StatistikPenduduk::find($id);
 
             if (!$statistik) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Data statistik tidak ditemukan.',
-                ], 404);
+                return redirect()
+                    ->back()
+                    ->with('error', 'Data statistik tidak ditemukan.');
             }
 
             $statistik->delete();
@@ -205,10 +199,9 @@ class StatistikPendudukController extends Controller
                 'id' => $id,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Data statistik penduduk berhasil dihapus.',
-            ]);
+            return redirect()
+                ->route('admin.statistik-penduduk.index')
+                ->with('success', 'Data statistik penduduk berhasil dihapus.');
 
         } catch (\Throwable $e) {
             Log::error('Admin: Gagal hapus statistik penduduk', [
@@ -216,10 +209,10 @@ class StatistikPendudukController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat menghapus data.',
-            ], 500);
+            return redirect()
+                ->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus data.');
         }
     }
+
 }

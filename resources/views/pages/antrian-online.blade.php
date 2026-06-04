@@ -1404,7 +1404,10 @@
  'Ditolak': 5,
  'Dibatalkan': 5
  };
- var currentStep = hasPernikahan ? (antrian.pernikahan.step || 1) : (stepMap[statusAntrian] || 1);
+//  var currentStep = hasPernikahan ? (antrian.pernikahan.step || 1) : (stepMap[statusAntrian] || 1);
+var currentStep = hasPernikahan 
+    ? (antrian.pernikahan.step || stepMap[statusAntrian] || 1) 
+    : (stepMap[statusAntrian] || 1);
  var stepWidth = (currentStep / 5) * 100;
  var progressHtml = '<div class="mt-3">' +
  '<div class="flex justify-between text-xs text-gray-500 mb-1">' +
@@ -1455,20 +1458,23 @@
 
  if (anyUploaded) {
  var rows = dfItems.map(function(it) {
- var url = df[it.key];
- if (url) {
- var downloadUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
- return '<div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 text-xs">' +
- '<span class="text-gray-700 font-medium"><i class="fas fa-file-pdf text-emerald-600 mr-2"></i>' + it.label + '</span>' +
- '<a href="' + downloadUrl + '" onclick="event.stopPropagation()" class="text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1">' +
- '<i class="fas fa-download"></i> Download</a>' +
- '</div>';
- }
- return '<div class="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-xs">' +
- '<span class="text-gray-500"><i class="fas fa-file-pdf text-gray-300 mr-2"></i>' + it.label + '</span>' +
- '<span class="text-gray-400 italic">Belum tersedia</span>' +
- '</div>';
- }).join('');
+    var url = df[it.key];
+    if (url) {
+        var downloadUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
+        return '<div style="display:flex;align-items:center;justify-content:space-between;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;margin-bottom:6px;">' +
+            '<span style="font-size:12px;color:#374151;font-weight:500;display:flex;align-items:center;gap:6px;">' +
+            '<i class="fas fa-file-pdf" style="color:#059669;"></i>' + it.label + '</span>' +
+            '<a href="' + downloadUrl + '" onclick="event.stopPropagation()" ' +
+            'style="display:inline-flex;align-items:center;gap:6px;background:#2563eb;color:#ffffff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;white-space:nowrap;">' +
+            '<i class="fas fa-download"></i> Download</a>' +
+            '</div>';
+    }
+    return '<div style="display:flex;align-items:center;justify-content:space-between;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px;margin-bottom:6px;">' +
+        '<span style="font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:6px;">' +
+        '<i class="fas fa-file-pdf" style="color:#d1d5db;"></i>' + it.label + '</span>' +
+        '<span style="font-size:12px;color:#9ca3af;font-style:italic;">Belum tersedia</span>' +
+        '</div>';
+}).join('');
 
  var uploadedAt = antrian.pernikahan.dokumen_final_uploaded_at
  ? '<p class="text-[10px] text-gray-400 mt-2"><i class="fas fa-clock mr-1"></i>Diupload: ' + antrian.pernikahan.dokumen_final_uploaded_at + '</p>'
@@ -1503,11 +1509,11 @@
  infoGridHtml +
  timelineHtml +
  dokumenFinalHtml +
- '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
- '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
- '<i class="fas fa-eye"></i><span>Lihat</span>' +
- '</button>' +
- '</div>' +
+//  '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
+//  '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
+//  '<i class="fas fa-eye"></i><span>Lihat</span>' +
+//  '</button>' +
+//  '</div>' +
  '</div>';
  }).join('');
  document.getElementById('searchResults').innerHTML = html;
@@ -1660,6 +1666,7 @@
  var namaLayanan = (antrian.layanan && antrian.layanan.nama_layanan) ? antrian.layanan.nama_layanan : 'Layanan Umum';
  var statusAntrian = antrian.status_antrian || 'Menunggu';
  var statusConfig = statusConfigMap[statusAntrian] || statusConfigMap['Menunggu'];
+ var stepVal = statusConfig.step;
  var stepWidth = (statusConfig.step / 5) * 100;
 
  // Format tanggal pembuatan

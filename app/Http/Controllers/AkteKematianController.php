@@ -75,12 +75,12 @@ class AkteKematianController extends Controller
             ]);
             
             $data['status'] = 'Verifikasi Data';
-            $data['jenis_layanan'] = 'akta_kematian';
-            
+            $data['layanan_id'] = 'akte_kematian';
+
             // 3. INI KUNCINYA: Timpa input asal-asalan pemohon dengan Token Resmi
             $data['nomor_antrian'] = $nomorAntrian; 
 
-            // 4. Handle file uploads
+            // 4. Handle file uploads - Changed to 'private' disk
             $fileUploads = [
                 'ktp_pemohon'               => 'akte_kematian/pemohon',
                 'kartu_keluarga_pemohon'    => 'akte_kematian/kk',
@@ -93,7 +93,7 @@ class AkteKematianController extends Controller
 
             foreach ($fileUploads as $inputName => $storagePath) {
                 if ($request->hasFile($inputName)) {
-                    $data[$inputName] = $request->file($inputName)->store($storagePath, 'public');
+                    $data[$inputName] = $request->file($inputName)->store($storagePath, 'private');
                 }
             }
 
@@ -102,9 +102,6 @@ class AkteKematianController extends Controller
 
             // 6. Tandai nomor antrian yang sudah ada sebagai mulai diproses
             $antrian->update(['status_antrian' => 'Verifikasi Data']);
-
-            // 7. Update relasi
-            //$akteKematian->update(['antrian_online_id' => $antrian->antrian_online_id]);
 
             // 8. Create lacak berkas
             Lacak_Berkas_Model::create([
@@ -143,37 +140,8 @@ class AkteKematianController extends Controller
         }
     }
 
-    private function generateNomorAntrian()
-    {
-        // Format wajib Antrian Online: 3 Huruf - 3 Angka - 3 Angka (Contoh: AKT-106-001)
-        $huruf = 'AKT'; // 3 Huruf penanda Akte Kematian
-        
-        // 3 Angka bagian tengah: Mengambil urutan hari dalam setahun (001 - 365)
-        $hariKe = str_pad(date('z') + 1, 3, '0', STR_PAD_LEFT); 
-        
-        // 3 Angka bagian akhir: Urutan pendaftar hari ini
-        $count = AkteKematian::whereDate('created_at', now())->count() + 1;
-        $urutan = str_pad($count, 3, '0', STR_PAD_LEFT);
-        
-        return "{$huruf}-{$hariKe}-{$urutan}";
-    }
-
-    private function invalidAntrianResponse(Request $request, string $message)
-    {
-        if ($request->expectsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => false,
-                'message' => $message,
-            ], 422);
-        }
-
-        return redirect()->back()->with('error', $message)->withInput();
-    }
-
-    // ... method daftar, detail, dan updateStatus tetap sama ...
     public function daftar(Request $request)
     {
-        // Hanya tampilkan data yang antriannya sudah dimulai admin (status_antrian != 'Menunggu')
         $startedAntrianSubquery = function ($q) {
             $q->select('nomor_antrian')
               ->from('antrian_online')
@@ -181,12 +149,12 @@ class AkteKematianController extends Controller
         };
 
         $query = AkteKematian::query()
-            ->whereIn('jenis_layanan', ['akta_kematian'])
+            ->whereIn('layanan_id', ['akte_kematian'])
             ->whereIn('nomor_antrian', $startedAntrianSubquery);
         if ($request->status) $query->where('status', $request->status);
         $dataKematian = $query->latest()->get();
 
-        $baseCount = AkteKematian::whereIn('jenis_layanan', ['akta_kematian'])
+        $baseCount = AkteKematian::whereIn('layanan_id', ['akte_kematian'])
             ->whereIn('nomor_antrian', $startedAntrianSubquery);
         $jumlah             = (clone $baseCount)->count();
         $menungguVerifikasi = (clone $baseCount)->where('status', 'Verifikasi Data')->count();
@@ -263,5 +231,21 @@ class AkteKematianController extends Controller
         $kematian->update(['status' => 'Selesai']);
 
         return redirect()->back()->with('success', 'Berkas berhasil diunggah dan dapat diunduh oleh pemohon.');
+    }
+
+    /**
+     * Lihat berkas dari private disk
+     * Pattern yang sama dengan AkteLahirController
+     */
+    public function lihatBerkas($uuid, $field)
+    {
+        $berkas = AkteKematian::where('uuid', $uuid)->firstOrFail();
+        $path = $berkas->$field;
+        
+        if (!$path || !Storage::disk('private')->exists($path)) {
+            abort(404);
+        }
+        
+        return Storage::disk('private')->response($path);
     }
 }

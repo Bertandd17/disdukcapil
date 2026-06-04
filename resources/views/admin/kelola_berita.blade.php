@@ -46,13 +46,19 @@
                                 {{ ($item->published_at ?? $item->created_at)->format('d/m/Y H:i') }}
                             </td>
                             <td class="px-4 py-3 text-right whitespace-nowrap">
-                                <button type="button" class="berita-edit-btn inline-flex items-center gap-1 px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition" data-berita-id="{{ $item->id }}">
+                                <button type="button"
+                                    data-style-guide-skip
+                                    class="berita-edit-btn inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition"
+                                    data-berita-id="{{ $item->id }}">
                                     <i class="fas fa-edit"></i> Ubah
                                 </button>
-                                <form action="{{ route('admin.berita.destroy', $item) }}" method="post" class="inline-block delete-berita-form" data-title="{{ $item->judul }}">
+                                <span class="text-gray-200 hidden sm:inline mx-1">|</span>
+                                <form action="{{ route('admin.berita.destroy', $item) }}" method="post" class="inline delete-berita-form" data-title="{{ $item->judul }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg font-medium transition">
+                                    <button type="button"
+                                        data-style-guide-skip
+                                        class="berita-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
                                         <i class="fas fa-trash-alt"></i> Hapus
                                     </button>
                                 </form>
@@ -187,15 +193,19 @@
         });
     });
 
-    document.querySelectorAll('.delete-berita-form').forEach(function (f) {
-        f.addEventListener('submit', function (e) {
+    document.querySelectorAll('.berita-delete-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
-            const t = f.getAttribute('data-title') || 'berita ini';
+            e.stopPropagation();
+            const form  = btn.closest('form');
+            const title = form.getAttribute('data-title') || 'berita ini';
+            if (window.pauseAutoLogoutReset) window.pauseAutoLogoutReset();
             SwalHelper.deleteConfirm(
-                'Hapus Berita',
-                'Apakah Anda yakin ingin menghapus ' + t + '?',
+                'Hapus Berita?',
+                'Yakin ingin menghapus: ' + title + '?',
                 function () {
-                    f.submit();
+                    if (window.resumeAutoLogoutReset) window.resumeAutoLogoutReset();
+                    form.submit();
                 }
             );
         });

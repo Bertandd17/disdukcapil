@@ -31,8 +31,11 @@
                     <i class="fas fa-chart-line mr-2"></i>Statistik
                 </a>
                 @auth
-                    <a href="{{ route('logout') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 transition" onclick="event.preventDefault(); handleUserLogout('logoutForm');">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    <a href="{{ route('logout') }}"
+                        data-style-guide-skip
+                        class="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
+                        onclick="event.preventDefault(); handleUserLogout('logoutForm');">
+                        <i class="fas fa-sign-out-alt"></i>Logout
                     </a>
                     <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="hidden">
                         @csrf
@@ -73,7 +76,10 @@
                 <i class="fas fa-chart-line mr-2"></i>Statistik
             </a>
             @auth
-                <a href="{{ route('logout') }}" class="block px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50" onclick="event.preventDefault(); handleUserLogout('logoutFormMobile');">
+                <a href="{{ route('logout') }}"
+                    data-style-guide-skip
+                    class="block px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700"
+                    onclick="event.preventDefault(); handleUserLogout('logoutFormMobile');">
                     <i class="fas fa-sign-out-alt mr-2"></i>Logout
                 </a>
                 <form method="POST" action="{{ route('logout') }}" id="logoutFormMobile" class="hidden">

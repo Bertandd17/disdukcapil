@@ -14,15 +14,15 @@
         </div>
         <div class="flex flex-wrap gap-2">
             @if($canCreate)
-            <button type="button" onclick="openModal('create')" 
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition shadow-sm text-sm">
+            <button data-style-guide-skip type="button" onclick="openModal('create')" 
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:scale-95 transition-all">
                 <i class="bi bi-plus-circle"></i>
                 Tambah Data
             </button>
             @endif
             @if($canGenerate)
-            <button type="button" onclick="openGenerateModal()" 
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition shadow-sm text-sm">
+            <button data-style-guide-skip type="button" onclick="openGenerateModal()" 
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:scale-95 transition-all">
                 <i class="bi bi-arrow-clockwise"></i>
                 Generate Otomatis
             </button>
@@ -119,8 +119,8 @@
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 @if($canEdit)
-                                <button type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_dokumen_id, "tahun" => $row->tahun, "bulan" => $row->bulan, "jumlah_kk" => $row->jumlah_kk, "jumlah_akte_lahir" => $row->jumlah_akte_lahir, "jumlah_akte_kematian" => $row->jumlah_akte_kematian, "jumlah_ktp" => $row->jumlah_ktp, "jumlah_kia" => $row->jumlah_kia]) }})' 
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition text-xs">
+                                <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_dokumen_id, "tahun" => $row->tahun, "bulan" => $row->bulan, "jumlah_kk" => $row->jumlah_kk, "jumlah_akte_lahir" => $row->jumlah_akte_lahir, "jumlah_akte_kematian" => $row->jumlah_akte_kematian, "jumlah_ktp" => $row->jumlah_ktp, "jumlah_kia" => $row->jumlah_kia]) }})' 
+                                        class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
                                     <i class="bi bi-pencil"></i> Ubah
                                 </button>
                                 @endif
@@ -128,7 +128,7 @@
                                 <form action="{{ route('admin.statistik-dokumen.destroy', $row->statistik_dokumen_id) }}" method="POST" class="inline-block delete-form" data-title="{{ $row->nama_bulan }} {{ $row->tahun }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg font-medium transition text-xs">
+                                    <button data-style-guide-skip type="submit" class="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
                                         <i class="bi bi-trash"></i> Hapus
                                     </button>
                                 </form>
@@ -155,7 +155,7 @@
     <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white rounded-t-2xl">
             <h2 id="modalTitle" class="text-lg font-bold text-gray-800">Tambah Data</h2>
-            <button type="button" onclick="closeModal()" class="w-10 h-10 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-500 transition">
+            <button data-style-guide-skip type="button" onclick="closeModal()" class="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center text-gray-500 transition">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -213,8 +213,8 @@
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
+                <button data-style-guide-skip type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">Batal</button>
+                <button data-style-guide-skip type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                     <span id="btnText">Simpan</span>
                 </button>
             </div>
@@ -227,7 +227,7 @@
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white rounded-t-2xl">
             <h2 class="text-lg font-bold text-gray-800">Generate Statistik Dokumen</h2>
-            <button type="button" onclick="closeGenerateModal()" class="w-10 h-10 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-500 transition">
+            <button data-style-guide-skip type="button" onclick="closeGenerateModal()" class="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center text-gray-500 transition">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -267,8 +267,8 @@
                 </div>
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closeGenerateModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition">Batal</button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-sm">
+                <button data-style-guide-skip type="button" onclick="closeGenerateModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">Batal</button>
+                <button data-style-guide-skip type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                     <i class="bi bi-arrow-clockwise me-1"></i> Generate
                 </button>
             </div>

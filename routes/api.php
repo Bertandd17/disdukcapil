@@ -148,12 +148,12 @@ Route::middleware(['auth'])->prefix('notifications')->name('api.notifications.')
 |
 */
 
-Route::prefix('antrian')->name('api.antrian.')->group(function () {
-    // Get data antrian by nomor antrian (dengan validasi layanan)
-    Route::get('/{nomorAntrian}', [Antrian_Online_Controller::class, 'getApiData'])->name('get');
-
+Route::prefix('antrian')->name('api.antrian.')->group(function () {   
     // Cek daily limit - apakah user hari ini sudah mengajukan layanan yang sama
     Route::get('/check-daily-limit', [Antrian_Online_Controller::class, 'checkDailyLimit'])->name('check_daily_limit');
+    
+    // Get data antrian by nomor antrian (dengan validasi layanan)
+    Route::get('/{nomorAntrian}', [Antrian_Online_Controller::class, 'getApiData'])->name('get');
 });
 
 /*

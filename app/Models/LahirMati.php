@@ -16,8 +16,8 @@ class LahirMati extends Model
     protected $fillable = [
         'uuid',
         'layanan_id',
-        'antrian_online_id',
         'nomor_antrian',
+        // 'antrian_online_id',
         
         // Data Pemohon (Sesuai Konsep Baru)
         'nik_pemohon',
@@ -34,9 +34,9 @@ class LahirMati extends Model
         'formulir_f201',
         'surat_keterangan_lahir_mati',
         
-        'keterangan',
+        // 'keterangan',
         'status',
-        'jenis_layanan',
+        // 'jenis_layanan',
         'alasan_penolakan',
     ];
 
@@ -44,25 +44,25 @@ class LahirMati extends Model
         'deleted_at',
     ];
 
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
+    // /**
+    //  * Indicates if the IDs are auto-incrementing.
+    //  *
+    //  * @var bool
+    //  */
+    // public $incrementing = false;
 
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
+    // /**
+    //  * The "type" of the auto-incrementing ID.
+    //  *
+    //  * @var string
+    //  */
+    // protected $keyType = 'string';
 
-    /**
-     * Daftar sensitive fields yang akan di-encrypt (gabungan dari local dan remote)
-     *
-     * @return array
-     */
+    // /**
+    //  * Daftar sensitive fields yang akan di-encrypt (gabungan dari local dan remote)
+    //  *
+    //  * @return array
+    //  */
     public function getSensitiveFields(): array
     {
         return [
@@ -84,9 +84,9 @@ class LahirMati extends Model
         parent::boot();
         
         self::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
+            // if (empty($model->id)) {
+            //     $model->id = (string) Str::uuid();
+            // }
             if (empty($model->uuid)) {
                 $model->uuid = (string) Str::uuid();
             }
@@ -100,16 +100,16 @@ class LahirMati extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function layanan()
-    {
-        return $this->belongsTo(Layanan_Model::class, 'layanan_id', 'layanan_id');
-    }
+    // public function layanan()
+    // {
+    //     return $this->belongsTo(Layanan_Model::class, 'layanan_id', 'layanan_id');
+    // }
 
     /**
      * Relasi dengan antrian online
      */
-    public function antrian_online()
-    {
-        return $this->belongsTo(Antrian_Online_Model::class, 'antrian_online_id', 'antrian_online_id');
-    }
+    // public function antrian_online()
+    // {
+    //     return $this->belongsTo(Antrian_Online_Model::class, 'antrian_online_id', 'antrian_online_id');
+    // }
 }

@@ -50,8 +50,8 @@ return new class extends Migration
             $table->string('ktp_saksi2')->nullable();
             
             // Status dan metadata
-            $table->enum('status', ['Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak', 'Siap Pengambilan', 'Tolak'])
-                ->default('Dokumen Diterima');
+            $table->enum('status', ['Menunggu','Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak', 'Siap Pengambilan', 'Tolak'])
+                ->default('Menunggu');
             $table->text('alasan_penolakan')->nullable();
             
             // Timestamps

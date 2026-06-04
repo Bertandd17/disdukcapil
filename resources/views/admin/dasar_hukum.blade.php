@@ -49,19 +49,19 @@
                         {{-- Lihat File --}}
                         @if ($item->file)
                             <a href="{{ asset('storage/' . $item->file) }}" target="_blank" rel="noopener"
-                                class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium transition py-1">
-                                <i class="fas fa-eye text-xs"></i>
-                                <span>Lihat File</span>
+                                data-style-guide-skip
+                                class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
+                                <i class="fas fa-eye"></i> Lihat File
                             </a>
                             <span class="text-gray-200 hidden sm:inline">|</span>
                         @endif
 
                         {{-- Tombol Ubah --}}
                         <button type="button"
-                            class="dasar-hukum-edit-btn inline-flex items-center gap-1.5 text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium transition py-1"
+                            data-style-guide-skip
+                            class="dasar-hukum-edit-btn inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition"
                             data-dasar-hukum-id="{{ $item->id }}">
-                            <i class="fas fa-edit text-xs"></i>
-                            <span>Ubah</span>
+                            <i class="fas fa-edit"></i> Ubah
                         </button>
                         <span class="text-gray-200 hidden sm:inline">|</span>
 
@@ -70,10 +70,10 @@
                             @csrf
                             @method('DELETE')
                             <button type="button"
-                                class="dasar-hukum-delete-btn inline-flex items-center gap-1.5 text-xs sm:text-sm text-red-500 hover:text-red-600 font-medium transition py-1"
+                                data-style-guide-skip
+                                class="dasar-hukum-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition"
                                 data-title="{{ $item->nama }}">
-                                <i class="fas fa-trash-alt text-xs"></i>
-                                <span>Hapus</span>
+                                <i class="fas fa-trash-alt"></i> Hapus
                             </button>
                         </form>
 
@@ -135,12 +135,27 @@
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">
-                    File PDF
-                </label>
-                <input type="file" name="file" id="field_file" accept=".pdf"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-                <p class="text-xs text-gray-400 mt-1">Format: PDF &bull; Maksimal: 500 KB. Kosongkan jika tidak ingin mengganti file.</p>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">File PDF</label>
+                <div class="relative">
+                    <button type="button" id="clear-dh-file"
+                            class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"
+                            title="Hapus file"
+                            onclick="event.preventDefault(); event.stopPropagation(); clearDasarHukumFile()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <label class="flex flex-col items-center justify-center w-full px-4 py-5
+                                  border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50
+                                  hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">
+                        <i class="fas fa-file-pdf text-2xl text-gray-400 mb-2" id="icon-dh-file"></i>
+                        <p class="text-sm font-semibold text-gray-600">Pilih File PDF</p>
+                        <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Format: PDF, maks. 500KB</p>
+                        <input type="file" name="file" id="field_file" accept=".pdf" class="hidden">
+                    </label>
+                </div>
+                <div id="name-dh-file" class="mt-1.5 px-2 text-[11px] text-blue-600 font-medium hidden">
+                    <i class="fas fa-check-circle mr-1"></i><span id="label-dh-file"></span>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">Kosongkan jika tidak ingin mengganti file.</p>
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
@@ -160,16 +175,54 @@
 
 @push('scripts')
 <script>
+// Fungsi global di luar IIFE
+window.clearDasarHukumFile = function() {
+    const input    = document.getElementById('field_file');
+    const icon     = document.getElementById('icon-dh-file');
+    const nameDiv  = document.getElementById('name-dh-file');
+    const clearBtn = document.getElementById('clear-dh-file');
+    if (input)    input.value = '';
+    if (icon)     icon.className = 'fas fa-file-pdf text-2xl text-gray-400 mb-2';
+    if (nameDiv)  nameDiv.classList.add('hidden');
+    if (clearBtn) clearBtn.classList.add('hidden');
+};
+
 (function () {
     const modal    = document.getElementById('dasarHukumModal');
     const form     = document.getElementById('dasarHukumForm');
     const methodEl = document.getElementById('dasarHukumMethod');
     const titleEl  = document.getElementById('dasarHukumModalTitle');
 
+    // Attach file input event
+    const dhFileInput = document.getElementById('field_file');
+    if (dhFileInput) {
+        dhFileInput.addEventListener('change', function() {
+            const file     = this.files && this.files[0];
+            const icon     = document.getElementById('icon-dh-file');
+            const nameDiv  = document.getElementById('name-dh-file');
+            const nameLabel= document.getElementById('label-dh-file');
+            const clearBtn = document.getElementById('clear-dh-file');
+
+            if (!file) return;
+
+            if (file.size > 500 * 1024) {
+                this.value = '';
+                SwalHelper.error('Ukuran file maksimal 500 KB');
+                return;
+            }
+
+            if (icon)      icon.className = 'fas fa-check-circle text-2xl text-green-500 mb-2';
+            if (nameLabel) nameLabel.textContent = file.name;
+            if (nameDiv)   nameDiv.classList.remove('hidden');
+            if (clearBtn)  clearBtn.classList.remove('hidden');
+        });
+    }
+
     /* ===== MODAL ===== */
     window.openDasarHukumModal = function (mode, item) {
         form.reset();
         methodEl.innerHTML = '';
+        window.clearDasarHukumFile();
 
         if (mode === 'create') {
             titleEl.textContent = 'Tambah Dasar Hukum';
@@ -212,42 +265,35 @@
         });
     });
 
-    /* ===== TOMBOL HAPUS =====
-       Tombol berada di dalam <form> langsung (tiru pola akta lahir).
-       Pakai click biasa — closest('form') langsung dapat formnya.
-    */
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.dasar-hukum-delete-btn').forEach(function (btn) {
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
+    /* ===== TOMBOL HAPUS ===== */
+    document.querySelectorAll('.dasar-hukum-delete-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-                const form  = btn.closest('form');
-                const title = btn.getAttribute('data-title') || 'dasar hukum ini';
+            const form  = btn.closest('form');
+            const title = btn.getAttribute('data-title') || 'dasar hukum ini';
 
-                if (window.pauseAutoLogoutReset) window.pauseAutoLogoutReset();
-                SwalHelper.deleteConfirm(
-                    'Hapus dasar hukum?',
-                    'Yakin ingin menghapus: ' + title + '?',
-                    function () {
-                        if (window.resumeAutoLogoutReset) window.resumeAutoLogoutReset();
-                        form.submit();
-                    }
-                );
-            });
+            if (window.pauseAutoLogoutReset) window.pauseAutoLogoutReset();
+            SwalHelper.deleteConfirm(
+                'Hapus dasar hukum?',
+                'Yakin ingin menghapus: ' + title + '?',
+                function () {
+                    if (window.resumeAutoLogoutReset) window.resumeAutoLogoutReset();
+                    form.submit();
+                }
+            );
         });
     });
 
     /* ===== AUTO-BUKA MODAL SAAT ADA ERROR VALIDASI ===== */
     @if ($errors->any())
-        document.addEventListener('DOMContentLoaded', function () {
-            titleEl.textContent = 'Tambah Dasar Hukum';
-            form.action         = @json(route('admin.dasar-hukum.store'));
-            methodEl.innerHTML  = '';
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        });
+        titleEl.textContent = 'Tambah Dasar Hukum';
+        form.action         = @json(route('admin.dasar-hukum.store'));
+        methodEl.innerHTML  = '';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
     @endif
 })();
 </script>

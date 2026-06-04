@@ -1700,6 +1700,12 @@ class Antrian_Online_Controller extends Controller
      */
     public function checkDailyLimit(Request $request): JsonResponse
     {
+        Log::info('checkDailyLimit called', [
+            'nik' => $request->query('nik'),
+            'nik_length' => strlen($request->query('nik', '')),
+            'layanan_id' => $request->query('layanan_id'),
+            'all_query' => $request->query(),
+        ]);
         try {
             $request->validate([
                 'nik' => 'required|string|size:16',

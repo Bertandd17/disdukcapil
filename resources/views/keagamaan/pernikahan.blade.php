@@ -1071,7 +1071,7 @@ async function refreshUIFromServer() {
 // Mulai auto-refresh
 function startAutoRefresh(intervalSeconds = 10) {
  stopAutoRefresh();
- console.log(` Auto-refresh started (every ${intervalSeconds)s)`);
+ console.log(` Auto-refresh started (every ${intervalSeconds}s)`);
 
  setTimeout(() => {
  checkStatusUpdates();

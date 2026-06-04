@@ -207,6 +207,8 @@ class Antrian_Online_Model extends Model
             ->where('antrian_online.nik', $nik)
             ->where('antrian_online.layanan_id', $normalizedLayananId)
             ->whereDate('lacak_berkas.tanggal', '=', now()->toDateString())
+            ->whereNotIn('antrian_online.status_antrian', ['Ditolak', 'Dibatalkan', 'Menunggu'])
+            ->whereNotIn('lacak_berkas.status', ['Menunggu'])
             ->exists();
 
         $elapsed = round((microtime(true) - $startTime) * 1000, 2);

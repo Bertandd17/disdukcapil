@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('kk_lama');
             $table->string('foto_wajah')->nullable();
             $table->string('alasan_penolakan')->nullable();
-            $table->enum('status',['Dokumen Diterima', 'Verifikasi Data','Proses Cetak', 'Siap Pengambilan','Tolak'])->default('Dokumen Diterima');
+            $table->enum('status',['Menunggu','Dokumen Diterima', 'Verifikasi Data','Proses Cetak', 'Siap Pengambilan','Tolak'])->default('Menunggu');
             $table->softDeletes();
             $table->timestamps();
         });

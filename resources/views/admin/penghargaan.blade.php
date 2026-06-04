@@ -14,7 +14,7 @@
             <h1 class="text-2xl font-bold text-gray-800">Penghargaan</h1>
             <p class="text-gray-600 mt-1 text-sm">Daftar penghargaan yang telah diraih Disdukcapil Kabupaten Toba</p>
         </div>
-        <button type="button" onclick="openPenghargaanModal('create')"
+        <button type="button" data-style-guide-skip onclick="openPenghargaanModal('create')"
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:scale-95 transition-all">
             <i class="fas fa-plus"></i>
             <span>Tambah Penghargaan</span>
@@ -51,6 +51,7 @@
         </div>
     </div>
 </div>
+
 <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm reveal">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
         <h3 class="text-base font-bold text-gray-800">Daftar Penghargaan</h3>
@@ -109,12 +110,14 @@
                         <div class="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-gray-100">
                             @if($item->file)
                                 <a href="{{ asset('storage/' . $item->file) }}" target="_blank" rel="noopener"
+                                    data-style-guide-skip
                                     class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
                                     <i class="fas fa-eye"></i> Lihat File
                                 </a>
                                 <span class="text-gray-200 hidden sm:inline">|</span>
                             @endif
                             <button type="button"
+                                data-style-guide-skip
                                 class="penghargaan-edit-btn inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition"
                                 data-id="{{ $item->id }}">
                                 <i class="fas fa-edit"></i> Ubah
@@ -124,6 +127,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="button"
+                                    data-style-guide-skip
                                     class="penghargaan-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition"
                                     data-title="{{ $item->nama }}">
                                     <i class="fas fa-trash-alt"></i> Hapus
@@ -143,6 +147,7 @@
         @endforelse
     </div>
 </div>
+
 @foreach ($data as $item)
     <script type="application/json" id="penghargaan-payload-{{ $item->id }}">{!! json_encode([
         'id'                => $item->id,
@@ -160,7 +165,7 @@
     <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div class="sticky top-0 flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white rounded-t-2xl">
             <h2 id="penghargaanModalTitle" class="text-lg font-bold text-gray-800">Tambah Penghargaan</h2>
-            <button type="button" onclick="closePenghargaanModal()"
+            <button type="button" data-style-guide-skip onclick="closePenghargaanModal()"
                 class="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center text-gray-500 transition">
                 <i class="fas fa-times"></i>
             </button>
@@ -168,7 +173,7 @@
         <form id="penghargaanForm" method="post" enctype="multipart/form-data" class="p-6 space-y-4">
             @csrf
             <div id="penghargaanMethod"></div>
-            <div>   
+            <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penghargaan <span class="text-red-500">*</span></label>
                 <input type="text" name="nama" id="field_nama" required maxlength="200"
                     placeholder="Contoh: Penghargaan Kualitas Pelayanan Publik"
@@ -199,7 +204,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun <span class="text-red-500">*</span></label>
-                    <input type="number" name="tahun" id="field_tahun" required
+                    <input type="text" name="tahun" id="field_tahun" required
                         min="2000" max="{{ date('Y') }}" placeholder="{{ date('Y') }}"
                         class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
                 </div>
@@ -212,16 +217,33 @@
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">File PDF</label>
-                <input type="file" name="file" id="field_file" accept=".pdf"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
-                <p class="text-xs text-gray-400 mt-1">Format: PDF &bull; Maksimal: 512 KB. Kosongkan jika tidak ingin mengganti file.</p>
+                <div class="relative">
+                    <button type="button" id="clear-field_file" data-style-guide-skip
+                            class="hidden absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs flex items-center justify-center shadow-md transition"
+                            title="Hapus file"
+                            onclick="event.preventDefault(); event.stopPropagation(); clearPenghargaanFile()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <label class="flex flex-col items-center justify-center w-full px-4 py-5
+                                  border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50
+                                  hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer">
+                        <i class="fas fa-file-pdf text-2xl text-gray-400 mb-2" id="icon-field_file"></i>
+                        <p class="text-sm font-semibold text-gray-600">Pilih File PDF</p>
+                        <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Format: PDF, maks. 512KB</p>
+                        <input type="file" name="file" id="field_file" accept=".pdf" class="hidden">
+                    </label>
+                </div>
+                <div id="name-field_file" class="mt-1.5 px-2 text-[11px] text-blue-600 font-medium hidden">
+                    <i class="fas fa-check-circle mr-1"></i><span id="label-field_file"></span>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">Kosongkan jika tidak ingin mengganti file.</p>
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" onclick="closePenghargaanModal()"
+                <button type="button" data-style-guide-skip onclick="closePenghargaanModal()"
                     class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold transition">
                     Batal
                 </button>
-                <button type="submit"
+                <button type="submit" data-style-guide-skip
                     class="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-sm">
                     Simpan
                 </button>
@@ -230,17 +252,55 @@
     </div>
 </div>
 @endsection
+
 @push('scripts')
 <script>
+window.handlePenghargaanFile = function(input) {
+    const file     = input.files && input.files[0];
+    const icon     = document.getElementById('icon-field_file');
+    const nameDiv  = document.getElementById('name-field_file');
+    const nameLabel= document.getElementById('label-field_file');
+    const clearBtn = document.getElementById('clear-field_file');
+    if (!file) return;
+    if (file.size > 512 * 1024) {
+        input.value = '';
+        SwalHelper.error('Ukuran file maksimal 512 KB');
+        return;
+    }
+    if (icon)      icon.className = 'fas fa-check-circle text-2xl text-green-500 mb-2';
+    if (nameLabel) nameLabel.textContent = file.name;
+    if (nameDiv)   nameDiv.classList.remove('hidden');
+    if (clearBtn)  clearBtn.classList.remove('hidden');
+};
+
+window.clearPenghargaanFile = function() {
+    const input    = document.getElementById('field_file');
+    const icon     = document.getElementById('icon-field_file');
+    const nameDiv  = document.getElementById('name-field_file');
+    const clearBtn = document.getElementById('clear-field_file');
+    if (input)    input.value = '';
+    if (icon)     icon.className = 'fas fa-file-pdf text-2xl text-gray-400 mb-2';
+    if (nameDiv)  nameDiv.classList.add('hidden');
+    if (clearBtn) clearBtn.classList.add('hidden');
+};
+
 (function () {
     const modal    = document.getElementById('penghargaanModal');
     const form     = document.getElementById('penghargaanForm');
     const methodEl = document.getElementById('penghargaanMethod');
     const titleEl  = document.getElementById('penghargaanModalTitle');
 
+    const fileInput = document.getElementById('field_file');
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            window.handlePenghargaanFile(this);
+        });
+    }
+
     window.openPenghargaanModal = function (mode, item) {
         form.reset();
         methodEl.innerHTML = '';
+        window.clearPenghargaanFile();
         if (mode === 'create') {
             titleEl.textContent = 'Tambah Penghargaan';
             form.action = @json(route('admin.penghargaan.store'));
@@ -329,6 +389,7 @@
     }
     window.addEventListener('scroll', reveal);
     reveal();
+
     @if(session('success'))
         SwalHelper.success("{{ session('success') }}");
     @endif

@@ -412,6 +412,7 @@ class KtpOcrController extends Controller
 
         return 'easyocr';
     }
+     /**
      * @param  array<string, mixed>|null  $data
      */
     private function respond(bool $success, string $message, ?array $data, int $status): JsonResponse

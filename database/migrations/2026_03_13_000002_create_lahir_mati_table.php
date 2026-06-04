@@ -18,7 +18,7 @@ return new class extends Migration
                 ->references('layanan_id')
                 ->on('layanan')
                 ->onDelete('cascade');
-            $table->char('antrian_online_id', 36)->nullable();
+            // $table->char('antrian_online_id', 36)->nullable();
             
             // Form fields
             $table->string('nomor_antrian')->nullable();
@@ -30,16 +30,6 @@ return new class extends Migration
             $table->text('alamat_pemohon');
             $table->string('hubungan_pemohon');
             
-            // Data Bayi (dari remote)
-            $table->string('nama_bayi');
-            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan']);
-            $table->datetime('tgl_lahir');
-            $table->string('tempat_lahir');
-            $table->string('nama_ayah');
-            $table->text('nik_ayah')->nullable();
-            $table->string('nama_ibu');
-            $table->text('nik_ibu')->nullable();
-            
             // File uploads
             $table->string('ktp_pemohon')->nullable();
             $table->string('kartu_keluarga_pemohon')->nullable();
@@ -49,10 +39,10 @@ return new class extends Migration
             $table->string('surat_keterangan_lahir_mati')->nullable();
             
             // Status dan metadata
-            $table->enum('status', ['Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak', 'Siap Pengambilan', 'Tolak'])
-                ->default('Dokumen Diterima');
+            $table->enum('status', ['Menunggu','Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak', 'Siap Pengambilan', 'Tolak'])
+                ->default('Menunggu');
             $table->text('alasan_penolakan')->nullable();
-            $table->text('keterangan')->nullable();
+            // $table->text('keterangan')->nullable();
             
             $table->timestamps();
             $table->softDeletes();

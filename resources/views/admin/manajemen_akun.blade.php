@@ -82,7 +82,7 @@
                             <th class="px-8 py-5">Agama</th>
                             <th class="px-8 py-5">Alamat</th>
                             <th class="px-8 py-5 text-center">Status</th>
-                            <th class="px-8 py-5 text-center">Aksi</th>
+                            <th class="px-8 py-5 text-center min-w-[140px]">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="accountTableBody" class="divide-y divide-gray-50">
@@ -102,9 +102,11 @@
                                     </span>
                                 </td>
                                 <td class="px-8 py-5 text-center">
-                                    <button onclick="editAccount({{ json_encode($user->load('detail_keagamaan')) }})"
-                                        class="px-4 py-2 bg-gray-100 text-blue-600 rounded-xl text-xs font-bold hover:bg-gray-200 hover:text-blue-700 transition-all">
-                                        <i class="fas fa-edit mr-1"></i> Edit Akun
+                                    <button type="button"
+                                        data-style-guide-skip
+                                        class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition"
+                                        onclick="editAccount({{ json_encode($user->load('detail_keagamaan')) }})">
+                                        <i class="fas fa-edit"></i> Ubah
                                     </button>
                                 </td>
                             </tr>
