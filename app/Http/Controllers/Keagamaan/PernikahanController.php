@@ -26,6 +26,7 @@ class PernikahanController extends Controller
      * Dashboard pernikahan untuk keagamaan
      * GET /keagamaan/pernikahan
      */
+cls
     public function index(Request $request)
     {
         $query = LayananPernikahan::with(['dokumen'])

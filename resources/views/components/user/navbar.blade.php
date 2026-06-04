@@ -1,3 +1,4 @@
+<!-- Load Dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
 <script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
@@ -39,13 +40,15 @@
                 </a>
 
                 @auth
+                    {{-- Form Logout Desktop --}}
+                    <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="hidden">
+                        @csrf
+                    </form>
+                    
                     <a href="#" class="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2"
                        onclick="handleUserLogout('logoutForm')">
                         <i class="fas fa-sign-out-alt"></i>Logout
                     </a>
-                    <form method="POST" action="{{ route('logout') }}" id="logoutForm" class="hidden">
-                        @csrf
-                    </form>
                 @else
                     @if($adminBelumAda)
                         <a href="{{ route('admin.register') }}" class="px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('admin.register') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }} transition">
@@ -83,14 +86,18 @@
             </a>
 
             @auth
-                <form method="POST" action="{{ route('logout') }}" id="logoutFormMobile" class="inline">
+                {{-- Form Logout Mobile --}}
+                {{-- Menggunakan ID yang sama dengan desktop agar fungsi handleUserLogout bisa reuse, 
+                    atau ganti ID form di bawah ini jika ingin spesifik mobile --}}
+                <form method="POST" action="{{ route('logout') }}" id="logoutFormMobile" class="hidden">
                     @csrf
-                    <button type="button" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
-                            onclick="handleUserLogout('logoutFormMobile')">
-                        <i class="fas fa-sign-out-alt w-5"></i>
-                        <span class="sidebar-text font-medium">Logout</span>
-                    </button>
                 </form>
+
+                <button type="button" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"
+                        onclick="handleUserLogout('logoutFormMobile')">
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    <span class="sidebar-text font-medium">Logout</span>
+                </button>
             @else
                 @if($adminBelumAda)
                     <a href="{{ route('admin.register') }}" class="block px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('admin.register') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">
@@ -120,16 +127,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Logout dengan SweetAlert2 full
 function handleUserLogout(formId) {
-    const doSubmit = () => {
+    // Fungsi untuk submit form
+    const submitForm = () => {
         const f = document.getElementById(formId);
-        if (f) f.submit();
+        if (f) {
+            f.submit();
+        } else {
+            console.error('Form dengan ID ' + formId + ' tidak ditemukan.');
+            // Fallback: jika form tidak ditemukan, coba submit form pertama yang ada
+            const anyForm = document.querySelector('form[method="POST"]');
+            if(anyForm) anyForm.submit();
+        }
     };
 
     const message = 'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?';
 
+    // Cek jika library helper khusus ada
     if (window.SwalHelper && typeof SwalHelper.confirm === 'function') {
-        SwalHelper.confirm(message, doSubmit);
-    } else if (window.Swal && typeof Swal.fire === 'function') {
+        SwalHelper.confirm(message, submitForm);
+    } 
+    // Cek jika SweetAlert2 standar ada
+    else if (window.Swal && typeof Swal.fire === 'function') {
         Swal.fire({
             title: 'Konfirmasi Logout',
             html: `<p class="text-gray-600 text-sm">${message}</p>`,
@@ -139,9 +157,18 @@ function handleUserLogout(formId) {
             cancelButtonText: 'Batal',
             confirmButtonColor: '#dc2626',
             reverseButtons: true
-        }).then(r => { if (r.isConfirmed) doSubmit(); });
-    } else {
-        doSubmit();
+        }).then((result) => {
+            if (result.isConfirmed) {
+                submitForm();
+            }
+        });
+    } 
+    // Fallback jika library gagal dimuat
+    else {
+        // Opsional: Tampilkan confirm browser native jika library gagal
+        if (confirm(message)) {
+            submitForm();
+        }
     }
 }
 </script>
