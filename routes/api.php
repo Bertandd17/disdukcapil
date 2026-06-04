@@ -190,15 +190,4 @@ Route::prefix('pernikahan')->name('api.pernikahan.')->group(function () {
         Route::post('/{id}/verify-all', [PernikahanController::class, 'verifyAll'])->name('verify-all');
         Route::post('/{id}/upload-berkas', [PernikahanController::class, 'uploadBerkas'])->name('upload-berkas');
     });
-
-    // Keagamaan endpoints (auth + keagamaan role) - mirror admin for calendar/detail/approve/reject
-    Route::middleware(['auth', 'role:keagamaan'])->name('keagamaan.')->prefix('keagamaan')->group(function () {
-        Route::get('/calendar', [PernikahanController::class, 'calendarData'])->name('calendar');
-        Route::get('/detail/{id}', [PernikahanController::class, 'detail'])->name('detail');
-        Route::post('/{id}/approve', [PernikahanController::class, 'approveTanggal'])->name('approve');
-        Route::post('/{id}/reject', [PernikahanController::class, 'rejectTanggal'])->name('reject');
-        Route::post('/{id}/reject-doc', [PernikahanController::class, 'rejectDokumen'])->name('reject-doc');
-        Route::post('/{id}/verify-all', [PernikahanController::class, 'verifyAll'])->name('verify-all');
-        Route::post('/{id}/upload-berkas', [PernikahanController::class, 'uploadBerkas'])->name('upload-berkas');
-    });
 });

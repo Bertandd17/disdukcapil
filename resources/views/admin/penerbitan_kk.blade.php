@@ -55,6 +55,7 @@
                     <td class="p-4">{{ $loop->iteration }}</td>
                     <td class="p-4 font-semibold">{{ $data->nama_pemohon }}</td>
                     <td class="p-4">{{ $data->jenis }}</td>
+                    <td class="p-4 text-gray-600">{{ $data->alamat_pemohon ?? '-' }}</td>
                     <td class="p-4 text-center">
                         <span class="px-3 py-1 rounded-full text-xs font-bold
                             @if($data->status == 'Dokumen Diterima') bg-gray-100 text-gray-700
@@ -76,7 +77,7 @@
                             @if($data->status == 'Proses Cetak')
                                 <button type="button"
                                     onclick='openUploadModal("{{ $data->uuid }}", {!! json_encode($data->jenis) !!}, {!! json_encode($data->nama_pemohon) !!})'
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-all h-[44px]">
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
                                     <i class="fas fa-upload"></i> Upload Berkas
                                 </button>
                             @endif
@@ -87,77 +88,94 @@
             </tbody>
         </table>
     </div>
-</div>
 
-{{-- Upload Berkas Modal --}}
-<div id="uploadBerkasModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-        <form id="uploadBerkasForm" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-slate-800 text-base">
-                    <i class="fas fa-upload text-emerald-600 mr-2"></i>
-                    Upload Berkas — Kartu Keluarga <span id=”jenisKKLabel” class=”text-emerald-700”></span>
-                </h3>
-                <button type="button" onclick="closeUploadModal()" class="text-slate-400 hover:text-red-500 transition">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-            </div>
-            <div class="p-6 space-y-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
-                    <i class="fas fa-info-circle mr-1"></i>
-                    Berkas yang diunggah akan tersedia bagi pemohon di halaman <strong>Lacak Berkas</strong>.
+    {{-- Upload Berkas Modal — di dalam @section agar ter-render ke DOM --}}
+    <div id="uploadBerkasModal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; padding:1rem; background:rgba(15,23,42,0.6); backdrop-filter:blur(4px);">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <form id="uploadBerkasForm" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="font-bold text-slate-800 text-base">
+                        <i class="fas fa-upload text-emerald-600 mr-2"></i>
+                        Upload Berkas — KK <span id="jenisKKLabel" class="text-emerald-700"></span>
+                    </h3>
+                    <button type="button" onclick="closeUploadModal()" class="text-slate-400 hover:text-red-500 transition">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
                 </div>
-                <p class="text-sm text-slate-600">Pemohon: <strong id="namaPemohonModal" class="text-slate-900">-</strong></p>
-                <label class="block">
-                    <span class="text-sm font-semibold text-slate-700">File Berkas <span class="text-red-500">*</span></span>
-                    <input type="file" name="file_berkas" required accept="application/pdf,.pdf"
-                        class="mt-2 block w-full text-sm border border-slate-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                    <span class="text-xs text-slate-500 mt-1 block">Format: PDF - Maksimal 5 MB</span>
-                </label>
-            </div>
-            <div class="p-4 bg-slate-50 flex justify-end gap-2 border-t border-slate-100">
-                <button type="button" onclick="closeUploadModal()"
-                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-semibold transition">
-                    Batal
-                </button>
-                <button type="submit"
-                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold shadow-sm transition">
-                    <i class="fas fa-upload mr-1"></i> Upload
-                </button>
-            </div>
-        </form>
+                <div class="p-6 space-y-4">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Berkas yang diunggah akan tersedia bagi pemohon di halaman <strong>Lacak Berkas</strong>.
+                    </div>
+                    <p class="text-sm text-slate-600">Pemohon: <strong id="namaPemohonModal" class="text-slate-900">-</strong></p>
+                    <label class="block">
+                        <span class="text-sm font-semibold text-slate-700">File Berkas <span class="text-red-500">*</span></span>
+                        <input type="file" name="file_berkas" required accept="application/pdf,.pdf"
+                            class="mt-2 block w-full text-sm border border-slate-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                        <span class="text-xs text-slate-500 mt-1 block">Format: PDF - Maksimal 5 MB</span>
+                    </label>
+                </div>
+                <div class="p-4 bg-slate-50 flex justify-end gap-2 border-t border-slate-100">
+                    <button type="button" onclick="closeUploadModal()"
+                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-semibold transition">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold shadow-sm transition">
+                        <i class="fas fa-upload mr-1"></i> Upload
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+
+</div>{{-- /container-fluid --}}
+@endsection
+
 @push('scripts')
 <script>
 function openUploadModal(uuid, jenis, nama) {
-    const form = document.getElementById('uploadBerkasForm');
-    form.action = "{{ url('admin/penerbitan-kk') }}/" + uuid + "/" + encodeURIComponent(jenis) + "/upload-berkas";
-    document.getElementById('namaPemohonModal').textContent = nama || '-';
-    document.getElementById('jenisKKLabel').textContent = '(' + jenis + ')';
-    const modal = document.getElementById('uploadBerkasModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    const form        = document.getElementById('uploadBerkasForm');
+    const namaPemohon = document.getElementById('namaPemohonModal');
+    const jenisLabel  = document.getElementById('jenisKKLabel');
+    const modal       = document.getElementById('uploadBerkasModal');
+
+    if (!form || !namaPemohon || !jenisLabel || !modal) {
+        console.error('openUploadModal: elemen modal tidak ditemukan di DOM.');
+        return;
+    }
+
+    form.action               = "{{ url('admin/penerbitan-kk') }}/" + uuid + "/" + encodeURIComponent(jenis) + "/upload-berkas";
+    namaPemohon.textContent   = nama  || '-';
+    jenisLabel.textContent    = '(' + jenis + ')';
+    modal.style.display       = 'flex';
 }
+
 function closeUploadModal() {
     const modal = document.getElementById('uploadBerkasModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.getElementById('uploadBerkasForm').reset();
+    const form  = document.getElementById('uploadBerkasForm');
+    if (modal) modal.style.display = 'none';
+    if (form)  form.reset();
 }
-document.getElementById('uploadBerkasModal').addEventListener('click', function(e){
-    if (e.target === this) closeUploadModal();
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('uploadBerkasModal');
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === this) closeUploadModal();
+        });
+    }
+
+    @if(session('success'))
+        if (typeof SwalHelper !== 'undefined') SwalHelper.success("{{ session('success') }}");
+    @endif
+    @if(session('upload_error'))
+        if (typeof SwalHelper !== 'undefined') SwalHelper.error("{{ session('upload_error') }}");
+    @endif
+    @if($errors->any())
+        if (typeof SwalHelper !== 'undefined') SwalHelper.error("{{ $errors->first() }}");
+    @endif
 });
-@if(session('success'))
-    SwalHelper.success("{{ session('success') }}");
-@endif
-@if(session('upload_error'))
-    SwalHelper.error("{{ session('upload_error') }}");
-@endif
-@if($errors->any())
-    SwalHelper.error("{{ $errors->first() }}");
-@endif
 </script>
 @endpush
-@endsection

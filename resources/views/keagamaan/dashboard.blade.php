@@ -26,15 +26,25 @@
 
     {{-- Quick Stats --}}
     @php
+        // Ambil keagamaan milik user yang sedang login
+        $keagamaanUser = \Illuminate\Support\Facades\DB::table('keagamaan')
+            ->where('user_id', auth()->id())
+            ->first();
+
+        $keagamaanId = $keagamaanUser?->keagamaan_id;
+
         $statistics = [
-            'total' => \App\Models\LayananPernikahan::count(),
-            'pending' => \App\Models\LayananPernikahan::menungguKonfirmasiKeagamaan()->count(),
-            'proses' => \App\Models\LayananPernikahan::whereIn('status', [
-                \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
-                \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
-                \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
-            ])->count(),
-            'selesai' => \App\Models\LayananPernikahan::where('status', \App\Models\LayananPernikahan::STATUS_SELESAI)->count(),
+            'total' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)->count(),
+            'pending' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)
+                ->menungguKonfirmasiKeagamaan()->count(),
+            'proses' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)
+                ->whereIn('status', [
+                    \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
+                    \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
+                    \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
+                ])->count(),
+            'selesai' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)
+                ->where('status', \App\Models\LayananPernikahan::STATUS_SELESAI)->count(),
         ];
     @endphp
 
@@ -137,7 +147,9 @@
             </div>
             <div class="p-6">
                 @php
+                    // $keagamaanId sudah didefinisikan di @php block atas, langsung dipakai
                     $recentPernikahan = \App\Models\LayananPernikahan::with(['dokumen'])
+                        ->where('keagamaan_id', $keagamaanId)
                         ->orderBy('created_at', 'desc')
                         ->limit(5)
                         ->get();
@@ -152,7 +164,8 @@
                                 @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DITOLAK_KEAGAMAAN) bg-red-100
                                 @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) bg-blue-100
                                 @else bg-yellow-100 @endif">
-                                <i class="fas @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) fa-check text-green-600
+                                <i class="fas
+                                    @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) fa-check text-green-600
                                     @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DITOLAK_KEAGAMAAN) fa-times text-red-600
                                     @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) fa-flag-checkered text-blue-600
                                     @else fa-clock text-yellow-600 @endif text-sm"></i>
@@ -167,7 +180,10 @@
                                 @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DITOLAK_KEAGAMAAN) bg-red-100 text-red-700
                                 @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) bg-blue-100 text-blue-700
                                 @else bg-yellow-100 text-yellow-700 @endif">
-                                {{ $item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI ? 'Disetujui' : ($item->status === \App\Models\LayananPernikahan::STATUS_DITOLAK_KEAGAMAAN ? 'Ditolak' : ($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI ? 'Selesai' : 'Pending')) }}
+                                @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) Disetujui
+                                @elseif($item->status === \App\Models\LayananPernikahan::STATUS_DITOLAK_KEAGAMAAN) Ditolak
+                                @elseif($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) Selesai
+                                @else Pending @endif
                             </span>
                         </div>
                         @endforeach
@@ -193,7 +209,6 @@ function updateDateTime() {
     }
 }
 
-// Update immediately and then every second
 updateDateTime();
 setInterval(updateDateTime, 1000);
 

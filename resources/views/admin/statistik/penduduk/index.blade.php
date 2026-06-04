@@ -265,35 +265,57 @@
         f.addEventListener('submit', function (e) {
             e.preventDefault();
             const t = f.getAttribute('data-title') || 'data ini';
-            SwalHelper.deleteConfirm('Hapus Data?', 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?', function () {
-                fetch(f.action, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(r => r.json())
-                .then(r => {
-                    if (r.success) {
-                        SwalHelper.toastSuccess(r.message);
-                        setTimeout(() => { window.location.reload(); }, 1000);
-                    } else {
-                        SwalHelper.toastError(r.message);
-                    }
-                });
+            Swal.fire({
+                title: 'Hapus Data?',
+                html: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
+                icon: false,
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#e5e7eb',
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(f.action, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(r => r.json())
+                    .then(r => {
+                        if (r.success) {
+                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 5000 });
+                            setTimeout(() => { window.location.reload(); }, 1000);
+                        } else {
+                            Swal.fire({ icon: 'error', title: 'Gagal!', text: r.message });
+                        }
+                    });
+                }
             });
         });
     });
 
     // E5 FIX: SweetAlert sukses HANYA dari session flash (server-side)
     @if(session('success'))
-    SwalHelper.toastSuccess('{{ session('success') }}');
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        toast: true,
+        position: 'top-end',
+        timer: 5000
+    });
     @endif
 
     @if(session('error'))
-    SwalHelper.toastError('{{ session('error') }}');
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}'
+    });
     @endif
 })();
 </script>

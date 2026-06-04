@@ -26,10 +26,21 @@ class PernikahanController extends Controller
      * Dashboard pernikahan untuk keagamaan
      * GET /keagamaan/pernikahan
      */
-cls
     public function index(Request $request)
     {
+        // Cari keagamaan_id milik user yang sedang login
+        $keagamaan = DB::table('keagamaan')
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$keagamaan) {
+            abort(403, 'Akun ini tidak terhubung ke data keagamaan.');
+        }
+
+        $keagamaanId = $keagamaan->keagamaan_id;
+
         $query = LayananPernikahan::with(['dokumen'])
+            ->where('keagamaan_id', $keagamaanId) // ← hanya data milik gereja ini
             ->whereIn('status', [
                 LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN,
                 LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
@@ -53,21 +64,22 @@ cls
         $pernikahan = $query->paginate(20);
 
         $statistics = [
-            'menunggu_konfirmasi' => LayananPernikahan::menungguKonfirmasiKeagamaan()->count(),
-            'dalam_proses' => LayananPernikahan::whereIn('status', [
-                LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
-                LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
-                LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
-                LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
-            ])->count(),
-            'tanggal_disetujui' => LayananPernikahan::where('status', LayananPernikahan::STATUS_TANGGAL_DISETUJUI)->count(),
-            'selesai' => LayananPernikahan::where('status', LayananPernikahan::STATUS_SELESAI)->count(),
+            'menunggu_konfirmasi' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+                ->menungguKonfirmasiKeagamaan()->count(),
+            'dalam_proses' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+                ->whereIn('status', [
+                    LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
+                    LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
+                    LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
+                    LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
+                ])->count(),
+            'tanggal_disetujui' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+                ->where('status', LayananPernikahan::STATUS_TANGGAL_DISETUJUI)->count(),
+            'selesai' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+                ->where('status', LayananPernikahan::STATUS_SELESAI)->count(),
         ];
 
-        return view('keagamaan.pernikahan', compact(
-            'pernikahan',
-            'statistics'
-        ));
+        return view('keagamaan.pernikahan', compact('pernikahan', 'statistics'));
     }
 
     /**

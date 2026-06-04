@@ -78,7 +78,7 @@ class AkteKematianController extends Controller
             $data['layanan_id'] = 'akte_kematian';
 
             // 3. INI KUNCINYA: Timpa input asal-asalan pemohon dengan Token Resmi
-            $data['nomor_antrian'] = $nomorAntrian;
+            $data['nomor_antrian'] = $nomorAntrian; 
 
             // 4. Handle file uploads - Changed to 'private' disk
             $fileUploads = [

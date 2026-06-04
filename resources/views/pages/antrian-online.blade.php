@@ -1509,11 +1509,11 @@ var currentStep = hasPernikahan
  infoGridHtml +
  timelineHtml +
  dokumenFinalHtml +
-//  '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
-//  '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
-//  '<i class="fas fa-eye"></i><span>Lihat</span>' +
-//  '</button>' +
-//  '</div>' +
+ '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
+ '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
+ '<i class="fas fa-eye"></i><span>Lihat</span>' +
+ '</button>' +
+ '</div>' +
  '</div>';
  }).join('');
  document.getElementById('searchResults').innerHTML = html;
