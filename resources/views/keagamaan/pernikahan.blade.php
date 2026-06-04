@@ -463,7 +463,7 @@ async function loadCalendarData() {
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
 
     try {
-        const response = await fetch(`{{ route('api.pernikahan.calendar') }}?year=${year}&month=${month}`);
+        const response = await fetch(`{{ route('api.pernikahan.keagamaan.calendar') }}?year=${year}&month=${month}`);
         const data = await response.json();
         calendarData = data.data || {};
         renderCalendar();
@@ -543,7 +543,7 @@ async function showDetail(id) {
     modal.classList.add('flex');
 
     try {
-        const response = await fetch(`{{ route('api.pernikahan.detail', ':id') }}`.replace(':id', id));
+        const response = await fetch(`{{ route('api.pernikahan.keagamaan.detail', ':id') }}`.replace(':id', id));
         const result = await response.json();
 
         if (result.success) {
@@ -738,15 +738,15 @@ async function executeConfirm() {
         let url, method, body;
 
         if (action === 'approve') {
-            url = '{{ route('api.pernikahan.approve', ':id') }}'.replace(':id', id);
+            url = '{{ route('api.pernikahan.keagamaan.approve', ':id') }}'.replace(':id', id);
             method = 'POST';
             body = JSON.stringify({});
         } else if (action === 'reject') {
-            url = '{{ route('api.pernikahan.reject', ':id') }}'.replace(':id', id);
+            url = '{{ route('api.pernikahan.keagamaan.reject', ':id') }}'.replace(':id', id);
             method = 'POST';
             body = JSON.stringify({ alasan: reason });
         } else if (action === 'reject_doc') {
-            url = '{{ route('api.pernikahan.reject-doc', ':id') }}'.replace(':id', id);
+            url = '{{ route('api.pernikahan.keagamaan.reject-doc', ':id') }}'.replace(':id', id);
             method = 'POST';
             body = JSON.stringify({ alasan: reason });
         }
@@ -777,7 +777,7 @@ async function executeConfirm() {
 
 async function verifyAllDocuments(id) {
     try {
-        const response = await fetch('{{ route('api.pernikahan.verify-all', ':id') }}'.replace(':id', id), {
+        const response = await fetch('{{ route('api.pernikahan.keagamaan.verify-all', ':id') }}'.replace(':id', id), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -820,7 +820,7 @@ async function handleFileUpload(input, id, type) {
     try {
         SwalHelper.loading('Mengupload berkas...');
 
-        const response = await fetch('{{ route('api.pernikahan.upload-berkas', ':id') }}'.replace(':id', id), {
+        const response = await fetch('{{ route('api.pernikahan.keagamaan.upload-berkas', ':id') }}'.replace(':id', id), {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
