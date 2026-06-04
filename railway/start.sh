@@ -4,9 +4,10 @@ set -e
 mkdir -p bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache storage/framework/testing storage/logs
 chmod -R a+rw bootstrap/cache storage
 
-php artisan migrate --force
-php artisan admin:reset --force
+php artisan migrate --force || true
+php artisan admin:reset --force || true
 php artisan optimize:clear
+php artisan route:clear
 php artisan storage:link || true
 php artisan config:cache
 php artisan event:cache
