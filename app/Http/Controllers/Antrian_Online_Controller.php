@@ -506,6 +506,7 @@ class Antrian_Online_Controller extends Controller
                         'status' => $lb->status,
                         'tanggal' => $lb->tanggal ?: ($lb->created_at ? $lb->created_at->format('d M Y') : date('d M Y')),
                         'keterangan' => $lb->keterangan,
+                        'alasan_penolakan' => $lb->alasan_penolakan,
                         'file_berkas' => $lb->file_berkas,
                         'download_url' => $lb->file_berkas ? route('lacak-berkas.download-final', ['id' => $lb->lacak_berkas_id]) : null,
                     ];
@@ -780,6 +781,7 @@ class Antrian_Online_Controller extends Controller
                 'lacak_berkas_id' => $item->lacak_berkas_id,
                 'status' => $item->status,
                 'keterangan' => $item->keterangan,
+                'alasan_penolakan' => $item->alasan_penolakan,
                 'tanggal' => $item->tanggal ?: ($item->created_at ? $item->created_at->format('d M Y') : date('d M Y')),
                 'file_berkas' => $item->file_berkas,
                 'download_url' => $item->file_berkas ? route('lacak-berkas.download-final', ['id' => $item->lacak_berkas_id]) : null,
@@ -1528,6 +1530,7 @@ class Antrian_Online_Controller extends Controller
                 'lacak_berkas_id' => $item->lacak_berkas_id,
                 'status' => $item->status,
                 'keterangan' => $item->keterangan,
+                'alasan_penolakan' => $item->alasan_penolakan,
                 'tanggal' => $item->created_at->format('d M Y H:i'),
                 'file_berkas' => $item->file_berkas,
                 'download_url' => $item->file_berkas ? route('lacak-berkas.download-final', ['id' => $item->lacak_berkas_id]) : null,

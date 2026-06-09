@@ -44,6 +44,8 @@
     @if(auth()->check())
         <script>window.location.href = "{{ route('admin.dashboard') }}";</script>
     @endif
+    {{-- SweetAlert Final Fix --}}
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
 </head>
 <body class="bg-animated min-h-screen flex items-center justify-center p-4">
 @include('components.page-loading')
@@ -408,5 +410,7 @@
     </style>
 <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
 <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+    {{-- SweetAlert Final Fix --}}
+    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 </body>
 </html>

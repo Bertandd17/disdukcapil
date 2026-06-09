@@ -525,7 +525,138 @@
     </div>
 </div>
 
+
+<style>
+    /*
+    |--------------------------------------------------------------------------
+    | SWEETALERT2 LOADING FIX
+    |--------------------------------------------------------------------------
+    | Loading modal harus tampil tanpa tombol.
+    | Class ini hanya dipasang pada modal loading agar tidak mengganggu
+    | toast atau modal konfirmasi lain.
+    */
+    .swal-loading-no-button .swal2-actions,
+    .swal-loading-no-button .swal2-confirm,
+    .swal-loading-no-button .swal2-deny,
+    .swal-loading-no-button .swal2-cancel,
+    .swal-loading-no-button .swal2-styled {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+
+    .swal-loading-no-button .swal2-actions {
+        height: 0 !important;
+        min-height: 0 !important;
+        margin-top: 0 !important;
+    }
+</style>
+
 <script>
+const AppSwal = {
+    loading: function(title, message) {
+        if (!window.Swal || typeof Swal.fire !== 'function') {
+            return;
+        }
+
+        Swal.fire({
+            title: title || 'Memproses...',
+            html: '<p class="text-gray-600 text-sm">' + (message || 'Mohon tunggu sebentar.') + '</p>',
+            icon: false,
+
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+
+            showConfirmButton: false,
+            showCancelButton: false,
+            showDenyButton: false,
+
+            buttonsStyling: false,
+            focusConfirm: false,
+            focusCancel: false,
+
+            customClass: {
+                popup: 'swal-loading-no-button'
+            },
+
+            didOpen: function() {
+                Swal.showLoading();
+
+                const popup = Swal.getPopup();
+                if (!popup) return;
+
+                const actions = popup.querySelector('.swal2-actions');
+                const confirmBtn = popup.querySelector('.swal2-confirm');
+                const denyBtn = popup.querySelector('.swal2-deny');
+                const cancelBtn = popup.querySelector('.swal2-cancel');
+
+                if (actions) {
+                    actions.style.display = 'none';
+                    actions.style.visibility = 'hidden';
+                    actions.style.height = '0';
+                    actions.style.minHeight = '0';
+                    actions.style.margin = '0';
+                    actions.style.padding = '0';
+                    actions.style.overflow = 'hidden';
+                }
+
+                if (confirmBtn) confirmBtn.remove();
+                if (denyBtn) denyBtn.remove();
+                if (cancelBtn) cancelBtn.remove();
+            }
+        });
+    },
+
+    close: function() {
+        if (window.Swal && typeof Swal.close === 'function') {
+            Swal.close();
+        }
+    },
+
+    success: function(message, title) {
+        if (!window.Swal || typeof Swal.fire !== 'function') {
+            alert(message || 'Berhasil');
+            return;
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: title || 'Berhasil',
+            text: message || 'Operasi berhasil dilakukan.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    },
+
+    error: function(message, title) {
+        if (!window.Swal || typeof Swal.fire !== 'function') {
+            alert(message || 'Terjadi kesalahan');
+            return;
+        }
+
+        Swal.fire({
+            icon: 'error',
+            title: title || 'Gagal',
+            text: message || 'Terjadi kesalahan.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#dc2626'
+        });
+    }
+};
+
 // Data jemaat yang tersedia (langsung dari PHP, tidak perlu AJAX)
 let selectedJemaat = null;
 let currentStep = 1;
@@ -665,7 +796,7 @@ function submitRequest() {
     btnSubmit.disabled = true;
     btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
 
-    SwalHelper.loading('Mengirim request tanggal...');
+    AppSwal.loading('Mengirim request tanggal...', 'Sedang mengirim request ke Disdukcapil.');
 
     fetch(`{{ route('keagamaan.pernikahan.submit-request-tanggal') }}`, {
         method: 'POST',
@@ -686,23 +817,23 @@ function submitRequest() {
         return response.json();
     })
     .then(data => {
-        SwalHelper.close();
+        AppSwal.close();
 
         if (data.success) {
             currentStep = 4;
             updateStepUI();
-            SwalHelper.success(data.message);
+            AppSwal.success(data.message || 'Request berhasil dikirim');
         } else {
             btnSubmit.disabled = false;
             btnSubmit.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Kirim Request';
-            SwalHelper.error(data.message || 'Gagal mengirim request');
+            AppSwal.error(data.message || 'Gagal mengirim request');
         }
     })
     .catch(error => {
-        SwalHelper.close();
+        AppSwal.close();
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Kirim Request';
-        SwalHelper.error('Terjadi kesalahan saat mengirim request');
+        AppSwal.error('Terjadi kesalahan saat mengirim request');
         console.error('Error:', error);
     });
 }
@@ -729,7 +860,7 @@ function printBerkas(pernikahanId) {
 }
 
 function showRequestDetail(pernikahanId) {
-    SwalHelper.loading('Memuat detail...');
+    AppSwal.loading('Memuat detail...', 'Sedang mengambil data dokumen.');
 
     fetch(`/keagamaan/pernikahan/detail-dokumen/${pernikahanId}`, {
         method: 'GET',
@@ -741,7 +872,7 @@ function showRequestDetail(pernikahanId) {
     })
     .then(response => response.json())
     .then(data => {
-        SwalHelper.close();
+        AppSwal.close();
         if (data.success) {
             const content = document.getElementById('detailModalContent');
             const dokumenList = data.dokumen && data.dokumen.length > 0
@@ -790,12 +921,12 @@ function showRequestDetail(pernikahanId) {
             `;
             document.getElementById('detailModal').classList.remove('hidden');
         } else {
-            SwalHelper.error(data.message || 'Gagal memuat detail');
+            AppSwal.error(data.message || 'Gagal memuat detail');
         }
     })
     .catch(error => {
-        SwalHelper.close();
-        SwalHelper.error('Terjadi kesalahan saat memuat detail');
+        AppSwal.close();
+        AppSwal.error('Terjadi kesalahan saat memuat detail');
     });
 }
 

@@ -1,10 +1,5 @@
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-<script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
-
-<link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
-<script src="{{ asset('js/swal-final-fix.js') }}"></script>
+{{-- SweetAlert dimuat oleh layouts.admin --}}
 
 @extends('layouts.admin')
 

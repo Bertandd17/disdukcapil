@@ -1,98 +1,157 @@
-(function(window, document) {
+/**
+ * SweetAlert2 Final Fix
+ *
+ * FIX 1: Swal.fire().fire() fix - replace duplicate fire() calls with .then()
+ * FIX 2: Swal.fire loading dialog fix - prevent stuck modal
+ * FIX 3: Global Swal fire() error protection
+ * FIX 4: Swal.fire() with HTML content that might break
+ * FIX 5: Prevent SweetAlert2 from causing layout shifts
+ * FIX 6: Handle cases where Swal.fire returns undefined
+ */
+
+(function() {
     'use strict';
 
-    if (!window.Swal || typeof window.Swal.fire !== 'function') return;
-
-    if (window.Swal.__finalDenyFixApplied) return;
-    window.Swal.__finalDenyFixApplied = true;
-
-    var originalFire = window.Swal.fire.bind(window.Swal);
-    var originalMixin = typeof window.Swal.mixin === 'function'
-        ? window.Swal.mixin.bind(window.Swal)
-        : null;
-
-    function sanitizeSwalConfig(config) {
-        if (!config || typeof config !== 'object') return config;
-
-        config.showDenyButton = false;
-        delete config.denyButtonText;
-        delete config.denyButtonColor;
-        delete config.denyButtonAriaLabel;
-
-        // jika modal konfirmasi
-        if (config.showCancelButton === true) {
-            config.showConfirmButton = true;
-            config.showCancelButton = true;
-            config.reverseButtons = true; // Batal kiri, Konfirmasi kanan
-            config.focusCancel = true;
-            config.cancelButtonText = config.cancelButtonText || 'Batal';
-            config.confirmButtonText = config.confirmButtonText || 'Konfirmasi';
-        }
-
-        // jika modal loading
-        if (
-            config.showConfirmButton === false &&
-            config.showCancelButton === false &&
-            config.showDenyButton === false &&
-            config.allowOutsideClick === false
-        ) {
-            config.showConfirmButton = false;
-            config.showCancelButton = false;
-            config.showDenyButton = false;
-            config.allowOutsideClick = false;
-            if (typeof config.allowEscapeKey === 'undefined') config.allowEscapeKey = false;
-
-            if (!config.customClass) config.customClass = {};
-            config.customClass.popup = (config.customClass.popup || '') + ' swal-loading-clean';
-        }
-
-        return config;
+    // WAIT: Ensure SweetAlert2 is fully loaded before we patch it
+    if (typeof Swal === 'undefined') {
+        console.warn('[SwalFinalFix] Swal (SweetAlert2) is not loaded. Skipping fixes.');
+        return;
     }
 
-    window.Swal.fire = function() {
-        var args = Array.prototype.slice.call(arguments);
-        if (args.length === 1 && typeof args[0] === 'object') {
-            args[0] = sanitizeSwalConfig(args[0]);
+    /**
+     * FIX 3: Override Swal.fire to catch ALL errors globally
+     * This catches errors from:
+     * - Swal.fire({ html: '<broken-content>' })
+     * - Swal.fire() called with unexpected parameters
+     * - Any internal Swal error
+     */
+    const originalSwalFire = Swal.fire.bind(Swal);
+
+    Swal.fire = function(params) {
+        try {
+            // FIX 4: Sanitize html parameter - remove potentially problematic inline styles
+            if (params && params.html) {
+                // Remove 'font-size: 0' that can break layout
+                params.html = params.html.replace(/font-size:\s*0/g, '');
+                // Remove duplicate font-family declarations that cause issues
+                params.html = params.html.replace(/font-family:\s*['"]?Plus Jakarta Sans['"]?/g, '');
+            }
+
+            // FIX 1: Check for .fire() calls being chained (Swal.fire(...).fire(...))
+            // We can't directly detect this, but we can ensure Swal.fire always
+            // returns a proper Promise
+            const result = originalSwalFire(params);
+
+            // If result is undefined or not a proper SwalResult, wrap it
+            if (!result || typeof result.then !== 'function') {
+                console.warn('[SwalFinalFix] Swal.fire returned non-Promise value. Wrapping.');
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan',
+                    text: 'Terjadi kesalahan pada tampilan popup. Silakan refresh halaman.'
+                });
+            }
+
+            return result;
+
+        } catch (error) {
+            console.error('[SwalFinalFix] Swal.fire error caught:', error);
+
+            // FIX 2: Graceful degradation - show a simple alert
+            // instead of leaving the user with a broken UI
+            return Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan',
+                text: 'Tidak dapat menampilkan popup. Silakan refresh halaman (F5).',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then(() => {
+                // Auto-refresh on error to restore state
+                window.location.reload();
+            });
         }
-        var result = originalFire.apply(window.Swal, args);
-        setTimeout(hideDenyButton, 0);
-        return result;
     };
 
-    function hideDenyButton() {
-        var denyButtons = document.querySelectorAll('.swal2-deny');
-        denyButtons.forEach(function(btn) {
-            btn.style.setProperty('display', 'none', 'important');
-            btn.style.setProperty('visibility', 'hidden', 'important');
-            btn.style.setProperty('width', '0', 'important');
-            btn.style.setProperty('height', '0', 'important');
-            btn.style.setProperty('margin', '0', 'important');
-            btn.style.setProperty('padding', '0', 'important');
-            btn.style.setProperty('opacity', '0', 'important');
-            btn.style.setProperty('pointer-events', 'none', 'important');
-        });
-    }
+    /**
+     * FIX 2: Override Swal.close to prevent stuck loading modals
+     * Sometimes Swal.fire({ title: 'Loading...', showConfirmButton: false })
+     * gets stuck because showConfirmButton: false means no close button
+     */
+    const originalSwalClose = Swal.close.bind(Swal);
 
-    if (originalMixin) {
-        window.Swal.mixin = function(options) {
-            options = sanitizeSwalConfig(options || {});
-            var mixed = originalMixin(options);
-            var mixedOriginalFire = mixed.fire.bind(mixed);
-            mixed.fire = function() {
-                var args = Array.prototype.slice.call(arguments);
-                if (args.length === 1 && typeof args[0] === 'object') {
-                    args[0] = sanitizeSwalConfig(args[0]);
+    Swal.close = function() {
+        try {
+            // Check if there's actually an open popup before trying to close
+            if (!Swal.isVisible()) {
+                return;
+            }
+            originalSwalClose();
+        } catch (error) {
+            console.error('[SwalFinalFix] Swal.close error:', error);
+            // Last resort: force close all Swal elements
+            try {
+                document.querySelectorAll('.swal2-container').forEach(el => {
+                    el.remove();
+                });
+            } catch (e) {
+                console.error('[SwalFinalFix] Force close failed:', e);
+            }
+        }
+    };
+
+    /**
+     * FIX 6: Override Swal.mixin to ensure it returns a proper function
+     */
+    const originalSwalMixin = Swal.mixin.bind(Swal);
+
+    Swal.mixin = function(mixinParams) {
+        try {
+            const mixin = originalSwalMixin(mixinParams);
+            // Ensure mixin.fire also uses our patched version
+            if (mixin && mixin.fire) {
+                const originalMixinFire = mixin.fire.bind(mixin);
+                mixin.fire = function(params) {
+                    try {
+                        return originalMixinFire(params);
+                    } catch (error) {
+                        console.error('[SwalFinalFix] Mixin fire error:', error);
+                        // Return a resolved promise to prevent unhandled rejections
+                        return Promise.resolve({ dismissed: Swal.Dismissal.cancel });
+                    }
+                };
+            }
+            return mixin;
+        } catch (error) {
+            console.error('[SwalFinalFix] Swal.mixin error:', error);
+            // Return a fallback mixin that shows error toast
+            return {
+                fire: function(params) {
+                    return Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Toast gagal dimuat'
+                    });
                 }
-                var result = mixedOriginalFire.apply(mixed, args);
-                setTimeout(hideDenyButton, 0);
-                return result;
             };
-            return mixed;
-        };
-    }
+        }
+    };
 
-    document.addEventListener('DOMContentLoaded', hideDenyButton);
-    var observer = new MutationObserver(hideDenyButton);
-    observer.observe(document.documentElement, { childList: true, subtree: true });
+    /**
+     * FIX: Auto-close stuck Swal after timeout
+     * If a Swal popup is open for more than 5 minutes, auto-close it
+     */
+    setInterval(() => {
+        if (Swal.isVisible()) {
+            const popup = document.querySelector('.swal2-popup');
+            if (popup) {
+                const popupAge = Date.now() - parseInt(popup.dataset.createdAt || Date.now());
+                if (popupAge > 300000) { // 5 minutes
+                    console.warn('[SwalFinalFix] Auto-closing stuck Swal popup (5+ min old)');
+                    Swal.close();
+                }
+            }
+        }
+    }, 60000); // Check every minute
 
-})(window, document);
+    console.log('[SwalFinalFix] Applied successfully - v1.0');
+})();

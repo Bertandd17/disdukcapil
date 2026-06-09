@@ -175,9 +175,20 @@
                     </div>
                     @endforeach
                 </div>
+
+                @if($berkas->foto_wajah)
+                <div class="mt-6 border-t pt-6">
+                    <h3 class="text-md font-semibold mb-4">Foto Verifikasi Wajah</h3>
+                    <img 
+                        src="{{ route('admin.lihat-berkas-lahir-mati', ['uuid' => $berkas->uuid, 'field' => 'foto_wajah']) }}"
+                        class="w-40 h-40 rounded-xl object-cover border shadow"
+                        alt="Foto Wajah Pemohon"
+                    >
+                </div>
+                @endif
+
             </div>
         </div>
-
     </div>
 </div>
 @endsection

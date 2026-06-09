@@ -80,16 +80,7 @@
                                 class="flex-1 px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700">
                             <i class="fas fa-upload mr-2"></i>Upload Berkas
                         </button>
-                        @else
-                        <button onclick="printBerkas('{{ $item->pernikahan_id }}')"
-                                class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
-                            <i class="fas fa-print mr-2"></i>Print Berkas
-                        </button>
                         @endif
-                        <a href="{{ route('keagamaan.pernikahan.show', $item->pernikahan_id) }}"
-                           class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
-                            <i class="fas fa-eye"></i>
-                        </a>
                     </div>
                 </div>
                 @endforeach

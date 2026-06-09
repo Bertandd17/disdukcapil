@@ -27,18 +27,8 @@
     <!-- SweetAlert2 — hanya dimuat SEKALI di sini -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- SweetAlert Helper -->
-    <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-
-    <!-- SweetAlert2 Disdukcapil Notification System -->
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
-
-    <!-- Notifikasi Disdukcapil Helper -->
-    <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
-
-    <!-- SweetAlert Final Fix (Batal kiri, Konfirmasi kanan; deny button hilang; loading bersih; toast top-end) -->
-    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
-    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
+    <!-- Notifikasi Disdukcapil (file final tunggal) -->
+    <script src="{{ asset('js/notifikasi-disdukcapil.js') }}?v={{ filemtime(public_path('js/notifikasi-disdukcapil.js')) }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -187,6 +177,9 @@
 
     {{-- SweetAlert Global Styles untuk Admin --}}
     @include('admin.partials.sweetalert-styles')
+
+    {{-- SweetAlert Final Fix --}}
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}?v={{ filemtime(public_path('css/swal-final-fix.css')) }}">
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
     @include('components.page-loading')
@@ -593,10 +586,12 @@
     });
     </script>
 
-    {{-- Custom toast (override SwalHelper toast methods) --}}
-    <script src="{{ asset('js/disdukcapil-toast.js') }}"></script>
+    {{-- Page loading & style guide enhancer --}}
     <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
     <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+
+    {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
+    <script src="{{ asset('js/swal-final-fix.js') }}?v={{ filemtime(public_path('js/swal-final-fix.js')) }}"></script>
 
     {{-- @stack dipanggil SETELAH SwalHelper didefinisikan --}}
     @stack('scripts')

@@ -134,19 +134,19 @@
                     Dokumen Persyaratan (Verifikasi Disini)
                 </h2>
                 
+                @php
+                    $dokumen = [
+                        ['label' => 'Formulir F-2.01 (Wajib)', 'field' => 'formulir_f201', 'icon' => 'fa-file-signature', 'color' => 'blue'],
+                        ['label' => 'Surat Kematian (Wajib)', 'field' => 'surat_keterangan_kematian', 'icon' => 'fa-file-medical', 'color' => 'red'],
+                        ['label' => 'KTP Pemohon (Wajib)', 'field' => 'ktp_pemohon', 'icon' => 'fa-id-card', 'color' => 'green'],
+                        ['label' => 'KK Pemohon (Wajib)', 'field' => 'kartu_keluarga_pemohon', 'icon' => 'fa-users', 'color' => 'green'],
+                        ['label' => 'KTP Almarhum (Wajib)', 'field' => 'ktp_almarhum', 'icon' => 'fa-id-badge', 'color' => 'gray'],
+                        ['label' => 'KTP Saksi 1 (Wajib)', 'field' => 'ktp_saksi1', 'icon' => 'fa-user-check', 'color' => 'gray'],
+                        ['label' => 'KTP Saksi 2 (Wajib)', 'field' => 'ktp_saksi2', 'icon' => 'fa-user-check', 'color' => 'gray'],
+                    ];
+                @endphp
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @php
-                        $dokumen = [
-                            ['label' => 'Formulir F-2.01 (Wajib)', 'field' => 'formulir_f201', 'icon' => 'fa-file-signature', 'color' => 'blue'],
-                            ['label' => 'Surat Kematian (Wajib)', 'field' => 'surat_keterangan_kematian', 'icon' => 'fa-file-medical', 'color' => 'red'],
-                            ['label' => 'KTP Pemohon (Wajib)', 'field' => 'ktp_pemohon', 'icon' => 'fa-id-card', 'color' => 'green'],
-                            ['label' => 'KK Pemohon (Wajib)', 'field' => 'kartu_keluarga_pemohon', 'icon' => 'fa-users', 'color' => 'green'],
-                            ['label' => 'KTP Almarhum (Wajib)', 'field' => 'ktp_almarhum', 'icon' => 'fa-id-badge', 'color' => 'gray'],
-                            ['label' => 'KTP Saksi 1 (Wajib)', 'field' => 'ktp_saksi1', 'icon' => 'fa-user-check', 'color' => 'gray'],
-                            ['label' => 'KTP Saksi 2 (Wajib)', 'field' => 'ktp_saksi2', 'icon' => 'fa-user-check', 'color' => 'gray'],
-                        ];
-                    @endphp
-                    
                     @foreach($dokumen as $dok)
                     <div class="border rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition bg-gray-50">
                         <div class="flex items-start gap-3 mb-4">
@@ -176,10 +176,24 @@
                     </div>
                     @endforeach
                 </div>
+
+                {{-- Foto Wajah / Liveness --}}
+                @if($berkas->foto_wajah)
+                <div class="mt-6 border-t pt-6">
+                    <h3 class="text-md font-semibold mb-4">Foto Verifikasi Wajah</h3>
+                    <img 
+                        src="{{ route('admin.lihat-berkas-kematian', ['uuid' => $berkas->uuid, 'field' => 'foto_wajah']) }}"
+                        class="w-40 h-40 rounded-xl object-cover border shadow"
+                        alt="Foto Wajah Pemohon"
+                    >
+                </div>
+                @endif
+
             </div>
         </div>
 
     </div>
+</div>
 @endsection
 
 @push('scripts')

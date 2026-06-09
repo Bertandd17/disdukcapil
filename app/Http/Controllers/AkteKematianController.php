@@ -22,7 +22,7 @@ class AkteKematianController extends Controller
             'nama_pemohon'              => 'required|string',
             'alamat_pemohon'            => 'required|string',
             'hubungan_pemohon'          => 'required|string',
-            
+            'foto_wajah'                => 'nullable|string',
             'ktp_pemohon'               => 'nullable|file|mimes:pdf|max:2048',
             'kartu_keluarga_pemohon'    => 'nullable|file|mimes:pdf|max:2048',
             'formulir_f201'             => 'nullable|file|mimes:pdf|max:2048',
@@ -33,7 +33,7 @@ class AkteKematianController extends Controller
         ], [
             'digits' => 'Pastikan nomor NIK/KK tepat 16 angka!',
             'mimes'  => 'Berkas yang diunggah harus berformat PDF!',
-            'max'    => 'Ukuran berkas maksimal adalah 5MB.'
+            'max'    => 'Ukuran berkas maksimal adalah 2MB.',
         ]);
 
         if ($validator->fails()) {
@@ -67,20 +67,16 @@ class AkteKematianController extends Controller
 
         try {
             $nomorAntrian = $antrian->nomor_antrian;
-
-            // 2. Ambil semua data teks
             $data = $request->except([
-                'ktp_pemohon', 'kartu_keluarga_pemohon', 'formulir_f201', 
-                'surat_keterangan_kematian', 'ktp_almarhum', 'ktp_saksi1', 'ktp_saksi2'
+                'ktp_pemohon', 'kartu_keluarga_pemohon', 'formulir_f201',
+                'surat_keterangan_kematian', 'ktp_almarhum', 'ktp_saksi1', 'ktp_saksi2',
+                'foto_wajah',
             ]);
-            
-            $data['status'] = 'Verifikasi Data';
-            $data['layanan_id'] = 'akte_kematian';
 
-            // 3. INI KUNCINYA: Timpa input asal-asalan pemohon dengan Token Resmi
-            $data['nomor_antrian'] = $nomorAntrian; 
+            $data['status']         = 'Verifikasi Data';
+            $data['layanan_id']     = 'akte_kematian';
+            $data['nomor_antrian']  = $nomorAntrian;
 
-            // 4. Handle file uploads - Changed to 'private' disk
             $fileUploads = [
                 'ktp_pemohon'               => 'akte_kematian/pemohon',
                 'kartu_keluarga_pemohon'    => 'akte_kematian/kk',
@@ -97,13 +93,18 @@ class AkteKematianController extends Controller
                 }
             }
 
-            // 5. Simpan ke database Akte Kematian
+            if ($request->filled('foto_wajah')) {
+                $base64   = preg_replace('/^data:image\/\w+;base64,/', '', $request->foto_wajah);
+                $decoded  = base64_decode($base64);
+                $filename = 'wajah_' . uniqid() . '_' . time() . '.jpg';
+                Storage::disk('private')->put("akte_kematian/{$filename}", $decoded);
+                $data['foto_wajah'] = "akte_kematian/{$filename}";
+            }
+
             $akteKematian = AkteKematian::create($data);
 
-            // 6. Tandai nomor antrian yang sudah ada sebagai mulai diproses
             $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
-            // 8. Create lacak berkas
             Lacak_Berkas_Model::create([
                 'antrian_online_id' => $antrian->antrian_online_id,
                 'status'            => 'Verifikasi Data',
@@ -233,19 +234,15 @@ class AkteKematianController extends Controller
         return redirect()->back()->with('success', 'Berkas berhasil diunggah dan dapat diunduh oleh pemohon.');
     }
 
-    /**
-     * Lihat berkas dari private disk
-     * Pattern yang sama dengan AkteLahirController
-     */
     public function lihatBerkas($uuid, $field)
     {
         $berkas = AkteKematian::where('uuid', $uuid)->firstOrFail();
         $path = $berkas->$field;
-        
+
         if (!$path || !Storage::disk('private')->exists($path)) {
             abort(404);
         }
-        
+
         return Storage::disk('private')->response($path);
     }
 }

@@ -226,7 +226,13 @@
       "Bash(echo \"=== After cleanup ===\")",
       "Bash(echo \"=== In HEAD? ===\")",
       "Bash(echo \"=== In origin/main? ===\")",
-      "Bash(echo \"=== Compare HEAD vs origin/main ===\")"
+      "Bash(echo \"=== Compare HEAD vs origin/main ===\")",
+      "Bash(php -l app/Http/Controllers/Antrian_Online_Controller.php)",
+      "Bash(php -l resources/views/pages/antrian-online.blade.php)",
+      "Bash(rm -f sweetalert-disdukcapil.js)",
+      "Bash(ls *.js)",
+      "Bash(exist \"D:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\\\\public\\\\css\\\\swal-final-fix.css\" del \"D:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\\\\public\\\\css\\\\swal-final-fix.css\")",
+      "Bash(awk -F\"'\" '{print $2}')"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"

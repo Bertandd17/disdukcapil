@@ -21,26 +21,12 @@ return new class extends Migration
                 ->references('layanan_id')
                 ->on('layanan')
                 ->onDelete('cascade');
-            // $table->char('antrian_online_id', 36)->nullable();
-            
-            // Form fields
             $table->string('nomor_antrian')->nullable();
-            
-            // Data Pemohon (Sesuai dengan controller baru)
             $table->string('nik_pemohon')->index();
             $table->string('nomor_kk_pemohon')->nullable();
             $table->string('nama_pemohon');
-            $table->text('alamat_pemohon'); // Menggunakan text karena alamat bisa panjang
-            $table->string('hubungan_pemohon');            
-            // // Data Jenazah (dari remote)
-            // $table->string('nama_almarhum');
-            // $table->text('nik_almarhum')->nullable();
-            // $table->text('nik_pelapor')->nullable();
-            // $table->date('tgl_meninggal');
-            // $table->string('tempat_meninggal');
-            // $table->text('sebab_meninggal')->nullable();
-            // $table->string('nama_pelapor');          
-            // File uploads (Semua data jenazah & saksi dialihkan ke unggahan dokumen F-2.01)
+            $table->text('alamat_pemohon');
+            $table->string('hubungan_pemohon');
             $table->string('ktp_pemohon')->nullable();
             $table->string('kartu_keluarga_pemohon')->nullable();
             $table->string('formulir_f201')->nullable();
@@ -48,6 +34,7 @@ return new class extends Migration
             $table->string('ktp_almarhum')->nullable();
             $table->string('ktp_saksi1')->nullable();
             $table->string('ktp_saksi2')->nullable();
+            $table->string('foto_wajah')->nullable();
             
             // Status dan metadata
             $table->enum('status', ['Menunggu','Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak', 'Siap Pengambilan', 'Tolak'])
