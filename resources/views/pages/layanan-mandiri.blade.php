@@ -797,7 +797,8 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    INTERCEPTOR GLOBAL — Paksa SEMUA loading modal tanpa tombol OK/No/Cancel
-   (FASE 4 — Ditempatkan setelah SweetAlert2, sebelum @stack('scripts'))
+   (FASE 4 — Ditempatkan SETELAH notifikasi-disdukcapil.js
+    supaya tidak menimpa patch toast-nya)
    ═══════════════════════════════════════════════════════════════════ */
 (function installSwalLoadingInterceptor() {
     function patchSwal(Swal) {
@@ -833,7 +834,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 config.allowEscapeKey    = false;
             }
 
-            return _originalFire(config);
+            return _previousFire(config);
         };
 
         /* Patch mixin juga (penting untuk Swal.mixin({...}).fire()) */
@@ -1490,6 +1491,9 @@ function showErrorToast(problem, solution, title, timer) {
     timer = timer || 6000;
     var cleanProblem  = stripToastHtml(problem  || 'Terjadi kesalahan saat memproses permintaan.');
     var cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
+    if (typeof window.showError === 'function') {
+        return window.showError(title, cleanProblem, cleanSolution);
+    }
     return showToast(cleanProblem + ' ' + cleanSolution, 'error');
 }
 
@@ -1653,26 +1657,15 @@ function clearFileInput(fieldName) {
 
 /* ═══════════════════════════════════════════════════════════════════
    Toast helper
+   Pakai fireToast() dari notifikasi-disdukcapil.js agar styling
+   hijau/merah + format "Masalah / Cara memperbaiki" konsisten.
    ═══════════════════════════════════════════════════════════════════ */
 function showToast(message, type) {
-    type = type || 'info';
-    var iconMap = { success:'success', error:'error', warning:'warning', info:'info' };
-    Swal.mixin({
-        toast             : true,
-        position          : 'top-end',
-        showConfirmButton : false,
-        showDenyButton    : false,
-        showCancelButton  : false,
-        timer             : 4000,
-        timerProgressBar  : true,
-        icon              : iconMap[type] || 'info',
-        title             : message,
-        customClass       : { popup: 'swal-toast-' + (type || 'info') },
-        didOpen           : function(toast) {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
-    }).fire();
+    if (typeof window.fireToast === 'function') {
+        var t = (type === 'error' || type === 'success' || type === 'warning' || type === 'info') ? type : 'info';
+        return window.fireToast({ type: t, title: message, timer: 4000 });
+    }
+    Swal.fire({ toast: true, position: 'top-end', icon: type || 'info', title: message, timer: 4000, showConfirmButton: false });
 }
 
 function formatValidationErrors(errors) {
@@ -1842,7 +1835,7 @@ async function handleKirimPengajuan() {
             return;
         }
 
-        showError(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'Server menolak atau gagal memproses pengajuan Anda.', 'Periksa kembali isian formulir, koneksi internet, lalu coba kirim ulang.');;
+        showError(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'Server menolak atau gagal memproses pengajuan Anda.', 'Periksa kembali isian formulir, koneksi internet, lalu coba kirim ulang.');
     })
     .catch(function(error) {
         Swal.close();

@@ -899,9 +899,7 @@
  var oldStatus = window.__lacakPollState.lastStatuses[key];
  if (oldStatus && newStatus && oldStatus !== newStatus) {
  changed = true;
- if (window.SwalHelper && window.SwalHelper.info) {
- window.SwalHelper.info('Status Diperbarui', key + ': ' + oldStatus + ' → ' + newStatus);
- }
+ showInfo('Status Diperbarui: ' + key + ' (' + oldStatus + ' → ' + newStatus + ')');
  }
  if (newStatus) window.__lacakPollState.lastStatuses[key] = newStatus;
  });
@@ -926,7 +924,7 @@
 
  if (!searchInput) {
  console.error('searchInput element not found');
- SwalHelper.error('Error!', 'Elemen input tidak ditemukan');
+ showError('Elemen input tidak ditemukan', 'Komponen pencarian (searchInput) tidak tersedia di halaman.', 'Muat ulang halaman. Jika masalah berlanjut, hubungi admin.');
  return;
  }
 
@@ -937,7 +935,7 @@
  console.log('Layanan ID:', layananId);
 
  if (!searchValue) {
- SwalHelper.warning('Peringatan!', 'Masukkan kata kunci pencarian');
+ showWarning('Masukkan kata kunci pencarian');
  return;
  }
 
@@ -1030,7 +1028,7 @@
  }
 
  // Notifikasi cari berhasil
- SwalHelper.success('Ditemukan!', data.data.length + ' data ditemukan untuk "' + searchValue + '"');
+ notifCariBerhasil(data.data.length, searchValue);
  } else {
  console.log('No results found. Message:', data.message || 'No message');
  window.stopLacakPolling();
@@ -1038,7 +1036,7 @@
  resultsContainer.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data antrian tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan nama atau nomor antrian yang dimasukkan benar.</p><div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg inline-block"><p class="text-sm text-yellow-700"><i class="fas fa-lightbulb mr-1"></i><strong>Tips:</strong> Gunakan nama lengkap sesuai KTP. Coba juga dengan nama lain yang mirip.</p></div>' + debugInfo + '</div>';
 
  // Tampilkan notifikasi cari kosong
- SwalHelper.info('Tidak Ditemukan', 'Data untuk "' + searchValue + '" tidak ditemukan dalam sistem');
+ notifCariKosong(searchValue);
  }
  })
  .catch(function(err) {
@@ -1046,12 +1044,11 @@
  if (resultsContainer) {
  resultsContainer.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-3xl text-red-500"></i></div><p class="text-gray-500 font-medium">Data tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Periksa nomor pengajuan Anda.</p></div>';
  }
- // Gunakan notifikasi error — pesan ke user tetap sederhana & ramah warga
- SwalHelper.error('Data Tidak Ditemukan', 'Data tidak ditemukan. Periksa nomor pengajuan Anda dan coba lagi.');
+ showError('Data tidak ditemukan', 'Data untuk kata kunci "' + searchValue + '" tidak ditemukan dalam sistem.', 'Periksa nama atau nomor antrian yang dimasukkan, lalu coba lagi.');
  });
  } catch (err) {
  console.error('[DEBUG] Unexpected error in searchAntrian:', err);
- SwalHelper.error('Terjadi Kesalahan', 'Sistem mengalami gangguan sementara. Silakan coba beberapa saat lagi.');
+ showError('Sistem mengalami gangguan sementara', 'Tidak berhasil memproses permintaan pencarian.', 'Tunggu beberapa saat lalu coba lagi. Jika masalah berlanjut, hubungi admin.');
  }
  };
 
