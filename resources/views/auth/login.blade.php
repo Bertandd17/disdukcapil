@@ -83,19 +83,10 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        /* Input Focus Animation */
+        /* Input Floating Label — Tailwind peer-* utilities handle animation.
+           Keep .input-group as a positioning context only (no extra CSS needed). */
         .input-group {
             position: relative;
-        }
-
-        .input-group input:focus ~ label,
-        .input-group input:not(:placeholder-shown) ~ label {
-            transform: translateY(-24px) scale(0.85);
-            color: #0052CC;
-        }
-
-        .input-group label {
-            transition: all 0.3s ease;
         }
 
         /* Button Ripple */
@@ -132,7 +123,7 @@
     {{-- SweetAlert Final Fix --}}
     <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
 </head>
-<body class="bg-animated min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
+<body class="bg-animated min-h-screen flex items-center justify-center p-4 py-12 sm:py-4 overflow-x-hidden">
 @include('components.page-loading')
 
     <!-- Background Particles -->
@@ -270,7 +261,8 @@
                     <input type="text" id="username" name="username" required placeholder=" "
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer"
                            value="{{ old('username') }}">
-                    <label for="username" class="absolute left-4 top-3 text-gray-400 pointer-events-none">
+                    <label for="username"
+                           class="absolute left-4 top-3 text-gray-400 pointer-events-none transition-all duration-200 origin-left scale-100 peer-focus:-top-2 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2 peer-[&:not(:placeholder-shown)]:scale-75 peer-[&:not(:placeholder-shown)]:text-blue-600 peer-[&:not(:placeholder-shown)]:bg-white peer-[&:not(:placeholder-shown)]:px-1">
                         <i class="fas fa-user mr-2"></i>Username
                     </label>
                 </div>
@@ -280,7 +272,8 @@
                     <div class="relative">
                         <input type="password" id="password" name="password" required placeholder=" "
                                class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer">
-                        <label for="password" class="absolute left-4 top-3 text-gray-400 pointer-events-none">
+                        <label for="password"
+                               class="absolute left-4 top-3 text-gray-400 pointer-events-none transition-all duration-200 origin-left scale-100 peer-focus:-top-2 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-[&:not(:placeholder-shown)]:-top-2 peer-[&:not(:placeholder-shown)]:scale-75 peer-[&:not(:placeholder-shown)]:text-blue-600 peer-[&:not(:placeholder-shown)]:bg-white peer-[&:not(:placeholder-shown)]:px-1">
                             <i class="fas fa-lock mr-2"></i>Password
                         </label>
                         <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
