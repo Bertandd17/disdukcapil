@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penerbitan Akta Kelahiran - Disdukcapil Kabupaten Toba</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']},colors:{primary:{50:'#E6F0FF',100:'#CCE0FF',500:'#0066FF',600:'#0052CC',700:'#003D9A',800:'#002B6E'}}}}}}</script>
+    <style>*{font-family:'Plus Jakarta Sans',sans-serif}.sidebar-link.active{background:linear-gradient(135deg,#0052CC 0%,#0066FF 100%);color:white}.toast{position:fixed;top:20px;right:20px;z-index:9999;min-width:300px;background:white;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.1);padding:16px 20px;display:flex;align-items:center;gap:12px;transform:translateX(400px);transition:transform 0.3s ease}.toast.show{transform:translateX(0)}.toast.success{border-left:4px solid #10B981}.toast.error{border-left:4px solid #EF4444}.toast.info{border-left:4px solid #0066FF}</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 z-50 shadow-lg">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-extrabold">T</div>
+            <span class="ml-3 font-bold text-lg text-gray-800">Disdukcapil</span>
+        </div>
+        <nav class="p-4 space-y-1 overflow-y-auto h-[calc(100vh-4rem)]">
+            <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-home w-5"></i><span class="font-medium">Dashboard</span></a>
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen</p></div>
+            <a href="kelola_berita.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-newspaper w-5"></i><span class="font-medium">Kelola Berita</span></a>
+            <a href="organisasi.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-sitemap w-5"></i><span class="font-medium">Organisasi</span></a>
+            <a href="penghargaan.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-trophy w-5"></i><span class="font-medium">Penghargaan</span></a>
+            <a href="dasar-hukum.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-balance-scale w-5"></i><span class="font-medium">Dasar Hukum</span></a>
+            <a href="visimisi.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-bullseye w-5"></i><span class="font-medium">Visi & Misi</span></a>
+            <a href="statistik.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-chart-bar w-5"></i><span class="font-medium">Statistik</span></a>
+            <a href="visualisasi-data.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-chart-pie w-5"></i><span class="font-medium">Visualisasi Data</span></a>
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Layanan</p></div>
+            <a href="antrian-online-index.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-ticket-alt w-5"></i><span class="font-medium">Antrian Online</span></a>
+            <a href="penerbitan_kk.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-id-card w-5"></i><span class="font-medium">Kartu Keluarga</span></a>
+            <a href="penerbitan_akte_lahir.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-baby w-5"></i><span class="font-medium">Akta Kelahiran</span></a>
+            <a href="penerbitan_akte_kematian.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-user-times w-5"></i><span class="font-medium">Akta Kematian</span></a>
+            <a href="penerbitan_lahir_mati.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-exchange-alt w-5"></i><span class="font-medium">Lahir Mati</span></a>
+            <a href="penerbitan_pernikahan.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-ring w-5"></i><span class="font-medium">Akta Pernikahan</span></a>
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Akun</p></div>
+            <a href="manajemen_akun.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-users-cog w-5"></i><span class="font-medium">Manajemen Akun</span></a>
+            <button onclick="logoutConfirm()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"><i class="fas fa-sign-out-alt w-5"></i><span class="font-medium">Logout</span></button>
+        </nav>
+    </aside>
+
+    <div class="ml-64 flex flex-col min-h-screen">
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center gap-4">
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition"><i class="fas fa-bars text-gray-600"></i></button>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Penerbitan Akta Kelahiran</h1>
+                        <p class="text-sm text-gray-500">Kelola permohonan akta kelahiran</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"><i class="fas fa-user text-blue-600"></i></div>
+                    <div class="hidden md:block">
+                        <p class="text-sm font-semibold text-gray-800">Admin Toba</p>
+                        <p class="text-xs text-gray-500">Administrator</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6">
+            <div class="flex justify-end mb-4">
+                <button onclick="tambahAktaLahir()" class="px-5 py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center gap-2"><i class="fas fa-plus"></i>Tambah Permohonan</button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <input type="text" placeholder="Cari..." class="px-4 py-2 border border-gray-200 rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary-500">
+                </div>
+                <table class="w-full">
+                    <thead class="bg-gray-50 text-xs font-semibold text-gray-600 uppercase">
+                        <tr>
+                            <th class="px-5 py-3 text-left">No</th>
+                            <th class="px-5 py-3 text-left">Nama Bayi</th>
+                            <th class="px-5 py-3 text-left">Tgl Lahir</th>
+                            <th class="px-5 py-3 text-left">Nama Ayah</th>
+                            <th class="px-5 py-3 text-left">Status</th>
+                            <th class="px-5 py-3 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr>
+                            <td class="px-5 py-3">1</td>
+                            <td class="px-5 py-3 font-medium">Aron Simanjuntak</td>
+                            <td class="px-5 py-3 text-gray-600">05-01-2025</td>
+                            <td class="px-5 py-3">Budi Simanjuntak</td>
+                            <td class="px-5 py-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">Menunggu</span></td>
+                            <td class="px-5 py-3 text-center">
+                                <button onclick="detailAktaLahir()" class="text-blue-600 mx-1"><i class="fas fa-eye"></i></button>
+                                <button onclick="setujuiAkta()" class="text-green-600 mx-1"><i class="fas fa-check"></i></button>
+                                <button onclick="tolakAkta()" class="text-red-600 mx-1"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+            <div class="max-w-7xl mx-auto px-6 text-sm text-gray-600 text-center"><p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved.</p></div>
+        </footer>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script>
+        function showToast(message, type='success') {
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            const icons = {success:'fa-check-circle text-green-500',error:'fa-times-circle text-red-500',info:'fa-info-circle text-blue-500'};
+            t.innerHTML = `<i class="fas ${icons[type]} text-2xl"></i><div><p class="font-semibold">${message}</p></div>`;
+            document.getElementById('toastContainer').appendChild(t);
+            setTimeout(()=>t.classList.add('show'), 50);
+            setTimeout(()=>{t.classList.remove('show'); setTimeout(()=>t.remove(), 300);}, 3000);
+        }
+
+        function tambahAktaLahir() {
+            Swal.fire({
+                title: 'Tambah Permohonan Akta Kelahiran',
+                width: 600,
+                html: '<div class="text-left space-y-2">' +
+                      '<label class="text-sm font-semibold">Nama Bayi</label><input id="nama_bayi" class="swal2-input" placeholder="Nama bayi">' +
+                      '<label class="text-sm font-semibold">Tempat Lahir</label><input id="tempat" class="swal2-input" placeholder="Tempat lahir">' +
+                      '<label class="text-sm font-semibold">Tanggal Lahir</label><input id="tgl_lahir" type="date" class="swal2-input">' +
+                      '<label class="text-sm font-semibold">Jenis Kelamin</label><select id="jk" class="swal2-input"><option>Laki-laki</option><option>Perempuan</option></select>' +
+                      '<label class="text-sm font-semibold">Nama Ayah</label><input id="ayah" class="swal2-input" placeholder="Nama ayah">' +
+                      '<label class="text-sm font-semibold">Nama Ibu</label><input id="ibu" class="swal2-input" placeholder="Nama ibu">' +
+                      '</div>',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                confirmButtonColor: '#0052CC'
+            }).then(r => { if (r.isConfirmed) showToast('Permohonan berhasil ditambahkan', 'success'); });
+        }
+
+        function detailAktaLahir() { Swal.fire({title:'Detail Akta Kelahiran', icon:'info', confirmButtonColor:'#0052CC'}); }
+        function setujuiAkta() { Swal.fire({title:'Setujui Permohonan?', icon:'question', showCancelButton:true, confirmButtonText:'Ya, Setujui', confirmButtonColor:'#10B981', cancelButtonColor:'#6b7280'}).then(r=>{if(r.isConfirmed)showToast('Akta disetujui','success');}); }
+        function tolakAkta() { Swal.fire({title:'Tolak Permohonan?', text:'Berikan alasan', icon:'warning', input:'textarea', showCancelButton:true, confirmButtonText:'Tolak', confirmButtonColor:'#EF4444', cancelButtonColor:'#6b7280'}).then(r=>{if(r.isConfirmed)showToast('Akta ditolak','error');}); }
+        function logoutConfirm() { Swal.fire({title:'Konfirmasi Logout', text:'Yakin keluar?', icon:'warning', showCancelButton:true, confirmButtonColor:'#0052CC', confirmButtonText:'Ya'}).then(r=>{if(r.isConfirmed)window.location.href='../auth/login.html';}); }
+    </script>
+</body>
+</html>

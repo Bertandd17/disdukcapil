@@ -9,247 +9,137 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E' } }
-                }
-            }
-        }
-    </script>
-    <style>
-        * { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .hero-pattern { background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%); }
-        .gradient-text { background: linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #00C9FF 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .service-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .service-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 82, 204, 0.15); }
-    </style>
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']},colors:{primary:{50:'#E6F0FF',100:'#CCE0FF',500:'#0066FF',600:'#0052CC',700:'#003D9A',800:'#002B6E'}}}}}}</script>
+    <style>*{font-family:'Plus Jakarta Sans',sans-serif}</style>
 </head>
 <body class="bg-gray-50 text-gray-800">
-
-    <!-- NAVBAR -->
-    <nav class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-primary-600">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-3">
-                    <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-primary-600 flex-shrink-0">
-                        <div class="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center text-white font-extrabold text-2xl">T</div>
-                    </div>
-                    <div>
-                        <h1 class="text-lg md:text-xl font-extrabold text-gray-800 leading-tight">Disdukcapil Toba</h1>
-                        <p class="text-xs text-gray-500">Kabupaten Toba Samosir</p>
-                    </div>
+    <nav class="bg-white/95 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-extrabold">T</div>
+                <div>
+                    <p class="font-bold text-gray-800 text-sm">Disdukcapil Toba</p>
+                    <p class="text-xs text-gray-500 -mt-0.5">Kabupaten Toba</p>
                 </div>
-                <div class="hidden lg:flex items-center gap-1">
-                    <a href="index.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-home mr-2"></i>Beranda</a>
-                    <a href="antrian-online.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-ticket-alt mr-2"></i>Antrian Online</a>
-                    <a href="statistik.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-chart-bar mr-2"></i>Statistik</a>
-                    <a href="layanan-mandiri.html" class="px-4 py-2 text-primary-600 font-semibold rounded-lg bg-primary-50"><i class="fas fa-laptop mr-2"></i>Layanan Mandiri</a>
-                    <a href="unduh-formulir.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-download mr-2"></i>Formulir</a>
-                </div>
-                <a href="auth/login.html" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition shadow-md">
-                    <i class="fas fa-user-shield"></i>Login Admin
-                </a>
-            </div>
+            </a>
+            <ul class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <li><a href="index.html" class="text-gray-700 hover:text-primary-600">Beranda</a></li>
+                <li><a href="antrian-online.html" class="text-gray-700 hover:text-primary-600">Antrian Online</a></li>
+                <li><a href="layanan-mandiri.html" class="text-primary-600">Layanan Mandiri</a></li>
+                <li><a href="statistik.html" class="text-gray-700 hover:text-primary-600">Statistik</a></li>
+                <li><a href="unduh-formulir.html" class="text-gray-700 hover:text-primary-600">Unduh Formulir</a></li>
+            </ul>
+            <a href="login.html" class="px-4 py-2 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition">Masuk</a>
         </div>
     </nav>
 
-    <!-- HEADER -->
-    <section class="hero-pattern text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-3xl md:text-5xl font-extrabold mb-3">Layanan Mandiri</h1>
-            <p class="text-lg text-blue-100">Cetak dan unduh dokumen kependudukan Anda secara online, 24 jam nonstop</p>
+    <header class="bg-gradient-to-br from-primary-600 via-primary-700 to-cyan-800 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-3">Layanan Mandiri</h1>
+            <p class="text-lg text-blue-100">Akses dan kelola dokumen kependudukan Anda secara online</p>
         </div>
-    </section>
+    </header>
 
-    <!-- BREADCRUMB -->
-    <div class="bg-white border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <nav class="flex items-center gap-2 text-sm">
-                <a href="index.html" class="text-gray-500 hover:text-primary-600"><i class="fas fa-home"></i></a>
-                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-                <span class="text-primary-600 font-semibold">Layanan Mandiri</span>
-            </nav>
-        </div>
-    </div>
-
-    <!-- INFORMASI LOGIN -->
-    <section class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-                <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center text-white flex-shrink-0">
-                    <i class="fas fa-shield-alt text-3xl"></i>
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
+                <div class="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-3">
+                    <i class="fas fa-id-card text-primary-600 text-2xl"></i>
                 </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Verifikasi Data Diri</h2>
-                    <p class="text-gray-600 mb-4">Untuk menggunakan layanan mandiri, silakan verifikasi data diri Anda terlebih dahulu menggunakan NIK dan informasi pribadi.</p>
-                    <a href="auth/login.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition">
-                        <i class="fas fa-sign-in-alt"></i>Login untuk Akses Penuh
-                    </a>
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Kartu Keluarga</h3>
+                <p class="text-sm text-gray-500 mb-4">Urus KK baru, perubahan data, atau cetak ulang</p>
+                <button onclick="bukaForm('Kartu Keluarga')" class="w-full py-2 bg-primary-50 text-primary-700 rounded-lg font-semibold text-sm hover:bg-primary-100">Ajukan</button>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
+                <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-3">
+                    <i class="fas fa-baby text-green-600 text-2xl"></i>
                 </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Akta Kelahiran</h3>
+                <p class="text-sm text-gray-500 mb-4">Pembuatan akta kelahiran bayi/anak</p>
+                <button onclick="bukaForm('Akta Kelahiran')" class="w-full py-2 bg-green-50 text-green-700 rounded-lg font-semibold text-sm hover:bg-green-100">Ajukan</button>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
+                <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-3">
+                    <i class="fas fa-ring text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Akta Pernikahan</h3>
+                <p class="text-sm text-gray-500 mb-4">Pencatatan pernikahan secara online</p>
+                <button onclick="bukaForm('Akta Pernikahan')" class="w-full py-2 bg-purple-50 text-purple-700 rounded-lg font-semibold text-sm hover:bg-purple-100">Ajukan</button>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
+                <div class="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center mb-3">
+                    <i class="fas fa-user-times text-gray-600 text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Akta Kematian</h3>
+                <p class="text-sm text-gray-500 mb-4">Pencatatan kematian warga</p>
+                <button onclick="bukaForm('Akta Kematian')" class="w-full py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-200">Ajukan</button>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
+                <div class="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-3">
+                    <i class="fas fa-exchange-alt text-orange-600 text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Lahir Mati</h3>
+                <p class="text-sm text-gray-500 mb-4">Pencatatan kelahiran bayi meninggal</p>
+                <button onclick="bukaForm('Lahir Mati')" class="w-full py-2 bg-orange-50 text-orange-700 rounded-lg font-semibold text-sm hover:bg-orange-100">Ajukan</button>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition">
+                <div class="w-14 h-14 bg-cyan-100 rounded-xl flex items-center justify-center mb-3">
+                    <i class="fas fa-search text-cyan-600 text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-2">Lacak Berkas</h3>
+                <p class="text-sm text-gray-500 mb-4">Cek status pengajuan Anda</p>
+                <button onclick="lacakBerkas()" class="w-full py-2 bg-cyan-50 text-cyan-700 rounded-lg font-semibold text-sm hover:bg-cyan-100">Lacak</button>
             </div>
         </div>
-    </section>
 
-    <!-- LAYANAN MANDIRI -->
-    <section class="py-12 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2">Pilih Layanan</h2>
-                <p class="text-gray-600">Akses cepat untuk berbagai kebutuhan adminduk Anda</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 cursor-pointer" onclick="aksesLayanan('Cetak KTP-el')">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-id-card text-2xl text-blue-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">Cetak KTP-el</h3>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Cetak Kartu Tanda Penduduk elektronik Anda.</p>
-                    <span class="text-primary-600 font-semibold text-sm">Akses Layanan <i class="fas fa-arrow-right ml-2"></i></span>
-                </div>
-
-                <div class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 cursor-pointer" onclick="aksesLayanan('Cetak Kartu Keluarga')">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-users text-2xl text-green-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">Cetak Kartu Keluarga</h3>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Cetak dan unduh Kartu Keluarga (KK) anggota keluarga.</p>
-                    <span class="text-primary-600 font-semibold text-sm">Akses Layanan <i class="fas fa-arrow-right ml-2"></i></span>
-                </div>
-
-                <div class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 cursor-pointer" onclick="aksesLayanan('Cetak Akta Kelahiran')">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-baby text-2xl text-purple-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">Cetak Akta Kelahiran</h3>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Cetak dan unduh akta kelahiran Anda atau anak Anda.</p>
-                    <span class="text-primary-600 font-semibold text-sm">Akses Layanan <i class="fas fa-arrow-right ml-2"></i></span>
-                </div>
-
-                <div class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 cursor-pointer" onclick="aksesLayanan('Surat Pindah')">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-truck text-2xl text-orange-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">Surat Pindah</h3>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Ajukan surat keterangan pindah domisili.</p>
-                    <span class="text-primary-600 font-semibold text-sm">Akses Layanan <i class="fas fa-arrow-right ml-2"></i></span>
-                </div>
-
-                <div class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 cursor-pointer" onclick="aksesLayanan('Cek Status Permohonan')">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-search text-2xl text-pink-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">Cek Status Permohonan</h3>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Lacak status permohonan dokumen yang sedang diproses.</p>
-                    <span class="text-primary-600 font-semibold text-sm">Akses Layanan <i class="fas fa-arrow-right ml-2"></i></span>
-                </div>
-
-                <div class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 cursor-pointer" onclick="aksesLayanan('Pengaduan Layanan')">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-comment-dots text-2xl text-red-600"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">Pengaduan</h3>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Sampaikan keluhan, saran, atau pengaduan layanan.</p>
-                    <span class="text-primary-600 font-semibold text-sm">Akses Layanan <i class="fas fa-arrow-right ml-2"></i></span>
-                </div>
+        <!-- POP-UP DEMO SECTION -->
+        <div class="mt-8 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-800 text-lg mb-4"><i class="fas fa-window-maximize text-primary-600 mr-2"></i>Demo Pop-up Konfirmasi & Toast</h3>
+            <div class="flex flex-wrap gap-3">
+                <button onclick="popupKonfirmasi()" class="px-4 py-2 bg-yellow-500 text-white rounded-lg font-semibold text-sm">Konfirmasi</button>
+                <button onclick="popupToast()" class="px-4 py-2 bg-green-500 text-white rounded-lg font-semibold text-sm">Toast Sukses</button>
+                <button onclick="popupToastError()" class="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold text-sm">Toast Error</button>
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- FAQ -->
-    <section class="py-12 bg-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 text-center">Pertanyaan Umum</h2>
-
-            <div class="space-y-3" id="faqContainer">
-                <div class="bg-gray-50 rounded-2xl border border-gray-200">
-                    <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-gray-800">Bagaimana cara mengakses layanan mandiri?</span>
-                        <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
-                    </button>
-                    <div class="faq-content hidden px-6 pb-4 text-gray-600 text-sm">
-                        <p>Untuk mengakses layanan mandiri, Anda harus login terlebih dahulu menggunakan NIK dan password yang telah terdaftar. Jika belum memiliki akun, silakan daftar melalui menu "Layanan Mandiri" atau hubungi loket pendaftaran.</p>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 rounded-2xl border border-gray-200">
-                    <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-gray-800">Apakah layanan ini berbayar?</span>
-                        <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
-                    </button>
-                    <div class="faq-content hidden px-6 pb-4 text-gray-600 text-sm">
-                        <p>Tidak, semua layanan adminduk di Disdukcapil Kabupaten Toba tidak dipungut biaya (GRATIS). Jika ada pihak yang meminta biaya, mohon laporkan kepada kami.</p>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 rounded-2xl border border-gray-200">
-                    <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-gray-800">Berapa lama proses dokumen?</span>
-                        <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
-                    </button>
-                    <div class="faq-content hidden px-6 pb-4 text-gray-600 text-sm">
-                        <p>Waktu proses dokumen bervariasi tergantung jenis layanan: KTP-el (1-3 hari kerja), KK (1-2 hari kerja), Akta Kelahiran (1-2 hari kerja). Anda dapat memantau status permohonan melalui menu "Cek Status Permohonan".</p>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 rounded-2xl border border-gray-200">
-                    <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center" onclick="toggleFaq(this)">
-                        <span class="font-semibold text-gray-800">Bagaimana jika saya lupa password?</span>
-                        <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
-                    </button>
-                    <div class="faq-content hidden px-6 pb-4 text-gray-600 text-sm">
-                        <p>Jika Anda lupa password, silakan klik tombol "Lupa Password" di halaman login, lalu ikuti instruksi yang diberikan. Anda juga dapat menghubungi customer service kami untuk bantuan reset password.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="bg-gray-900 text-gray-300 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
-            <p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved.</p>
+    <footer class="bg-gradient-to-br from-primary-600 via-primary-700 to-cyan-800 text-white py-8 mt-12">
+        <div class="max-w-5xl mx-auto px-4 text-center text-sm">
+            <p>&copy; 2025 Disdukcapil Kabupaten Toba.</p>
         </div>
     </footer>
 
     <script>
-        function aksesLayanan(nama) {
+        function bukaForm(layanan) {
             Swal.fire({
-                title: 'Login Diperlukan',
-                html: '<p>Untuk mengakses layanan <strong>' + nama + '</strong>, Anda perlu login terlebih dahulu.</p>',
-                icon: 'info',
+                title: 'Form ' + layanan,
+                html: '<input id="f-nama" class="swal2-input" placeholder="Nama pemohon">' +
+                      '<input id="f-nik" maxlength="16" class="swal2-input" placeholder="NIK">' +
+                      '<textarea id="f-ket" class="swal2-input" placeholder="Keterangan" style="height:80px"></textarea>',
                 showCancelButton: true,
+                confirmButtonText: 'Kirim',
                 confirmButtonColor: '#0052CC',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Login Sekarang',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'auth/login.html';
-                }
-            });
+                width: 500
+            }).then(r => { if (r.isConfirmed) Swal.fire({icon:'success', title:'Pengajuan Dikirim', text:'Kami akan menghubungi Anda segera', timer:2500, showConfirmButton:false}); });
         }
-
-        function toggleFaq(button) {
-            const content = button.nextElementSibling;
-            const icon = button.querySelector('i');
-            content.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
+        function lacakBerkas() {
+            Swal.fire({
+                title: 'Lacak Berkas',
+                input: 'text',
+                inputPlaceholder: 'Masukkan nomor pendaftaran',
+                showCancelButton: true,
+                confirmButtonText: 'Cari',
+                confirmButtonColor: '#0052CC'
+            }).then(r => { if (r.isConfirmed) Swal.fire({icon:'info', title:'Status: Diproses', text:'Berkas sedang dalam tahap verifikasi'}); });
+        }
+        function popupKonfirmasi() {
+            Swal.fire({title:'Konfirmasi', text:'Setujui pengajuan ini?', icon:'question', showCancelButton:true, confirmButtonText:'Setuju', confirmButtonColor:'#0052CC'}).then(r=>{if(r.isConfirmed)popupToast();});
+        }
+        function popupToast() {
+            Swal.fire({icon:'success', title:'Berhasil', toast:true, position:'top-end', timer:2000, showConfirmButton:false});
+        }
+        function popupToastError() {
+            Swal.fire({icon:'error', title:'Gagal', toast:true, position:'top-end', timer:2000, showConfirmButton:false});
         }
     </script>
 </body>
