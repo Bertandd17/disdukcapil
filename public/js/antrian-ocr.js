@@ -26,8 +26,25 @@
         return m ? m.getAttribute('content') : '';
     };
     var toastError = function (msg) {
-        if (window.SwalHelper && typeof window.SwalHelper.toastError === 'function') {
+        if (window.Toast && typeof window.Toast.error === 'function') {
+            window.Toast.error({
+                judul  : 'Terjadi Kesalahan',
+                masalah: msg || 'Permintaan tidak dapat diproses saat ini.',
+                solusi : 'Periksa koneksi Anda, lalu coba lagi. Jika masalah berlanjut, hubungi petugas.'
+            });
+        } else if (window.SwalHelper && typeof window.SwalHelper.toastError === 'function') {
             window.SwalHelper.toastError(msg);
+        } else if (window.Swal && typeof window.Swal.fire === 'function') {
+            window.Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Terjadi Kesalahan',
+                text: msg,
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
         } else {
             alert(msg);
         }
@@ -433,6 +450,21 @@
                     onKonfirmasi: function () {
                         performResetUi();
                         toastSuccess('Form direset. Silakan ambil nomor antrian baru');
+                    }
+                });
+            } else if (window.Swal && typeof window.Swal.fire === 'function') {
+                window.Swal.fire({
+                    title: 'Konfirmasi Reset',
+                    text: 'Nomor antrian saat ini akan hilang. Lanjutkan?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    customClass: { popup: 'swal-dd-modal' }
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        performResetUi();
                     }
                 });
             } else if (window.confirm('Ambil antrian baru? Nomor saat ini akan hilang.')) {

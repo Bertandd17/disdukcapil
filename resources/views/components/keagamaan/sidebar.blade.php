@@ -91,6 +91,32 @@
                             document.getElementById('logoutForm').submit();
                         }
                     });
+                } else if (window.Swal && typeof window.Swal.fire === 'function') {
+                    window.Swal.fire({
+                        title: 'Konfirmasi Logout',
+                        text: 'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Konfirmasi',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true,
+                        customClass: { popup: 'swal-dd-modal' }
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            window.Swal.fire({
+                                title: 'Memproses Logout',
+                                html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>' +
+                                    '<p class="text-gray-600 mt-4">Sedang mengakhiri session...</p>',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                showDenyButton: false,
+                                showCancelButton: false,
+                                customClass: { popup: 'swal-dd-modal', htmlContainer: 'swal2-html-container' }
+                            });
+                            document.getElementById('logoutForm').submit();
+                        }
+                    });
                 } else {
                     if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
                         document.getElementById('logoutForm').submit();
