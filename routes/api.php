@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\KtpOcrController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OcrController;
 use App\Http\Controllers\Api\PernikahanController;
-use App\Http\Controllers\Antrian_Online_Controller;
+use App\Http\Controllers\AntrianOnlineController;
 use App\Http\Controllers\StatistikPublikController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,13 +35,13 @@ Route::prefix('ocr')->group(function () {
     Route::get('/result/{antrianId}', [EasyOcrController::class, 'result']);
 
     // Proses OCR (integrated dengan Antrian_Online)
-    Route::post('/process', [Antrian_Online_Controller::class, 'Proses_Ocr_Easy']);
+    Route::post('/process', [AntrianOnlineController::class, 'Proses_Ocr_Easy']);
 
     // Proses OCR dengan Google Vision (fallback)
-    Route::post('/process-vision', [Antrian_Online_Controller::class, 'Proses_Ocr_Vision']);
+    Route::post('/process-vision', [AntrianOnlineController::class, 'Proses_Ocr_Vision']);
 
     // Diagnostic endpoint
-    Route::get('/diagnose', [Antrian_Online_Controller::class, 'Diagnose_Ocr']);
+    Route::get('/diagnose', [AntrianOnlineController::class, 'Diagnose_Ocr']);
 
     /*
     |--------------------------------------------------------------------------
@@ -150,10 +150,10 @@ Route::middleware(['auth'])->prefix('notifications')->name('api.notifications.')
 
 Route::prefix('antrian')->name('api.antrian.')->group(function () {   
     // Cek daily limit - apakah user hari ini sudah mengajukan layanan yang sama
-    Route::get('/check-daily-limit', [Antrian_Online_Controller::class, 'checkDailyLimit'])->name('check_daily_limit');
-    
+    Route::get('/check-daily-limit', [AntrianOnlineController::class, 'checkDailyLimit'])->name('check_daily_limit');
+
     // Get data antrian by nomor antrian (dengan validasi layanan)
-    Route::get('/{nomorAntrian}', [Antrian_Online_Controller::class, 'getApiData'])->name('get');
+    Route::get('/{nomorAntrian}', [AntrianOnlineController::class, 'getApiData'])->name('get');
 });
 
 /*

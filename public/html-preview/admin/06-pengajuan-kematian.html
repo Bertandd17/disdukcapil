@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengajuan Kematian — Disdukcapil Toba</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: #f1f5f9; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .sidebar-link.active { background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); color: white; }
+    .sidebar-link { transition: all 0.2s; }
+    .sidebar-link.active i { color: white !important; }
+    .table-row:hover { background: #f8fafc; }
+    .preview-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(90deg, #1e40af 0%, #0891b2 100%); color: white; padding: 0.4rem 1rem; text-align: center; font-size: 0.75rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="preview-banner"><i class="fas fa-eye mr-1"></i> HTML Preview Mode — Tampilan ini adalah representasi statis dari blade view Laravel</div>
+
+  <!-- Sidebar -->
+  <aside class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 fixed left-0 top-8 bottom-0 z-40">
+    <div class="px-6 py-5 border-b border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center text-white shadow-md"><i class="fas fa-id-card text-lg"></i></div>
+        <div><p class="font-bold text-slate-800 text-sm">Disdukcapil Toba</p><p class="text-[10px] text-slate-500 uppercase tracking-wider">Administrator</p></div>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <a href="01-dashboard.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-home w-5 text-center text-slate-400"></i>Dashboard</a>
+      <a href="03-antrian-online.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-list-ol w-5 text-center text-slate-400"></i>Antrian Online</a>
+      <a href="02-kelola-berita.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-newspaper w-5 text-center text-slate-400"></i>Kelola Berita</a>
+      <a href="05-visualisasi-data.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-chart-pie w-5 text-center text-slate-400"></i>Visualisasi Data</a>
+      <a href="04-manajemen-akun.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-users w-5 text-center text-slate-400"></i>Manajemen Akun</a>
+      <a href="06-pengajuan-kematian.html" class="sidebar-link active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold"><i class="fas fa-file-alt w-5 text-center text-white"></i>Penerbitan Akta</a>
+    </nav>
+    <div class="px-3 py-4 border-t border-slate-100">
+      <a href="../index.html" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 rounded-lg transition"><i class="fas fa-arrow-left"></i>Kembali ke Index</a>
+    </div>
+  </aside>
+
+  <header class="lg:hidden fixed top-8 left-0 right-0 bg-white border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2"><div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center text-white"><i class="fas fa-id-card text-sm"></i></div><span class="font-bold text-slate-800 text-sm">Disdukcapil Toba</span></div>
+    <button onclick="document.getElementById('m1').classList.toggle('hidden')" class="w-9 h-9 flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg"><i class="fas fa-bars"></i></button>
+  </header>
+
+  <main class="lg:ml-64 pt-[80px] lg:pt-12 min-h-screen">
+    <div class="p-4 md:p-6 lg:p-8">
+      <!-- Header -->
+      <div class="mb-6 reveal">
+        <h1 class="text-2xl font-black text-slate-800">Penerbitan Akta Kematian</h1>
+        <p class="text-sm text-slate-500 mt-1">Kelola dan verifikasi pengajuan penerbitan akta kematian dari masyarakat</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 reveal">
+        <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Hari Ini</p><h3 class="text-2xl font-black text-slate-800 mt-1">5</h3>
+        </div>
+        <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+          <p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Menunggu</p><h3 class="text-2xl font-black text-amber-700 mt-1">3</h3>
+        </div>
+        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+          <p class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Diverifikasi</p><h3 class="text-2xl font-black text-blue-700 mt-1">1</h3>
+        </div>
+        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+          <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Terbit</p><h3 class="text-2xl font-black text-emerald-700 mt-1">1</h3>
+        </div>
+      </div>
+
+      <!-- Tabel -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden reveal">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <tr>
+                <th class="px-6 py-4">No. Pengajuan</th>
+                <th class="px-6 py-4">Nama Almarhum</th>
+                <th class="px-6 py-4">Pemohon</th>
+                <th class="px-6 py-4">Tanggal Meninggal</th>
+                <th class="px-6 py-4 text-center">Status</th>
+                <th class="px-6 py-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              <tr class="table-row">
+                <td class="px-6 py-4 font-mono font-bold text-xs text-slate-700">AKM-001</td>
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-slate-800 text-sm">H. Nainggolan</div>
+                  <div class="text-[10px] text-slate-500">NIK: 120709•••••0001</div>
+                </td>
+                <td class="px-6 py-4 text-slate-600 text-sm">Sitorus, S.E</td>
+                <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">15 Okt 2024</td>
+                <td class="px-6 py-4 text-center"><span class="inline-flex items-center px-2.5 py-1 text-[10px] font-bold rounded-full bg-amber-50 text-amber-700"><i class="fas fa-hourglass-half mr-1"></i>Menunggu</span></td>
+                <td class="px-6 py-4 text-center whitespace-nowrap">
+                  <button onclick="verify('AKM-001')" class="inline-flex items-center px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg transition"><i class="fas fa-check mr-1"></i>Verifikasi</button>
+                  <button onclick="reject('AKM-001')" class="inline-flex items-center px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-lg transition ml-1"><i class="fas fa-times mr-1"></i>Tolak</button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-6 py-4 font-mono font-bold text-xs text-slate-700">AKM-002</td>
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-slate-800 text-sm">M. Pardede</div>
+                  <div class="text-[10px] text-slate-500">NIK: 127301•••••0002</div>
+                </td>
+                <td class="px-6 py-4 text-slate-600 text-sm">Siregar, A.Ma</td>
+                <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">16 Okt 2024</td>
+                <td class="px-6 py-4 text-center"><span class="inline-flex items-center px-2.5 py-1 text-[10px] font-bold rounded-full bg-blue-50 text-blue-700"><i class="fas fa-check mr-1"></i>Diverifikasi</span></td>
+                <td class="px-6 py-4 text-center whitespace-nowrap">
+                  <button onclick="showToast('info','Sedang diverifikasi oleh Operator A')" class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg transition"><i class="fas fa-eye mr-1"></i>Detail</button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-6 py-4 font-mono font-bold text-xs text-slate-700">AKM-003</td>
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-slate-800 text-sm">P. Simanjuntak</div>
+                  <div class="text-[10px] text-slate-500">NIK: 127302•••••0003</div>
+                </td>
+                <td class="px-6 py-4 text-slate-600 text-sm">Nainggolan, S.Pd</td>
+                <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">17 Okt 2024</td>
+                <td class="px-6 py-4 text-center"><span class="inline-flex items-center px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-700"><i class="fas fa-certificate mr-1"></i>Terbit</span></td>
+                <td class="px-6 py-4 text-center whitespace-nowrap">
+                  <button onclick="showToast('info','Akta telah diterbitkan')" class="inline-flex items-center px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-lg transition"><i class="fas fa-eye mr-1"></i>Detail</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ DEMO BAGIAN B: FORM VERIFIKASI ============ -->
+      <div class="mt-10 reveal">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-flask text-blue-500"></i> Demo Form Verifikasi</h3>
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <form id="formVerifikasi" onsubmit="event.preventDefault(); submitVerifikasi();">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">No. Pengajuan</label>
+                <input type="text" readonly class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed" value="AKM-001">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Nama Almarhum</label>
+                <input type="text" readonly class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed" value="H. Nainggolan">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">NIK Almarhum</label>
+                <input type="text" readonly class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed" value="120709•••••0001">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Nama Pemohon</label>
+                <input type="text" readonly class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed" value="Sitorus, S.E">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">No. Surat Keterangan Dokter</label>
+                <input type="text" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" placeholder="Masukkan no. surat...">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Upload Surat Keterangan Dokter</label>
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition cursor-pointer">
+                  <i class="fas fa-file-medical text-3xl text-slate-300 mb-2"></i>
+                  <p class="text-sm text-slate-500">Klik atau drop file PDF di sini</p>
+                  <p class="text-xs text-slate-400 mt-1">PDF · Maks 5MB</p>
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Catatan (Opsional)</label>
+                <textarea rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" placeholder="Catatan tambahan..."></textarea>
+              </div>
+            </div>
+            <div class="flex items-center justify-end gap-2 mt-5 pt-5 border-t border-slate-100">
+              <button type="button" onclick="document.getElementById('formVerifikasi').reset()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-semibold rounded-xl transition">Batal</button>
+              <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition flex items-center gap-2"><i class="fas fa-save"></i> Verifikasi</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ============ DEMO C & D ============ -->
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 reveal">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fas fa-window-maximize text-purple-500"></i> Demo Popup Konfirmasi</h3>
+          <div class="space-y-2">
+            <button onclick="verify('AKM-001')" class="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2"><i class="fas fa-check"></i>Verifikasi (Modal 2 Tombol)</button>
+            <button onclick="reject('AKM-001')" class="w-full px-4 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2"><i class="fas fa-times"></i>Tolak (Modal + Alasan)</button>
+            <button onclick="confirmLogout()" class="w-full px-4 py-2.5 bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2"><i class="fas fa-sign-out-alt"></i>Logout (Modal 2 Tombol)</button>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fas fa-bell text-amber-500"></i> Demo Toast Notifikasi</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="showToast('success','Akta kematian berhasil diterbitkan!')" class="px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded-xl transition">Sukses Terbit</button>
+            <button onclick="showToast('success','Verifikasi berhasil!')" class="px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded-xl transition">Sukses Verifikasi</button>
+            <button onclick="showToast('warning','Nomor surat wajib diisi')" class="px-3 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-xl transition">Warning</button>
+            <button onclick="showToast('error','Gagal menerbitkan akta')" class="px-3 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold rounded-xl transition">Error</button>
+            <button onclick="showToast('info','Memverifikasi dokumen...')" class="px-3 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-xl transition">Loading</button>
+            <button onclick="showToast('info','Data pengajuan dimuat')" class="px-3 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-xl transition">Info</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toastContainer" class="fixed top-12 right-4 z-[10000] space-y-2"></div>
+
+  <script>
+    function showToast(type, msg) {
+      const c = document.getElementById('toastContainer');
+      const colors = { success: 'bg-emerald-500', error: 'bg-rose-500', warning: 'bg-amber-500', info: 'bg-blue-500' };
+      const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+      const t = document.createElement('div');
+      t.className = `${colors[type]} text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 min-w-[280px] max-w-md`;
+      t.style.animation = 'slideUp 0.4s ease';
+      t.innerHTML = `<i class="fas ${icons[type]} text-xl"></i><span class="text-sm font-semibold flex-1">${msg}</span><button onclick="this.parentElement.remove()" class="text-white/80"><i class="fas fa-times"></i></button>`;
+      c.appendChild(t); setTimeout(() => t.remove(), 5000);
+    }
+    const style = document.createElement('style');
+    style.innerHTML = '@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}';
+    document.head.appendChild(style);
+
+    function submitVerifikasi() { showLoading(); setTimeout(() => { Swal.close(); showToast('success', 'Akta kematian berhasil diterbitkan dan notifikasi dikirim ke pemohon!'); document.getElementById('formVerifikasi').reset(); }, 1500); }
+    function showLoading() { Swal.fire({ title: 'Memproses...', allowOutsideClick: false, showConfirmButton: false, showDenyButton: false, showCancelButton: false, didOpen: () => Swal.showLoading() }); }
+    function verify(no) {
+      Swal.fire({ title: 'Verifikasi Pengajuan', text: `Verifikasi pengajuan ${no}? Akta akan diterbitkan jika data valid.`,
+        icon: 'question', showConfirmButton: true, showCancelButton: true, showDenyButton: false,
+        confirmButtonText: 'Ya, Verifikasi', confirmButtonColor: '#43A047',
+        cancelButtonText: 'Batal', cancelButtonColor: '#e5e7eb', reverseButtons: true,
+        customClass: { cancelButton: 'text-slate-700' }
+      }).then(r => { if (r.isConfirmed) showLoading(), setTimeout(() => { Swal.close(); showToast('success', `Pengajuan ${no} berhasil diverifikasi! Akta diterbitkan.`); }, 1500); });
+    }
+    function reject(no) {
+      Swal.fire({ title: 'Tolak Pengajuan', html: `
+        <p class="text-sm text-slate-600 mb-3 text-left">Pengajuan <b>${no}</b> akan ditolak.</p>
+        <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase text-left">Alasan Penolakan <span class="text-rose-500">*</span></label>
+        <textarea id="alasanTolak" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" rows="3" placeholder="Tuliskan alasan penolakan..."></textarea>`,
+        icon: 'warning', showConfirmButton: true, showCancelButton: true, showDenyButton: false,
+        confirmButtonText: 'Tolak', confirmButtonColor: '#E53935',
+        cancelButtonText: 'Batal', cancelButtonColor: '#e5e7eb', reverseButtons: true,
+        customClass: { cancelButton: 'text-slate-700' },
+        preConfirm: () => { const v = document.getElementById('alasanTolak').value.trim(); if (!v) { Swal.showValidationMessage('Alasan wajib diisi'); return false; } return v; }
+      }).then(r => { if (r.isConfirmed) showLoading(), setTimeout(() => { Swal.close(); showToast('success', `Pengajuan ${no} ditolak. Notifikasi dikirim.`); }, 1200); });
+    }
+    function confirmLogout() {
+      Swal.fire({ title: 'Konfirmasi Logout', text: 'Keluar dari sistem?', icon: 'question',
+        showConfirmButton: true, showCancelButton: true, showDenyButton: false,
+        confirmButtonText: 'Konfirmasi', confirmButtonColor: '#43A047',
+        cancelButtonText: 'Batal', cancelButtonColor: '#e5e7eb', reverseButtons: true,
+        customClass: { cancelButton: 'text-slate-700' }
+      }).then(r => { if (r.isConfirmed) showToast('success', 'Logout berhasil!'); });
+    }
+    const obs = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

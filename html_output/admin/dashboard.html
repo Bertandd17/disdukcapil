@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Disdukcapil Kabupaten Toba</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #0052CC; border-radius: 4px; }
+        .sidebar-link.active { background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%); color: white; }
+        .sidebar-link:hover { background: #f1f5f9; }
+        .sidebar-link.active:hover { background: linear-gradient(135deg, #003D9A 0%, #0052CC 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- SIDEBAR -->
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 z-50 shadow-lg">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-extrabold">T</div>
+            <span class="ml-3 font-bold text-lg text-gray-800">Disdukcapil</span>
+        </div>
+
+        <nav class="p-4 space-y-1 overflow-y-auto h-[calc(100vh-4rem)]">
+            <a href="dashboard.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-home w-5"></i><span class="font-medium">Dashboard</span>
+            </a>
+
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen</p></div>
+            <a href="kelola_berita.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-newspaper w-5"></i><span class="font-medium">Kelola Berita</span>
+            </a>
+            <a href="organisasi.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-sitemap w-5"></i><span class="font-medium">Organisasi</span>
+            </a>
+            <a href="penghargaan.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-trophy w-5"></i><span class="font-medium">Penghargaan</span>
+            </a>
+            <a href="dasar-hukum.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-balance-scale w-5"></i><span class="font-medium">Dasar Hukum</span>
+            </a>
+            <a href="visimisi.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-bullseye w-5"></i><span class="font-medium">Visi & Misi</span>
+            </a>
+            <a href="statistik.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-chart-bar w-5"></i><span class="font-medium">Statistik</span>
+            </a>
+            <a href="visualisasi-data.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Visualisasi Data</span>
+            </a>
+
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Layanan</p></div>
+            <a href="antrian-online-index.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-ticket-alt w-5"></i><span class="font-medium">Antrian Online</span>
+            </a>
+            <a href="penerbitan_kk.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-id-card w-5"></i><span class="font-medium">Kartu Keluarga</span>
+            </a>
+            <a href="penerbitan_akte_lahir.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-baby w-5"></i><span class="font-medium">Akta Kelahiran</span>
+            </a>
+            <a href="penerbitan_akte_kematian.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-user-times w-5"></i><span class="font-medium">Akta Kematian</span>
+            </a>
+            <a href="penerbitan_lahir_mati.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-exchange-alt w-5"></i><span class="font-medium">Lahir Mati</span>
+            </a>
+            <a href="penerbitan_pernikahan.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-ring w-5"></i><span class="font-medium">Akta Pernikahan</span>
+            </a>
+
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Akun</p></div>
+            <a href="manajemen_akun.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700">
+                <i class="fas fa-users-cog w-5"></i><span class="font-medium">Manajemen Akun</span>
+            </a>
+            <button onclick="logoutConfirm()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all">
+                <i class="fas fa-sign-out-alt w-5"></i><span class="font-medium">Logout</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="ml-64 flex flex-col min-h-screen">
+        <!-- NAVBAR -->
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center gap-4">
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition">
+                        <i class="fas fa-bars text-gray-600"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Dashboard Admin</h1>
+                        <p class="text-sm text-gray-500">Selamat datang kembali, Admin Toba</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <div class="hidden md:block">
+                        <p class="text-sm font-semibold text-gray-800">Admin Toba</p>
+                        <p class="text-xs text-gray-500">Administrator</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <main class="flex-1 p-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-users text-xl text-blue-600"></i>
+                        </div>
+                        <span class="text-xs text-green-600 font-semibold">+5.2%</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Total Penduduk</p>
+                    <p class="text-2xl font-extrabold text-gray-800">203.352</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-file-alt text-xl text-green-600"></i>
+                        </div>
+                        <span class="text-xs text-green-600 font-semibold">+12%</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Dokumen Diproses</p>
+                    <p class="text-2xl font-extrabold text-gray-800">1.245</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-ticket-alt text-xl text-orange-600"></i>
+                        </div>
+                        <span class="text-xs text-orange-600 font-semibold">Aktif</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Antrian Hari Ini</p>
+                    <p class="text-2xl font-extrabold text-gray-800">87</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-check-circle text-xl text-purple-600"></i>
+                        </div>
+                        <span class="text-xs text-green-600 font-semibold">98%</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Tingkat Penyelesaian</p>
+                    <p class="text-2xl font-extrabold text-gray-800">98.5%</p>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-chart-line mr-2 text-primary-600"></i>Statistik Layanan Bulanan</h3>
+                    <canvas id="mainChart" height="120"></canvas>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-chart-pie mr-2 text-primary-600"></i>Distribusi Layanan</h3>
+                    <canvas id="pieChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-clock mr-2 text-primary-600"></i>Aktivitas Terbaru</h3>
+                    <a href="#" class="text-sm text-primary-600 font-semibold hover:text-primary-700">Lihat Semua</a>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-id-card text-blue-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-800 text-sm">Permohonan KTP-el Baru</p>
+                            <p class="text-xs text-gray-500">Ahmad Surya - 12 menit yang lalu</p>
+                        </div>
+                        <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-full">Pending</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-baby text-green-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-800 text-sm">Akta Kelahiran Selesai</p>
+                            <p class="text-xs text-gray-500">Maria Lestari - 30 menit yang lalu</p>
+                        </div>
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">Selesai</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-users text-purple-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-800 text-sm">Kartu Keluarga Diperbarui</p>
+                            <p class="text-xs text-gray-500">Budi Darmawan - 1 jam yang lalu</p>
+                        </div>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Diproses</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition">
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-ring text-red-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-800 text-sm">Akta Pernikahan</p>
+                            <p class="text-xs text-gray-500">Pasangan Tamba & Sirait - 2 jam yang lalu</p>
+                        </div>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">Verifikasi</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
+                <p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-blue-600 transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-blue-600 transition">Terms of Service</a>
+                    <a href="#" class="hover:text-blue-600 transition">Contact Support</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Main Chart
+        new Chart(document.getElementById('mainChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                datasets: [{
+                    label: 'Layanan Selesai',
+                    data: [320, 410, 380, 520, 480, 610, 720, 690, 580, 640, 720, 850],
+                    borderColor: '#0052CC',
+                    backgroundColor: 'rgba(0, 82, 204, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Permohonan Baru',
+                    data: [280, 380, 350, 480, 450, 580, 680, 650, 540, 600, 690, 820],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'top' } } }
+        });
+
+        // Pie Chart
+        new Chart(document.getElementById('pieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['KTP', 'KK', 'Akta Lahir', 'Akta Kematian', 'Pernikahan'],
+                datasets: [{
+                    data: [450, 320, 280, 85, 110],
+                    backgroundColor: ['#0052CC', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // Logout confirmation
+        function logoutConfirm() {
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: 'Apakah Anda yakin ingin keluar dari sistem?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0052CC',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ icon: 'success', title: 'Logout Berhasil', timer: 1200, showConfirmButton: false })
+                    .then(() => { window.location.href = '../auth/login.html'; });
+                }
+            });
+        }
+
+        // Active sidebar link
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            if (link.getAttribute('href') === location.pathname.split('/').pop()) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

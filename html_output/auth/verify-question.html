@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Pertanyaan Keamanan - Disdukcapil Toba</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #0047B3 100%); min-height: 100vh; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md relative z-10 fade-in">
+        <a href="login.html" class="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition">
+            <i class="fas fa-arrow-left"></i>Kembali ke Login
+        </a>
+
+        <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <i class="fas fa-shield-alt text-white text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold text-gray-800">Verifikasi Keamanan</h1>
+                <p class="text-gray-500 text-sm mt-1">Jawab pertanyaan keamanan untuk melanjutkan</p>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-primary-600 p-4 mb-6 rounded-r-lg">
+                <p class="text-sm text-gray-700"><i class="fas fa-info-circle text-primary-600 mr-2"></i>Silakan jawab pertanyaan keamanan yang Anda buat saat pendaftaran.</p>
+            </div>
+
+            <form id="verifyForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email Terdaftar *</label>
+                    <input type="email" name="email" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none" placeholder="email@contoh.com">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Pertanyaan Keamanan</label>
+                    <div class="px-4 py-3 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-700">
+                        <i class="fas fa-question-circle text-primary-600 mr-2"></i>Siapa nama ibu kandung Anda?
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Jawaban Anda *</label>
+                    <input type="text" name="answer" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none" placeholder="Ketik jawaban Anda">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl font-bold hover:from-primary-700 hover:to-primary-800 transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fas fa-check-circle"></i>Verifikasi
+                </button>
+            </form>
+
+            <p class="text-center text-sm text-gray-600 mt-6">
+                <a href="login.html" class="text-primary-600 font-semibold hover:text-primary-700">Kembali ke Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Memverifikasi...',
+                timer: 1200,
+                showConfirmButton: false
+            }).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Verifikasi Berhasil!',
+                    text: 'Silakan atur password baru Anda',
+                    confirmButtonColor: '#0052CC',
+                    confirmButtonText: 'Lanjut'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

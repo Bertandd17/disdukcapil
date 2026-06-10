@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Disdukcapil Toba Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root {
+      --primary-blue-dark : #003d80;
+      --primary-blue-main : #0052CC;
+      --primary-blue-50   : #f0f5ff;
+      --primary-blue-100  : #e0ebff;
+      --success-green     : #43A047;
+      --success-green-light:#e8f5e9;
+      --warning-orange    : #FB8C00;
+      --danger-red        : #E53935;
+      --danger-red-light  : #ffebee;
+      --neutral-white     : #ffffff;
+      --neutral-50        : #f9fafb;
+      --neutral-100       : #f3f4f6;
+      --neutral-200       : #e5e7eb;
+      --neutral-300       : #d1d5db;
+      --neutral-400       : #9ca3af;
+      --neutral-500       : #6b7280;
+      --neutral-700       : #374151;
+      --neutral-800       : #1f2937;
+      --neutral-900       : #111827;
+      --radius-md         : 10px;
+      --radius-lg         : 14px;
+      --shadow-sm         : 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md         : 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg         : 0 8px 24px rgba(0,0,0,0.10);
+    }
+    * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+    body { background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue-main) 100%); margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-card { background: white; border-radius: var(--radius-lg); padding: 40px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); }
+    .login-card .logo-text { text-align: center; margin-bottom: 24px; }
+    .login-card .logo-text i { font-size: 2.5rem; color: var(--primary-blue-main); }
+    .login-card .logo-text h3 { font-size: 1.25rem; font-weight: 800; color: var(--neutral-900); margin: 8px 0 4px; }
+    .login-card .logo-text p { font-size: 0.8rem; color: var(--neutral-500); margin: 0; }
+    .form-group-dd { margin-bottom: 16px; }
+    .form-label-dd { display: block; font-size: 0.8rem; font-weight: 600; color: var(--neutral-700); margin-bottom: 6px; }
+    .form-input-dd { width: 100%; padding: 10px 14px; border: 2px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 0.875rem; font-family: 'Plus Jakarta Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+    .form-input-dd:focus { border-color: var(--primary-blue-main); box-shadow: 0 0 0 3px var(--primary-blue-100); }
+    .btn-disdukcapil { padding: 10px 20px; border-radius: var(--radius-md); font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-disdukcapil:hover { transform: translateY(-1px); }
+    .btn-success-dd  { background: var(--success-green); color: white; }
+    .btn-primary-dd  { background: var(--primary-blue-main); color: white; }
+    .btn-secondary-dd{ background: var(--neutral-200); color: var(--neutral-900); }
+    .form-hint-dd { font-size: 0.75rem; color: var(--neutral-400); margin-top: 4px; }
+    .demo-section { margin-top: 60px; padding-top: 32px; border-top: 3px dashed var(--neutral-300); }
+    .demo-section-title { background: var(--primary-blue-main); color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; font-size: 0.8rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .demo-block { background: white; border-radius: var(--radius-lg); border: 1px solid var(--neutral-200); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+    .demo-block-title { font-size: 0.75rem; font-weight: 700; color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--neutral-100); }
+    .home-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--neutral-500); text-decoration: none; margin-top: 16px; }
+    .home-link:hover { color: var(--primary-blue-main); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ BAGIAN A — Halaman Utama ═══ -->
+<div class="login-card">
+  <div class="logo-text">
+    <i class="fas fa-id-card"></i>
+    <h3>Disdukcapil Toba</h3>
+    <p>Halaman Login Admin / Keagamaan</p>
+  </div>
+  <div class="form-group-dd">
+    <label class="form-label-dd">Username</label>
+    <input type="text" class="form-input-dd" placeholder="Masukkan username">
+  </div>
+  <div class="form-group-dd">
+    <label class="form-label-dd">Password</label>
+    <input type="password" class="form-input-dd" placeholder="Masukkan password">
+  </div>
+  <div class="d-grid gap-2">
+    <button class="btn-disdukcapil btn-success-dd" onclick="event.preventDefault()">
+      <i class="fas fa-sign-in-alt"></i> Masuk
+    </button>
+  </div>
+  <a href="01-beranda.html" class="home-link"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a>
+</div>
+
+<!-- ═══ BAGIAN D — Demo Toast ═══ -->
+<div style="min-height: 0;"></div>
+<div class="demo-section" style="margin-top: 80px;">
+  <div style="max-width: 420px; margin: 0 auto;">
+    <div class="demo-section-title">Bagian D — Demo Toast</div>
+    <div class="demo-block">
+      <div class="demo-block-title">Toast Error &amp; Sukses</div>
+      <div class="row g-2">
+        <div class="col-6">
+          <button class="btn-disdukcapil btn-danger-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'error',title:'Username atau password salah.'})">
+            <i class="fas fa-times"></i> Error Login
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn-disdukcapil btn-success-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'success',title:'Login berhasil. Selamat datang!'})">
+            <i class="fas fa-check"></i> Login Sukses
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

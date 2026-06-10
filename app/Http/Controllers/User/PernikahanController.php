@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubmitPernikahanRequest;
-use App\Models\Antrian_Online_Model;
+use App\Models\AntrianOnlineModel;
 use App\Models\DokumenPernikahan;
 use App\Models\LayananPernikahan;
 use Illuminate\Http\Request;
@@ -262,7 +262,7 @@ class PernikahanController extends Controller
         $layananId = $request->input('layanan_id');
 
         if ($nomorTrimmed && $layananId) {
-            $antrian = Antrian_Online_Model::with('layanan')
+            $antrian = AntrianOnlineModel::with('layanan')
                 ->cariNomorExact($nomorTrimmed)
                 ->first();
 
@@ -376,7 +376,7 @@ class PernikahanController extends Controller
 
             // Tandai nomor antrian sebagai digunakan
             if ($nomorTrimmed && $layananId) {
-                $antrian = Antrian_Online_Model::with('layanan')
+                $antrian = AntrianOnlineModel::with('layanan')
                     ->cariNomorExact($nomorTrimmed)
                     ->first();
 

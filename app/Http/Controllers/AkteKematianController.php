@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AkteKematian;
-use App\Models\Antrian_Online_Model;
-use App\Models\Lacak_Berkas_Model;
+use App\Models\AntrianOnlineModel;
+use App\Models\LacakBerkasModel;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -52,7 +52,7 @@ class AkteKematianController extends Controller
                 ->withInput();
         }
 
-        $antrian = Antrian_Online_Model::with('layanan')
+        $antrian = AntrianOnlineModel::with('layanan')
             ->cariNomorExact($request->nomor_antrian)
             ->first();
 
@@ -105,7 +105,7 @@ class AkteKematianController extends Controller
 
             $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
-            Lacak_Berkas_Model::create([
+            LacakBerkasModel::create([
                 'antrian_online_id' => $antrian->antrian_online_id,
                 'status'            => 'Verifikasi Data',
                 'tanggal'           => now()->toDateString(),
@@ -179,11 +179,11 @@ class AkteKematianController extends Controller
         if ($request->status == 'Tolak') $kematian->alasan_penolakan = $alasan;
         $kematian->save();
 
-        $antrianId = $kematian->antrian_online_id ?? Antrian_Online_Model::where('nomor_antrian', $kematian->nomor_antrian)->value('antrian_online_id');
+        $antrianId = $kematian->antrian_online_id ?? AntrianOnlineModel::where('nomor_antrian', $kematian->nomor_antrian)->value('antrian_online_id');
         if ($antrianId) {
             $statusAntrian = $request->status === 'Tolak' ? 'Ditolak' : $request->status;
-            Antrian_Online_Model::where('antrian_online_id', $antrianId)->update(['status_antrian' => $statusAntrian]);
-            Lacak_Berkas_Model::create([
+            AntrianOnlineModel::where('antrian_online_id', $antrianId)->update(['status_antrian' => $statusAntrian]);
+            LacakBerkasModel::create([
                 'antrian_online_id' => $antrianId,
                 'status'            => $request->status,
                 'tanggal'           => now()->toDateString(),
@@ -217,16 +217,16 @@ class AkteKematianController extends Controller
         $filename = 'akte-kematian-' . Str::slug($kematian->nama_pemohon ?? 'pemohon') . '-' . time() . '.' . $ext;
         $path     = $file->storeAs('berkas-final/akte-kematian', $filename, 'private');
 
-        $antrianId = $kematian->antrian_online_id ?? Antrian_Online_Model::where('nomor_antrian', $kematian->nomor_antrian)->value('antrian_online_id');
+        $antrianId = $kematian->antrian_online_id ?? AntrianOnlineModel::where('nomor_antrian', $kematian->nomor_antrian)->value('antrian_online_id');
         if ($antrianId) {
-            Lacak_Berkas_Model::create([
+            LacakBerkasModel::create([
                 'antrian_online_id' => $antrianId,
                 'status'            => 'Berkas Siap Diunduh',
                 'tanggal'           => now()->toDateString(),
                 'keterangan'        => 'Berkas Akta Kematian telah diunggah oleh admin. Silakan unduh.',
                 'file_berkas'       => $path,
             ]);
-            Antrian_Online_Model::where('antrian_online_id', $antrianId)->update(['status_antrian' => 'Selesai']);
+            AntrianOnlineModel::where('antrian_online_id', $antrianId)->update(['status_antrian' => 'Selesai']);
         }
 
         $kematian->update(['status' => 'Selesai']);

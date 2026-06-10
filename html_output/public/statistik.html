@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik Penduduk - Disdukcapil Kabupaten Toba</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #0052CC; border-radius: 4px; }
+        .hero-pattern { background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%); }
+        .gradient-text { background: linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #00C9FF 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-primary-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-primary-600 flex-shrink-0">
+                        <div class="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center text-white font-extrabold text-2xl">T</div>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-extrabold text-gray-800 leading-tight">Disdukcapil Toba</h1>
+                        <p class="text-xs text-gray-500">Kabupaten Toba Samosir</p>
+                    </div>
+                </div>
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-home mr-2"></i>Beranda</a>
+                    <a href="antrian-online.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-ticket-alt mr-2"></i>Antrian Online</a>
+                    <a href="statistik.html" class="px-4 py-2 text-primary-600 font-semibold rounded-lg bg-primary-50"><i class="fas fa-chart-bar mr-2"></i>Statistik</a>
+                    <a href="layanan-mandiri.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-laptop mr-2"></i>Layanan Mandiri</a>
+                    <a href="unduh-formulir.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-download mr-2"></i>Formulir</a>
+                </div>
+                <a href="auth/login.html" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition shadow-md">
+                    <i class="fas fa-user-shield"></i>Login Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <section class="hero-pattern text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-3">Statistik Penduduk</h1>
+            <p class="text-lg text-blue-100">Data kependudukan terkini Kabupaten Toba - Diperbarui: 15 Januari 2025</p>
+        </div>
+    </section>
+
+    <!-- BREADCRUMB -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <nav class="flex items-center gap-2 text-sm">
+                <a href="index.html" class="text-gray-500 hover:text-primary-600"><i class="fas fa-home"></i></a>
+                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+                <span class="text-primary-600 font-semibold">Statistik Penduduk</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-2xl p-6 shadow-md">
+                    <i class="fas fa-users text-3xl mb-3 opacity-80"></i>
+                    <p class="text-sm text-blue-100">Total Penduduk</p>
+                    <p class="text-3xl font-extrabold">203.352</p>
+                </div>
+                <div class="bg-gradient-to-br from-green-500 to-green-700 text-white rounded-2xl p-6 shadow-md">
+                    <i class="fas fa-mars text-3xl mb-3 opacity-80"></i>
+                    <p class="text-sm text-green-100">Laki-laki</p>
+                    <p class="text-3xl font-extrabold">102.154</p>
+                </div>
+                <div class="bg-gradient-to-br from-pink-500 to-pink-700 text-white rounded-2xl p-6 shadow-md">
+                    <i class="fas fa-venus text-3xl mb-3 opacity-80"></i>
+                    <p class="text-sm text-pink-100">Perempuan</p>
+                    <p class="text-3xl font-extrabold">101.198</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-2xl p-6 shadow-md">
+                    <i class="fas fa-home text-3xl mb-3 opacity-80"></i>
+                    <p class="text-sm text-purple-100">Jumlah KK</p>
+                    <p class="text-3xl font-extrabold">52.310</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHARTS -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-venus-mars mr-2 text-primary-600"></i>Distribusi Jenis Kelamin</h3>
+                    <canvas id="genderChart" height="250"></canvas>
+                </div>
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-child mr-2 text-primary-600"></i>Distribusi Usia</h3>
+                    <canvas id="ageChart" height="250"></canvas>
+                </div>
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-graduation-cap mr-2 text-primary-600"></i>Tingkat Pendidikan</h3>
+                    <canvas id="educationChart" height="250"></canvas>
+                </div>
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-briefcase mr-2 text-primary-600"></i>Jenis Pekerjaan</h3>
+                    <canvas id="jobChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATISTIK PER KECAMATAN -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 text-center">Statistik Per Kecamatan</h2>
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
+                            <tr>
+                                <th class="px-4 py-3 text-left">No</th>
+                                <th class="px-4 py-3 text-left">Kecamatan</th>
+                                <th class="px-4 py-3 text-right">Laki-laki</th>
+                                <th class="px-4 py-3 text-right">Perempuan</th>
+                                <th class="px-4 py-3 text-right">Total</th>
+                                <th class="px-4 py-3 text-right">KK</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">1</td><td class="px-4 py-3 font-semibold">Balige</td><td class="px-4 py-3 text-right">22.450</td><td class="px-4 py-3 text-right">22.180</td><td class="px-4 py-3 text-right font-bold">44.630</td><td class="px-4 py-3 text-right">11.520</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">2</td><td class="px-4 py-3 font-semibold">Laguboti</td><td class="px-4 py-3 text-right">18.210</td><td class="px-4 py-3 text-right">17.980</td><td class="px-4 py-3 text-right font-bold">36.190</td><td class="px-4 py-3 text-right">9.310</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">3</td><td class="px-4 py-3 font-semibold">Silaen</td><td class="px-4 py-3 text-right">12.450</td><td class="px-4 py-3 text-right">12.230</td><td class="px-4 py-3 text-right font-bold">24.680</td><td class="px-4 py-3 text-right">6.420</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">4</td><td class="px-4 py-3 font-semibold">Habinsaran</td><td class="px-4 py-3 text-right">10.870</td><td class="px-4 py-3 text-right">10.720</td><td class="px-4 py-3 text-right font-bold">21.590</td><td class="px-4 py-3 text-right">5.580</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">5</td><td class="px-4 py-3 font-semibold">Pintu Pohan Meranti</td><td class="px-4 py-3 text-right">8.320</td><td class="px-4 py-3 text-right">8.150</td><td class="px-4 py-3 text-right font-bold">16.470</td><td class="px-4 py-3 text-right">4.250</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">6</td><td class="px-4 py-3 font-semibold">Borbor</td><td class="px-4 py-3 text-right">7.890</td><td class="px-4 py-3 text-right">7.760</td><td class="px-4 py-3 text-right font-bold">15.650</td><td class="px-4 py-3 text-right">4.030</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">7</td><td class="px-4 py-3 font-semibold">Porsea</td><td class="px-4 py-3 text-right">9.560</td><td class="px-4 py-3 text-right">9.420</td><td class="px-4 py-3 text-right font-bold">18.980</td><td class="px-4 py-3 text-right">4.890</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">8</td><td class="px-4 py-3 font-semibold">Ajibata</td><td class="px-4 py-3 text-right">6.720</td><td class="px-4 py-3 text-right">6.580</td><td class="px-4 py-3 text-right font-bold">13.300</td><td class="px-4 py-3 text-right">3.420</td></tr>
+                            <tr class="hover:bg-blue-50 transition"><td class="px-4 py-3">9</td><td class="px-4 py-3 font-semibold">Lumban Julu</td><td class="px-4 py-3 text-right">5.680</td><td class="px-4 py-3 text-right">5.180</td><td class="px-4 py-3 text-right font-bold">10.860</td><td class="px-4 py-3 text-right">2.890</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gender Chart
+        new Chart(document.getElementById('genderChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Laki-laki', 'Perempuan'],
+                datasets: [{ data: [102154, 101198], backgroundColor: ['#3B82F6', '#EC4899'], borderWidth: 0 }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // Age Chart
+        new Chart(document.getElementById('ageChart'), {
+            type: 'bar',
+            data: {
+                labels: ['0-5', '6-12', '13-17', '18-25', '26-40', '41-60', '60+'],
+                datasets: [{
+                    label: 'Jumlah',
+                    data: [18230, 25410, 15870, 32150, 48520, 42890, 20282],
+                    backgroundColor: '#0052CC',
+                    borderRadius: 8
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Education Chart
+        new Chart(document.getElementById('educationChart'), {
+            type: 'pie',
+            data: {
+                labels: ['SD', 'SMP', 'SMA', 'Diploma', 'Sarjana', 'Pascasarjana'],
+                datasets: [{ data: [45230, 38420, 56120, 12340, 38920, 8320], backgroundColor: ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'] }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // Job Chart
+        new Chart(document.getElementById('jobChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Petani', 'Nelayan', 'Pedagang', 'PNS', 'Swasta', 'Wiraswasta', 'Lainnya'],
+                datasets: [{
+                    label: 'Jumlah',
+                    data: [65230, 12450, 28450, 8930, 32150, 38920, 17222],
+                    backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#8B5CF6', '#EC4899', '#EF4444', '#6B7280'],
+                    borderRadius: 8
+                }]
+            },
+            options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+        });
+    </script>
+</body>
+</html>

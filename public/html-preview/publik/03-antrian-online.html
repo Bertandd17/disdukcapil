@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antrian Online — Disdukcapil Toba Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root {
+      --primary-blue-dark : #003d80;
+      --primary-blue-main : #0052CC;
+      --primary-blue-50   : #f0f5ff;
+      --primary-blue-100  : #e0ebff;
+      --success-green     : #43A047;
+      --success-green-light:#e8f5e9;
+      --warning-orange    : #FB8C00;
+      --danger-red        : #E53935;
+      --danger-red-light  : #ffebee;
+      --neutral-white     : #ffffff;
+      --neutral-50        : #f9fafb;
+      --neutral-100       : #f3f4f6;
+      --neutral-200       : #e5e7eb;
+      --neutral-300       : #d1d5db;
+      --neutral-400       : #9ca3af;
+      --neutral-500       : #6b7280;
+      --neutral-700       : #374151;
+      --neutral-800       : #1f2937;
+      --neutral-900       : #111827;
+      --radius-md         : 10px;
+      --radius-lg         : 14px;
+      --shadow-sm         : 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md         : 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg         : 0 8px 24px rgba(0,0,0,0.10);
+      --radius-md         : 10px;
+    }
+    * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+    body { background: var(--neutral-50); margin: 0; }
+    .preview-navbar { background: white; border-bottom: 1px solid var(--neutral-200); padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 100; }
+    .preview-navbar .brand { font-weight: 800; font-size: 1rem; color: var(--primary-blue-main); display: flex; align-items: center; gap: 10px; }
+    .preview-navbar .nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--neutral-600); text-decoration: none; padding: 6px 14px; border-radius: 8px; margin-left: 4px; transition: all 0.2s; }
+    .preview-navbar .nav-links a:hover, .preview-navbar .nav-links a.active { background: var(--primary-blue-50); color: var(--primary-blue-main); }
+    .preview-footer { background: var(--primary-blue-main); color: rgba(255,255,255,0.8); text-align: center; padding: 16px; font-size: 0.8rem; margin-top: 40px; }
+    .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+    .service-card {
+      background: white; border-radius: var(--radius-lg); padding: 24px 16px; text-align: center;
+      border: 2px solid var(--neutral-200); cursor: pointer; transition: all 0.3s;
+    }
+    .service-card:hover { border-color: var(--primary-blue-main); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .service-card i { font-size: 2rem; color: var(--primary-blue-main); margin-bottom: 12px; }
+    .service-card h6 { font-size: 0.875rem; font-weight: 700; color: var(--neutral-800); margin: 0; }
+    .service-card p { font-size: 0.75rem; color: var(--neutral-400); margin: 4px 0 0; }
+    .badge-dd { padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; display: inline-block; }
+    .badge-warning-dd  { background: #fff3e0; color: #FB8C00; }
+    .badge-success-dd  { background: #e8f5e9; color: #388E3C; }
+    .badge-danger-dd   { background: #ffebee; color: #E53935; }
+    .badge-primary-dd  { background: #e0ebff; color: #003d80; }
+    .badge-neutral-dd  { background: #e5e7eb; color: #374151; }
+    .form-group-dd { margin-bottom: 16px; }
+    .form-label-dd { display: block; font-size: 0.8rem; font-weight: 600; color: var(--neutral-700); margin-bottom: 6px; }
+    .form-input-dd { width: 100%; padding: 10px 14px; border: 2px solid var(--neutral-300); border-radius: 10px; font-size: 0.875rem; font-family: 'Plus Jakarta Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+    .form-input-dd:focus { border-color: var(--primary-blue-main); box-shadow: 0 0 0 3px var(--primary-blue-100); }
+    .btn-disdukcapil { padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-disdukcapil:hover { transform: translateY(-1px); }
+    .btn-primary-dd  { background: var(--primary-blue-main); color: white; }
+    .btn-success-dd  { background: var(--success-green); color: white; }
+    .btn-outline-dd  { background: transparent; border: 2px solid var(--primary-blue-main); color: var(--primary-blue-main); }
+    .btn-danger-dd   { background: var(--danger-red); color: white; }
+    .btn-secondary-dd{ background: var(--neutral-200); color: var(--neutral-900); }
+    .demo-section { margin-top: 60px; padding-top: 32px; border-top: 3px dashed var(--neutral-300); }
+    .demo-section-title { background: var(--primary-blue-main); color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; font-size: 0.8rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .demo-block { background: white; border-radius: 14px; border: 1px solid var(--neutral-200); padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .demo-block-title { font-size: 0.75rem; font-weight: 700; color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--neutral-100); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ BAGIAN A — Halaman Utama ═══ -->
+<nav class="preview-navbar">
+  <div class="brand"><i class="fas fa-id-card"></i> Disdukcapil Toba</div>
+  <div class="nav-links d-none d-md-flex">
+    <a href="01-beranda.html"><i class="fas fa-home"></i> Beranda</a>
+    <a href="03-antrian-online.html" class="active"><i class="fas fa-ticket"></i> Antrian Online</a>
+    <a href="04-layanan-mandiri.html"><i class="fas fa-hand-holding-heart"></i> Layanan Mandiri</a>
+    <a href="#"><i class="fas fa-chart-bar"></i> Statistik</a>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <div class="preview-page-header">
+    <h1><i class="fas fa-ticket-alt" style="color: var(--primary-blue-main);"></i> Daftar Antrian Online</h1>
+    <p>Pilih jenis layanan dan daftar antrian untuk pengurusan dokumen kependudukan</p>
+  </div>
+
+  <h5 class="fw-bold mb-3" style="color: var(--neutral-700);">Pilih Jenis Layanan</h5>
+  <div class="service-grid mb-4">
+    <div class="service-card"><i class="fas fa-users"></i><h6>Kartu Keluarga</h6><p>BB, tambah anggota, hilang</p></div>
+    <div class="service-card"><i class="fas fa-baby"></i><h6>Akta Lahir</h6><p>Pendaftaran kelahiran</p></div>
+    <div class="service-card"><i class="fas fa-cross"></i><h6>Akta Kematian</h6><p>Pendaftaran kematian</p></div>
+    <div class="service-card"><i class="fas fa-ring"></i><h6>Perkawinan</h6><p>Permohonan pernikahan</p></div>
+    <div class="service-card"><i class="fas fa-id-badge"></i><h6>KTP Elektronik</h6><p>KTP baru / penggantian</p></div>
+    <div class="service-card"><i class="fas fa-exchange-alt"></i><h6>Perpindahan</h6><p>Cardir / pindah datang</p></div>
+  </div>
+
+  <h5 class="fw-bold mb-3" style="color: var(--neutral-700);">Formulir Pendaftaran Antrian</h5>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="form-group-dd">
+        <label class="form-label-dd">Nama Lengkap</label>
+        <input type="text" class="form-input-dd" placeholder="Sandra Hutapea" value="Sandra Hutapea">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group-dd">
+        <label class="form-label-dd">NIK (16 Digit)</label>
+        <input type="text" class="form-input-dd" placeholder="1209000000000000" value="1212001985000001">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group-dd">
+        <label class="form-label-dd">Nomor Telepon</label>
+        <input type="tel" class="form-input-dd" placeholder="08xxxxxxxxxx" value="081234567890">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group-dd">
+        <label class="form-label-dd">Tanggal Kunjungan</label>
+        <input type="date" class="form-input-dd" value="2026-06-15">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group-dd">
+        <label class="form-label-dd">Jenis Layanan</label>
+        <select class="form-input-dd">
+          <option>Kartu Keluarga Baru</option>
+          <option>Akta Lahir</option>
+          <option>Akta Kematian</option>
+          <option>Perkawinan</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group-dd">
+        <label class="form-label-dd">Upload KTP (opsional — untuk OCR)</label>
+        <input type="file" class="form-input-dd">
+        <div class="form-hint-dd">File akan diproses otomatis untuk mengisi formulir</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 mt-3">
+    <button class="btn-disdukcapil btn-success-dd"><i class="fas fa-paper-plane"></i> Daftar Antrian</button>
+    <button class="btn-disdukcapil btn-secondary-dd"><i class="fas fa-times"></i> Batal</button>
+  </div>
+</div>
+
+<footer class="preview-footer">&copy; 2026 Disdukcapil Kabupaten Toba. Semua hak dilindungi.</footer>
+
+<!-- ═══ BAGIAN C — Demo Modal ═══ -->
+<div class="demo-section">
+  <div class="container">
+    <div class="demo-section-title">Bagian C — Demo Modal Konfirmasi</div>
+    <div class="demo-block">
+      <div class="demo-block-title">Modal Konfirmasi Daftar Antrian</div>
+      <p class="small text-muted">Klik tombol untuk melihat modal konfirmasi pendaftaran antrian.</p>
+      <button class="btn-disdukcapil btn-success-dd" onclick="Swal.fire({ title:'Konfirmasi Pendaftaran', text:'Apakah Anda yakin data antrian sudah benar? Antrian tidak dapat dibatalkan setelah dikonfirmasi.', icon:'question', showConfirmButton:true, confirmButtonText:'Konfirmasi', confirmButtonColor:'#43A047', showCancelButton:true, cancelButtonText:'Batal', cancelButtonColor:'#e5e7eb', showDenyButton:false, reverseButtons:true })">
+        <i class="fas fa-ticket"></i> Demo Konfirmasi Antrian
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BAGIAN D — Demo Toast ═══ -->
+<div class="demo-section">
+  <div class="container">
+    <div class="demo-section-title">Bagian D — Demo Toast</div>
+    <div class="demo-block">
+      <div class="demo-block-title">Toast Antrian</div>
+      <div class="row g-2">
+        <div class="col-6 col-md-4">
+          <button class="btn-disdukcapil btn-success-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'success',title:'Antrian berhasil dibuat! No. Antrian: A-001'})">
+            <i class="fas fa-check"></i> Sukses
+          </button>
+        </div>
+        <div class="col-6 col-md-4">
+          <button class="btn-disdukcapil btn-danger-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'error',title:'Anda sudah mendaftar antrian hari ini. Tunggu hingga besok.'})">
+            <i class="fas fa-times"></i> Duplikasi
+          </button>
+        </div>
+        <div class="col-6 col-md-4">
+          <button class="btn-disdukcapil btn-outline-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'info',title:'Silakan upload foto KTP terlebih dahulu untuk auto-fill'})">
+            <i class="fas fa-info"></i> Info OCR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

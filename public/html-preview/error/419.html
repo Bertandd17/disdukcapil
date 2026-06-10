@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesi Telah Berakhir — Disdukcapil Toba</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root{--primary-blue-dark:#003d80;--primary-blue-main:#0052CC;--neutral-white:#ffffff;--neutral-900:#111827;}
+    *{font-family:'Plus Jakarta Sans',sans-serif;box-sizing:border-box;}
+    body{margin:0;min-height:100vh;background:linear-gradient(135deg,#003d80 0%,#0052CC 50%,#3b82f6 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+    .error-container{max-width:480px;width:100%;text-align:center;}
+    .error-code{font-size:140px;font-weight:800;color:rgba(255,255,255,0.15);line-height:1;margin:0 0 -40px;}
+    .error-card{background:white;border-radius:14px;padding:48px 36px 36px;box-shadow:0 20px 60px rgba(0,0,0,0.25);margin-top:20px;}
+    .error-card i{font-size:48px;color:#FB8C00;margin-bottom:16px;}
+    .error-card h1{font-size:1.25rem;font-weight:800;color:var(--neutral-900);margin:0 0 8px;}
+    .error-card p{font-size:0.875rem;color:#6b7280;margin:0 0 28px;}
+    .btn-disdukcapil{padding:10px 20px;border-radius:10px;font-weight:600;font-size:0.875rem;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+    .btn-disdukcapil:hover{transform:translateY(-1px);}
+    .btn-primary-dd{background:#0052CC;color:white;}
+    .btn-secondary-dd{background:#e5e7eb;color:#1f2937;}
+    .btn-group{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-code">419</div>
+    <div class="error-card">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <h1>Sesi Telah Berakhir</h1>
+      <p>Maaf, sesi Anda telah berakhir. Silakan refresh halaman atau login kembali.</p>
+      <div class="btn-group">
+        <a href="#" class="btn-disdukcapil btn-primary-dd" onclick="event.preventDefault();window.location.reload();"><i class="fa-solid fa-rotate"></i> Refresh</a>
+        <a href="#" class="btn-disdukcapil btn-secondary-dd" onclick="event.preventDefault();Swal.fire({icon:'success',title:'Mengarahkan ke beranda...',timer:1500,timerProgressBar:false});"><i class="fa-solid fa-home"></i> Beranda</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

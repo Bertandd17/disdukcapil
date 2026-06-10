@@ -533,7 +533,7 @@ class EasyOcrController extends Controller
      */
     private function getDefaultLayananId(): ?string
     {
-        $layanan = \App\Models\Layanan_Model::first();
+        $layanan = \App\Models\LayananModel::first();
         return $layanan?->layanan_id;
     }
 }

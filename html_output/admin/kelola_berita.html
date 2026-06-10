@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Berita - Disdukcapil Kabupaten Toba</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E' } }
+                }
+            }
+        }
+    </script>
+    <style>* { font-family: 'Plus Jakarta Sans', sans-serif; } .sidebar-link.active { background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%); color: white; }</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 z-50 shadow-lg">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-extrabold">T</div>
+            <span class="ml-3 font-bold text-lg text-gray-800">Disdukcapil</span>
+        </div>
+        <nav class="p-4 space-y-1 overflow-y-auto h-[calc(100vh-4rem)]">
+            <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-home w-5"></i><span class="font-medium">Dashboard</span></a>
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen</p></div>
+            <a href="kelola_berita.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-newspaper w-5"></i><span class="font-medium">Kelola Berita</span></a>
+            <a href="organisasi.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-sitemap w-5"></i><span class="font-medium">Organisasi</span></a>
+            <a href="penghargaan.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-trophy w-5"></i><span class="font-medium">Penghargaan</span></a>
+            <a href="dasar-hukum.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-balance-scale w-5"></i><span class="font-medium">Dasar Hukum</span></a>
+            <a href="visimisi.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-bullseye w-5"></i><span class="font-medium">Visi & Misi</span></a>
+            <a href="statistik.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-chart-bar w-5"></i><span class="font-medium">Statistik</span></a>
+            <a href="visualisasi-data.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-chart-pie w-5"></i><span class="font-medium">Visualisasi Data</span></a>
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Layanan</p></div>
+            <a href="antrian-online-index.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-ticket-alt w-5"></i><span class="font-medium">Antrian Online</span></a>
+            <a href="penerbitan_kk.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-id-card w-5"></i><span class="font-medium">Kartu Keluarga</span></a>
+            <a href="penerbitan_akte_lahir.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-baby w-5"></i><span class="font-medium">Akta Kelahiran</span></a>
+            <a href="penerbitan_akte_kematian.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-user-times w-5"></i><span class="font-medium">Akta Kematian</span></a>
+            <a href="penerbitan_lahir_mati.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-exchange-alt w-5"></i><span class="font-medium">Lahir Mati</span></a>
+            <a href="penerbitan_pernikahan.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-ring w-5"></i><span class="font-medium">Akta Pernikahan</span></a>
+            <div class="pt-4 pb-2"><p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Akun</p></div>
+            <a href="manajemen_akun.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"><i class="fas fa-users-cog w-5"></i><span class="font-medium">Manajemen Akun</span></a>
+            <button onclick="logoutConfirm()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all"><i class="fas fa-sign-out-alt w-5"></i><span class="font-medium">Logout</span></button>
+        </nav>
+    </aside>
+
+    <div class="ml-64 flex flex-col min-h-screen">
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center gap-4">
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition"><i class="fas fa-bars text-gray-600"></i></button>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Kelola Berita</h1>
+                        <p class="text-sm text-gray-500">Kelola berita dan pengumuman Disdukcapil</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"><i class="fas fa-user text-blue-600"></i></div>
+                    <div class="hidden md:block">
+                        <p class="text-sm font-semibold text-gray-800">Admin Toba</p>
+                        <p class="text-xs text-gray-500">Administrator</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6">
+            <!-- Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <p class="text-sm text-gray-500">Total Berita</p>
+                    <p class="text-2xl font-extrabold text-gray-800">42</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <p class="text-sm text-gray-500">Dipublikasikan</p>
+                    <p class="text-2xl font-extrabold text-green-600">38</p>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                    <p class="text-sm text-gray-500">Draft</p>
+                    <p class="text-2xl font-extrabold text-orange-600">4</p>
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 mb-4 flex flex-col md:flex-row gap-3 items-center justify-between">
+                <input type="text" placeholder="Cari berita..." class="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-primary-500 outline-none">
+                <button onclick="tambahBerita()" class="px-5 py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center gap-2">
+                    <i class="fas fa-plus"></i>Tambah Berita
+                </button>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Judul</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Kategori</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Tanggal</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 text-sm">1</td>
+                                <td class="px-6 py-4">
+                                    <p class="font-semibold text-gray-800">Pelayanan Adminduk Online 24 Jam</p>
+                                    <p class="text-xs text-gray-500">Disdukcapil Toba</p>
+                                </td>
+                                <td class="px-6 py-4 text-sm">Pengumuman</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">10 Jan 2025</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">Dipublikasi</span></td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex justify-center gap-2">
+                                        <button onclick="editBerita('Pelayanan Adminduk Online 24 Jam')" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200"><i class="fas fa-edit"></i></button>
+                                        <button onclick="hapusBerita('Pelayanan Adminduk Online 24 Jam')" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 text-sm">2</td>
+                                <td class="px-6 py-4">
+                                    <p class="font-semibold text-gray-800">Jadwal Pelayanan Bulan Februari 2025</p>
+                                    <p class="text-xs text-gray-500">Admin</p>
+                                </td>
+                                <td class="px-6 py-4 text-sm">Informasi</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">08 Jan 2025</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">Dipublikasi</span></td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex justify-center gap-2">
+                                        <button onclick="editBerita('Jadwal Pelayanan')" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200"><i class="fas fa-edit"></i></button>
+                                        <button onclick="hapusBerita('Jadwal Pelayanan')" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 text-sm">3</td>
+                                <td class="px-6 py-4">
+                                    <p class="font-semibold text-gray-800">Sosialisasi KTP Digital Nasional</p>
+                                    <p class="text-xs text-gray-500">Bidang PIAK</p>
+                                </td>
+                                <td class="px-6 py-4 text-sm">Berita</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">05 Jan 2025</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">Draft</span></td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex justify-center gap-2">
+                                        <button onclick="editBerita('KTP Digital')" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200"><i class="fas fa-edit"></i></button>
+                                        <button onclick="hapusBerita('KTP Digital')" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 text-sm">4</td>
+                                <td class="px-6 py-4">
+                                    <p class="font-semibold text-gray-800">Libur Nasional Pelayanan Ditutup</p>
+                                    <p class="text-xs text-gray-500">Admin</p>
+                                </td>
+                                <td class="px-6 py-4 text-sm">Pengumuman</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">02 Jan 2025</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">Dipublikasi</span></td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex justify-center gap-2">
+                                        <button onclick="editBerita('Libur Nasional')" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200"><i class="fas fa-edit"></i></button>
+                                        <button onclick="hapusBerita('Libur Nasional')" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-gray-50 px-6 py-3 border-t border-gray-200 flex items-center justify-between text-sm">
+                    <p class="text-gray-600">Menampilkan 1-4 dari 42 data</p>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-white">Sebelumnya</button>
+                        <button class="px-3 py-1.5 bg-primary-600 text-white rounded-lg">1</button>
+                        <button class="px-3 py-1.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-white">2</button>
+                        <button class="px-3 py-1.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-white">3</button>
+                        <button class="px-3 py-1.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-white">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+            <div class="max-w-7xl mx-auto px-6 text-sm text-gray-600 text-center">
+                <p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function tambahBerita() {
+            Swal.fire({
+                title: 'Tambah Berita',
+                html: '<input id="judul" class="swal2-input" placeholder="Judul berita">' +
+                      '<select id="kategori" class="swal2-input"><option>Pengumuman</option><option>Berita</option><option>Informasi</option></select>' +
+                      '<textarea id="isi" class="swal2-input" placeholder="Isi berita" style="height:100px"></textarea>',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                confirmButtonColor: '#0052CC',
+                preConfirm: () => {
+                    if (!document.getElementById('judul').value) Swal.showValidationMessage('Judul wajib diisi');
+                }
+            }).then(r => { if (r.isConfirmed) Swal.fire({icon:'success', title:'Berita Ditambahkan', timer:1500, showConfirmButton:false}); });
+        }
+
+        function editBerita(nama) {
+            Swal.fire({
+                title: 'Edit Berita',
+                text: 'Edit berita: ' + nama,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Buka Editor',
+                confirmButtonColor: '#0052CC'
+            }).then(r => { if (r.isConfirmed) Swal.fire({icon:'info', title:'Mode Edit', text:'Editor terbuka untuk: ' + nama}); });
+        }
+
+        function hapusBerita(nama) {
+            Swal.fire({
+                title: 'Hapus Berita?',
+                text: 'Berita "' + nama + '" akan dihapus permanen',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#EF4444',
+                cancelButtonColor: '#6b7280'
+            }).then(r => { if (r.isConfirmed) Swal.fire({icon:'success', title:'Dihapus!', timer:1500, showConfirmButton:false}); });
+        }
+
+        function logoutConfirm() {
+            Swal.fire({ title: 'Konfirmasi Logout', text: 'Yakin keluar?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#0052CC', confirmButtonText: 'Ya' })
+            .then(r => { if (r.isConfirmed) window.location.href = '../auth/login.html'; });
+        }
+    </script>
+</body>
+</html>

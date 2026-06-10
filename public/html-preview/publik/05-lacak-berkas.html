@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lacak Berkas — Disdukcapil Toba Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root {
+      --primary-blue-dark : #003d80;
+      --primary-blue-main : #0052CC;
+      --primary-blue-50   : #f0f5ff;
+      --primary-blue-100  : #e0ebff;
+      --success-green     : #43A047;
+      --success-green-light:#e8f5e9;
+      --warning-orange    : #FB8C00;
+      --danger-red        : #E53935;
+      --danger-red-light  : #ffebee;
+      --neutral-white     : #ffffff;
+      --neutral-50        : #f9fafb;
+      --neutral-100       : #f3f4f6;
+      --neutral-200       : #e5e7eb;
+      --neutral-300       : #d1d5db;
+      --neutral-400       : #9ca3af;
+      --neutral-500       : #6b7280;
+      --neutral-700       : #374151;
+      --neutral-800       : #1f2937;
+      --neutral-900       : #111827;
+      --radius-md         : 10px;
+      --radius-lg         : 14px;
+      --shadow-sm         : 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md         : 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg         : 0 8px 24px rgba(0,0,0,0.10);
+    }
+    * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+    body { background: var(--neutral-50); margin: 0; }
+    .preview-navbar { background: white; border-bottom: 1px solid var(--neutral-200); padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 100; }
+    .preview-navbar .brand { font-weight: 800; font-size: 1rem; color: var(--primary-blue-main); display: flex; align-items: center; gap: 10px; }
+    .preview-navbar .nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--neutral-600); text-decoration: none; padding: 6px 14px; border-radius: 8px; margin-left: 4px; transition: all 0.2s; }
+    .preview-navbar .nav-links a:hover, .preview-navbar .nav-links a.active { background: var(--primary-blue-50); color: var(--primary-blue-main); }
+    .preview-footer { background: var(--primary-blue-main); color: rgba(255,255,255,0.8); text-align: center; padding: 16px; font-size: 0.8rem; margin-top: 40px; }
+    .search-card { background: white; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm); border: 1px solid var(--neutral-200); }
+    .form-group-dd { margin-bottom: 16px; }
+    .form-label-dd { display: block; font-size: 0.8rem; font-weight: 600; color: var(--neutral-700); margin-bottom: 6px; }
+    .form-input-dd { width: 100%; padding: 10px 14px; border: 2px solid var(--neutral-300); border-radius: 10px; font-size: 0.875rem; font-family: 'Plus Jakarta Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+    .form-input-dd:focus { border-color: var(--primary-blue-main); box-shadow: 0 0 0 3px var(--primary-blue-100); }
+    .btn-disdukcapil { padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-disdukcapil:hover { transform: translateY(-1px); }
+    .btn-primary-dd  { background: var(--primary-blue-main); color: white; }
+    .btn-success-dd  { background: var(--success-green); color: white; }
+    .btn-outline-dd  { background: transparent; border: 2px solid var(--primary-blue-main); color: var(--primary-blue-main); }
+    .btn-danger-dd   { background: var(--danger-red); color: white; }
+    .btn-secondary-dd{ background: var(--neutral-200); color: var(--neutral-900); }
+    .badge-dd { padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; display: inline-block; }
+    .badge-warning-dd  { background: #fff3e0; color: #FB8C00; }
+    .badge-success-dd  { background: #e8f5e9; color: #388E3C; }
+    .badge-danger-dd   { background: #ffebee; color: #E53935; }
+    .badge-primary-dd  { background: #e0ebff; color: #003d80; }
+    .badge-neutral-dd  { background: #e5e7eb; color: #374151; }
+    .status-timeline { position: relative; padding-left: 32px; }
+    .status-timeline::before { content: ''; position: absolute; left: 12px; top: 0; bottom: 0; width: 2px; background: var(--neutral-200); }
+    .status-step { position: relative; margin-bottom: 20px; padding-left: 20px; }
+    .status-step::before { content: ''; position: absolute; left: -20px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--neutral-300); border: 2px solid white; }
+    .status-step.completed::before { background: var(--success-green); }
+    .status-step.current::before { background: var(--primary-blue-main); }
+    .status-step h6 { font-size: 0.85rem; font-weight: 700; color: var(--neutral-800); margin: 0; }
+    .status-step p { font-size: 0.75rem; color: var(--neutral-500); margin: 2px 0 0; }
+    .result-card { background: white; border-radius: var(--radius-lg); border: 1px solid var(--neutral-200); padding: 24px; box-shadow: var(--shadow-sm); }
+    .demo-section { margin-top: 60px; padding-top: 32px; border-top: 3px dashed var(--neutral-300); }
+    .demo-section-title { background: var(--primary-blue-main); color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; font-size: 0.8rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .demo-block { background: white; border-radius: 14px; border: 1px solid var(--neutral-200); padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .demo-block-title { font-size: 0.75rem; font-weight: 700; color: var(--neutral-500); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--neutral-100); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ BAGIAN A — Halaman Utama ═══ -->
+<nav class="preview-navbar">
+  <div class="brand"><i class="fas fa-id-card"></i> Disdukcapil Toba</div>
+  <div class="nav-links d-none d-md-flex">
+    <a href="01-beranda.html"><i class="fas fa-home"></i> Beranda</a>
+    <a href="03-antrian-online.html"><i class="fas fa-ticket"></i> Antrian Online</a>
+    <a href="04-layanan-mandiri.html"><i class="fas fa-hand-holding-heart"></i> Layanan Mandiri</a>
+    <a href="#"><i class="fas fa-chart-bar"></i> Statistik</a>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <div class="preview-page-header">
+    <h1><i class="fas fa-search" style="color: var(--primary-blue-main);"></i> Lacak Berkas</h1>
+    <p>Cek status pengajuan dokumen kependudukan Anda</p>
+  </div>
+
+  <!-- Form Pencarian -->
+  <div class="search-card mb-4">
+    <h6 class="fw-bold mb-3" style="color: var(--neutral-700);">Masukkan Nomor Pengajuan</h6>
+    <div class="row g-3 align-items-end">
+      <div class="col-md-8">
+        <div class="form-group-dd" style="margin:0;">
+          <input type="text" class="form-input-dd" placeholder="Contoh: ANTR-2026-0615-001" value="ANTR-2026-0615-001">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <button class="btn-disdukcapil btn-primary-dd w-100"><i class="fas fa-search"></i> Cari</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hasil Pencarian -->
+  <div class="result-card">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div>
+        <h5 class="fw-bold mb-1" style="color: var(--neutral-900);">Pengajuan: ANTR-2026-0615-001</h5>
+        <p class="small text-muted mb-0">Layanan: Kartu Keluarga Baru — Diajukan: 15 Juni 2026</p>
+      </div>
+      <span class="badge-dd badge-primary-dd"><i class="fas fa-spinner"></i> Dalam Proses</span>
+    </div>
+    <hr>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <p class="small text-muted mb-1">Nama Pelamar</p>
+        <p class="small fw-bold mb-0" style="color: var(--neutral-800);">Sandra Hutapea</p>
+      </div>
+      <div class="col-md-6">
+        <p class="small text-muted mb-1">NIK</p>
+        <p class="small fw-bold mb-0" style="color: var(--neutral-800);">1212001985000001</p>
+      </div>
+      <div class="col-md-6">
+        <p class="small text-muted mb-1">No. Telepon</p>
+        <p class="small fw-bold mb-0" style="color: var(--neutral-800);">081234567890</p>
+      </div>
+      <div class="col-md-6">
+        <p class="small text-muted mb-1">Tanggal Kunjungan</p>
+        <p class="small fw-bold mb-0" style="color: var(--neutral-800);">18 Juni 2026</p>
+      </div>
+    </div>
+    <hr>
+    <h6 class="fw-bold small text-uppercase mb-3" style="color: var(--neutral-500);">Status Pengajuan</h6>
+    <div class="status-timeline">
+      <div class="status-step completed">
+        <h6 class="small">Berhasil Diajukan</h6>
+        <p>15 Juni 2026, 10:30 — Antrian online berhasil didaftarkan</p>
+      </div>
+      <div class="status-step completed">
+        <h6 class="small">Diterima</h6>
+        <p>15 Juni 2026, 14:00 — Antrian diterima admin Disdukcapil</p>
+      </div>
+      <div class="status-step current">
+        <h6 class="small">Sedang Diproses</h6>
+        <p>Dalam proses verifikasi dokumen oleh petugas</p>
+      </div>
+      <div class="status-step">
+        <h6 class="small">Menunggu Dokumen Final</h6>
+        <p>Penerbitan dokumen akan dimulai setelah verifikasi selesai</p>
+      </div>
+      <div class="status-step">
+        <h6 class="small">Siap Diambil</h6>
+        <p>Dokumen sudah siap untuk diambil di kantor</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="preview-footer">&copy; 2026 Disdukcapil Kabupaten Toba. Semua hak dilindungi.</footer>
+
+<!-- ═══ BAGIAN D — Demo Toast ═══ -->
+<div class="demo-section">
+  <div class="container">
+    <div class="demo-section-title">Bagian D — Demo Toast</div>
+    <div class="demo-block">
+      <div class="demo-block-title">Toast Lacak Berkas</div>
+      <div class="row g-2">
+        <div class="col-6 col-md-4">
+          <button class="btn-disdukcapil btn-danger-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'error',title:'Nomor Pengajuan Tidak Ditemukan.'})">
+            <i class="fas fa-times"></i> Tidak Ditemukan
+          </button>
+        </div>
+        <div class="col-6 col-md-4">
+          <button class="btn-disdukcapil btn-success-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'success',title:'Berkas ditemukan! Status: Dalam Proses.'})">
+            <i class="fas fa-check"></i> Berkas Ditemukan
+          </button>
+        </div>
+        <div class="col-6 col-md-4">
+          <button class="btn-disdukcapil btn-outline-dd w-100" onclick="Swal.mixin({toast:true,position:'top-end',showConfirmButton:false,timer:4000,timerProgressBar:true}).fire({icon:'info',title:'Masukkan nomor pengajuan yang valid.'})">
+            <i class="fas fa-info"></i> Info
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

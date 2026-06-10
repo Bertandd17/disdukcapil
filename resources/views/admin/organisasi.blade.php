@@ -7,7 +7,7 @@
     $total           = $allOrganisasi->count();
     $totalTerisi     = $allOrganisasi->whereNotNull('nama_pejabat')->where('nama_pejabat', '!=', '')->count();
     $totalKosong     = $total - $totalTerisi;
-    $levelLabels     = \App\Models\Organisasi_Model::getLevels();
+    $levelLabels     = \App\Models\OrganisasiModel::getLevels();
     $levelBadgeStyle = [
         'pimpinan_utama'      => 'bg-blue-100 text-blue-700',
         'bidang'              => 'bg-emerald-100 text-emerald-700',

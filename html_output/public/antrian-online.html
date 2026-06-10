@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antrian Online - Disdukcapil Kabupaten Toba</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #0052CC; border-radius: 4px; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        .gradient-text { background: linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #00C9FF 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-pattern { background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%); }
+        .queue-card { transition: all 0.3s ease; }
+        .queue-card:hover { transform: translateY(-4px); }
+        .pulse-dot { animation: pulse-dot 1.5s infinite; }
+        @keyframes pulse-dot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-primary-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-primary-600 flex-shrink-0">
+                        <div class="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center text-white font-extrabold text-2xl">T</div>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-extrabold text-gray-800 leading-tight">Disdukcapil Toba</h1>
+                        <p class="text-xs text-gray-500">Kabupaten Toba Samosir</p>
+                    </div>
+                </div>
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-home mr-2"></i>Beranda</a>
+                    <a href="antrian-online.html" class="px-4 py-2 text-primary-600 font-semibold rounded-lg bg-primary-50"><i class="fas fa-ticket-alt mr-2"></i>Antrian Online</a>
+                    <a href="statistik.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-chart-bar mr-2"></i>Statistik</a>
+                    <a href="layanan-mandiri.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-laptop mr-2"></i>Layanan Mandiri</a>
+                    <a href="unduh-formulir.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-download mr-2"></i>Formulir</a>
+                </div>
+                <a href="auth/login.html" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition shadow-md">
+                    <i class="fas fa-user-shield"></i>Login Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <section class="hero-pattern text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-3">Antrian Online</h1>
+            <p class="text-lg text-blue-100">Hindari antrian panjang, ambil nomor antrian Anda secara online</p>
+        </div>
+    </section>
+
+    <!-- BREADCRUMB -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <nav class="flex items-center gap-2 text-sm">
+                <a href="index.html" class="text-gray-500 hover:text-primary-600"><i class="fas fa-home"></i></a>
+                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+                <span class="text-primary-600 font-semibold">Antrian Online</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- STATUS ANTRIAN -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="queue-card bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-2xl p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold">Sedang Dilayani</h3>
+                        <span class="pulse-dot w-3 h-3 bg-green-300 rounded-full"></span>
+                    </div>
+                    <p class="text-5xl font-extrabold mb-2">A-023</p>
+                    <p class="text-blue-100 text-sm">Loket 1 - KTP-el</p>
+                </div>
+                <div class="queue-card bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold">Antrian Anda</h3>
+                        <i class="fas fa-user-clock text-2xl"></i>
+                    </div>
+                    <p class="text-5xl font-extrabold mb-2">A-027</p>
+                    <p class="text-orange-100 text-sm">Estimasi: ~25 menit</p>
+                </div>
+                <div class="queue-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold">Total Antrian</h3>
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <p class="text-5xl font-extrabold mb-2">42</p>
+                    <p class="text-green-100 text-sm">Diperbarui 1 menit lalu</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AMBIL ANTRIAN -->
+    <section class="py-12 bg-gradient-to-br from-blue-50 to-cyan-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-ticket-alt text-white text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2">Ambil Nomor Antrian</h2>
+                    <p class="text-gray-600">Lengkapi formulir di bawah ini untuk mengambil nomor antrian</p>
+                </div>
+
+                <form id="antrianForm" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-user mr-2 text-primary-600"></i>Nama Lengkap *
+                            </label>
+                            <input type="text" name="nama" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition" placeholder="Masukkan nama lengkap">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-id-card mr-2 text-primary-600"></i>NIK *
+                            </label>
+                            <input type="text" name="nik" required maxlength="16" pattern="[0-9]{16}" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition" placeholder="16 digit NIK">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-phone mr-2 text-primary-600"></i>No. Telepon *
+                            </label>
+                            <input type="tel" name="telepon" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition" placeholder="08xxxxxxxxxx">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-envelope mr-2 text-primary-600"></i>Email
+                            </label>
+                            <input type="email" name="email" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition" placeholder="email@contoh.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-file-alt mr-2 text-primary-600"></i>Jenis Layanan *
+                        </label>
+                        <select name="layanan" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition bg-white">
+                            <option value="">-- Pilih Jenis Layanan --</option>
+                            <option value="ktp">KTP-el</option>
+                            <option value="kk">Kartu Keluarga (KK)</option>
+                            <option value="akta_lahir">Akta Kelahiran</option>
+                            <option value="akta_kematian">Akta Kematian</option>
+                            <option value="akta_nikah">Akta Pernikahan</option>
+                            <option value="pindah_domisili">Surat Pindah Domisili</option>
+                            <option value="lainnya">Layanan Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-calendar mr-2 text-primary-600"></i>Tanggal Kunjungan *
+                        </label>
+                        <input type="date" name="tanggal" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-comment mr-2 text-primary-600"></i>Keperluan / Catatan
+                        </label>
+                        <textarea name="keperluan" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition" placeholder="Jelaskan keperluan Anda (opsional)"></textarea>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <input type="checkbox" id="setuju" required class="mt-1 w-5 h-5 text-primary-600 rounded">
+                        <label for="setuju" class="text-sm text-gray-700">
+                            Saya menyatakan bahwa data yang diisi adalah benar dan siap untuk diverifikasi di loket.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl font-bold text-lg hover:from-primary-700 hover:to-primary-800 transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i>Ambil Nomor Antrian
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOKET -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 text-center">Loket Pelayanan</h2>
+            <div class="grid md:grid-cols-4 gap-4">
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 text-center">
+                    <i class="fas fa-id-card text-4xl text-blue-600 mb-3"></i>
+                    <h3 class="font-bold text-gray-800">Loket 1</h3>
+                    <p class="text-sm text-gray-600">KTP-el</p>
+                    <p class="text-2xl font-extrabold text-blue-600 mt-2">A-023</p>
+                </div>
+                <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-6 text-center">
+                    <i class="fas fa-users text-4xl text-green-600 mb-3"></i>
+                    <h3 class="font-bold text-gray-800">Loket 2</h3>
+                    <p class="text-sm text-gray-600">Kartu Keluarga</p>
+                    <p class="text-2xl font-extrabold text-green-600 mt-2">B-015</p>
+                </div>
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-6 text-center">
+                    <i class="fas fa-baby text-4xl text-purple-600 mb-3"></i>
+                    <h3 class="font-bold text-gray-800">Loket 3</h3>
+                    <p class="text-sm text-gray-600">Akta Kelahiran</p>
+                    <p class="text-2xl font-extrabold text-purple-600 mt-2">C-008</p>
+                </div>
+                <div class="bg-pink-50 border-2 border-pink-200 rounded-2xl p-6 text-center">
+                    <i class="fas fa-heart text-4xl text-pink-600 mb-3"></i>
+                    <h3 class="font-bold text-gray-800">Loket 4</h3>
+                    <p class="text-sm text-gray-600">Akta Pernikahan</p>
+                    <p class="text-2xl font-extrabold text-pink-600 mt-2">D-012</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set minimum date = today
+        document.querySelector('input[type="date"]').min = new Date().toISOString().split('T')[0];
+
+        document.getElementById('antrianForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Konfirmasi Pengambilan Antrian',
+                html: '<p>Anda akan mengambil nomor antrian dengan detail:</p><div class="text-left bg-blue-50 p-4 rounded-lg mt-3"><p><strong>Nama:</strong> ' + this.nama.value + '</p><p><strong>NIK:</strong> ' + this.nik.value + '</p><p><strong>Layanan:</strong> ' + this.layanan.options[this.layanan.selectedIndex].text + '</p><p><strong>Tanggal:</strong> ' + this.tanggal.value + '</p></div>',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#0052CC',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Ambil Antrian',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Mengambil Antrian...',
+                        text: 'Mohon tunggu sebentar',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            html: '<div class="text-center"><p class="mb-2">Nomor antrian Anda adalah:</p><p class="text-5xl font-extrabold text-primary-600 my-3">A-028</p><p class="text-sm text-gray-600">Simpan nomor ini dan tunjukkan saat verifikasi di loket</p></div>',
+                            icon: 'success',
+                            confirmButtonText: 'Cetak Tiket',
+                            confirmButtonColor: '#0052CC',
+                            showCancelButton: true,
+                            cancelButtonText: 'Tutup',
+                            cancelButtonColor: '#6b7280'
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Berita_Model;
+use App\Models\BeritaModel;
 use App\View\Composers\AdminExistsComposer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        Route::model('berita', Berita_Model::class);
+        Route::model('berita', BeritaModel::class);
 
         // Register AdminExistsComposer untuk semua views
         View::composer('*', AdminExistsComposer::class);

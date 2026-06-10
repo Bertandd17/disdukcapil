@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Berita_Model;
+use App\Models\BeritaModel;
 use App\Models\DasarHukum;
 use App\Models\Penghargaan;
 use Illuminate\Http\Request;
-use App\Models\Organisasi_Model;
+use App\Models\OrganisasiModel;
 
 class PageController extends Controller
 {
@@ -15,7 +15,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $beritas = Berita_Model::query()
+        $beritas = BeritaModel::query()
             ->orderByDesc('published_at')
             ->orderByDesc('created_at')
             ->limit(12)
@@ -36,16 +36,16 @@ class PageController extends Controller
 
         // Ambil data organisasi untuk halaman publik - dikelompokkan berdasarkan level
         $organisasiByLevel = [
-            'pimpinan_utama' => Organisasi_Model::byLevel('pimpinan_utama')->get(),
-            'sub_bagian' => Organisasi_Model::byLevel('sub_bagian')->get(),
-            'kelompok_fungsional_sekretariat' => Organisasi_Model::query()
+            'pimpinan_utama' => OrganisasiModel::byLevel('pimpinan_utama')->get(),
+            'sub_bagian' => OrganisasiModel::byLevel('sub_bagian')->get(),
+            'kelompok_fungsional_sekretariat' => OrganisasiModel::query()
                 ->where('level', 'kelompok_fungsional')
                 ->where('urutan', '<=', 7)
                 ->orderBy('urutan')
                 ->get(),
-            'bidang' => Organisasi_Model::byLevel('bidang')->get(),
-            'koordinator' => Organisasi_Model::byLevel('koordinator')->get(),
-            'kelompok_fungsional_bidang' => Organisasi_Model::query()
+            'bidang' => OrganisasiModel::byLevel('bidang')->get(),
+            'koordinator' => OrganisasiModel::byLevel('koordinator')->get(),
+            'kelompok_fungsional_bidang' => OrganisasiModel::query()
                 ->where('level', 'kelompok_fungsional')
                 ->where('urutan', '>', 7)
                 ->orderBy('urutan')

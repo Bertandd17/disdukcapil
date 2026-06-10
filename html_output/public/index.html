@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disdukcapil Kabupaten Toba - Portal Layanan Adminduk</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <meta name="description" content="Portal resmi Dinas Kependudukan dan Pencatatan Sipil Kabupaten Toba. Layanan adminduk online, antrian, statistik, formulir, dan informasi pernikahan.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E', 900:'#001A47' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #0052CC; border-radius: 4px; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .float-animation { animation: float 5s ease-in-out infinite; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
+        .slide-down { animation: slideDown 0.3s ease-out; }
+        .hero-gradient { background: linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #0047B3 100%); }
+        .service-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .service-card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px -12px rgba(0, 82, 204, 0.25); }
+        .gradient-text { background: linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #00C9FF 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-ripple { position: relative; overflow: hidden; }
+        .btn-ripple::after { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background: rgba(255, 255, 255, 0.3); border-radius: 50%; transform: translate(-50%, -50%); transition: width 0.6s, height 0.6s; }
+        .btn-ripple:active::after { width: 300px; height: 300px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-primary-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-primary-600 flex-shrink-0">
+                        <div class="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center text-white font-extrabold text-2xl">T</div>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-extrabold text-gray-800 leading-tight">Disdukcapil Toba</h1>
+                        <p class="text-xs text-gray-500">Kabupaten Toba Samosir</p>
+                    </div>
+                </div>
+
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-4 py-2 text-primary-600 font-semibold rounded-lg bg-primary-50">
+                        <i class="fas fa-home mr-2"></i>Beranda
+                    </a>
+                    <a href="antrian-online.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition">
+                        <i class="fas fa-ticket-alt mr-2"></i>Antrian Online
+                    </a>
+                    <a href="statistik.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition">
+                        <i class="fas fa-chart-bar mr-2"></i>Statistik
+                    </a>
+                    <a href="layanan-mandiri.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition">
+                        <i class="fas fa-laptop mr-2"></i>Layanan Mandiri
+                    </a>
+                    <a href="unduh-formulir.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition">
+                        <i class="fas fa-download mr-2"></i>Formulir
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <a href="auth/login.html" class="btn-ripple hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition shadow-md">
+                        <i class="fas fa-user-shield"></i>Login Admin
+                    </a>
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="mobileMenu" class="hidden lg:hidden pb-4 slide-down">
+                <div class="space-y-1 pt-2">
+                    <a href="index.html" class="block px-4 py-2 text-primary-600 font-semibold rounded-lg bg-primary-50"><i class="fas fa-home mr-2"></i>Beranda</a>
+                    <a href="antrian-online.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"><i class="fas fa-ticket-alt mr-2"></i>Antrian Online</a>
+                    <a href="statistik.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"><i class="fas fa-chart-bar mr-2"></i>Statistik</a>
+                    <a href="layanan-mandiri.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"><i class="fas fa-laptop mr-2"></i>Layanan Mandiri</a>
+                    <a href="unduh-formulir.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"><i class="fas fa-download mr-2"></i>Formulir</a>
+                    <a href="auth/login.html" class="block px-4 py-2 bg-primary-600 text-white rounded-lg text-center mt-2"><i class="fas fa-user-shield mr-2"></i>Login Admin</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero-gradient relative overflow-hidden text-white">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-10 left-10 w-72 h-72 bg-white rounded-full float-animation"></div>
+            <div class="absolute top-40 right-20 w-96 h-96 bg-white rounded-full float-animation" style="animation-delay: 2s;"></div>
+            <div class="absolute bottom-10 left-1/3 w-64 h-64 bg-white rounded-full float-animation" style="animation-delay: 4s;"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in-up">
+                    <div class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-6">
+                        <i class="fas fa-star mr-2"></i>Portal Resmi Terpercaya
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                        Layanan <span class="text-cyan-300">Administrasi</span><br>
+                        Kependudukan <span class="text-cyan-300">Online</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-blue-100 mb-8">
+                        Solusi cepat dan mudah untuk berbagai kebutuhan adminduk Anda. Dilengkapi dengan antrian online, layanan mandiri, dan formulir unduhan.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="antrian-online.html" class="btn-ripple inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-700 rounded-xl font-bold hover:bg-blue-50 transition shadow-xl hover:scale-105 transform">
+                            <i class="fas fa-ticket-alt"></i>Ambil Antrian
+                        </a>
+                        <a href="#layanan" class="btn-ripple inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl font-bold hover:bg-white/20 transition">
+                            <i class="fas fa-info-circle"></i>Pelajari Layanan
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex justify-center fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-cyan-300/20 rounded-3xl blur-2xl"></div>
+                        <div class="relative glass rounded-3xl p-8 border-2 border-white/30">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-6 text-center">
+                                    <i class="fas fa-id-card text-5xl text-cyan-300 mb-3"></i>
+                                    <p class="font-bold text-lg">KTP-el</p>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-6 text-center">
+                                    <i class="fas fa-users text-5xl text-cyan-300 mb-3"></i>
+                                    <p class="font-bold text-lg">KK</p>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-6 text-center">
+                                    <i class="fas fa-baby text-5xl text-cyan-300 mb-3"></i>
+                                    <p class="font-bold text-lg">Akta Kelahiran</p>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-6 text-center">
+                                    <i class="fas fa-heart text-5xl text-cyan-300 mb-3"></i>
+                                    <p class="font-bold text-lg">Akta Nikah</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATISTIK RINGKAS -->
+    <section class="py-12 bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center fade-in-up">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-users text-2xl text-blue-600"></i>
+                    </div>
+                    <p class="text-3xl font-extrabold gradient-text">203.352</p>
+                    <p class="text-gray-600 text-sm">Penduduk</p>
+                </div>
+                <div class="text-center fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-id-card text-2xl text-green-600"></i>
+                    </div>
+                    <p class="text-3xl font-extrabold gradient-text">187.420</p>
+                    <p class="text-gray-600 text-sm">KTP-el Terbit</p>
+                </div>
+                <div class="text-center fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-home text-2xl text-purple-600"></i>
+                    </div>
+                    <p class="text-3xl font-extrabold gradient-text">52.310</p>
+                    <p class="text-gray-600 text-sm">Kartu Keluarga</p>
+                </div>
+                <div class="text-center fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-check-circle text-2xl text-orange-600"></i>
+                    </div>
+                    <p class="text-3xl font-extrabold gradient-text">99.5%</p>
+                    <p class="text-gray-600 text-sm">Kepuasan</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LAYANAN KAMI -->
+    <section id="layanan" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3">Layanan Kami</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Berbagai layanan administrasi kependudukan yang siap melayani Anda secara online dan offline</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="antrian-online.html" class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-primary-500 group">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-ticket-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Antrian Online</h3>
+                    <p class="text-gray-600 text-sm mb-4">Ambil nomor antrian secara online untuk menghindari antrian panjang di kantor.</p>
+                    <span class="text-primary-600 font-semibold text-sm">Ambil Antrian <i class="fas fa-arrow-right ml-2"></i></span>
+                </a>
+
+                <a href="statistik.html" class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-primary-500 group">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-bar text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Statistik Penduduk</h3>
+                    <p class="text-gray-600 text-sm mb-4">Lihat data statistik kependudukan terkini di Kabupaten Toba.</p>
+                    <span class="text-primary-600 font-semibold text-sm">Lihat Statistik <i class="fas fa-arrow-right ml-2"></i></span>
+                </a>
+
+                <a href="layanan-mandiri.html" class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-primary-500 group">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-laptop text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Layanan Mandiri</h3>
+                    <p class="text-gray-600 text-sm mb-4">Cetak dan unduh dokumen kependudukan Anda secara mandiri.</p>
+                    <span class="text-primary-600 font-semibold text-sm">Akses Layanan <i class="fas fa-arrow-right ml-2"></i></span>
+                </a>
+
+                <a href="unduh-formulir.html" class="service-card bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-primary-500 group">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-download text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Unduh Formulir</h3>
+                    <p class="text-gray-600 text-sm mb-4">Download formulir pendaftaran dan permohonan dokumen adminduk.</p>
+                    <span class="text-primary-600 font-semibold text-sm">Unduh Formulir <i class="fas fa-arrow-right ml-2"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ALUR LAYANAN -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3">Alur Layanan</h2>
+                <p class="text-lg text-gray-600">Empat langkah mudah untuk mendapatkan layanan Anda</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-2xl p-6 text-center shadow-lg">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">1</div>
+                        <h3 class="text-lg font-bold mb-2">Login / Ambil Antrian</h3>
+                        <p class="text-sm text-blue-100">Login atau ambil nomor antrian online</p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 -right-3 text-blue-500 text-2xl z-10"><i class="fas fa-arrow-right"></i></div>
+                </div>
+
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-green-500 to-green-700 text-white rounded-2xl p-6 text-center shadow-lg">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">2</div>
+                        <h3 class="text-lg font-bold mb-2">Isi Formulir</h3>
+                        <p class="text-sm text-green-100">Lengkapi formulir dan data yang diperlukan</p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 -right-3 text-green-500 text-2xl z-10"><i class="fas fa-arrow-right"></i></div>
+                </div>
+
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-2xl p-6 text-center shadow-lg">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">3</div>
+                        <h3 class="text-lg font-bold mb-2">Verifikasi</h3>
+                        <p class="text-sm text-purple-100">Petugas memverifikasi data dan berkas Anda</p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 -right-3 text-purple-500 text-2xl z-10"><i class="fas fa-arrow-right"></i></div>
+                </div>
+
+                <div>
+                    <div class="bg-gradient-to-br from-orange-500 to-orange-700 text-white rounded-2xl p-6 text-center shadow-lg">
+                        <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">4</div>
+                        <h3 class="text-lg font-bold mb-2">Dokumen Selesai</h3>
+                        <p class="text-sm text-orange-100">Dokumen adminduk Anda siap diambil</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PENGUMUMAN -->
+    <section class="py-20 bg-gradient-to-br from-blue-50 to-cyan-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3">Pengumuman</h2>
+                <p class="text-lg text-gray-600">Informasi terbaru dari Disdukcapil Kabupaten Toba</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">Penting</span>
+                        <span class="text-xs text-gray-500">15 Jan 2025</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Jam Layanan Baru</h3>
+                    <p class="text-gray-600 text-sm mb-4">Mulai 1 Februari 2025, jam pelayanan berubah menjadi pukul 08.00 - 15.00 WIB setiap hari kerja.</p>
+                    <a href="#" class="text-primary-600 font-semibold text-sm">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">Info</span>
+                        <span class="text-xs text-gray-500">10 Jan 2025</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Pelayanan Online 24 Jam</h3>
+                    <p class="text-gray-600 text-sm mb-4">Sekarang Anda dapat mengakses layanan mandiri kapan saja dan di mana saja melalui website ini.</p>
+                    <a href="#" class="text-primary-600 font-semibold text-sm">Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">Update</span>
+                        <span class="text-xs text-gray-500">05 Jan 2025</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Persyaratan Dokumen Baru</h3>
+                    <p class="text-gray-600 text-sm mb-4">Telah diperbarui persyaratan dokumen untuk pengajuan KK dan KTP-el. Silakan unduh formulir terbaru.</p>
+                    <a href="unduh-formulir.html" class="text-primary-600 font-semibold text-sm">Lihat Formulir <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl overflow-hidden">
+                            <div class="w-full h-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-extrabold text-xl">T</div>
+                        </div>
+                        <h3 class="text-white font-bold text-lg">Disdukcapil Toba</h3>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">Dinas Kependudukan dan Pencatatan Sipil Kabupaten Toba Samosir.</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">Layanan</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="antrian-online.html" class="hover:text-white transition">Antrian Online</a></li>
+                        <li><a href="statistik.html" class="hover:text-white transition">Statistik Penduduk</a></li>
+                        <li><a href="layanan-mandiri.html" class="hover:text-white transition">Layanan Mandiri</a></li>
+                        <li><a href="unduh-formulir.html" class="hover:text-white transition">Unduh Formulir</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">Link Cepat</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>
+                        <li><a href="#" class="hover:text-white transition">Berita</a></li>
+                        <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                        <li><a href="auth/login.html" class="hover:text-white transition">Login Admin</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">Kontak Kami</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-map-marker-alt text-primary-500 mt-1"></i>
+                            <span>Jl. Pertanian No. 1, Balige, Kabupaten Toba, Sumatera Utara</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-phone text-primary-500"></i>
+                            <span>(0632) 21234</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-envelope text-primary-500"></i>
+                            <span>disdukcapil@tobakab.go.id</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-clock text-primary-500"></i>
+                            <span>Senin - Jumat, 08.00 - 15.00 WIB</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved. | Developed with <i class="fas fa-heart text-red-500"></i></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-6 right-6 w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-40">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+        // Welcome popup saat pertama kali load
+        setTimeout(() => {
+            Swal.fire({
+                title: 'Selamat Datang!',
+                text: 'Di Portal Resmi Disdukcapil Kabupaten Toba',
+                icon: 'info',
+                confirmButtonColor: '#0052CC',
+                confirmButtonText: 'Mulai'
+            });
+        }, 1000);
+    </script>
+</body>
+</html>

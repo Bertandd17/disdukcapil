@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Jenis_Keagamaan_Model;
+use App\Models\JenisKeagamaanModel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +13,8 @@ class JenisKeagamaanSeeder extends Seeder
      */
     public function run(): void
     {
-        $katolikLama = Jenis_Keagamaan_Model::where('nama_jenis_keagamaan', 'Katolik')->first();
-        if ($katolikLama && ! Jenis_Keagamaan_Model::where('nama_jenis_keagamaan', 'Kristen Katolik')->exists()) {
+        $katolikLama = JenisKeagamaanModel::where('nama_jenis_keagamaan', 'Katolik')->first();
+        if ($katolikLama && ! JenisKeagamaanModel::where('nama_jenis_keagamaan', 'Kristen Katolik')->exists()) {
             $katolikLama->update(['nama_jenis_keagamaan' => 'Kristen Katolik']);
         }
 
@@ -28,7 +28,7 @@ class JenisKeagamaanSeeder extends Seeder
         ];
 
         foreach ($agama as $nama) {
-            Jenis_Keagamaan_Model::firstOrCreate([
+            JenisKeagamaanModel::firstOrCreate([
                 'nama_jenis_keagamaan' => $nama,
             ]);
         }

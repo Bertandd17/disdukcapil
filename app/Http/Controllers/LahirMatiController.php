@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LahirMati;
-use App\Models\Antrian_Online_Model;
-use App\Models\Lacak_Berkas_Model;
+use App\Models\AntrianOnlineModel;
+use App\Models\LacakBerkasModel;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -51,7 +51,7 @@ class LahirMatiController extends Controller
                 ->withInput();
         }
 
-        $antrian = Antrian_Online_Model::with('layanan')
+        $antrian = AntrianOnlineModel::with('layanan')
             ->cariNomorExact($request->nomor_antrian)
             ->first();
 
@@ -104,7 +104,7 @@ class LahirMatiController extends Controller
 
             $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
-            Lacak_Berkas_Model::create([
+            LacakBerkasModel::create([
                 'antrian_online_id' => $antrian->antrian_online_id,
                 'status'            => 'Verifikasi Data',
                 'tanggal'           => now()->toDateString(),
@@ -197,12 +197,12 @@ class LahirMatiController extends Controller
         $lahirMati->save();
 
         $antrianId = $lahirMati->antrian_online_id
-            ?? Antrian_Online_Model::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
+            ?? AntrianOnlineModel::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
 
         if ($antrianId) {
             $statusAntrian = $request->status === 'Tolak' ? 'Ditolak' : $request->status;
-            Antrian_Online_Model::where('antrian_online_id', $antrianId)->update(['status_antrian' => $statusAntrian]);
-            Lacak_Berkas_Model::create([
+            AntrianOnlineModel::where('antrian_online_id', $antrianId)->update(['status_antrian' => $statusAntrian]);
+            LacakBerkasModel::create([
                 'antrian_online_id' => $antrianId,
                 'status'            => $request->status,
                 'tanggal'           => now()->toDateString(),
@@ -237,17 +237,17 @@ class LahirMatiController extends Controller
         $path     = $file->storeAs('berkas-final/lahir-mati', $filename, 'private');
 
         $antrianId = $lahirMati->antrian_online_id
-            ?? Antrian_Online_Model::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
+            ?? AntrianOnlineModel::where('nomor_antrian', $lahirMati->nomor_antrian)->value('antrian_online_id');
 
         if ($antrianId) {
-            Lacak_Berkas_Model::create([
+            LacakBerkasModel::create([
                 'antrian_online_id' => $antrianId,
                 'status'            => 'Berkas Siap Diunduh',
                 'tanggal'           => now()->toDateString(),
                 'keterangan'        => 'Surat Keterangan Lahir Mati telah diunggah oleh admin. Silakan unduh.',
                 'file_berkas'       => $path,
             ]);
-            Antrian_Online_Model::where('antrian_online_id', $antrianId)->update(['status_antrian' => 'Selesai']);
+            AntrianOnlineModel::where('antrian_online_id', $antrianId)->update(['status_antrian' => 'Selesai']);
         }
 
         $lahirMati->update(['status' => 'Selesai']);

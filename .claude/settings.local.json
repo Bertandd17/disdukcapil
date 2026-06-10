@@ -249,7 +249,17 @@
       "Bash(railway metrics *)",
       "Bash(findstr \"APP_KEY\")",
       "Bash(findstr \"APP_KEY\" .env)",
-      "Bash(dir *)"
+      "Bash(dir *)",
+      "mcp__claude-flow__hooks_init",
+      "mcp__claude-flow__hooks_pre-task",
+      "mcp__claude-flow__memory_store",
+      "Bash(ls -la app/Models/Layanan*.php)",
+      "Bash(ls -la app/Models/LayananModel.php)",
+      "Bash(ls -la app/Models/Layanan_.php)",
+      "Bash(ls -la app/Models/Layanan_Model.php)",
+      "Bash(php -l routes/web.php)",
+      "Bash(php -l routes/api.php)",
+      "Bash(xargs -0 sed -i -e 's/\\\\bAntrian_Online_Model\\\\b/AntrianOnlineModel/g' -e 's/\\\\bLacak_Berkas_Model\\\\b/LacakBerkasModel/g' -e 's/\\\\bBerita_Model\\\\b/BeritaModel/g' -e 's/\\\\bOrganisasi_Model\\\\b/OrganisasiModel/g' -e 's/\\\\bLayanan_Model\\\\b/LayananModel/g' -e 's/\\\\bJenis_Keagamaan_Model\\\\b/JenisKeagamaanModel/g' -e 's/\\\\bKeagamaan_Model\\\\b/KeagamaanModel/g')"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"

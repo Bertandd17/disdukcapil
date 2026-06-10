@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Antrian_Online_Model;
-use App\Models\Lacak_Berkas_Model;
-use App\Models\Layanan_Model;
+use App\Models\AntrianOnlineModel;
+use App\Models\LacakBerkasModel;
+use App\Models\LayananModel;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -15,7 +15,7 @@ class Antrian_Online_Seeder extends Seeder
      */
     public function run(): void
     {
-        $layanan = Layanan_Model::first();
+        $layanan = LayananModel::first();
 
         if (!$layanan) {
             $this->command->warn('Tidak ada layanan ditemukan. Jalankan Layanan_Seeder terlebih dahulu.');
@@ -55,7 +55,7 @@ class Antrian_Online_Seeder extends Seeder
             $uuid = (string) Str::uuid();
 
             // Buat antrian dengan UUID yang sudah digenerate
-            $antrian = Antrian_Online_Model::create([
+            $antrian = AntrianOnlineModel::create([
                 'antrian_online_id' => $uuid,
                 'nomor_antrian' => $data['nomor_antrian'],
                 'nama_lengkap' => $data['nama_lengkap'],
@@ -105,7 +105,7 @@ class Antrian_Online_Seeder extends Seeder
         };
 
         foreach ($lacakData as $data) {
-            Lacak_Berkas_Model::create([
+            LacakBerkasModel::create([
                 'antrian_online_id' => $antrianId,
                 'status' => $data['status'],
                 'tanggal' => $data['tanggal']->format('Y-m-d'),

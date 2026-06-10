@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unduh Formulir - Disdukcapil Kabupaten Toba</title>
+    <link rel="icon" type="image/jpeg" href="https://via.placeholder.com/64x64/0052CC/FFFFFF?text=T">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { primary: { 50:'#E6F0FF', 100:'#CCE0FF', 500:'#0066FF', 600:'#0052CC', 700:'#003D9A', 800:'#002B6E' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hero-pattern { background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%); }
+        .gradient-text { background: linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #00C9FF 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .formulir-card { transition: all 0.3s ease; }
+        .formulir-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0, 82, 204, 0.15); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-primary-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-primary-600 flex-shrink-0">
+                        <div class="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center text-white font-extrabold text-2xl">T</div>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-extrabold text-gray-800 leading-tight">Disdukcapil Toba</h1>
+                        <p class="text-xs text-gray-500">Kabupaten Toba Samosir</p>
+                    </div>
+                </div>
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-home mr-2"></i>Beranda</a>
+                    <a href="antrian-online.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-ticket-alt mr-2"></i>Antrian Online</a>
+                    <a href="statistik.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-chart-bar mr-2"></i>Statistik</a>
+                    <a href="layanan-mandiri.html" class="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition"><i class="fas fa-laptop mr-2"></i>Layanan Mandiri</a>
+                    <a href="unduh-formulir.html" class="px-4 py-2 text-primary-600 font-semibold rounded-lg bg-primary-50"><i class="fas fa-download mr-2"></i>Formulir</a>
+                </div>
+                <a href="auth/login.html" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition shadow-md">
+                    <i class="fas fa-user-shield"></i>Login Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <section class="hero-pattern text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-3">Unduh Formulir</h1>
+            <p class="text-lg text-blue-100">Download formulir pendaftaran dan permohonan layanan adminduk</p>
+        </div>
+    </section>
+
+    <!-- BREADCRUMB -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <nav class="flex items-center gap-2 text-sm">
+                <a href="index.html" class="text-gray-500 hover:text-primary-600"><i class="fas fa-home"></i></a>
+                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+                <span class="text-primary-600 font-semibold">Unduh Formulir</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- SEARCH -->
+    <section class="py-8 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm">
+                <h3 class="font-bold text-gray-800 mb-3"><i class="fas fa-search mr-2 text-primary-600"></i>Cari Formulir</h3>
+                <div class="flex flex-col md:flex-row gap-3">
+                    <input type="text" id="searchInput" onkeyup="searchFormulir()" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none" placeholder="Cari formulir berdasarkan nama...">
+                    <select id="filterKategori" onchange="searchFormulir()" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 outline-none">
+                        <option value="">Semua Kategori</option>
+                        <option value="ktp">KTP-el</option>
+                        <option value="kk">Kartu Keluarga</option>
+                        <option value="akta">Akta</option>
+                        <option value="pindah">Pindah Domisili</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KATEGORI FORMULIR -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 text-center">Daftar Formulir</h2>
+
+            <div id="formulirGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- F-1 KTP-el -->
+                <div class="formulir-card bg-white rounded-2xl p-6 border-2 border-gray-100" data-name="formulir permohonan ktp-el baru" data-kategori="ktp">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-id-card text-xl text-blue-600"></i>
+                        </div>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">KTP-el</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-1">F-1.01 Permohonan KTP-el Baru</h3>
+                    <p class="text-sm text-gray-600 mb-4">Formulir untuk mengajukan KTP-el baru</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                        <span><i class="fas fa-file-pdf mr-1 text-red-500"></i>PDF • 245 KB</span>
+                        <span>Diperbarui: 10 Jan 2025</span>
+                    </div>
+                    <button onclick="downloadFormulir('F-1.01 KTP-el Baru')" class="w-full py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>Unduh
+                    </button>
+                </div>
+
+                <!-- F-1.02 KTP-el Perubahan -->
+                <div class="formulir-card bg-white rounded-2xl p-6 border-2 border-gray-100" data-name="formulir perubahan data ktp-el" data-kategori="ktp">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-id-card text-xl text-blue-600"></i>
+                        </div>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">KTP-el</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-1">F-1.02 Perubahan Data KTP-el</h3>
+                    <p class="text-sm text-gray-600 mb-4">Formulir perubahan data pada KTP-el</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                        <span><i class="fas fa-file-pdf mr-1 text-red-500"></i>PDF • 280 KB</span>
+                        <span>Diperbarui: 10 Jan 2025</span>
+                    </div>
+                    <button onclick="downloadFormulir('F-1.02 Perubahan KTP-el')" class="w-full py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>Unduh
+                    </button>
+                </div>
+
+                <!-- F-1.06 KK -->
+                <div class="formulir-card bg-white rounded-2xl p-6 border-2 border-gray-100" data-name="formulir permohonan kartu keluarga baru" data-kategori="kk">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-users text-xl text-green-600"></i>
+                        </div>
+                        <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">KK</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-1">F-1.06 Permohonan KK Baru</h3>
+                    <p class="text-sm text-gray-600 mb-4">Formulir untuk mengajukan Kartu Keluarga baru</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                        <span><i class="fas fa-file-pdf mr-1 text-red-500"></i>PDF • 320 KB</span>
+                        <span>Diperbarui: 12 Jan 2025</span>
+                    </div>
+                    <button onclick="downloadFormulir('F-1.06 KK Baru')" class="w-full py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>Unduh
+                    </button>
+                </div>
+
+                <!-- F-2.01 Akta Kelahiran -->
+                <div class="formulir-card bg-white rounded-2xl p-6 border-2 border-gray-100" data-name="formulir akta kelahiran" data-kategori="akta">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-baby text-xl text-purple-600"></i>
+                        </div>
+                        <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">Akta</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-1">F-2.01 Akta Kelahiran</h3>
+                    <p class="text-sm text-gray-600 mb-4">Formulir pendaftaran akta kelahiran</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                        <span><i class="fas fa-file-pdf mr-1 text-red-500"></i>PDF • 410 KB</span>
+                        <span>Diperbarui: 08 Jan 2025</span>
+                    </div>
+                    <button onclick="downloadFormulir('F-2.01 Akta Kelahiran')" class="w-full py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>Unduh
+                    </button>
+                </div>
+
+                <!-- F-2.03 Akta Kematian -->
+                <div class="formulir-card bg-white rounded-2xl p-6 border-2 border-gray-100" data-name="formulir akta kematian" data-kategori="akta">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-heart-broken text-xl text-pink-600"></i>
+                        </div>
+                        <span class="px-2 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-semibold">Akta</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-1">F-2.03 Akta Kematian</h3>
+                    <p class="text-sm text-gray-600 mb-4">Formulir pendaftaran akta kematian</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                        <span><i class="fas fa-file-pdf mr-1 text-red-500"></i>PDF • 285 KB</span>
+                        <span>Diperbarui: 08 Jan 2025</span>
+                    </div>
+                    <button onclick="downloadFormulir('F-2.03 Akta Kematian')" class="w-full py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>Unduh
+                    </button>
+                </div>
+
+                <!-- F-3.01 Pindah Domisili -->
+                <div class="formulir-card bg-white rounded-2xl p-6 border-2 border-gray-100" data-name="formulir pindah domisili" data-kategori="pindah">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-truck text-xl text-orange-600"></i>
+                        </div>
+                        <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">Pindah</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-1">F-3.01 Pindah Domisili</h3>
+                    <p class="text-sm text-gray-600 mb-4">Formulir pengajuan pindah domisili</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                        <span><i class="fas fa-file-pdf mr-1 text-red-500"></i>PDF • 350 KB</span>
+                        <span>Diperbarui: 12 Jan 2025</span>
+                    </div>
+                    <button onclick="downloadFormulir('F-3.01 Pindah Domisili')" class="w-full py-2.5 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>Unduh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Disdukcapil Kabupaten Toba. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function downloadFormulir(nama) {
+            Swal.fire({
+                title: 'Konfirmasi Unduh',
+                text: 'Anda akan mengunduh formulir: ' + nama,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#0052CC',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Unduh Sekarang',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Mengunduh...',
+                        text: 'Formulir ' + nama + ' sedang diunduh',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+
+        function searchFormulir() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const kategori = document.getElementById('filterKategori').value;
+            const cards = document.querySelectorAll('#formulirGrid > div');
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                const kat = card.getAttribute('data-kategori');
+                const matchSearch = name.includes(search);
+                const matchKategori = !kategori || kat === kategori;
+                card.style.display = (matchSearch && matchKategori) ? 'block' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

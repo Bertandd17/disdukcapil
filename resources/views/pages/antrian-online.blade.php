@@ -2,8 +2,8 @@
 
 @section('content')
 @php
- use App\Models\Layanan_Model;
- $data_layanan = Layanan_Model::all();
+ use App\Models\LayananModel;
+ $data_layanan = LayananModel::all();
 
  $jam_kerja = $jam_kerja ?? [
  'senin_kamis' => '08.00 - 16.00 WIB',

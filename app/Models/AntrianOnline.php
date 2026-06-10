@@ -93,7 +93,7 @@ class AntrianOnline extends Model
 
     public function layanan(): BelongsTo
     {
-        return $this->belongsTo(Layanan_Model::class, 'layanan_id', 'layanan_id');
+        return $this->belongsTo(LayananModel::class, 'layanan_id', 'layanan_id');
     }
 
     public function scopeMenunggu(Builder $query): Builder

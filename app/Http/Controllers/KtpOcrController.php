@@ -912,7 +912,7 @@ EOT;
     private function getDefaultLayananId(): ?string
     {
         // Ambil layanan pertama atau null jika tidak ada
-        $layanan = \App\Models\Layanan_Model::first();
+        $layanan = \App\Models\LayananModel::first();
         
         return $layanan?->layanan_id;
     }

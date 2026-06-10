@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Antrian_Online_Model;
+use App\Models\AntrianOnlineModel;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AntrianOnlinePolicy
@@ -25,10 +25,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Antrian_Online_Model $antrian)
+    public function view(User $user, AntrianOnlineModel $antrian)
     {
         // Admin can view all
         if ($user->hasRole('Admin')) {
@@ -58,10 +58,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Antrian_Online_Model $antrian)
+    public function update(User $user, AntrianOnlineModel $antrian)
     {
         // Admin can update all
         if ($user->hasRole('Admin')) {
@@ -80,10 +80,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Antrian_Online_Model $antrian)
+    public function delete(User $user, AntrianOnlineModel $antrian)
     {
         // Only admin can delete
         return $user->hasRole('Admin');
@@ -93,10 +93,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Antrian_Online_Model $antrian)
+    public function restore(User $user, AntrianOnlineModel $antrian)
     {
         return $user->hasRole('Admin');
     }
@@ -105,10 +105,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Antrian_Online_Model $antrian)
+    public function forceDelete(User $user, AntrianOnlineModel $antrian)
     {
         return $user->hasRole('Admin');
     }
@@ -117,10 +117,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can verify the antrian.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function verify(User $user, Antrian_Online_Model $antrian)
+    public function verify(User $user, AntrianOnlineModel $antrian)
     {
         return $user->hasRole('Admin');
     }
@@ -129,10 +129,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can process the antrian.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function process(User $user, Antrian_Online_Model $antrian)
+    public function process(User $user, AntrianOnlineModel $antrian)
     {
         return $user->hasRole('Admin') || $user->hasRole('Keagamaan');
     }
@@ -141,10 +141,10 @@ class AntrianOnlinePolicy
      * Determine whether the user can complete the antrian.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Antrian_Online_Model  $antrian
+     * @param  \App\Models\AntrianOnlineModel  $antrian
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function complete(User $user, Antrian_Online_Model $antrian)
+    public function complete(User $user, AntrianOnlineModel $antrian)
     {
         return $user->hasRole('Admin');
     }

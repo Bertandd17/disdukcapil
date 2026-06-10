@@ -1,0 +1,225 @@
+<!--
+  SHELL TEMPLATE untuk HTML Preview Disdukcapil Toba.
+  Style guide WAJIB untuk setiap file preview:
+  - Bootstrap 5 (CDN) untuk layout & components
+  - SweetAlert2 (CDN) untuk popup & toast
+  - Font Awesome 6 (CDN) untuk ikon
+  - Google Fonts Plus Jakarta Sans
+  - Class CSS kustom mengikuti style guide Disdukcapil
+  Variabel warna, badge, tombol, form ada di <style> di bawah.
+-->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[NAMA HALAMAN] — Disdukcapil Toba Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root {
+      --primary-blue-dark : #003d80;
+      --primary-blue-main : #0052CC;
+      --primary-blue-50   : #f0f5ff;
+      --primary-blue-100  : #e0ebff;
+      --success-green     : #43A047;
+      --success-green-light:#e8f5e9;
+      --warning-orange    : #FB8C00;
+      --danger-red        : #E53935;
+      --danger-red-light  : #ffebee;
+      --neutral-white     : #ffffff;
+      --neutral-50        : #f9fafb;
+      --neutral-100       : #f3f4f6;
+      --neutral-200       : #e5e7eb;
+      --neutral-300       : #d1d5db;
+      --neutral-400       : #9ca3af;
+      --neutral-500       : #6b7280;
+      --neutral-700       : #374151;
+      --neutral-800       : #1f2937;
+      --neutral-900       : #111827;
+      --radius-md         : 10px;
+      --radius-lg         : 14px;
+      --shadow-sm         : 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md         : 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg         : 0 8px 24px rgba(0,0,0,0.10);
+      --shadow-xl         : 0 20px 40px rgba(0,0,0,0.12);
+      --spacing-sm        : 12px;
+      --spacing-md        : 16px;
+      --spacing-lg        : 24px;
+    }
+    * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+    body { background: var(--neutral-50); margin: 0; }
+
+    /* ── NAVBAR PUBLIK ── */
+    .preview-navbar {
+      background: white;
+      border-bottom: 1px solid var(--neutral-200);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .preview-navbar .brand {
+      font-weight: 800; font-size: 1rem;
+      color: var(--primary-blue-main);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .preview-navbar .nav-links a {
+      font-size: 0.875rem; font-weight: 500;
+      color: var(--neutral-600);
+      text-decoration: none; padding: 6px 14px;
+      border-radius: 8px; margin-left: 4px;
+      transition: all 0.2s;
+    }
+    .preview-navbar .nav-links a:hover,
+    .preview-navbar .nav-links a.active {
+      background: var(--primary-blue-50);
+      color: var(--primary-blue-main);
+    }
+    .preview-navbar .nav-links a.btn-logout {
+      background: #E53935; color: white;
+      padding: 6px 16px; border-radius: 8px;
+    }
+
+    /* ── SIDEBAR ADMIN ── */
+    .preview-layout { display: flex; min-height: calc(100vh - 60px); }
+    .preview-sidebar {
+      width: 240px; min-width: 240px;
+      background: var(--primary-blue-main);
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+    .preview-sidebar .sidebar-logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      margin-bottom: 12px;
+      font-weight: 800; color: white; font-size: 0.95rem;
+    }
+    .preview-sidebar a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; color: rgba(255,255,255,0.8);
+      text-decoration: none; font-size: 0.875rem;
+      font-weight: 500; transition: all 0.2s;
+    }
+    .preview-sidebar a:hover,
+    .preview-sidebar a.active {
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+    .preview-sidebar .sidebar-section {
+      font-size: 10px; font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      padding: 14px 20px 4px;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .preview-main { flex: 1; padding: 28px; overflow-x: hidden; }
+
+    /* ── HEADER HALAMAN ── */
+    .preview-page-header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    .preview-page-header h1 {
+      font-size: 1.5rem; font-weight: 800;
+      color: var(--neutral-900); margin: 0 0 4px;
+    }
+    .preview-page-header p {
+      font-size: 0.875rem; color: var(--neutral-500); margin: 0;
+    }
+
+    /* ── FOOTER ── */
+    .preview-footer {
+      background: var(--primary-blue-main);
+      color: rgba(255,255,255,0.8);
+      text-align: center; padding: 16px;
+      font-size: 0.8rem; margin-top: 40px;
+    }
+
+    /* ── SECTION DIVIDER (pemisah halaman & demo) ── */
+    .demo-section {
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 3px dashed var(--neutral-300);
+    }
+    .demo-section-title {
+      background: var(--primary-blue-main);
+      color: white; padding: 8px 20px;
+      border-radius: 20px; display: inline-block;
+      font-size: 0.8rem; font-weight: 700;
+      margin-bottom: 24px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .demo-block {
+      background: white; border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      padding: 24px; margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .demo-block-title {
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--neutral-500); text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--neutral-100);
+    }
+
+    /* ── TOMBOL SESUAI STYLE GUIDE ── */
+    .btn-disdukcapil {
+      padding: 10px 20px; border-radius: var(--radius-md);
+      font-weight: 600; font-size: 0.875rem; border: none;
+      cursor: pointer; transition: all 0.3s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-disdukcapil:hover { transform: translateY(-1px); }
+    .btn-primary-dd  { background: var(--primary-blue-main); color: white; }
+    .btn-success-dd  { background: var(--success-green); color: white; }
+    .btn-danger-dd   { background: var(--danger-red); color: white; }
+    .btn-outline-dd  { background: transparent; border: 2px solid var(--primary-blue-main); color: var(--primary-blue-main); }
+    .btn-secondary-dd{ background: var(--neutral-200); color: var(--neutral-900); }
+
+    /* ── FORM SESUAI STYLE GUIDE ── */
+    .form-group-dd { margin-bottom: 16px; }
+    .form-label-dd {
+      display: block; font-size: 0.8rem; font-weight: 600;
+      color: var(--neutral-700); margin-bottom: 6px;
+    }
+    .form-input-dd {
+      width: 100%; padding: 10px 14px;
+      border: 2px solid var(--neutral-300); border-radius: var(--radius-md);
+      font-size: 0.875rem; font-family: 'Plus Jakarta Sans', sans-serif;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-input-dd:focus {
+      border-color: var(--primary-blue-main);
+      box-shadow: 0 0 0 3px var(--primary-blue-100);
+    }
+    .form-hint-dd { font-size: 0.75rem; color: var(--neutral-400); margin-top: 4px; }
+
+    /* ── BADGE STATUS ── */
+    .badge-dd {
+      padding: 4px 12px; border-radius: 9999px;
+      font-size: 12px; font-weight: 700; display: inline-block;
+    }
+    .badge-warning-dd  { background: #fff3e0; color: #FB8C00; }
+    .badge-success-dd  { background: #e8f5e9; color: #388E3C; }
+    .badge-danger-dd   { background: var(--danger-red-light); color: var(--danger-red); }
+    .badge-primary-dd  { background: var(--primary-blue-100); color: var(--primary-blue-dark); }
+    .badge-neutral-dd  { background: var(--neutral-200); color: var(--neutral-700); }
+
+    /* Override Bootstrap untuk konsistensi */
+    .container { max-width: 1200px; }
+  </style>
+</head>
+<body>
+  <!-- Shell kosong — gunakan sebagai template -->
+  <div class="container py-4">
+    <p class="text-muted">Ini adalah shell template. Salin blok &lt;head&gt; ke file preview baru.</p>
+  </div>
+</body>
+</html>

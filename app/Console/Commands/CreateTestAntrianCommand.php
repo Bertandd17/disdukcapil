@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\AntrianOnline;
-use App\Models\Layanan_Model;
+use App\Models\LayananModel;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -120,7 +120,7 @@ class CreateTestAntrianCommand extends Command
     private function getOrCreateDefaultLayanan(): ?string
     {
         // Coba ambil layanan pertama
-        $layanan = Layanan_Model::first();
+        $layanan = LayananModel::first();
         if ($layanan) {
             return $layanan->layanan_id;
         }

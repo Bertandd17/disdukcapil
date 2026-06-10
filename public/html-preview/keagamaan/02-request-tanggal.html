@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request Tanggal — Disdukcapil Toba</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: #f1f5f9; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .sidebar-link.active { background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); color: white; }
+    .sidebar-link { transition: all 0.2s; }
+    .sidebar-link.active i { color: white !important; }
+    .table-row:hover { background: #f8fafc; }
+    .calendar-day { transition: all 0.15s; }
+    .calendar-day:hover:not(.disabled) { background: #fef3c7; }
+    .calendar-day.selected { background: #f59e0b !important; color: white; }
+    .calendar-day.disabled { opacity: 0.3; cursor: not-allowed; }
+    .preview-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: linear-gradient(90deg, #92400e 0%, #c2410c 100%); color: white; padding: 0.4rem 1rem; text-align: center; font-size: 0.75rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="preview-banner"><i class="fas fa-eye mr-1"></i> HTML Preview Mode — Keagamaan · Tampilan statis blade view</div>
+
+  <aside class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 fixed left-0 top-8 bottom-0 z-40">
+    <div class="px-6 py-5 border-b border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white shadow-md"><i class="fas fa-mosque text-lg"></i></div>
+        <div><p class="font-bold text-slate-800 text-sm">Disdukcapil Toba</p><p class="text-[10px] text-slate-500 uppercase tracking-wider">Petugas Keagamaan</p></div>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <a href="01-pernikahan.html" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-ring w-5 text-center text-slate-400"></i>Perkawinan</a>
+      <a href="02-request-tanggal.html" class="sidebar-link active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold"><i class="fas fa-calendar-check w-5 text-center text-white"></i>Request Tanggal</a>
+    </nav>
+    <div class="px-3 py-4 border-t border-slate-100">
+      <a href="../index.html" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 rounded-lg transition"><i class="fas fa-arrow-left"></i>Kembali ke Index</a>
+    </div>
+  </aside>
+
+  <header class="lg:hidden fixed top-8 left-0 right-0 bg-white border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2"><div class="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center text-white"><i class="fas fa-mosque text-sm"></i></div><span class="font-bold text-slate-800 text-sm">Keagamaan</span></div>
+    <button onclick="document.getElementById('m1').classList.toggle('hidden')" class="w-9 h-9 flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg"><i class="fas fa-bars"></i></button>
+  </header>
+
+  <main class="lg:ml-64 pt-[80px] lg:pt-12 min-h-screen">
+    <div class="p-4 md:p-6 lg:p-8">
+      <div class="mb-6 reveal">
+        <h1 class="text-2xl font-black text-slate-800">Request Tanggal Akad</h1>
+        <p class="text-sm text-slate-500 mt-1">Kelola permintaan tanggal akad nikah dari pasangan calon pengantin</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <!-- Calendar -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-6 reveal">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-bold text-slate-800"><i class="fas fa-calendar-alt text-amber-500 mr-2"></i>Oktober 2024</h3>
+            <div class="flex items-center gap-1">
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg"><i class="fas fa-chevron-left"></i></button>
+              <button class="px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 rounded-lg">Hari Ini</button>
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 uppercase mb-2">
+            <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+          </div>
+          <div class="grid grid-cols-7 gap-1">
+            <div class="calendar-day disabled h-10 flex items-center justify-center text-xs rounded-lg">29</div>
+            <div class="calendar-day disabled h-10 flex items-center justify-center text-xs rounded-lg">30</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">1</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">2</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">3</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">4</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">5</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">6</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">7</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">8</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">9</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">10</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">11</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">12</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">13</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">14</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">15</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">16</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">17</div>
+            <div class="calendar-day bg-amber-100 text-amber-800 h-10 flex items-center justify-center text-xs font-bold rounded-lg" title="3 request">18</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">19</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">20</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">21</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">22</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">23</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">24</div>
+            <div class="calendar-day selected h-10 flex items-center justify-center text-xs font-bold rounded-lg cursor-pointer">25</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">26</div>
+            <div class="calendar-day bg-amber-100 text-amber-800 h-10 flex items-center justify-center text-xs font-bold rounded-lg" title="2 request">27</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">28</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">29</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">30</div>
+            <div class="calendar-day h-10 flex items-center justify-center text-xs font-semibold text-slate-700 rounded-lg cursor-pointer">31</div>
+            <div class="calendar-day disabled h-10 flex items-center justify-center text-xs rounded-lg">1</div>
+            <div class="calendar-day disabled h-10 flex items-center justify-center text-xs rounded-lg">2</div>
+          </div>
+          <div class="mt-4 flex items-center gap-3 text-xs">
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-amber-100 rounded"></div><span class="text-slate-600">Ada Request</span></div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-amber-500 rounded"></div><span class="text-slate-600">Terpilih</span></div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="space-y-3 reveal">
+          <div class="bg-gradient-to-br from-amber-500 to-orange-500 p-5 rounded-2xl text-white">
+            <p class="text-[10px] font-bold text-amber-100 uppercase tracking-wider">Total Request</p>
+            <h3 class="text-3xl font-black mt-1">18</h3>
+            <p class="text-xs text-amber-100 mt-0.5">Bulan Oktober 2024</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Disetujui</p>
+                <h3 class="text-2xl font-black text-emerald-600 mt-1">12</h3>
+              </div>
+              <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center"><i class="fas fa-check text-emerald-600"></i></div>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Menunggu</p>
+                <h3 class="text-2xl font-black text-amber-600 mt-1">5</h3>
+              </div>
+              <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"><i class="fas fa-hourglass-half text-amber-600"></i></div>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ditolak</p>
+                <h3 class="text-2xl font-black text-rose-600 mt-1">1</h3>
+              </div>
+              <div class="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center"><i class="fas fa-times text-rose-600"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabel Request -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden reveal">
+        <div class="px-6 py-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center gap-3">
+          <h3 class="text-sm font-bold text-slate-700">Daftar Request Tanggal</h3>
+          <div class="flex-1 relative ml-0 md:ml-auto">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" placeholder="Cari pasangan..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <tr>
+                <th class="px-6 py-4">No. Request</th>
+                <th class="px-6 py-4">Pasangan</th>
+                <th class="px-6 py-4">Tgl Request</th>
+                <th class="px-6 py-4">Tgl Akad</th>
+                <th class="px-6 py-4 text-center">Status</th>
+                <th class="px-6 py-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              <tr class="table-row">
+                <td class="px-6 py-4 font-mono font-bold text-xs text-slate-700">RT-001</td>
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-slate-800 text-sm">M. Sitorus & R. Nainggolan</div>
+                </td>
+                <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">10 Okt 2024</td>
+                <td class="px-6 py-4 text-slate-700 text-xs font-semibold whitespace-nowrap">25 Okt 2024</td>
+                <td class="px-6 py-4 text-center"><span class="inline-flex items-center px-2.5 py-1 text-[10px] font-bold rounded-full bg-amber-50 text-amber-700"><i class="fas fa-hourglass-half mr-1"></i>Menunggu</span></td>
+                <td class="px-6 py-4 text-center whitespace-nowrap">
+                  <button onclick="approve('RT-001')" class="inline-flex items-center px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg transition"><i class="fas fa-check mr-1"></i>Setujui</button>
+                  <button onclick="rejectRT('RT-001')" class="inline-flex items-center px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-lg transition ml-1"><i class="fas fa-times mr-1"></i>Tolak</button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-6 py-4 font-mono font-bold text-xs text-slate-700">RT-002</td>
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-slate-800 text-sm">D. Siregar & H. Pardede</div>
+                </td>
+                <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">11 Okt 2024</td>
+                <td class="px-6 py-4 text-slate-700 text-xs font-semibold whitespace-nowrap">28 Okt 2024</td>
+                <td class="px-6 py-4 text-center"><span class="inline-flex items-center px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-700"><i class="fas fa-check mr-1"></i>Disetujui</span></td>
+                <td class="px-6 py-4 text-center whitespace-nowrap">
+                  <button onclick="showToast('info','Request telah disetujui')" class="inline-flex items-center px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-lg transition"><i class="fas fa-eye mr-1"></i>Detail</button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-6 py-4 font-mono font-bold text-xs text-slate-700">RT-003</td>
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-slate-800 text-sm">B. Simanjuntak & M. Marpaung</div>
+                </td>
+                <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">12 Okt 2024</td>
+                <td class="px-6 py-4 text-slate-700 text-xs font-semibold whitespace-nowrap">30 Okt 2024</td>
+                <td class="px-6 py-4 text-center"><span class="inline-flex items-center px-2.5 py-1 text-[10px] font-bold rounded-full bg-rose-50 text-rose-700"><i class="fas fa-times mr-1"></i>Ditolak</span></td>
+                <td class="px-6 py-4 text-center whitespace-nowrap">
+                  <button onclick="showToast('info','Request telah ditolak')" class="inline-flex items-center px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-lg transition"><i class="fas fa-eye mr-1"></i>Detail</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ DEMO BAGIAN B: FORM REQUEST TANGGAL ============ -->
+      <div class="mt-10 reveal">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-flask text-amber-500"></i> Demo Form Request Tanggal</h3>
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <form id="formRequest" onsubmit="event.preventDefault(); submitRequest();">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">No. Pendaftaran</label>
+                <select required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-amber-500">
+                  <option value="">Pilih No. Pendaftaran</option>
+                  <option>NKH-001 — M. Sitorus & R. Nainggolan</option>
+                  <option>NKH-002 — D. Siregar & H. Pardede</option>
+                  <option>NKH-003 — B. Simanjuntak & M. Marpaung</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Tanggal Akad Diminta</label>
+                <input type="date" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-amber-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Waktu Akad</label>
+                <input type="time" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-amber-500" value="09:00">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Lokasi Akad</label>
+                <input type="text" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-amber-500" placeholder="KUA / Masjid / Lokasi...">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Catatan (Opsional)</label>
+                <textarea rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-amber-500" placeholder="Catatan tambahan untuk request tanggal..."></textarea>
+              </div>
+            </div>
+            <div class="flex items-center justify-end gap-2 mt-5 pt-5 border-t border-slate-100">
+              <button type="button" onclick="document.getElementById('formRequest').reset()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-semibold rounded-xl transition">Batal</button>
+              <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl shadow-sm transition flex items-center gap-2"><i class="fas fa-paper-plane"></i> Kirim Request</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ============ DEMO C & D ============ -->
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 reveal">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fas fa-window-maximize text-purple-500"></i> Demo Popup Konfirmasi</h3>
+          <div class="space-y-2">
+            <button onclick="approve('RT-001')" class="w-full px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2"><i class="fas fa-check"></i>Setujui Request (Modal 2 Tombol)</button>
+            <button onclick="rejectRT('RT-001')" class="w-full px-4 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2"><i class="fas fa-times"></i>Tolak (Modal + Alasan)</button>
+            <button onclick="confirmLogout()" class="w-full px-4 py-2.5 bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2"><i class="fas fa-sign-out-alt"></i>Logout (Modal 2 Tombol)</button>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fas fa-bell text-amber-500"></i> Demo Toast Notifikasi</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="showToast('success','Request tanggal disetujui!')" class="px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded-xl transition">Sukses Setujui</button>
+            <button onclick="showToast('success','Request berhasil dikirim!')" class="px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded-xl transition">Sukses Kirim</button>
+            <button onclick="showToast('warning','Tanggal sudah terisi, pilih tanggal lain')" class="px-3 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-xl transition">Warning</button>
+            <button onclick="showToast('error','Gagal mengirim request')" class="px-3 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold rounded-xl transition">Error</button>
+            <button onclick="showToast('info','Mengirim request...')" class="px-3 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-xl transition">Loading</button>
+            <button onclick="showToast('info','Pilih tanggal pada kalender')" class="px-3 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-xl transition">Info</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toastContainer" class="fixed top-12 right-4 z-[10000] space-y-2"></div>
+
+  <script>
+    function showToast(type, msg) {
+      const c = document.getElementById('toastContainer');
+      const colors = { success: 'bg-emerald-500', error: 'bg-rose-500', warning: 'bg-amber-500', info: 'bg-blue-500' };
+      const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+      const t = document.createElement('div');
+      t.className = `${colors[type]} text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 min-w-[280px] max-w-md`;
+      t.style.animation = 'slideUp 0.4s ease';
+      t.innerHTML = `<i class="fas ${icons[type]} text-xl"></i><span class="text-sm font-semibold flex-1">${msg}</span><button onclick="this.parentElement.remove()" class="text-white/80"><i class="fas fa-times"></i></button>`;
+      c.appendChild(t); setTimeout(() => t.remove(), 5000);
+    }
+    const style = document.createElement('style');
+    style.innerHTML = '@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}';
+    document.head.appendChild(style);
+
+    function submitRequest() { showLoading(); setTimeout(() => { Swal.close(); showToast('success', 'Request tanggal berhasil dikirim ke admin!'); document.getElementById('formRequest').reset(); }, 1500); }
+    function showLoading() { Swal.fire({ title: 'Memproses...', allowOutsideClick: false, showConfirmButton: false, showDenyButton: false, showCancelButton: false, didOpen: () => Swal.showLoading() }); }
+    function approve(no) {
+      Swal.fire({ title: 'Setujui Request', text: `Setujui request ${no}? Tanggal akan dicadangkan.`,
+        icon: 'question', showConfirmButton: true, showCancelButton: true, showDenyButton: false,
+        confirmButtonText: 'Ya, Setujui', confirmButtonColor: '#43A047',
+        cancelButtonText: 'Batal', cancelButtonColor: '#e5e7eb', reverseButtons: true,
+        customClass: { cancelButton: 'text-slate-700' }
+      }).then(r => { if (r.isConfirmed) showLoading(), setTimeout(() => { Swal.close(); showToast('success', `Request ${no} disetujui!`); }, 1200); });
+    }
+    function rejectRT(no) {
+      Swal.fire({ title: 'Tolak Request', html: `
+        <p class="text-sm text-slate-600 mb-3 text-left">Request <b>${no}</b> akan ditolak.</p>
+        <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase text-left">Alasan Penolakan <span class="text-rose-500">*</span></label>
+        <textarea id="alasanTolakRT" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm" rows="3" placeholder="Tuliskan alasan penolakan..."></textarea>`,
+        icon: 'warning', showConfirmButton: true, showCancelButton: true, showDenyButton: false,
+        confirmButtonText: 'Tolak', confirmButtonColor: '#E53935',
+        cancelButtonText: 'Batal', cancelButtonColor: '#e5e7eb', reverseButtons: true,
+        customClass: { cancelButton: 'text-slate-700' },
+        preConfirm: () => { const v = document.getElementById('alasanTolakRT').value.trim(); if (!v) { Swal.showValidationMessage('Alasan wajib diisi'); return false; } return v; }
+      }).then(r => { if (r.isConfirmed) showLoading(), setTimeout(() => { Swal.close(); showToast('success', `Request ${no} ditolak. Notifikasi dikirim.`); }, 1200); });
+    }
+    function confirmLogout() {
+      Swal.fire({ title: 'Konfirmasi Logout', text: 'Keluar dari sistem?', icon: 'question',
+        showConfirmButton: true, showCancelButton: true, showDenyButton: false,
+        confirmButtonText: 'Konfirmasi', confirmButtonColor: '#43A047',
+        cancelButtonText: 'Batal', cancelButtonColor: '#e5e7eb', reverseButtons: true,
+        customClass: { cancelButton: 'text-slate-700' }
+      }).then(r => { if (r.isConfirmed) showToast('success', 'Logout berhasil!'); });
+    }
+    const obs = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

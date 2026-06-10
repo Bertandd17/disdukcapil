@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Organisasi_Model;
+use App\Models\OrganisasiModel;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,12 +15,12 @@ class OrganisasiSeeder extends Seeder
     {
         // Bersihkan data existing (urutan: hapus child dulu, baru parent)
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        Organisasi_Model::query()->delete();
+        OrganisasiModel::query()->delete();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         // 2 tahap: insert parent dulu agar parent_id bisa di-reference
         // Tahap 1: Pimpinan utama (top-level, parent_id = NULL)
-        $kadis = Organisasi_Model::create([
+        $kadis = OrganisasiModel::create([
             'kode_posisi' => 'kadis',
             'nama_jabatan' => 'Kepala Dinas',
             'nama_pejabat' => null,
@@ -30,7 +30,7 @@ class OrganisasiSeeder extends Seeder
             'urutan' => 1,
         ]);
 
-        $sekdin = Organisasi_Model::create([
+        $sekdin = OrganisasiModel::create([
             'kode_posisi' => 'sekdin',
             'nama_jabatan' => 'Sekretaris',
             'nama_pejabat' => null,
@@ -41,7 +41,7 @@ class OrganisasiSeeder extends Seeder
         ]);
 
         // Tahap 2: Sub-bagian & kelompok fungsional di bawah Sekretaris
-        $umum = Organisasi_Model::create([
+        $umum = OrganisasiModel::create([
             'kode_posisi' => 'umum_kepegawaian',
             'nama_jabatan' => 'Sub Bagian Umum dan Kepegawaian',
             'nama_pejabat' => null,
@@ -51,7 +51,7 @@ class OrganisasiSeeder extends Seeder
             'urutan' => 3,
         ]);
 
-        $perencanaan = Organisasi_Model::create([
+        $perencanaan = OrganisasiModel::create([
             'kode_posisi' => 'perencanaan',
             'nama_jabatan' => 'Sub Bagian Perencanaan',
             'nama_pejabat' => null,
@@ -61,7 +61,7 @@ class OrganisasiSeeder extends Seeder
             'urutan' => 4,
         ]);
 
-        Organisasi_Model::create([
+        OrganisasiModel::create([
             'kode_posisi' => 'koord_sekretariat',
             'nama_jabatan' => 'Koordinator / Sub Koordinator Sekretariat',
             'nama_pejabat' => null,
@@ -72,7 +72,7 @@ class OrganisasiSeeder extends Seeder
         ]);
 
         // Tahap 3: 4 Bidang (parent: Kadis langsung, sesuai struktur Disdukcapil)
-        $bidafduk = Organisasi_Model::create([
+        $bidafduk = OrganisasiModel::create([
             'kode_posisi' => 'bidafduk',
             'nama_jabatan' => 'Bidang Pelayanan Pendaftaran Penduduk',
             'nama_pejabat' => null,
@@ -82,7 +82,7 @@ class OrganisasiSeeder extends Seeder
             'urutan' => 6,
         ]);
 
-        $bidcapil = Organisasi_Model::create([
+        $bidcapil = OrganisasiModel::create([
             'kode_posisi' => 'bidcapil',
             'nama_jabatan' => 'Bidang Pelayanan Pencatatan Sipil',
             'nama_pejabat' => null,
@@ -92,7 +92,7 @@ class OrganisasiSeeder extends Seeder
             'urutan' => 7,
         ]);
 
-        $bidInformasi = Organisasi_Model::create([
+        $bidInformasi = OrganisasiModel::create([
             'kode_posisi' => 'bid_informasi',
             'nama_jabatan' => 'Bidang Pengelolaan Informasi Adm. Kependudukan',
             'nama_pejabat' => null,
@@ -102,7 +102,7 @@ class OrganisasiSeeder extends Seeder
             'urutan' => 8,
         ]);
 
-        $bidPemanfaatan = Organisasi_Model::create([
+        $bidPemanfaatan = OrganisasiModel::create([
             'kode_posisi' => 'bid_pemanfaatan',
             'nama_jabatan' => 'Bidang Pemanfaatan Data dan Inovasi Pelayanan',
             'nama_pejabat' => null,
@@ -132,7 +132,7 @@ class OrganisasiSeeder extends Seeder
         ];
 
         foreach ($koordItems as [$bidangKey, $kode, $nama, $urutan]) {
-            Organisasi_Model::create([
+            OrganisasiModel::create([
                 'kode_posisi' => $kode,
                 'nama_jabatan' => $nama,
                 'nama_pejabat' => null,
@@ -151,7 +151,7 @@ class OrganisasiSeeder extends Seeder
             'koord_pemanfaatan_1' => 'kf_pemanfaatan',
         ];
 
-        $koordMap = Organisasi_Model::whereIn('kode_posisi', array_keys($kfItems))
+        $koordMap = OrganisasiModel::whereIn('kode_posisi', array_keys($kfItems))
             ->pluck('id', 'kode_posisi');
 
         $urutanStart = 18;
@@ -160,7 +160,7 @@ class OrganisasiSeeder extends Seeder
             if (! $parentId) {
                 continue;
             }
-            Organisasi_Model::create([
+            OrganisasiModel::create([
                 'kode_posisi' => $kode,
                 'nama_jabatan' => 'Kelompok Jabatan Fungsional',
                 'nama_pejabat' => null,

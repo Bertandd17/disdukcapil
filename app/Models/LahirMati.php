@@ -95,7 +95,7 @@ class LahirMati extends Model
      */
     // public function layanan()
     // {
-    //     return $this->belongsTo(Layanan_Model::class, 'layanan_id', 'layanan_id');
+    //     return $this->belongsTo(LayananModel::class, 'layanan_id', 'layanan_id');
     // }
 
     /**
@@ -103,6 +103,6 @@ class LahirMati extends Model
      */
     // public function antrian_online()
     // {
-    //     return $this->belongsTo(Antrian_Online_Model::class, 'antrian_online_id', 'antrian_online_id');
+    //     return $this->belongsTo(AntrianOnlineModel::class, 'antrian_online_id', 'antrian_online_id');
     // }
 }

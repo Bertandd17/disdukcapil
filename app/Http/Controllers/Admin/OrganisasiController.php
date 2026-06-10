@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Organisasi_Model;
+use App\Models\OrganisasiModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,8 +16,8 @@ class OrganisasiController extends Controller
 
     public function index()
     {
-        $roots = Organisasi_Model::roots()->get();
-        $allOrganisasi = Organisasi_Model::orderBy('urutan')->get();
+        $roots = OrganisasiModel::roots()->get();
+        $allOrganisasi = OrganisasiModel::orderBy('urutan')->get();
 
         return view('admin.organisasi', [
             'roots' => $roots,
@@ -38,7 +38,7 @@ class OrganisasiController extends Controller
             'urutan' => 'required|integer|min:0'
         ]);
 
-        Organisasi_Model::create($validated);
+        OrganisasiModel::create($validated);
 
         return redirect()->route('admin.organisasi.index')
             ->with('success', 'Jabatan berhasil ditambahkan');
@@ -48,7 +48,7 @@ class OrganisasiController extends Controller
     {
         $this->authorize('edit organisasi');
 
-        $organisasi = Organisasi_Model::findOrFail($id);
+        $organisasi = OrganisasiModel::findOrFail($id);
 
         // Validasi hanya untuk nama_pejabat
         $validated = $request->validate([
@@ -63,7 +63,7 @@ class OrganisasiController extends Controller
 
     public function destroy($id)
     {
-        $organisasi = Organisasi_Model::findOrFail($id);
+        $organisasi = OrganisasiModel::findOrFail($id);
 
         if ($organisasi->children()->count() > 0) {
             return redirect()->route('admin.organisasi.index')

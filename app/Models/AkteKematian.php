@@ -78,6 +78,6 @@ class AkteKematian extends Model
 
     public function layanan()
     {
-        return $this->belongsTo(Layanan_Model::class, 'layanan_id', 'layanan_id');
+        return $this->belongsTo(LayananModel::class, 'layanan_id', 'layanan_id');
     }
 }

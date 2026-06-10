@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Layanan_Model;
+use App\Models\LayananModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

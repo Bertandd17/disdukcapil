@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Lacak_Berkas_Model;
-use App\Models\Antrian_Online_Model;
+use App\Models\LacakBerkasModel;
+use App\Models\AntrianOnlineModel;
 
 class Status_Lacak_Berkas_Seeder extends Seeder
 {
@@ -23,7 +23,7 @@ class Status_Lacak_Berkas_Seeder extends Seeder
         ];
 
         // Untuk demo, kita akan membuat riwayat status untuk setiap antrian yang ada
-        $antrian_list = Antrian_Online_Model::all();
+        $antrian_list = AntrianOnlineModel::all();
 
         foreach ($antrian_list as $antrian) {
             $tanggal_awal = $antrian->tanggal;
@@ -31,7 +31,7 @@ class Status_Lacak_Berkas_Seeder extends Seeder
             foreach ($status_list as $index => $status) {
                 $tanggal = date('Y-m-d', strtotime($tanggal_awal . " +{$index} days"));
 
-                Lacak_Berkas_Model::create([
+                LacakBerkasModel::create([
                     'antrian_online_id' => $antrian->antrian_online_id,
                     'status' => $status,
                     'tanggal' => $tanggal,

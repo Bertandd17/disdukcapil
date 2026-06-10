@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Preview Index — Disdukcapil Toba</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); min-height: 100vh; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .card-link { transition: all 0.3s; }
+    .card-link:hover { transform: translateY(-6px); box-shadow: 0 16px 32px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <div class="max-w-6xl mx-auto p-6 md:p-10">
+    <!-- Header -->
+    <div class="mb-10 reveal">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl flex items-center justify-center text-white shadow-md">
+          <i class="fas fa-id-card text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl font-black text-slate-800">HTML Preview Index</h1>
+          <p class="text-sm text-slate-500">Disdukcapil Toba — Sistem Informasi Kependudukan</p>
+        </div>
+      </div>
+      <p class="text-sm text-slate-600 max-w-3xl mt-3">Halaman ini adalah pusat navigasi untuk preview semua halaman blade view Laravel dalam format HTML statis. Setiap file preview menampilkan halaman utama beserta elemen demo: form input, popup konfirmasi (SweetAlert 2 tombol), toast notifikasi, dan sidebar navigation.</p>
+    </div>
+
+    <!-- Info Card -->
+    <div class="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-6 text-white mb-8 shadow-lg reveal">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+          <i class="fas fa-info-circle text-2xl"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold mb-1">Tentang HTML Preview</h2>
+          <p class="text-sm text-blue-50">File-file ini adalah <strong>representasi statis</strong> dari blade view Laravel yang dapat dibuka langsung di browser tanpa menjalankan PHP/MySQL. Data yang ditampilkan adalah <strong>data dummy</strong> untuk演示 tampilan UI/UX.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grup Admin -->
+    <div class="mb-8 reveal">
+      <h2 class="text-xl font-black text-slate-800 mb-4 flex items-center gap-2">
+        <i class="fas fa-shield-halved text-blue-500"></i> Grup Admin <span class="text-xs font-semibold text-slate-500">(6 halaman)</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="admin/01-dashboard.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><i class="fas fa-home text-blue-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">01</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Dashboard</h3>
+          <p class="text-xs text-slate-500 mt-1">Statistik, ringkasan data, dan aksi cepat admin</p>
+        </a>
+        <a href="admin/02-kelola-berita.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center"><i class="fas fa-newspaper text-emerald-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">02</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Kelola Berita</h3>
+          <p class="text-xs text-slate-500 mt-1">Manajemen berita & pengumuman Disdukcapil</p>
+        </a>
+        <a href="admin/03-antrian-online.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"><i class="fas fa-list-ol text-amber-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">03</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Antrian Online</h3>
+          <p class="text-xs text-slate-500 mt-1">Daftar antrian & validasi NIK</p>
+        </a>
+        <a href="admin/04-manajemen-akun.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><i class="fas fa-users text-purple-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">04</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Manajemen Akun</h3>
+          <p class="text-xs text-slate-500 mt-1">CRUD pengguna & role (Spatie)</p>
+        </a>
+        <a href="admin/05-visualisasi-data.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center"><i class="fas fa-chart-pie text-rose-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">05</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Visualisasi Data</h3>
+          <p class="text-xs text-slate-500 mt-1">Chart & statistik penduduk, KK, layanan</p>
+        </a>
+        <a href="admin/06-pengajuan-kematian.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center"><i class="fas fa-file-alt text-indigo-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">06</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Penerbitan Akta</h3>
+          <p class="text-xs text-slate-500 mt-1">Pengajuan & verifikasi akta kematian</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Grup Keagamaan -->
+    <div class="mb-8 reveal">
+      <h2 class="text-xl font-black text-slate-800 mb-4 flex items-center gap-2">
+        <i class="fas fa-mosque text-amber-500"></i> Grup Keagamaan <span class="text-xs font-semibold text-slate-500">(2 halaman)</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="keagamaan/01-pernikahan.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"><i class="fas fa-ring text-amber-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">01</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Perkawinan</h3>
+          <p class="text-xs text-slate-500 mt-1">Verifikasi data pendaftaran perkawinan</p>
+        </a>
+        <a href="keagamaan/02-request-tanggal.html" class="card-link bg-white rounded-2xl p-5 border border-slate-100 shadow-sm block">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"><i class="fas fa-calendar-check text-orange-600"></i></div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">02</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm">Request Tanggal</h3>
+          <p class="text-xs text-slate-500 mt-1">Kelola request tanggal akad nikah + kalender</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Cara Akses -->
+    <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm reveal">
+      <h2 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><i class="fas fa-question-circle text-blue-500"></i>Cara Mengakses</h2>
+      <div class="space-y-3 text-sm text-slate-600">
+        <div class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0">1</div>
+          <p>Buka folder <code class="bg-slate-100 px-2 py-0.5 rounded text-xs font-mono">D:\Semester 6\PA 3\Project\PA3\public\html-preview\</code></p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0">2</div>
+          <p>Double-click <strong>index.html</strong> untuk membuka navigasi utama di browser default</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0">3</div>
+          <p>Atau akses langsung via URL: <code class="bg-slate-100 px-2 py-0.5 rounded text-xs font-mono">http://localhost/PA3/public/html-preview/</code> (jika Laravel berjalan)</p>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0">4</div>
+          <p>File sudah <strong>fully self-contained</strong> — Tailwind, Font Awesome, SweetAlert via CDN. Tidak butuh server untuk dilihat.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center text-xs text-slate-400 mt-8">
+      <p>Total: 8 file HTML preview · 6 admin + 2 keagamaan</p>
+      <p class="mt-1">Dikeluarkan pada: <span id="tanggal"></span></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('tanggal').textContent = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    const obs = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
