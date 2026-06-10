@@ -86,3 +86,8 @@ yarn-error.log
 /README_DEPLOY.md
 /setup-hostinger.sh
 /upload-hostinger.sh
+".claude/" 
+".claude-flow/" 
+".swarm/" 
+"agents/" 
+"CLAUDE.md" 

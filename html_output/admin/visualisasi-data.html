@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']},colors:{primary:{50:'#E6F0FF',100:'#CCE0FF',500:'#0066FF',600:'#0052CC',700:'#003D9A',800:'#002B6E'}}}}}}</script>
     <style>*{font-family:'Plus Jakarta Sans',sans-serif}.sidebar-link.active{background:linear-gradient(135deg,#0052CC 0%,#0066FF 100%);color:white}</style>
 </head>
@@ -49,7 +49,7 @@
                     <button class="p-2 hover:bg-gray-100 rounded-lg transition"><i class="fas fa-bars text-gray-600"></i></button>
                     <div>
                         <h1 class="text-xl font-bold text-gray-800">Visualisasi Data</h1>
-                        <p class="text-sm text-gray-500">Dashboard visualisasi data kependudukan</p>
+                        <p class="text-sm text-gray-500">Visualisasi data kependudukan interaktif</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
@@ -63,22 +63,22 @@
         </header>
 
         <main class="flex-1 p-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 mb-4"><i class="fas fa-chart-pie mr-2 text-primary-600"></i>Distribusi Jenis Kelamin</h3>
-                    <canvas id="c1" height="200"></canvas>
+                    <h3 class="font-bold text-gray-800 mb-4">Komposisi Usia</h3>
+                    <canvas id="ageChart" height="220"></canvas>
                 </div>
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 mb-4"><i class="fas fa-chart-line mr-2 text-primary-600"></i>Pertumbuhan Penduduk</h3>
-                    <canvas id="c2" height="200"></canvas>
+                    <h3 class="font-bold text-gray-800 mb-4">Jenis Kelamin</h3>
+                    <canvas id="genderChart" height="220"></canvas>
                 </div>
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 mb-4"><i class="fas fa-chart-bar mr-2 text-primary-600"></i>Distribusi Usia</h3>
-                    <canvas id="c3" height="200"></canvas>
+                    <h3 class="font-bold text-gray-800 mb-4">Tren Layanan Bulanan</h3>
+                    <canvas id="trendChart" height="220"></canvas>
                 </div>
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 mb-4"><i class="fas fa-map-marked-alt mr-2 text-primary-600"></i>Distribusi Wilayah</h3>
-                    <canvas id="c4" height="200"></canvas>
+                    <h3 class="font-bold text-gray-800 mb-4">Status Perkawinan</h3>
+                    <canvas id="maritalChart" height="220"></canvas>
                 </div>
             </div>
         </main>
@@ -89,10 +89,10 @@
     </div>
 
     <script>
-        new Chart(document.getElementById('c1'), { type:'pie', data:{ labels:['Laki-laki','Perempuan'], datasets:[{ data:[104221,101977], backgroundColor:['#0052CC','#EC4899'] }]}});
-        new Chart(document.getElementById('c2'), { type:'line', data:{ labels:['2020','2021','2022','2023','2024','2025'], datasets:[{ label:'Penduduk', data:[198500,200100,202300,204500,205800,206198], borderColor:'#0052CC', backgroundColor:'rgba(0,82,204,0.1)', fill:true, tension:0.3 }]}});
-        new Chart(document.getElementById('c3'), { type:'bar', data:{ labels:['0-12','13-25','26-40','41-55','56+'], datasets:[{ label:'Jumlah', data:[42180,48700,58320,37100,19898], backgroundColor:'#10B981' }]}, options:{plugins:{legend:{display:false}}}});
-        new Chart(document.getElementById('c4'), { type:'doughnut', data:{ labels:['Balige','Porsea','Laguboti','Silaen','Habinsaran','Borbor','Nassau','Pintu Pohan','Siantar Narumonda','Uluan'], datasets:[{ data:[32000,28000,25000,22000,20000,18000,17000,15000,14000,13000], backgroundColor:['#0052CC','#0066FF','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899','#06B6D4','#84CC16','#F97316'] }]}});
+        new Chart(document.getElementById('ageChart'), {type:'bar', data:{labels:['0-12','13-25','26-40','41-55','56+'], datasets:[{label:'Jumlah', data:[42100,58200,56300,32100,18170], backgroundColor:'#0052CC'}]}, options:{responsive:true, plugins:{legend:{display:false}}}});
+        new Chart(document.getElementById('genderChart'), {type:'pie', data:{labels:['Laki-laki','Perempuan'], datasets:[{data:[104230,102640], backgroundColor:['#0052CC','#EC4899']}]}, options:{responsive:true, plugins:{legend:{position:'bottom'}}}});
+        new Chart(document.getElementById('trendChart'), {type:'line', data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun'], datasets:[{label:'Layanan', data:[320,410,380,520,480,612], borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.1)', fill:true, tension:0.3}]}, options:{responsive:true}});
+        new Chart(document.getElementById('maritalChart'), {type:'doughnut', data:{labels:['Belum Kawin','Kawin','Cerai Hidup','Cerai Mati'], datasets:[{data:[92340,98420,10210,5900], backgroundColor:['#0052CC','#10B981','#F59E0B','#EF4444']}]}, options:{responsive:true, plugins:{legend:{position:'bottom'}}}});
         function logoutConfirm() { Swal.fire({title:'Konfirmasi Logout', text:'Yakin keluar?', icon:'warning', showCancelButton:true, confirmButtonColor:'#0052CC', confirmButtonText:'Ya'}).then(r=>{if(r.isConfirmed)window.location.href='../auth/login.html';}); }
     </script>
 </body>

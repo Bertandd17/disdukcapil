@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']},colors:{primary:{50:'#E6F0FF',100:'#CCE0FF',500:'#0066FF',600:'#0052CC',700:'#003D9A',800:'#002B6E'}}}}}}</script>
     <style>*{font-family:'Plus Jakarta Sans',sans-serif}.sidebar-link.active{background:linear-gradient(135deg,#0052CC 0%,#0066FF 100%);color:white}</style>
 </head>
@@ -49,7 +49,7 @@
                     <button class="p-2 hover:bg-gray-100 rounded-lg transition"><i class="fas fa-bars text-gray-600"></i></button>
                     <div>
                         <h1 class="text-xl font-bold text-gray-800">Statistik</h1>
-                        <p class="text-sm text-gray-500">Statistik penduduk, dokumen, dan layanan</p>
+                        <p class="text-sm text-gray-500">Statistik data kependudukan dan layanan</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
@@ -63,27 +63,58 @@
         </header>
 
         <main class="flex-1 p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <a href="statistik-penduduk.html" class="bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
-                    <i class="fas fa-users text-4xl mb-3 opacity-80"></i>
-                    <h4 class="font-bold text-lg mb-1">Statistik Penduduk</h4>
-                    <p class="text-sm text-blue-100">Data agregat kependudukan</p>
-                </a>
-                <a href="statistik-dokumen.html" class="bg-gradient-to-br from-green-500 to-green-700 text-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
-                    <i class="fas fa-file-alt text-4xl mb-3 opacity-80"></i>
-                    <h4 class="font-bold text-lg mb-1">Statistik Dokumen</h4>
-                    <p class="text-sm text-green-100">Data dokumen kependudukan</p>
-                </a>
-                <a href="statistik-layanan.html" class="bg-gradient-to-br from-orange-500 to-orange-700 text-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
-                    <i class="fas fa-clipboard-list text-4xl mb-3 opacity-80"></i>
-                    <h4 class="font-bold text-lg mb-1">Statistik Layanan</h4>
-                    <p class="text-sm text-orange-100">Data pelayanan publik</p>
-                </a>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl p-5 shadow-sm">
+                    <p class="text-sm opacity-80">Total Penduduk</p>
+                    <p class="text-3xl font-extrabold mt-1">206.870</p>
+                    <p class="text-xs opacity-80 mt-2"><i class="fas fa-arrow-up"></i> +1.2% tahun ini</p>
+                </div>
+                <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-5 shadow-sm">
+                    <p class="text-sm opacity-80">KK Tercatat</p>
+                    <p class="text-3xl font-extrabold mt-1">54.231</p>
+                    <p class="text-xs opacity-80 mt-2"><i class="fas fa-arrow-up"></i> +0.8% tahun ini</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl p-5 shadow-sm">
+                    <p class="text-sm opacity-80">Akta Bulan Ini</p>
+                    <p class="text-3xl font-extrabold mt-1">812</p>
+                    <p class="text-xs opacity-80 mt-2"><i class="fas fa-arrow-up"></i> +5.4% bulan lalu</p>
+                </div>
+                <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-5 shadow-sm">
+                    <p class="text-sm opacity-80">Layanan Hari Ini</p>
+                    <p class="text-3xl font-extrabold mt-1">128</p>
+                    <p class="text-xs opacity-80 mt-2"><i class="fas fa-clock"></i> Realtime</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 mb-4">Pertumbuhan Penduduk 6 Bulan Terakhir</h3>
+                    <canvas id="chart1" height="200"></canvas>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 mb-4">Distribusi Jenis Layanan</h3>
+                    <canvas id="chart2" height="200"></canvas>
+                </div>
             </div>
 
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fas fa-chart-line mr-2 text-primary-600"></i>Statistik Layanan Tahun 2025</h3>
-                <canvas id="statChart" height="100"></canvas>
+                <h3 class="font-bold text-gray-800 mb-4">Statistik Kecamatan</h3>
+                <table class="w-full">
+                    <thead class="text-xs font-semibold text-gray-600 uppercase border-b">
+                        <tr>
+                            <th class="py-2 text-left">Kecamatan</th>
+                            <th class="py-2 text-right">Penduduk</th>
+                            <th class="py-2 text-right">KK</th>
+                            <th class="py-2 text-right">Layanan Bulan Ini</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-gray-100">
+                        <tr><td class="py-3">Balige</td><td class="py-3 text-right">45.231</td><td class="py-3 text-right">12.103</td><td class="py-3 text-right">256</td></tr>
+                        <tr><td class="py-3">Porsea</td><td class="py-3 text-right">32.450</td><td class="py-3 text-right">8.654</td><td class="py-3 text-right">189</td></tr>
+                        <tr><td class="py-3">Laguboti</td><td class="py-3 text-right">28.102</td><td class="py-3 text-right">7.421</td><td class="py-3 text-right">154</td></tr>
+                        <tr><td class="py-3">Samosir</td><td class="py-3 text-right">24.789</td><td class="py-3 text-right">6.543</td><td class="py-3 text-right">121</td></tr>
+                    </tbody>
+                </table>
             </div>
         </main>
 
@@ -93,17 +124,8 @@
     </div>
 
     <script>
-        new Chart(document.getElementById('statChart'), {
-            type: 'bar',
-            data: {
-                labels: ['KTP', 'KK', 'Akta Lahir', 'Akta Kematian', 'Pernikahan', 'Lahir Mati'],
-                datasets: [
-                    { label: 'Diproses', data: [320, 280, 195, 45, 78, 12], backgroundColor: '#0052CC' },
-                    { label: 'Selesai', data: [450, 410, 280, 60, 95, 18], backgroundColor: '#10B981' }
-                ]
-            },
-            options: { responsive: true, plugins: { legend: { position: 'top' } } }
-        });
+        new Chart(document.getElementById('chart1'), {type:'line', data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun'], datasets:[{label:'Penduduk', data:[204120,204890,205430,205890,206340,206870], borderColor:'#0052CC', backgroundColor:'rgba(0,82,204,0.1)', tension:0.3, fill:true}]}, options:{responsive:true, plugins:{legend:{display:false}}}});
+        new Chart(document.getElementById('chart2'), {type:'doughnut', data:{labels:['KTP','KK','Akta Lahir','Akta Kematian','Akta Nikah'], datasets:[{data:[420,310,256,98,180], backgroundColor:['#0052CC','#10B981','#F59E0B','#EF4444','#8B5CF6']}]}, options:{responsive:true, plugins:{legend:{position:'bottom'}}}});
         function logoutConfirm() { Swal.fire({title:'Konfirmasi Logout', text:'Yakin keluar?', icon:'warning', showCancelButton:true, confirmButtonColor:'#0052CC', confirmButtonText:'Ya'}).then(r=>{if(r.isConfirmed)window.location.href='../auth/login.html';}); }
     </script>
 </body>

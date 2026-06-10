@@ -50,6 +50,17 @@ class RegisterController extends Controller
             return response()->view('errors.500', [
                 'exception' => $e,
             ], 500);
+        } catch (\Throwable $e) {
+            Log::error('REGISTER PAGE UNKNOWN ERROR', [
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'trace'   => $e->getTraceAsString(),
+            ]);
+
+            return response()->view('errors.500', [
+                'exception' => $e,
+            ], 500);
         }
     }
 
