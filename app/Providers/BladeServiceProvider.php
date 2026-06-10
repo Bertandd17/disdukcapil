@@ -35,5 +35,11 @@ class BladeServiceProvider extends ServiceProvider
             }
             $view->with('isAdmin', $isAdmin);
         });
+
+        Blade::directive('assetV', function (string $expression): string {
+            $expression = trim($expression, "()'\" ");
+
+            return "<?php echo app(\\App\\Support\\AssetVersion::class)->url({$expression}); ?>";
+        });
     }
 }

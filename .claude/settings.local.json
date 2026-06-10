@@ -236,7 +236,20 @@
       "Bash(railway whoami *)",
       "Bash(railway list *)",
       "Bash(railway link *)",
-      "Bash(railway domain *)"
+      "Bash(railway domain *)",
+      "Bash(env)",
+      "Bash(where git *)",
+      "Bash(GIT_EXEC_PATH=\"C:/Program Files/Git/mingw64/libexec/git-core\" git add docs/)",
+      "Bash(GIT_EXEC_PATH=\"C:/Program Files/Git/mingw64/libexec/git-core\" git commit -m \"docs: add comprehensive deployment guide for Railway + Hostinger\")",
+      "Bash(GIT_EXEC_PATH=\"C:/Program Files/Git/mingw64/libexec/git-core\" git status)",
+      "Bash(php -r \"echo 'APP_KEY=base64:' . base64_encode\\(random_bytes\\(32\\)\\) . PHP_EOL;\")",
+      "Bash(railway services *)",
+      "Bash(railway env *)",
+      "Bash(railway environment *)",
+      "Bash(railway metrics *)",
+      "Bash(findstr \"APP_KEY\")",
+      "Bash(findstr \"APP_KEY\" .env)",
+      "Bash(dir *)"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"

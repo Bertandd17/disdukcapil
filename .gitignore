@@ -58,3 +58,31 @@ yarn-error.log
 
 # Catatan fix (sudah ada di git history)
 /SWEETALERT_FIX_SUMMARY.txt
+
+# Python ML models (OCR jalan di Railway, tidak perlu di Hostinger)
+/scripts/models/**/*.pt
+/scripts/models/easyocr_models/
+/scripts/ktp_crnn_ocr.py
+/scripts/ktp_crnn_v2_*.py
+/scripts/train_model.py
+/scripts/dataset_51.png
+/scripts/bigdata/
+/scripts/__pycache__/
+/scripts/fix_encoding.py
+/scripts/preprocessing.py
+/scripts/setup_ocr.py
+/scripts/run_ocr.py
+/scripts/PANDUAN_SETUP_OCR.txt
+
+# Railway / OCR engine (jalan di Railway, tidak perlu di Hostinger)
+/railway/
+/nixpacks.toml
+/Procfile
+/runtime.txt
+
+# Snippets & noise dari editor
+/DEPLOY_HOSTINGER_RAILWAY.md
+/DEPLOY_INDONESIA.md
+/README_DEPLOY.md
+/setup-hostinger.sh
+/upload-hostinger.sh

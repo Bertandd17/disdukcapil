@@ -12,7 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style-guide.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="@assetV('css/page-loading.css')">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -321,7 +321,7 @@
 
     <!-- Load SweetAlert Helper Global -->
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="@assetV('js/swal-final-fix.js')"></script>
 
     <script>
         // Toggle Password Visibility
@@ -390,8 +390,8 @@
             }, 30000);
         });
     </script>
-<script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-<script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+<script src="@assetV('js/page-loading.js')"></script>
+<script src="@assetV('js/style-guide-enhancer.js')"></script>
     {{-- SweetAlert Final Fix --}}
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 </body>

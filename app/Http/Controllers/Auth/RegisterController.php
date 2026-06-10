@@ -20,20 +20,37 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        // Cek apakah sudah ada user dengan role Admin
-        $adminRole = Role::where('name', 'Admin')->first();
-        $adminExists = $adminRole && $adminRole->users()->exists();
+        try {
+            $adminRole = Role::where('name', 'Admin')->first();
+            $adminExists = $adminRole && $adminRole->users()->exists();
 
-        // Jika sudah ada admin, redirect ke login
-        if ($adminExists) {
-            return redirect()->route('login')
-                ->with('info', 'Registrasi sudah dilakukan. Silakan login dengan akun yang sudah terdaftar.');
+            if ($adminExists) {
+                return redirect()->route('login')
+                    ->with('info', 'Registrasi sudah dilakukan. Silakan login dengan akun yang sudah terdaftar.');
+            }
+
+            $securityQuestions = SecurityQuestion::all();
+
+            return view('auth.register', compact('securityQuestions'));
+        } catch (\Illuminate\Encryption\MissingAppKeyException $e) {
+            Log::critical('APP_KEY missing on production server', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->view('errors.500', [
+                'exception' => $e,
+            ], 500);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::critical('Database connection failed on admin register page', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->view('errors.500', [
+                'exception' => $e,
+            ], 500);
         }
-
-        // Ambil semua pertanyaan keamanan
-        $securityQuestions = SecurityQuestion::all();
-
-        return view('auth.register', compact('securityQuestions'));
     }
 
     /**

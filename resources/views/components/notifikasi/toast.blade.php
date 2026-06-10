@@ -3,7 +3,7 @@
     PANDUAN NOTIFIKASI DISDUKCAPIL — DESAIN BARU (TOP-END GRADIENT)
     =====================================================================
     Semua notifikasi terpusat di:
-        public/js/sweetalert-disdukcapil.js
+        public/js/swal-final-fix.js
 
     Sudah di-load otomatis di seluruh layouts:
         - resources/views/layouts/admin.blade.php

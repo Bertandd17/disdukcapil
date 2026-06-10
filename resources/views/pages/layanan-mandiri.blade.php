@@ -524,7 +524,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 </div>
             @endif
 
-            <form id="serviceForm" method="POST" action="{{ route('pernikahan.store.layanan-mandiri') }}" enctype="multipart/form-data" novalidate>
+            <form id="serviceForm" method="POST" action="{{ route('pernikahan.store.layanan-mandiri') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="foto_wajah" id="foto_wajah">
 
@@ -660,7 +660,8 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 </div>
 
 @push('styles')
-{{-- swal-final-fix.css sudah di-include oleh layout utama --}}
+{{-- SWEETALERT2 ASSETS — jangan ubah urutan --}}
+<link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
 
 <style>
     /* ═══════════════════════════════════════════════════════════
@@ -787,9 +788,8 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 {{-- SWEETALERT2 ASSETS — jangan ubah urutan --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-<script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
-<script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
-{{-- swal-final-fix.js sudah di-include oleh layout utama --}}
+<script src="{{ asset('js/swal-final-fix.js') }}"></script>
+<script src="{{ asset('js/swal-final-fix.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -797,8 +797,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    INTERCEPTOR GLOBAL — Paksa SEMUA loading modal tanpa tombol OK/No/Cancel
-   (FASE 4 — Ditempatkan SETELAH notifikasi-disdukcapil.js
-    supaya tidak menimpa patch toast-nya)
+   (FASE 4 — Ditempatkan setelah SweetAlert2, sebelum @stack('scripts'))
    ═══════════════════════════════════════════════════════════════════ */
 (function installSwalLoadingInterceptor() {
     function patchSwal(Swal) {
@@ -834,7 +833,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 config.allowEscapeKey    = false;
             }
 
-            return _previousFire(config);
+            return _originalFire(config);
         };
 
         /* Patch mixin juga (penting untuk Swal.mixin({...}).fire()) */
@@ -1182,13 +1181,6 @@ function renderField(field) {
 }
 
 function goToStep(step) {
-    /* FIX: Reset state Step 4 saat kembali dari Step 5 (Konfirmasi)
-       agar tombol "Mulai Verifikasi" tidak terjebak disabled.
-       Guard `currentStep > 4` mencegah reset saat initial load. */
-    if (step === 4 && currentStep > 4) {
-        resetLiveness();
-    }
-
     currentStep = step;
     document.querySelectorAll('.step-content').forEach(function(el) { el.classList.add('hidden'); });
     var active = document.getElementById('step' + step);
@@ -1222,44 +1214,30 @@ function validateAndGoStep3() {
         .querySelectorAll('input[required],textarea[required],select[required]');
     var valid = true;
     var hasEmpty = false;
-    var emptyLabels = [];
-    var invalidNik = false;
+    var errMsg = 'Ada Dokumen yang Perlu dilengkapi';
     inputs.forEach(function(input) {
         input.style.borderColor = '';
         var val = input.value.trim();
-        if (!val) {
+        if (!val) { input.style.borderColor = '#ef4444'; valid = false; hasEmpty = true; }
+        else if (val && (input.name.toLowerCase().includes('nik') || input.name.toLowerCase().includes('nomor_kk')) && val.length !== 16) {
             input.style.borderColor = '#ef4444';
             valid = false;
-            hasEmpty = true;
-            var lbl = (input.labels && input.labels[0]) ? input.labels[0].textContent.replace('*', '').trim() : (input.placeholder || input.name || input.id);
-            emptyLabels.push(lbl);
-        } else if (val && (input.name.toLowerCase().includes('nik') || input.name.toLowerCase().includes('nomor_kk')) && val.length !== 16) {
-            input.style.borderColor = '#ef4444';
-            valid = false;
-            invalidNik = true;
+            errMsg = 'Nomor harus tepat 16 angka!';
         }
     });
-    if (!valid) {
-        if (invalidNik) {
-            notifValidasiGagal(['NIK / Nomor KK harus tepat 16 angka']);
-        } else if (emptyLabels.length > 0) {
-            notifValidasiGagal(emptyLabels);
-        } else {
-            notifFormBelumLengkap();
-        }
-        return;
-    }
+    if (hasEmpty) errMsg = 'Ada Dokumen yang Perlu dilengkapi';
+    if (!valid) { showToast(errMsg, 'warning'); return; }
     goToStep(3);
 }
 
 function validateAndGoStep4() {
     var valid = true;
-    var missingLabels = [];
+    var missingLabel = '';
     currentConfig.files.forEach(function(file) {
         if (file.required === false) return;
         var input = document.querySelector('input[name="' + file.name + '"]');
         if (!input || !input.files || input.files.length === 0) {
-            missingLabels.push(file.label);
+            if (!missingLabel) missingLabel = file.label;
             valid = false;
             var lbl = input ? input.closest('label') : null;
             if (lbl) {
@@ -1268,10 +1246,7 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) {
-        notifValidasiGagal(missingLabels);
-        return;
-    }
+    if (!valid) { showToast('Ada Dokumen yang Perlu dilengkapi', 'warning'); return; }
     goToStep(4);
 }
 
@@ -1357,7 +1332,7 @@ function onLivenessPassed() {
     video.parentNode.insertBefore(preview, video);
     document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
     document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
-    showSuccess('Verifikasi Wajah Berhasil');
+    showToast('Verifikasi Wajah Berhasil', 'success');
     setTimeout(function() { goToStep(5); }, 900);
 }
 function setOverlay(text) { document.getElementById('liveness-overlay').textContent = text; }
@@ -1491,9 +1466,6 @@ function showErrorToast(problem, solution, title, timer) {
     timer = timer || 6000;
     var cleanProblem  = stripToastHtml(problem  || 'Terjadi kesalahan saat memproses permintaan.');
     var cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
-    if (typeof window.showError === 'function') {
-        return window.showError(title, cleanProblem, cleanSolution);
-    }
     return showToast(cleanProblem + ' ' + cleanSolution, 'error');
 }
 
@@ -1520,37 +1492,33 @@ function autoFillFromAntrian(nomorAntrian) {
             if (!data.success) {
                 var errorCode = data.error_code;
                 if (errorCode === 'NOT_FOUND') {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Nomor antrian tidak ditemukan',
-                        problem  : data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
-                        solution : data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.'
-                    });
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
+                        data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.',
+                        'Nomor antrian tidak ditemukan'
+                    );
                     input.value = '';
                 } else if (errorCode === 'ALREADY_USED') {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Nomor antrian sudah digunakan',
-                        problem  : data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
-                        solution : data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.'
-                    });
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
+                        data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
+                        'Nomor antrian sudah digunakan'
+                    );
                     input.value = '';
                 } else if (errorCode === 'INVALID_SERVICE') {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Nomor antrian tidak sesuai layanan',
-                        problem  : data.problem || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.',
-                        solution : data.solution || 'Pilih layanan yang sesuai atau buat nomor antrian baru.',
-                        timer    : 7000
-                    });
+                    showErrorToast(
+                        data.problem || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.',
+                        data.solution || 'Pilih layanan yang sesuai atau buat nomor antrian baru.',
+                        'Nomor antrian tidak sesuai layanan',
+                        7000
+                    );
                     input.value = '';
                 } else {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Gagal mengambil data antrian',
-                        problem  : data.problem || data.message || 'Gagal mengambil data antrian.',
-                        solution : data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.'
-                    });
+                    showErrorToast(
+                        data.problem || data.message || 'Gagal mengambil data antrian.',
+                        data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.',
+                        'Gagal mengambil data antrian'
+                    );
                 }
                 return;
             }
@@ -1563,17 +1531,16 @@ function autoFillFromAntrian(nomorAntrian) {
                 if (nikInput    && data.data.nik)          nikInput.value    = data.data.nik;
                 if (namaInput   && data.data.nama_lengkap) namaInput.value   = data.data.nama_lengkap;
                 if (alamatInput && data.data.alamat)       alamatInput.value = data.data.alamat;
-                showSuccess('Berhasil Mengambil Data dari Nomor Antrian');
+                showToast('Berhasil Mengambil Data dari Nomor Antrian', 'success');
             }
         })
         .catch(function(error) {
             console.error('autoFillFromAntrian error:', error);
-            fireToast({
-                type     : 'error',
-                title    : 'Gagal mengambil data antrian',
-                problem  : 'Sistem gagal mengambil data antrian.',
-                solution : 'Periksa koneksi internet, lalu masukkan nomor antrian kembali.'
-            });
+            showErrorToast(
+                'Sistem gagal mengambil data antrian.',
+                'Periksa koneksi internet, lalu masukkan nomor antrian kembali.',
+                'Gagal mengambil data antrian'
+            );
         })
         .finally(function() {
             if (input) input.classList.remove('loading');
@@ -1606,46 +1573,11 @@ function isPdfOnlyInput(input) {
 function validateSelectedFile(input) {
     var file = input.files && input.files[0] ? input.files[0] : null;
     if (!file) return true;
-    var name = file.name;
-    var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
     if (isPdfOnlyInput(input)) {
-        var isPdf = file.type === 'application/pdf' || name.toLowerCase().endsWith('.pdf');
-        if (!isPdf) {
-            input.value = '';
-            fireToast({
-                type: 'error',
-                title: 'Format File Tidak Didukung',
-                problem: 'File "' + name + '" berformat ' + (file.type || 'tidak dikenal') + ', tidak diizinkan.',
-                solution: 'Pilih ulang file dengan format PDF sesuai ketentuan.',
-                timer: 6000
-            });
-            return false;
-        }
-    } else {
-        var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-        if (allowedTypes.indexOf(file.type) === -1) {
-            input.value = '';
-            fireToast({
-                type: 'error',
-                title: 'Format File Tidak Didukung',
-                problem: 'File "' + name + '" berformat ' + (file.type || 'tidak dikenal') + ', tidak diizinkan.',
-                solution: 'Pilih file dengan format PDF, JPG, atau PNG sesuai ketentuan.',
-                timer: 6000
-            });
-            return false;
-        }
+        var isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        if (!isPdf) { input.value = ''; showToast('Hanya file PDF yang diperbolehkan', 'error'); return false; }
     }
-    if (file.size > 2 * 1024 * 1024) {
-        input.value = '';
-        fireToast({
-            type: 'error',
-            title: 'File Terlalu Besar',
-            problem: 'File "' + name + '" berukuran ' + sizeMB + ' MB, melebihi batas 2 MB.',
-            solution: 'Kompres file terlebih dahulu atau pilih file lain yang ukurannya di bawah 2 MB.',
-            timer: 7000
-        });
-        return false;
-    }
+    if (file.size > 2 * 1024 * 1024) { input.value = ''; showToast('Maksimal ukuran file: 2MB', 'error'); return false; }
     return true;
 }
 function clearFileInput(fieldName) {
@@ -1657,15 +1589,26 @@ function clearFileInput(fieldName) {
 
 /* ═══════════════════════════════════════════════════════════════════
    Toast helper
-   Pakai fireToast() dari notifikasi-disdukcapil.js agar styling
-   hijau/merah + format "Masalah / Cara memperbaiki" konsisten.
    ═══════════════════════════════════════════════════════════════════ */
 function showToast(message, type) {
-    if (typeof window.fireToast === 'function') {
-        var t = (type === 'error' || type === 'success' || type === 'warning' || type === 'info') ? type : 'info';
-        return window.fireToast({ type: t, title: message, timer: 4000 });
-    }
-    Swal.fire({ toast: true, position: 'top-end', icon: type || 'info', title: message, timer: 4000, showConfirmButton: false });
+    type = type || 'info';
+    var iconMap = { success:'success', error:'error', warning:'warning', info:'info' };
+    Swal.mixin({
+        toast             : true,
+        position          : 'top-end',
+        showConfirmButton : false,
+        showDenyButton    : false,
+        showCancelButton  : false,
+        timer             : 4000,
+        timerProgressBar  : true,
+        icon              : iconMap[type] || 'info',
+        title             : message,
+        customClass       : { popup: 'swal-toast-' + (type || 'info') },
+        didOpen           : function(toast) {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    }).fire();
 }
 
 function formatValidationErrors(errors) {
@@ -1720,8 +1663,7 @@ async function handleKirimPengajuan() {
 
     /* Guard: verifikasi wajah harus selesai */
     if (livenessValue !== '1') {
-        notifFormBelumLengkap();
-        showError('Verifikasi Wajah Belum Selesai', 'Verifikasi wajah belum dilakukan atau belum lulus.', 'Selesaikan verifikasi wajah (liveness) terlebih dahulu sebelum mengirim pengajuan.');
+        showToast('Harap selesaikan verifikasi wajah terlebih dahulu.', 'error');
         goToStep(4);
         return;
     }
@@ -1772,9 +1714,9 @@ async function handleKirimPengajuan() {
                 Swal.close();
                 if (btnSubmit) btnSubmit.disabled = false;
                 if (checkData.error_code === 'DAILY_LIMIT_EXCEEDED') {
-                    showWarning(checkData.message || 'Anda sudah mengajukan layanan ini hari ini.');
+                    showToast(checkData.message || 'Anda sudah mengajukan layanan ini hari ini.', 'warning');
                 } else {
-                    showError(checkData.message || 'Terjadi kesalahan validasi', 'Validasi gagal saat memeriksa batas harian.', 'Periksa data pengajuan dan coba lagi, atau hubungi admin jika masalah berlanjut.');
+                    showToast(checkData.message || 'Terjadi kesalahan validasi', 'error');
                 }
                 return;
             }
@@ -1835,13 +1777,13 @@ async function handleKirimPengajuan() {
             return;
         }
 
-        showError(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'Server menolak atau gagal memproses pengajuan Anda.', 'Periksa kembali isian formulir, koneksi internet, lalu coba kirim ulang.');
+        showToast(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'error');
     })
     .catch(function(error) {
         Swal.close();
         if (btnSubmit) btnSubmit.disabled = false;
         console.error('Submit error:', error);
-        showError('Gagal mengirim pengajuan', 'Tidak berhasil mengirim data ke server.', 'Periksa koneksi internet Anda, lalu coba kirim ulang pengajuan.');
+        showToast('Gagal mengirim pengajuan. Silakan coba lagi.', 'error');
     });
 }
 
@@ -1859,11 +1801,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     @if(session('error'))
-    showError('{!! addslashes(session("error")) !!}');
+    showToast('{!! addslashes(session("error")) !!}', 'error');
     @endif
 
     @if(session('success'))
-    showSuccess('{{ addslashes(session("success")) }}');
+    showToast('{{ addslashes(session("success")) }}', 'success');
     @endif
 
 }); /* end DOMContentLoaded */

@@ -14,7 +14,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style-guide.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ md5_file(base_path('public/css/page-loading.css')) }}">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -260,8 +260,8 @@
         </div>
     </div>
 
-<script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-<script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+<script src="{{ asset('js/page-loading.js') }}?v={{ md5_file(base_path('public/js/page-loading.js')) }}"></script>
+<script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ md5_file(base_path('public/js/style-guide-enhancer.js')) }}"></script>
     {{-- SweetAlert Final Fix --}}
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 </body>

@@ -25,7 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- SweetAlert Disdukcapil -->
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset('js/swal-final-fix.js') }}?v={{ filemtime(public_path('js/swal-final-fix.js')) }}"></script>
 
     <style>
         .swal2-loader {

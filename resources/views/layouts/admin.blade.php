@@ -28,7 +28,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Notifikasi Disdukcapil (file final tunggal) -->
-    <script src="{{ asset('js/notifikasi-disdukcapil.js') }}?v={{ filemtime(public_path('js/notifikasi-disdukcapil.js')) }}"></script>
+    <script src="{{ asset('js/notifikasi-disdukcapil.js') }}?v={{ md5_file(base_path('public/js/notifikasi-disdukcapil.js')) }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -171,7 +171,7 @@
         }
     </style>
 
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ md5_file(base_path('public/css/page-loading.css')) }}">
 
     @stack('styles')
 
@@ -179,7 +179,7 @@
     @include('admin.partials.sweetalert-styles')
 
     {{-- SweetAlert Final Fix --}}
-    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}?v={{ filemtime(public_path('css/swal-final-fix.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}?v={{ md5_file(base_path('public/css/swal-final-fix.css')) }}">
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
     @include('components.page-loading')
@@ -587,11 +587,11 @@
     </script>
 
     {{-- Page loading & style guide enhancer --}}
-    <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-    <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+    <script src="{{ asset('js/page-loading.js') }}?v={{ md5_file(base_path('public/js/page-loading.js')) }}"></script>
+    <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ md5_file(base_path('public/js/style-guide-enhancer.js')) }}"></script>
 
     {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
-    <script src="{{ asset('js/swal-final-fix.js') }}?v={{ filemtime(public_path('js/swal-final-fix.js')) }}"></script>
+    <script src="{{ asset('js/swal-final-fix.js') }}?v={{ md5_file(base_path('public/js/swal-final-fix.js')) }}"></script>
 
     {{-- @stack dipanggil SETELAH SwalHelper didefinisikan --}}
     @stack('scripts')
