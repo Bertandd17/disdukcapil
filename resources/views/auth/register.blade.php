@@ -223,7 +223,7 @@
 
     <!-- Load SweetAlert Helper Global -->
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 
     <script>
         // Toggle Password Visibility
