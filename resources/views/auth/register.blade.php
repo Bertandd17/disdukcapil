@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style-guide.css') }}">
-    <link rel="stylesheet" href="@assetV('css/page-loading.css')">
+    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -43,10 +44,8 @@
     @if(auth()->check())
         <script>window.location.href = "{{ route('admin.dashboard') }}";</script>
     @endif
-    {{-- SweetAlert Final Fix --}}
-    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
 </head>
-<body class="bg-animated min-h-screen flex items-center justify-center p-4 py-12 sm:py-4">
+<body class="bg-animated min-h-screen flex items-center justify-center p-4">
 @include('components.page-loading')
 
     <!-- Background Particles -->
@@ -57,7 +56,7 @@
     </div>
 
     <!-- Register Container -->
-    <div class="relative z-10 w-full max-w-2xl px-4 sm:px-0">
+    <div class="relative z-10 w-full max-w-md">
         <!-- Logo & Header -->
         <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-24 h-24 bg-white rounded-2xl shadow-xl mb-4 float-animation overflow-hidden border-4 border-white/30">
@@ -68,7 +67,7 @@
         </div>
 
         <!-- Register Card -->
-        <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10">
+        <div class="bg-white rounded-3xl shadow-2xl p-8">
             <div class="text-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-1">Buat Akun Admin</h2>
                 <p class="text-gray-600">Registrasi hanya dapat dilakukan sekali</p>
@@ -224,7 +223,7 @@
 
     <!-- Load SweetAlert Helper Global -->
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-    <script src="@assetV('js/swal-final-fix.js')"></script>
+    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
 
     <script>
         // Toggle Password Visibility
@@ -407,7 +406,7 @@
             background: linear-gradient(to right, #10b981 0%, #10b981 50%, #10b981 100%);
         }
     </style>
-<script src="@assetV('js/page-loading.js')"></script>
-<script src="@assetV('js/style-guide-enhancer.js')"></script>
+<script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
+<script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
 </body>
 </html>
