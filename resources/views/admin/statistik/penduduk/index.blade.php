@@ -287,7 +287,7 @@
                     .then(r => r.json())
                     .then(r => {
                         if (r.success) {
-                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 5000 });
+                            Toast.sukses(r.message || 'Data berhasil diperbarui.');
                             setTimeout(() => { window.location.reload(); }, 1000);
                         } else {
                             Swal.fire({ icon: 'error', title: 'Gagal!', text: r.message });
@@ -298,25 +298,7 @@
         });
     });
 
-    // E5 FIX: SweetAlert sukses HANYA dari session flash (server-side)
-    @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: '{{ session('success') }}',
-        toast: true,
-        position: 'top-end',
-        timer: 5000
-    });
-    @endif
-
-    @if(session('error'))
-    Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: '{{ session('error') }}'
-    });
-    @endif
+    // Session flash ditangani otomatis oleh window.__flashData (toast-disdukcapil.js)
 })();
 </script>
 @endpush

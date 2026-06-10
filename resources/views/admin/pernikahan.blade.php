@@ -356,6 +356,9 @@ const AppSwal = {
             return;
         }
 
+        if (window.Toast && typeof Toast.sukses === 'function') {
+            return Toast.sukses(message || title || 'Operasi berhasil.');
+        }
         return Swal.fire({
             icon: 'success',
             title: title || 'Berhasil!',
@@ -369,6 +372,13 @@ const AppSwal = {
     },
 
     error: function(message, title) {
+        if (window.Toast && typeof Toast.error === 'function') {
+            return Toast.error({
+                judul  : title || 'Operasi Gagal',
+                masalah: message || 'Terjadi kesalahan saat memproses permintaan.',
+                solusi : 'Periksa kembali data yang dikirim, lalu coba lagi.'
+            });
+        }
         if (!window.Swal || typeof Swal.fire !== 'function') {
             alert(message || 'Terjadi kesalahan');
             return;
@@ -1004,7 +1014,7 @@ async function checkStatusUpdates() {
 
  // Jika berubah ke Disetujui
  if (newStatus === 'TANGGAL_DISETUJUI') {
- const Toast = Swal.mixin({
+ const SwalToast = Swal.mixin({
  toast: true,
  position: 'top-end',
  showConfirmButton: true,
@@ -1014,7 +1024,7 @@ async function checkStatusUpdates() {
  backdrop: false,
  });
 
- Toast.fire({
+ SwalToast.fire({
  icon: 'success',
  title: 'Tanggal Disetujui!',
  html: `

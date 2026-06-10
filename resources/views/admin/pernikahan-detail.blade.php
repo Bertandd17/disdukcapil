@@ -63,6 +63,9 @@ window.SwalHelper = {
         Swal.close();
     },
     success: function(message = 'Berhasil!') {
+        if (window.Toast && typeof Toast.sukses === 'function') {
+            return Toast.sukses(message);
+        }
         Swal.fire({
             icon: 'success',
             title: message,

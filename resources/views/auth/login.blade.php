@@ -385,7 +385,5 @@
     </script>
 <script src="@assetV('js/page-loading.js')"></script>
 <script src="@assetV('js/style-guide-enhancer.js')"></script>
-    {{-- SweetAlert Final Fix --}}
-    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 </body>
 </html>

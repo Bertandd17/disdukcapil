@@ -1685,15 +1685,7 @@
  copyBtn.classList.remove('from-gray-100', 'to-gray-200', 'hover:from-gray-200', 'hover:to-gray-300');
  copyBtn.classList.add('from-green-500', 'to-green-600', 'text-white');
  
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: 'Nomor antrian ' + ticketNumber + ' telah disalin',
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end',
- });
+ Toast.sukses('Nomor antrian ' + ticketNumber + ' telah disalin.');
  
  setTimeout(function() {
  copyBtn.innerHTML = originalText;
@@ -1710,15 +1702,7 @@
  textarea.select();
  try {
  document.execCommand('copy');
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: 'Nomor antrian ' + ticketNumber + ' telah disalin',
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end',
- });
+ Toast.sukses('Nomor antrian ' + ticketNumber + ' telah disalin.');
  } catch (err) {
  Swal.fire({
  icon: 'error',
@@ -2093,15 +2077,7 @@
  window.copyNomorAntrianToClipboard = function(text) {
  if (navigator.clipboard && navigator.clipboard.writeText) {
  navigator.clipboard.writeText(text).then(() => {
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: `Nomor antrian ${text} telah disalin`,
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end'
- });
+ Toast.sukses('Nomor antrian ' + text + ' telah disalin.');
  }).catch(() => {
  fallbackCopyNomor(text);
  });
@@ -2119,15 +2095,7 @@
  textarea.select();
  try {
  document.execCommand('copy');
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: `Nomor antrian ${text} telah disalin`,
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end'
- });
+ Toast.sukses('Nomor antrian ' + text + ' telah disalin.');
  } catch (err) {
  Swal.fire({
  icon: 'error',

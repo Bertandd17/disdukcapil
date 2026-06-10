@@ -488,7 +488,7 @@
                     .then(r => r.json())
                     .then(r => {
                         if (r.success) {
-                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 5000 });
+                            Toast.sukses(r.message || 'Data berhasil diperbarui.');
                             setTimeout(() => { window.location.reload(); }, 1000);
                         }
                     });

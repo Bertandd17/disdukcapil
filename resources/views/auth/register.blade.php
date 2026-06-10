@@ -11,9 +11,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style-guide.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="@assetV('css/page-loading.css')">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
+    <script src="@assetV('js/swal-final-fix.js')"></script>
+    <script src="@assetV('js/toast-disdukcapil.js')"></script>
 
     <script>
         tailwind.config = {
@@ -221,9 +224,7 @@
         </div>
     </div>
 
-    <!-- Load SweetAlert Helper Global -->
-    <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
+    <!-- Load SweetAlert Helper Global (sudah dimuat di head) -->
 
     <script>
         // Toggle Password Visibility
@@ -285,15 +286,15 @@
             }
         });
 
-        // Form submission dengan SweetAlert Helper
+        // Form submission dengan Notifikasi
         const registerForm = document.getElementById('registerForm');
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const submitBtn = this.querySelector('button[type="submit"]');
 
-            // Tampilkan konfirmasi menggunakan helper global
-            SwalHelper.confirm(
+            // Tampilkan konfirmasi menggunakan API Notifikasi
+            Notifikasi.confirm(
                 'Konfirmasi Registrasi',
                 'Pastikan semua data yang Anda masukkan sudah benar. Registrasi hanya dapat dilakukan sekali. Lanjutkan?',
                 function() {
@@ -301,8 +302,8 @@
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Memproses...';
 
-                    // Tampilkan loading menggunakan helper global
-                    SwalHelper.loading('Memproses Registrasi', 'Sedang membuat akun admin...');
+                    // Tampilkan loading menggunakan API Notifikasi
+                    Notifikasi.loading('Memproses Registrasi', 'Sedang membuat akun admin...');
 
                     // Submit form dengan delay untuk update UI
                     setTimeout(() => {
@@ -314,18 +315,19 @@
 
         // Tampilkan pesan error/success dari session (jika ada)
         @if(session('error'))
-        SwalHelper.error(
-            'Registrasi gagal.',
-            @json(session('error_solution') ?? session('error') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.')
+        Notifikasi.error(
+            'Registrasi Gagal',
+            @json(session('error') ?? 'Terjadi kesalahan saat registrasi.'),
+            @json(session('error_solution') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.')
         );
         @endif
 
         @if(session('success'))
-        SwalHelper.success(@json(session('success')));
+        Notifikasi.success(@json(session('success')));
         @endif
 
         @if(session('warning'))
-        SwalHelper.warning(@json(session('warning')));
+        Notifikasi.warning(@json(session('warning')));
         @endif
     </script>
 

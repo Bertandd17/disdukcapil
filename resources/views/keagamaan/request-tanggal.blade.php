@@ -629,6 +629,11 @@ const AppSwal = {
             return;
         }
 
+        if (window.Toast && typeof Toast.sukses === 'function') {
+            Toast.sukses(message || 'Operasi berhasil dilakukan.');
+            return;
+        }
+
         Swal.fire({
             icon: 'success',
             title: title || 'Berhasil',

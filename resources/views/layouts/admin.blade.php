@@ -590,8 +590,20 @@
     <script src="{{ asset('js/page-loading.js') }}?v={{ md5_file(base_path('public/js/page-loading.js')) }}"></script>
     <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ md5_file(base_path('public/js/style-guide-enhancer.js')) }}"></script>
 
+    {{-- Toast disdukcapil (API window.Toast.*) --}}
+    <script src="{{ asset('js/toast-disdukcapil.js') }}?v={{ md5_file(base_path('public/js/toast-disdukcapil.js')) }}"></script>
+
     {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
     <script src="{{ asset('js/swal-final-fix.js') }}?v={{ md5_file(base_path('public/js/swal-final-fix.js')) }}"></script>
+
+    <script>
+        window.__flashData = {
+            success : @json(session('success')),
+            error   : @json(session('error')),
+            warning : @json(session('warning')),
+            info    : @json(session('info'))
+        };
+    </script>
 
     {{-- @stack dipanggil SETELAH SwalHelper didefinisikan --}}
     @stack('scripts')

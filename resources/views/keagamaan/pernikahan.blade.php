@@ -609,28 +609,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  SCRIPTS
 ===================================================================== --}}
 <script>
-if (typeof SwalHelper === 'undefined') {
- var SwalHelper = {
- loading: function(msg) {
- if (typeof Swal !== 'undefined') {
- Swal.fire({ title: msg || 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
- }
- },
- close: function() {
- if (typeof Swal !== 'undefined') Swal.close();
- },
- success: function(msg) {
- if (typeof Swal !== 'undefined') {
- Swal.fire({ icon: 'success', title: 'Berhasil', text: msg, timer: 2000, showConfirmButton: false });
- } else { alert(msg); }
- },
- error: function(msg) {
- if (typeof Swal !== 'undefined') {
- Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
- } else { alert('Error: ' + msg); }
- }
- };
-}
+// SwalHelper didefinisikan global di layout keagamaan (tidak boleh duplikat di sini)
 
 let selectedPernikahanId = null;
 let currentPernikahanData = null;
@@ -936,11 +915,12 @@ function submitKonfirmasi() {
  SwalHelper.close();
  if (data.success) {
  closeKonfirmasiModal();
- const Toast = Swal.mixin({
- toast: true, position: 'top-end',
- showConfirmButton: false, timer: 5000, timerProgressBar: true, backdrop: false,
- });
- Toast.fire({ icon: 'success', title: data.message || 'Konfirmasi berhasil', iconColor: '#22c55e' });
+ if (window.Toast && typeof Toast.sukses === 'function') {
+ Toast.sukses(data.message || 'Konfirmasi berhasil.');
+ } else {
+ console.warn('[pernikahan] window.Toast belum tersedia — fallback ke console.');
+ console.info(data.message || 'Konfirmasi berhasil.');
+ }
  updateUIAfterConfirm(selectedPernikahanId, 'approve');
  } else {
  SwalHelper.error(data.message || 'Gagal memproses konfirmasi');
@@ -988,11 +968,11 @@ function submitTolak() {
  SwalHelper.close();
  if (data.success) {
  closeTolakModal();
- const Toast = Swal.mixin({
- toast: true, position: 'top-end',
- showConfirmButton: false, timer: 5000, timerProgressBar: true, backdrop: false,
+ Toast.warning({
+ judul: 'Permohonan Ditolak',
+ masalah: data.message || 'Permohonan pernikahan berhasil ditolak.',
+ solusi: 'Status antrian akan diperbarui otomatis pada daftar permohonan.'
  });
- Toast.fire({ icon: 'warning', title: data.message || 'Permohonan ditolak', iconColor: '#eab308' });
  updateUIAfterConfirm(selectedPernikahanId, 'reject');
  } else {
  SwalHelper.error(data.message || 'Gagal memproses penolakan');
@@ -1125,12 +1105,15 @@ async function checkStatusUpdates() {
  knownStatuses.set(update.pernikahan_id, newStatus);
 
  if (newStatus === 'TANGGAL_DISETUJUI') {
- const Toast = Swal.mixin({
+ // Pakai Swal.mixin langsung (bukan window.Toast) karena notifikasi ini
+ // MEMERLUKAN tombol "Lihat" (showConfirmButton:true) yang tidak disupport
+ // oleh window.Toast (window.Toast dikonfigurasi showConfirmButton:false).
+ const Notif = Swal.mixin({
  toast: true, position: 'top-end',
  showConfirmButton: true, confirmButtonText: 'Lihat',
  confirmButtonColor: '#16a34a', timer: 0, backdrop: false,
  });
- Toast.fire({
+ Notif.fire({
  icon: 'success',
  title: 'Tanggal Disetujui!',
  html: `

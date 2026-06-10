@@ -279,22 +279,23 @@
         }
 
         function showToast(type, message) {
-            if (window.SwalHelper && typeof window.SwalHelper[type] === 'function') {
-                window.SwalHelper[type](message);
+            if (window.Toast && typeof window.Toast === 'object') {
+                if (type === 'success') { window.Toast.sukses(message); return; }
+                if (type === 'error') {
+                    window.Toast.error({
+                        judul  : 'Operasi Akun Gagal',
+                        masalah: message || 'Terjadi kesalahan pada server.',
+                        solusi : 'Periksa data yang dimasukkan dan coba lagi. Jika masalah berlanjut, hubungi administrator.'
+                    });
+                    return;
+                }
+                if (type === 'warning') { window.Toast.warning({ judul:'Perhatian', masalah:message, solusi:'Periksa kembali data Anda.' }); return; }
+                window.Toast.info(message);
                 return;
             }
-
             if (window.Swal) {
-                Swal.fire({
-                    icon: type,
-                    title: message,
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: type === 'success' ? 3000 : 5000,
-                    timerProgressBar: true,
-                    backdrop: false
-                });
+                console.warn('Toast global belum siap, fallback ke Swal.fire toast.');
+                Swal.fire({ icon: type, title: message, toast: true, position: 'top-end', showConfirmButton: false, timer: 4000 });
             }
         }
 

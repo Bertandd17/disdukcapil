@@ -193,7 +193,19 @@
     <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
     <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
 
+    {{-- Toast disdukcapil (API window.Toast.*) --}}
+    <script src="{{ asset('js/toast-disdukcapil.js') }}?v={{ filemtime(public_path('js/toast-disdukcapil.js')) }}"></script>
+
     {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
     <script src="{{ asset('js/swal-final-fix.js') }}?v={{ filemtime(public_path('js/swal-final-fix.js')) }}"></script>
+
+    <script>
+        window.__flashData = {
+            success : @json(session('success')),
+            error   : @json(session('error')),
+            warning : @json(session('warning')),
+            info    : @json(session('info'))
+        };
+    </script>
 </body>
 </html>

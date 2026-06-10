@@ -349,8 +349,9 @@
         });
     </script>
 
-    {{-- Custom toast (override SwalHelper toast methods) --}}
-    <script src="{{ asset('js/disdukcapil-toast.js') }}"></script>
+    {{-- Toast API (window.Toast: sukses/error/warning/info) --}}
+    <script src="{{ asset('js/toast-disdukcapil.js') }}?v={{ filemtime(public_path('js/toast-disdukcapil.js')) }}"></script>
+
     <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
     <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
 

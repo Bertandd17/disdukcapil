@@ -285,24 +285,11 @@
         reveal();
     })();
 
-    @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: @json(session('success')),
-            showConfirmButton: false,
-            timer: 2000,
-            toast: true,
-            position: 'top-end'
-        });
-    @endif
-
     @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: @json(session('error')),
-            confirmButtonText: 'OK'
+        Toast.error({
+            judul  : 'Gagal Memuat Data Organisasi',
+            masalah: @json(session('error')),
+            solusi : 'Periksa koneksi Anda dan coba lagi.'
         });
     @endif
 </script>

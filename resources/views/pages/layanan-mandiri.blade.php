@@ -684,61 +684,9 @@ $layananById = \App\Models\LayananModel::whereIn('layanan_id', collect($kategori
     }
 
     /* ═══════════════════════════════════════════════════════════
-       TOAST COLORS — Hijau/Kuning/Merah/Biru sesuai tipe
-       Class disuntik via customClass.popup = swal-toast-{type}
-       dari helper showToast() di bawah.
+       TOAST styling dipindahkan ke public/css/swal-final-fix.css
+       dan di-render oleh public/js/toast-disdukcapil.js (window.Toast).
        ═══════════════════════════════════════════════════════════ */
-    .swal-toast-success {
-        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #15803d !important;
-    }
-    .swal-toast-success .swal2-title,
-    .swal-toast-success .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-success .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-warning {
-        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b45309 !important;
-    }
-    .swal-toast-warning .swal2-title,
-    .swal-toast-warning .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-warning .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-error {
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b91c1c !important;
-    }
-    .swal-toast-error .swal2-title,
-    .swal-toast-error .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-error .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-info {
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #1d4ed8 !important;
-    }
-    .swal-toast-info .swal2-title,
-    .swal-toast-info .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-info .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
 
     /* ═══════════════════════════════════════════════════════════
        General styles
@@ -1226,7 +1174,14 @@ function validateAndGoStep3() {
         }
     });
     if (hasEmpty) errMsg = 'Ada Dokumen yang Perlu dilengkapi';
-    if (!valid) { showToast(errMsg, 'warning'); return; }
+    if (!valid) {
+        Toast.warning({
+            judul  : 'Dokumen Belum Lengkap',
+            masalah: 'Nomor NIK/KK harus 16 angka dan semua kolom wajib harus diisi.',
+            solusi : 'Lengkapi kolom yang ditandai merah, lalu coba lagi.'
+        });
+        return;
+    }
     goToStep(3);
 }
 
@@ -1246,7 +1201,14 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) { showToast('Ada Dokumen yang Perlu dilengkapi', 'warning'); return; }
+    if (!valid) {
+        Toast.warning({
+            judul  : 'Berkas Belum Lengkap',
+            masalah: 'Ada dokumen wajib yang belum diunggah: ' + (missingLabel || '(tidak diketahui)') + '.',
+            solusi : 'Unggah dokumen yang ditandai merah, lalu lanjutkan ke langkah berikutnya.'
+        });
+        return;
+    }
     goToStep(4);
 }
 
@@ -1332,7 +1294,7 @@ function onLivenessPassed() {
     video.parentNode.insertBefore(preview, video);
     document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
     document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
-    showToast('Verifikasi Wajah Berhasil', 'success');
+    Toast.sukses('Verifikasi wajah berhasil. Lanjut ke langkah berikutnya.');
     setTimeout(function() { goToStep(5); }, 900);
 }
 function setOverlay(text) { document.getElementById('liveness-overlay').textContent = text; }
@@ -1462,11 +1424,18 @@ function stripToastHtml(message) {
 }
 
 function showErrorToast(problem, solution, title, timer) {
+    if (typeof window.Toast === 'undefined') {
+        console.error('[LayananMandiri] window.Toast belum tersedia.');
+        return;
+    }
     title = title || 'Terjadi kesalahan';
-    timer = timer || 6000;
     var cleanProblem  = stripToastHtml(problem  || 'Terjadi kesalahan saat memproses permintaan.');
     var cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
-    return showToast(cleanProblem + ' ' + cleanSolution, 'error');
+    return Toast.error({
+        judul  : title.substring(0, 60),
+        masalah: cleanProblem,
+        solusi : cleanSolution
+    });
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1531,7 +1500,7 @@ function autoFillFromAntrian(nomorAntrian) {
                 if (nikInput    && data.data.nik)          nikInput.value    = data.data.nik;
                 if (namaInput   && data.data.nama_lengkap) namaInput.value   = data.data.nama_lengkap;
                 if (alamatInput && data.data.alamat)       alamatInput.value = data.data.alamat;
-                showToast('Berhasil Mengambil Data dari Nomor Antrian', 'success');
+                Toast.sukses('Berhasil mengambil data dari nomor antrian.');
             }
         })
         .catch(function(error) {
@@ -1575,9 +1544,25 @@ function validateSelectedFile(input) {
     if (!file) return true;
     if (isPdfOnlyInput(input)) {
         var isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-        if (!isPdf) { input.value = ''; showToast('Hanya file PDF yang diperbolehkan', 'error'); return false; }
+        if (!isPdf) {
+            input.value = '';
+            Toast.error({
+                judul  : 'Format File Tidak Didukung',
+                masalah: 'File yang diunggah bukan PDF.',
+                solusi : 'Unggah file berformat PDF (bukan foto atau dokumen lain).'
+            });
+            return false;
+        }
     }
-    if (file.size > 2 * 1024 * 1024) { input.value = ''; showToast('Maksimal ukuran file: 2MB', 'error'); return false; }
+    if (file.size > 2 * 1024 * 1024) {
+        input.value = '';
+        Toast.error({
+            judul  : 'File Terlalu Besar',
+            masalah: 'Ukuran file melebihi batas 2MB.',
+            solusi : 'Kompres file PDF Anda dan unggah ulang.'
+        });
+        return false;
+    }
     return true;
 }
 function clearFileInput(fieldName) {
@@ -1588,28 +1573,9 @@ function clearFileInput(fieldName) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Toast helper
+   Toast helper — gunakan window.Toast dari public/js/toast-disdukcapil.js
+   (helper lokal showToast() sudah dihapus; semua notifikasi via Toast API)
    ═══════════════════════════════════════════════════════════════════ */
-function showToast(message, type) {
-    type = type || 'info';
-    var iconMap = { success:'success', error:'error', warning:'warning', info:'info' };
-    Swal.mixin({
-        toast             : true,
-        position          : 'top-end',
-        showConfirmButton : false,
-        showDenyButton    : false,
-        showCancelButton  : false,
-        timer             : 4000,
-        timerProgressBar  : true,
-        icon              : iconMap[type] || 'info',
-        title             : message,
-        customClass       : { popup: 'swal-toast-' + (type || 'info') },
-        didOpen           : function(toast) {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
-    }).fire();
-}
 
 function formatValidationErrors(errors) {
     if (!errors || typeof errors !== 'object') return '';
@@ -1663,7 +1629,11 @@ async function handleKirimPengajuan() {
 
     /* Guard: verifikasi wajah harus selesai */
     if (livenessValue !== '1') {
-        showToast('Harap selesaikan verifikasi wajah terlebih dahulu.', 'error');
+        Toast.error({
+            judul  : 'Verifikasi Wajah Belum Selesai',
+            masalah: 'Sistem belum dapat memverifikasi wajah Anda.',
+            solusi : 'Selesaikan verifikasi wajah di langkah sebelumnya, lalu coba kirim lagi.'
+        });
         goToStep(4);
         return;
     }
@@ -1714,9 +1684,17 @@ async function handleKirimPengajuan() {
                 Swal.close();
                 if (btnSubmit) btnSubmit.disabled = false;
                 if (checkData.error_code === 'DAILY_LIMIT_EXCEEDED') {
-                    showToast(checkData.message || 'Anda sudah mengajukan layanan ini hari ini.', 'warning');
+                    Toast.warning({
+                        judul  : 'Sudah Pernah Mengajukan Hari Ini',
+                        masalah: checkData.message || 'Anda sudah mengajukan layanan ini hari ini.',
+                        solusi : 'Cek status pengajuan Anda di menu "Lacak Antrian" atau coba lagi besok.'
+                    });
                 } else {
-                    showToast(checkData.message || 'Terjadi kesalahan validasi', 'error');
+                    Toast.error({
+                        judul  : 'Validasi Gagal',
+                        masalah: checkData.message || 'Terjadi kesalahan validasi.',
+                        solusi : 'Periksa data Anda, lalu coba kirim ulang.'
+                    });
                 }
                 return;
             }
@@ -1777,13 +1755,21 @@ async function handleKirimPengajuan() {
             return;
         }
 
-        showToast(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'error');
+        Toast.error({
+            judul  : 'Pengajuan Gagal Dikirim',
+            masalah: data.message || 'Terjadi kesalahan saat mengirim pengajuan.',
+            solusi : 'Periksa data dan koneksi Anda, lalu coba kirim ulang.'
+        });
     })
     .catch(function(error) {
         Swal.close();
         if (btnSubmit) btnSubmit.disabled = false;
         console.error('Submit error:', error);
-        showToast('Gagal mengirim pengajuan. Silakan coba lagi.', 'error');
+        Toast.error({
+            judul  : 'Gagal Mengirim Pengajuan',
+            masalah: 'Tidak dapat terhubung ke server.',
+            solusi : 'Periksa koneksi internet Anda, lalu coba lagi.'
+        });
     });
 }
 
@@ -1800,13 +1786,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }, true); /* capture phase — mencegat sebelum listener lain */
     }
 
-    @if(session('error'))
-    showToast('{!! addslashes(session("error")) !!}', 'error');
-    @endif
+    /* Flash session ditangani otomatis oleh window.__flashData di layout */
 
-    @if(session('success'))
-    showToast('{{ addslashes(session("success")) }}', 'success');
-    @endif
+    if (typeof window.Toast !== 'undefined' && window.__flashData) {
+        if (window.__flashData.error)   Toast.error({   judul: 'Terjadi Kesalahan', masalah: window.__flashData.error,   solusi: 'Periksa kembali dan coba lagi.' });
+        if (window.__flashData.warning) Toast.warning({ judul: 'Perhatian',          masalah: window.__flashData.warning, solusi: 'Tinjau kembali informasi yang ditampilkan.' });
+        if (window.__flashData.info)    Toast.info(window.__flashData.info);
+        if (window.__flashData.success) Toast.sukses(window.__flashData.success);
+    }
 
 }); /* end DOMContentLoaded */
 </script>

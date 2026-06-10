@@ -1153,23 +1153,22 @@ async function executeConfirm() {
 }
 
 function showToast(type, message) {
- const Toast = Swal.mixin({
- toast: true,
- position: 'top-end',
- showConfirmButton: false,
- timer: 5000,
- timerProgressBar: true,
- background: '#ffffff',
- backdrop: false,
- showClass: { popup: 'swal2-show', backdrop: '' },
- hideClass: { popup: 'swal2-hide', backdrop: '' }
- });
-
- Toast.fire({
- icon: type === 'success' ? 'success' : 'error',
- title: message,
- iconColor: type === 'success' ? '#22c55e' : '#ef4444'
- });
+ if (window.Toast && typeof window.Toast === 'object') {
+  if (type === 'success') { window.Toast.sukses(message); return; }
+  if (type === 'error') {
+   window.Toast.error({
+    judul  : message ? 'Operasi Gagal' : 'Terjadi Kesalahan',
+    masalah: message || 'Permintaan tidak dapat diproses oleh server.',
+    solusi : 'Periksa data permohonan dan coba lagi. Jika masalah berlanjut, hubungi administrator.'
+   });
+   return;
+  }
+  if (type === 'warning') { window.Toast.warning({ judul:'Perhatian', masalah:message, solusi:'Periksa kembali data Anda.' }); return; }
+  window.Toast.info(message);
+  return;
+ }
+ /* fallback aman: gunakan Toast.info, tanpa Swal.fire toast */
+ window.Toast.info(message);
 }
 
 async function updateUIAfterAction(pernikahanId, action) {
