@@ -420,10 +420,10 @@
     <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
     <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
 
+    @stack('scripts')
+
     {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
     <script src="{{ asset('js/swal-final-fix.js') }}?v={{ filemtime(public_path('js/swal-final-fix.js')) }}"></script>
-
-    @stack('scripts')
 
 </body>
 </html>

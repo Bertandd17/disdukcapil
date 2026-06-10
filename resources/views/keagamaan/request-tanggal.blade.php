@@ -625,7 +625,9 @@ const AppSwal = {
 
     success: function(message, title) {
         if (!window.Swal || typeof Swal.fire !== 'function') {
-            alert(message || 'Berhasil');
+            if (window.Toast && typeof Toast.sukses === 'function') {
+                Toast.sukses(message || 'Operasi berhasil dilakukan.');
+            }
             return;
         }
 
@@ -648,7 +650,13 @@ const AppSwal = {
 
     error: function(message, title) {
         if (!window.Swal || typeof Swal.fire !== 'function') {
-            alert(message || 'Terjadi kesalahan');
+            if (window.Toast && typeof Toast.error === 'function') {
+                Toast.error({
+                    judul  : title || 'Terjadi Kesalahan',
+                    masalah: message || 'Sistem tidak dapat memproses permintaan.',
+                    solusi : 'Muat ulang halaman dan coba lagi.'
+                });
+            }
             return;
         }
 

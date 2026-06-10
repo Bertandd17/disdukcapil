@@ -593,9 +593,6 @@
     {{-- Toast disdukcapil (API window.Toast.*) --}}
     <script src="{{ asset('js/toast-disdukcapil.js') }}?v={{ md5_file(base_path('public/js/toast-disdukcapil.js')) }}"></script>
 
-    {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
-    <script src="{{ asset('js/swal-final-fix.js') }}?v={{ md5_file(base_path('public/js/swal-final-fix.js')) }}"></script>
-
     <script>
         window.__flashData = {
             success : @json(session('success')),
@@ -607,6 +604,9 @@
 
     {{-- @stack dipanggil SETELAH SwalHelper didefinisikan --}}
     @stack('scripts')
+
+    {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
+    <script src="{{ asset('js/swal-final-fix.js') }}?v={{ md5_file(base_path('public/js/swal-final-fix.js')) }}"></script>
 
 </body>
 </html>

@@ -352,7 +352,9 @@ const AppSwal = {
 
     success: function(message, title) {
         if (!window.Swal || typeof Swal.fire !== 'function') {
-            alert(message || 'Berhasil');
+            if (window.Toast && typeof Toast.sukses === 'function') {
+                return Toast.sukses(message || 'Operasi berhasil.');
+            }
             return;
         }
 
@@ -380,7 +382,13 @@ const AppSwal = {
             });
         }
         if (!window.Swal || typeof Swal.fire !== 'function') {
-            alert(message || 'Terjadi kesalahan');
+            if (window.Toast && typeof Toast.error === 'function') {
+                return Toast.error({
+                    judul  : title || 'Operasi Gagal',
+                    masalah: message || 'Terjadi kesalahan saat memproses permintaan.',
+                    solusi : 'Periksa kembali data yang dikirim, lalu coba lagi.'
+                });
+            }
             return;
         }
 
@@ -396,7 +404,13 @@ const AppSwal = {
 
     warning: function(message, title) {
         if (!window.Swal || typeof Swal.fire !== 'function') {
-            alert(message || 'Peringatan');
+            if (window.Toast && typeof Toast.warning === 'function') {
+                return Toast.warning({
+                    judul  : title || 'Peringatan',
+                    masalah: message || 'Periksa kembali data Anda.',
+                    solusi : 'Pastikan semua kolom wajib terisi dengan benar.'
+                });
+            }
             return;
         }
 

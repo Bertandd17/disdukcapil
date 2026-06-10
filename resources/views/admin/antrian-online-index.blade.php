@@ -659,7 +659,13 @@
         } else {
             // Fallback if SweetAlert is not available
             console.error('SweetAlert not available!');
-            alert('Error: SweetAlert tidak tersedia. Silakan refresh halaman.');
+            if (window.Toast && typeof Toast.error === 'function') {
+                Toast.error({
+                    judul  : 'SweetAlert Tidak Tersedia',
+                    masalah: 'Library SweetAlert gagal dimuat oleh browser.',
+                    solusi : 'Muat ulang halaman (tekan F5) untuk memuat ulang seluruh skrip.'
+                });
+            }
         }
     }
 
@@ -674,8 +680,12 @@
         if (!queueData) {
             if (typeof SwalHelper !== 'undefined') {
                 SwalHelper.modalError('Error', 'Data antrian tidak ditemukan');
-            } else {
-                alert('Data antrian tidak ditemukan');
+            } else if (window.Toast && typeof Toast.error === 'function') {
+                Toast.error({
+                    judul  : 'Data Antrian Tidak Ditemukan',
+                    masalah: 'Catatan antrian yang dipilih tidak tersedia di memori lokal.',
+                    solusi : 'Tutup detail, lalu buka kembali dari daftar antrian yang termuat.'
+                });
             }
             return;
         }

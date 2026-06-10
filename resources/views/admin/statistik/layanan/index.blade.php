@@ -476,11 +476,11 @@
             Swal.fire({
                 title: 'Hapus Data?',
                 html: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
-                icon: false,
+                icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#e5e7eb',
-                confirmButtonText: 'Konfirmasi',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Hapus!',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {

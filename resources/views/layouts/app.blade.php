@@ -151,8 +151,6 @@
         @yield('content')
     </main>
 
-    @stack('scripts')
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
@@ -195,6 +193,8 @@
 
     {{-- Toast disdukcapil (API window.Toast.*) --}}
     <script src="{{ asset('js/toast-disdukcapil.js') }}?v={{ filemtime(public_path('js/toast-disdukcapil.js')) }}"></script>
+
+    @stack('scripts')
 
     {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
     <script src="{{ asset('js/swal-final-fix.js') }}?v={{ filemtime(public_path('js/swal-final-fix.js')) }}"></script>
