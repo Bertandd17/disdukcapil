@@ -37,9 +37,9 @@ class BladeServiceProvider extends ServiceProvider
         });
 
         Blade::directive('assetV', function (string $expression): string {
-            $expression = trim($expression, "()'\" ");
+            $expression = trim($expression);
 
-            return "<?php echo app(\\App\\Support\\AssetVersion::class)->url({$expression}); ?>";
+            return "<?php echo e(app(\\App\\Support\\AssetVersion::class)->url({$expression})); ?>";
         });
     }
 }
