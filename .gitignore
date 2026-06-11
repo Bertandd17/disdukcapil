@@ -74,8 +74,7 @@ yarn-error.log
 /scripts/run_ocr.py
 /scripts/PANDUAN_SETUP_OCR.txt
 
-# Railway / OCR engine (jalan di Railway, tidak perlu di Hostinger)
-/railway/
+# Railway / OCR engine (file yang di-deploy hanya via image / runtime khusus)
 /nixpacks.toml
 /Procfile
 /runtime.txt
