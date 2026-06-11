@@ -1,8 +1,8 @@
 {
   "$schema": "https://railway.com/railway.schema.json",
   "deploy": {
-    "preDeployCommand": "sh railway/init-app.sh",
-    "startCommand": "sh railway/start.sh",
+    "preDeployCommand": "bash /app/railway/init-app.sh",
+    "startCommand": "bash /app/railway/start.sh",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
