@@ -232,7 +232,10 @@
       "Bash(rm -f sweetalert-disdukcapil.js)",
       "Bash(ls *.js)",
       "Bash(exist \"D:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\\\\public\\\\css\\\\swal-final-fix.css\" del \"D:\\\\Semester 6\\\\PA 3\\\\Project\\\\PA3\\\\public\\\\css\\\\swal-final-fix.css\")",
-      "Bash(awk -F\"'\" '{print $2}')"
+      "Bash(awk -F\"'\" '{print $2}')",
+      "Bash(git ls-remote *)",
+      "Bash(set GIT_EXEC_PATH=C:/Program Files/Git/mingw64/libexec/git-core)",
+      "Bash(GIT_EXEC_PATH=\"/C/Program Files/Git/mingw64/libexec/git-core\" git push *)"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
