@@ -546,6 +546,7 @@
                 text: confirmationText,
                 icon: hasUploads ? 'question' : 'warning',
                 showCancelButton: true,
+                showDenyButton: false,
                 confirmButtonColor: hasUploads ? '#16a34a' : '#f59e0b',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',

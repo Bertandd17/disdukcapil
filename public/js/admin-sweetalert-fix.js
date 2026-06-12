@@ -91,11 +91,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // HAPUS: Event listener mousemove yang menyebabkan popup hilang saat cursor bergerak
     // HAPUS: Event listener click dan keydown yang override native SweetAlert behavior
 
-    // Override Swal.fire untuk menyimpan referensi
+    // Override Swal.fire: simpan reference + paksa sembunyikan deny button
     if (typeof Swal !== 'undefined') {
         const originalFire = Swal.fire;
         Swal.fire = function() {
+            // PATCH: paksa showDenyButton = false & buang deny button dari DOM setelah render
+            if (arguments.length === 1 && typeof arguments[0] === 'object' && arguments[0] !== null) {
+                arguments[0].showDenyButton = false;
+            } else if (arguments.length >= 2) {
+                arguments[1] = Object.assign({}, arguments[1] || {}, { showDenyButton: false });
+            }
+
             const result = originalFire.apply(this, arguments);
+
+            // Hapus deny button dari DOM segera setelah render
+            if (result && typeof result.then === 'function') {
+                result.then(() => {
+                    setTimeout(() => {
+                        document.querySelectorAll('.swal2-deny').forEach(el => el.remove());
+                    }, 0);
+                });
+            } else {
+                setTimeout(() => {
+                    document.querySelectorAll('.swal2-deny').forEach(el => el.remove());
+                }, 0);
+            }
+
             window.SwalInstance = result;
             return result;
         };

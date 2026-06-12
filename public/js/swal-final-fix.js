@@ -12,6 +12,24 @@
 
     var _originalFire = Swal.fire.bind(Swal);
 
+    // ── Penapis tombol deny visual secara global ──────────────────────
+    function stripDenyButton() {
+        try {
+            var deny = Swal.getDenyButton && Swal.getDenyButton();
+            if (deny) {
+                deny.style.setProperty('display', 'none', 'important');
+                deny.style.setProperty('visibility', 'hidden', 'important');
+                deny.setAttribute('aria-hidden', 'true');
+                deny.setAttribute('tabindex', '-1');
+            }
+            document.querySelectorAll('.swal2-deny').forEach(function(el) {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('visibility', 'hidden', 'important');
+                el.setAttribute('aria-hidden', 'true');
+            });
+        } catch (e) { /* ignore */ }
+    }
+
     Swal.fire = function(params) {
         if (!params || typeof params !== 'object') {
             return _originalFire(params);
@@ -47,6 +65,18 @@
             if (params.cancelButtonText && /No\b/i.test(params.cancelButtonText)) {
                 params.cancelButtonText = 'Batal';
             }
+            // STRIP: sembunyikan deny button dari DOM agar tidak tampil
+            var origDidOpen = params.didOpen || function() {};
+            params.didOpen = function(toast) {
+                origDidOpen(toast);
+                setTimeout(stripDenyButton, 0);
+            };
+            // Juga pasang di willOpen untuk kasus modal tanpa didOpen
+            var origWillOpen = params.willOpen || function() {};
+            params.willOpen = function(toast) {
+                origWillOpen(toast);
+                setTimeout(stripDenyButton, 50);
+            };
         }
 
         try {
@@ -86,6 +116,32 @@
             document.querySelectorAll('.swal2-container').forEach(function(el) { el.remove(); });
         }
     };
+
+    // ── MutationObserver untuk menangkap deny button yang ditambahkan setelahnya ──
+    if (typeof MutationObserver !== 'undefined') {
+        var _denyObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(m) {
+                m.addedNodes.forEach(function(node) {
+                    if (node && node.nodeType === 1) {
+                        if (node.classList && node.classList.contains('swal2-deny')) {
+                            node.style.setProperty('display', 'none', 'important');
+                            node.style.setProperty('visibility', 'hidden', 'important');
+                        }
+                        if (node.querySelectorAll) {
+                            node.querySelectorAll('.swal2-deny').forEach(function(el) {
+                                el.style.setProperty('display', 'none', 'important');
+                                el.style.setProperty('visibility', 'hidden', 'important');
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        _denyObserver.observe(document.documentElement || document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
 
     console.log('[SwalFix] Loaded — Disdukcapil Toba v1.0');
 })();

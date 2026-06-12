@@ -270,6 +270,7 @@
                 html: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
                 icon: false,
                 showCancelButton: true,
+                showDenyButton: false,
                 confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',

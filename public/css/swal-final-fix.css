@@ -21,3 +21,10 @@
 
 .swal2-html-container * { font-size: inherit !important; }
 .swal2-loading { display: inline-block !important; }
+
+/* Paksa sembunyikan deny button (pengaman terakhir agar tidak ada tombol "No" ekstra) */
+.swal2-deny {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}

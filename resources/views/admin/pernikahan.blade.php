@@ -351,6 +351,7 @@ if (typeof window.SwalHelper === 'undefined') {
                 icon : 'question',
                 showCancelButton : true,
                 showConfirmButton: true,
+                showDenyButton   : false,
                 confirmButtonText: 'Ya, Lanjutkan',
                 cancelButtonText : 'Batal',
                 confirmButtonColor: '#0052CC',
