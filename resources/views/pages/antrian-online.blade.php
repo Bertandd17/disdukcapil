@@ -1521,16 +1521,21 @@ var currentStep = hasPernikahan
  }
  }
 
+ // Override warna header card untuk status Ditolak: konsisten merah
+ var headerIconGradient = isDitolak ? 'from-red-500 to-rose-600' : 'from-green-500 to-emerald-600';
+ var headerAccentText = isDitolak ? 'text-red-600' : 'text-green-600';
+ var headerAccentBg = isDitolak ? 'bg-red-100' : 'bg-green-100';
+
  return '<div class="search-result-card bg-white border-2 ' + statusStyle.border + ' rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer" style="animation-delay: ' + (index * 0.1) + 's" data-card-antrian-key="' + regKey + '">' +
  '<div class="flex items-center gap-2 mb-3">' +
- '<div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg">' +
+ '<div class="w-12 h-12 bg-gradient-to-br ' + headerIconGradient + ' rounded-xl flex items-center justify-center text-white shadow-lg">' +
  '<i class="fas fa-file-alt text-xl"></i>' +
  '</div>' +
  '<div class="flex-1 min-w-0">' +
  '<div class="flex items-center gap-2 mb-1">' +
- '<span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded uppercase tracking-wide">' + namaLayanan + '</span>' +
+ '<span class="text-xs font-semibold ' + headerAccentText + ' ' + headerAccentBg + ' px-2 py-0.5 rounded uppercase tracking-wide">' + namaLayanan + '</span>' +
  '</div>' +
- '<h3 class="font-bold text-xl text-green-600 truncate">' + nomorAntrian + '</h3>' +
+ '<h3 class="font-bold text-xl ' + headerAccentText + ' truncate">' + nomorAntrian + '</h3>' +
  '<p class="text-gray-800 font-semibold truncate">' + namaLengkap + '</p>' +
  '</div>' +
  '<div class="flex items-center gap-2 px-3 py-2 rounded-full ' + statusStyle.bg + ' ' + statusStyle.text + ' border ' + statusStyle.border + ' font-bold text-xs shadow-sm whitespace-nowrap">' +
