@@ -341,7 +341,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/detail/{uuid}', [LahirMatiController::class, 'detail'])->name('admin.lahir-mati.detail');
             Route::post('/{uuid}/status', [LahirMatiController::class, 'updateStatus'])->name('admin.lahir-mati.status');
             Route::post('/{uuid}/upload-berkas', [LahirMatiController::class, 'uploadBerkasFinal'])->name('admin.lahir-mati.upload-berkas');
-            Route::get('/berkas/{uuid}/lihat/{field}', [LahirMatiController::class, 'lihatBerkas'])->name('admin.lihat-berkas-lahir-mati');
+            Route::get('/admin/berkas/{uuid}/lihat/{field}', [LahirMatiController::class, 'lihatBerkas'])->name('admin.lihat-berkas-kematian');
         });
 
         // Akte Kelahiran

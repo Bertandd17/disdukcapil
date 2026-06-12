@@ -161,8 +161,8 @@
         }
 
         // Show countdown modal
-        window.SwalHelper.konfirmasiDisdukcapil({
-            judul: 'Peringatan Inaktivitas',
+        Swal.fire({
+            title: 'Peringatan Inaktivitas',
             html: `
                 <div class="text-center">
                     <p class="text-gray-600 mb-4">
@@ -179,17 +179,30 @@
                     </p>
                 </div>
             `,
-            tipe: 'warning',
-            labelOk: 'Lanjutkan Sesi',
-            labelBatal: 'Logout Sekarang',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Lanjutkan Sesi',
+            cancelButtonText: 'Logout Sekarang',
             confirmButtonColor: '#2563eb',
             cancelButtonColor: '#dc2626',
             allowOutsideClick: false,
             allowEscapeKey: false,
-            onKonfirmasi: function () {
-                handleContinueSession();
+            showClass: {
+                popup: 'swal2-show',
+                backdrop: 'swal2-backdrop-show',
+                icon: 'swal2-icon-show'
             },
-            onBatal: function () {
+            hideClass: {
+                popup: 'swal2-hide',
+                backdrop: 'swal2-backdrop-hide',
+                icon: 'swal2-icon-hide'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User clicked "Lanjutkan Sesi"
+                handleContinueSession();
+            } else if (result.isDismissed || result.isDenied) {
+                // User clicked "Logout Sekarang" or dismissed
                 handleLogoutNow();
             }
         });

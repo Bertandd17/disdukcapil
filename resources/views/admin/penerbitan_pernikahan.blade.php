@@ -206,6 +206,7 @@
  ]);
  $canUploadFinal = in_array($item->status, [
  \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
+ \App\Models\LayananPernikahan::STATUS_SELESAI,
  ]);
  @endphp
  <div class="p-3 hover:bg-gray-50 transition-colors cursor-pointer"

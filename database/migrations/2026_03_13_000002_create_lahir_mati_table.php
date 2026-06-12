@@ -37,7 +37,6 @@ return new class extends Migration
             $table->string('ktp_saksi2')->nullable();
             $table->string('formulir_f201')->nullable();
             $table->string('surat_keterangan_lahir_mati')->nullable();
-            $table->string('foto_wajah')->nullable();
             
             // Status dan metadata
             $table->enum('status', ['Menunggu','Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak', 'Siap Pengambilan', 'Tolak'])

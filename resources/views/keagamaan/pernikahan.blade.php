@@ -2,12 +2,17 @@
 
 @section('title', 'Permintaan Nikah')
 
+{{-- =====================================================================
+ PUSH: CSS & JS dependencies (FullCalendar + SweetAlert2 jika belum)
+ Tambahkan di @push agar tidak bentrok dengan layout
+ ===================================================================== --}}
 @push('styles')
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css">
 @endpush
 
 @push('scripts')
  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+ {{-- SweetAlert2 sebagai fallback jika belum di-load layout --}}
  <script>
  if (typeof Swal === 'undefined') {
  var script = document.createElement('script');
@@ -20,6 +25,7 @@
 @section('content')
 
 @php
+// Persiapan data kalender untuk JavaScript
 $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
  \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
@@ -52,6 +58,9 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
 @endphp
 
 <?php
+ // ------------------------------------------------------------------ //
+ // Helper: badge status
+ // ------------------------------------------------------------------ //
  $getStatusBadge = function($item) {
  $status = $item->status;
  if ($status === \App\Models\LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN) {
@@ -80,6 +89,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
 
 <div class="min-h-screen bg-gray-50">
 
+ {{--  --  --  Page Header  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --}}
  <div class="bg-white border-b border-gray-200 px-6 py-4 mb-6">
  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
  <div>
@@ -97,6 +107,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
 
  <div class="px-6 pb-6">
 
+ {{--  --  --  Statistics  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --}}
  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
  <div class="bg-white rounded-xl shadow-sm p-5 flex items-center justify-between">
  <div>
@@ -136,12 +147,14 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  </div>
  </div>
 
+ {{--  --  --  Calendar + List  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --}}
  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
  {{-- Calendar --}}
  <div class="lg:col-span-2">
  <div class="bg-white rounded-2xl shadow-sm p-6">
  <h2 class="text-lg font-semibold text-gray-800 mb-4">Kalender Pernikahan</h2>
+ {{-- FIX 1: pastikan div ini punya tinggi eksplisit agar FullCalendar render --}}
  <div id="calendar" style="min-height:520px"></div>
  </div>
  </div>
@@ -151,6 +164,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  <div class="bg-white rounded-2xl shadow-sm p-6">
  <div class="flex items-center justify-between mb-4">
  <h2 class="text-lg font-semibold text-gray-800">Daftar Permohonan</h2>
+ {{-- FIX 3: gunakan onchange yang terbukti terpanggil --}}
  <select id="filterStatus"
  onchange="filterList(this.value)"
  class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-500">
@@ -164,6 +178,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  <div id="permohonanList" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
  @forelse($pernikahan as $item)
  @php
+ // Tentukan kategori untuk filter
  $statusCategory = 'pending';
  if (in_array($item->status, [
  \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
@@ -180,6 +195,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  $statusCategory = 'rejected';
  }
  @endphp
+ {{-- FIX 3: gunakan style="display:block" bukan Tailwind hidden --}}
  <div class="permohonan-item p-4 border border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50/50 transition-all cursor-pointer"
  data-status="{{ $statusCategory }}"
  style="display:block"
@@ -207,32 +223,30 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  </div>
  </div>
 
- </div>
- </div>
-</div>
+ </div>{{-- /grid --}}
+ </div>{{-- /px-6 --}}
+</div>{{-- /min-h-screen --}}
 
 
 {{-- =====================================================================
- MODAL: Detail Permohonan — flat style (tiru gambar 2)
-===================================================================== --}}
+ MODAL: Detail Permohonan
+ ===================================================================== --}}
 <div id="detailModal"
  class="fixed inset-0 bg-black/50 items-center justify-center z-50 p-4"
  style="display:none">
- <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden mx-auto">
-
- {{-- Header: flat putih --}}
- <div class="flex items-start justify-between p-5 border-b border-gray-100">
- <div>
- <h3 class="text-lg font-bold text-gray-800">Detail Pernikahan</h3>
- <p id="modalSubtitle" class="text-sm text-gray-400 font-mono mt-0.5"></p>
+ <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden mx-auto">
+ <div class="modal-header sticky top-0 z-10">
+ <div class="flex items-center gap-3">
+ <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+ <i class="fas fa-heart text-white text-sm"></i>
  </div>
- <button onclick="closeDetailModal()"
- class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors flex-shrink-0 ml-3">
- <i class="fas fa-times text-gray-500 text-sm"></i>
+ <h3>Detail Permohonan Pernikahan</h3>
+ </div>
+ <button onclick="closeDetailModal()">
+ <i class="fas fa-times text-sm"></i>
  </button>
  </div>
-
- <div id="detailContent" class="p-5 overflow-y-auto max-h-[calc(90vh-72px)]">
+ <div id="detailContent" class="p-5 overflow-y-auto max-h-[calc(90vh-64px)]">
  {{-- Diisi via JS --}}
  </div>
  </div>
@@ -241,7 +255,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
 
 {{-- =====================================================================
  MODAL: Konfirmasi
-===================================================================== --}}
+ ===================================================================== --}}
 <div id="konfirmasiModal"
  class="fixed inset-0 bg-black/50 items-center justify-center z-50 p-4"
  style="display:none">
@@ -286,7 +300,7 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
 
 {{-- =====================================================================
  MODAL: Tolak
-===================================================================== --}}
+ ===================================================================== --}}
 <div id="tolakModal"
  class="fixed inset-0 bg-black/50 items-center justify-center z-50 p-4"
  style="display:none">
@@ -323,66 +337,102 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
 
 {{-- =====================================================================
  STYLES
-===================================================================== --}}
+ ===================================================================== --}}
 <style>
-/* Modal Base */
-.modal-open { display: flex !important; }
+ /* =====================================================================
+    Modal Base
+ ===================================================================== */
+ .modal-open { display: flex !important; }
 
-#detailModal,
-#konfirmasiModal,
-#tolakModal {
+ /* Backdrop blur untuk modal */
+ #detailModal,
+ #konfirmasiModal,
+ #tolakModal {
  backdrop-filter: blur(4px);
  -webkit-backdrop-filter: blur(4px);
- background-color: rgba(0, 0, 0, 0.45);
+ background-color: rgba(0, 0, 0, 0.55);
  animation: fadeInBackdrop 0.2s ease;
-}
+ }
 
-@keyframes fadeInBackdrop {
+ @keyframes fadeInBackdrop {
  from { opacity: 0; }
  to   { opacity: 1; }
-}
+ }
 
-#detailModal > div,
-#konfirmasiModal > div,
-#tolakModal > div {
+ /* Modal card slide-in */
+ #detailModal > div,
+ #konfirmasiModal > div,
+ #tolakModal > div {
  animation: slideUpModal 0.25s cubic-bezier(0.34, 1.3, 0.64, 1);
-}
+ }
 
-@keyframes slideUpModal {
+ @keyframes slideUpModal {
  from { opacity: 0; transform: translateY(24px) scale(0.97); }
  to   { opacity: 1; transform: translateY(0)   scale(1);    }
-}
+ }
 
-/* =====================================================================
-   Detail Content — Info Rows
-===================================================================== */
-.detail-section {
+ /* =====================================================================
+    Detail Modal — Header
+ ===================================================================== */
+ #detailModal .modal-header {
+ background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+ color: white;
+ padding: 16px 20px;
+ border-radius: 16px 16px 0 0;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ }
+
+ #detailModal .modal-header h3 {
+ font-size: 15px;
+ font-weight: 700;
+ color: white;
+ letter-spacing: 0.01em;
+ }
+
+ #detailModal .modal-header button {
+ width: 32px;
+ height: 32px;
+ border-radius: 50%;
+ background: rgba(255,255,255,0.18);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: background 0.2s;
+ color: white;
+ }
+ #detailModal .modal-header button:hover {
+ background: rgba(255,255,255,0.32);
+ }
+
+ /* =====================================================================
+    Detail Content — Info Rows
+ ===================================================================== */
+ .detail-section {
  padding: 14px 0;
  border-bottom: 1px solid #f1f5f9;
-}
-.detail-section:last-child {
+ }
+ .detail-section:last-child {
  border-bottom: none;
-}
+ }
 
-.detail-label {
+ .detail-label {
  font-size: 11px;
  font-weight: 600;
  text-transform: uppercase;
  letter-spacing: 0.06em;
  color: #94a3b8;
  margin-bottom: 4px;
- display: flex;
- align-items: center;
- gap: 5px;
-}
+ }
 
-.detail-value {
+ .detail-value {
  font-size: 14px;
  font-weight: 600;
  color: #1e293b;
-}
+ }
 
-.detail-value.mono {
+ .detail-value.mono {
  font-family: 'Courier New', monospace;
  color: #2563eb;
  font-size: 13px;
@@ -391,18 +441,18 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  padding: 2px 8px;
  border-radius: 6px;
  border: 1px solid #bfdbfe;
-}
+ }
 
-/* =====================================================================
-   KTP Dokumen List
-===================================================================== */
-.ktp-doc-list {
+ /* =====================================================================
+    KTP Dokumen List
+ ===================================================================== */
+ .ktp-doc-list {
  display: flex;
  flex-direction: column;
  gap: 8px;
-}
+ }
 
-.ktp-doc-row {
+ .ktp-doc-row {
  display: flex;
  align-items: center;
  justify-content: space-between;
@@ -411,46 +461,44 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  border: 1.5px solid #e2e8f0;
  border-radius: 10px;
  transition: border-color 0.2s, background 0.2s;
-}
-.ktp-doc-row:hover {
+ }
+ .ktp-doc-row:hover {
  background: #eff6ff;
  border-color: #bfdbfe;
-}
+ }
 
-.ktp-doc-info {
+ .ktp-doc-info {
  display: flex;
  align-items: center;
  gap: 10px;
  font-size: 13px;
  font-weight: 500;
  color: #374151;
-}
+ }
 
-.ktp-doc-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 16px;
-    background: #2563eb;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background 0.2s;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.ktp-doc-btn:hover {
- background: #1d4ed8;
+ .ktp-doc-btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ padding: 6px 14px;
+ background: #16a34a;
+ color: white;
+ font-size: 12px;
+ font-weight: 600;
+ border-radius: 8px;
+ text-decoration: none;
+ transition: background 0.2s, transform 0.15s;
+ white-space: nowrap;
+ }
+ .ktp-doc-btn:hover {
+ background: #15803d;
  transform: translateY(-1px);
-}
+ }
 
-/* =====================================================================
-   Status Badge di Detail
-===================================================================== */
-.status-pill {
+ /* =====================================================================
+    Status Badge di Detail
+ ===================================================================== */
+ .status-pill {
  display: inline-flex;
  align-items: center;
  gap: 5px;
@@ -458,43 +506,43 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  border-radius: 20px;
  font-size: 12px;
  font-weight: 600;
-}
+ }
 
-/* =====================================================================
-   Info Row (Tanggal & Gereja)
-===================================================================== */
-.info-row {
+ /* =====================================================================
+    Info Row (Tanggal & Gereja)
+ ===================================================================== */
+ .info-row {
  display: flex;
  align-items: center;
  justify-content: space-between;
- padding: 8px 0;
- border-bottom: 1px solid #f1f5f9;
-}
-.info-row:last-child {
- border-bottom: none;
-}
-.info-row-key {
- font-size: 13px;
+ padding: 8px 12px;
+ background: #f8fafc;
+ border-radius: 8px;
+ margin-bottom: 6px;
+ }
+ .info-row:last-child { margin-bottom: 0; }
+ .info-row-key {
+ font-size: 12px;
  color: #64748b;
  display: flex;
  align-items: center;
  gap: 6px;
-}
-.info-row-val {
+ }
+ .info-row-val {
  font-size: 13px;
  font-weight: 600;
  color: #1e293b;
-}
+ }
 
-/* =====================================================================
-   Action Buttons
-===================================================================== */
-.modal-action-btn {
+ /* =====================================================================
+    Action Buttons
+ ===================================================================== */
+ .modal-action-btn {
  flex: 1;
- padding: 13px 16px;
+ padding: 11px 16px;
  border-radius: 12px;
  font-weight: 700;
- font-size: 14px;
+ font-size: 13px;
  display: flex;
  align-items: center;
  justify-content: center;
@@ -502,113 +550,129 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  transition: all 0.18s;
  cursor: pointer;
  border: none;
-}
-.modal-action-btn:active { transform: scale(0.97); }
+ }
+ .modal-action-btn:active { transform: scale(0.97); }
 
-.btn-tolak {
- background: #ef4444;
- color: white;
-}
-.btn-tolak:hover {
+ .btn-tolak {
+ background: #fef2f2;
+ color: #dc2626;
+ border: 1.5px solid #fecaca;
+ }
+ .btn-tolak:hover {
  background: #dc2626;
-}
-
-.btn-konfirmasi {
- background: #16a34a;
  color: white;
-}
-.btn-konfirmasi:hover {
- background: #15803d;
-}
+ border-color: #dc2626;
+ }
 
-/* =====================================================================
-   Dokumen Final
-===================================================================== */
-.dokumen-final-row {
+ .btn-konfirmasi {
+ background: linear-gradient(135deg, #16a34a, #22c55e);
+ color: white;
+ box-shadow: 0 4px 12px rgba(34,197,94,0.35);
+ }
+ .btn-konfirmasi:hover {
+ background: linear-gradient(135deg, #15803d, #16a34a);
+ box-shadow: 0 4px 16px rgba(34,197,94,0.45);
+ }
+
+ /* =====================================================================
+    Dokumen Final
+ ===================================================================== */
+ .dokumen-final-row {
  display: flex;
  align-items: center;
  justify-content: space-between;
  padding: 9px 12px;
  border-radius: 8px;
  margin-bottom: 5px;
-}
-.dokumen-final-row.available {
+ }
+ .dokumen-final-row.available {
  background: #f0fdf4;
  border: 1px solid #bbf7d0;
-}
-.dokumen-final-row.unavailable {
+ }
+ .dokumen-final-row.unavailable {
  background: #f8fafc;
  border: 1px solid #e2e8f0;
-}
+ }
 
-/* =====================================================================
-   Scrollbar Custom
-===================================================================== */
-#detailContent::-webkit-scrollbar { width: 5px; }
-#detailContent::-webkit-scrollbar-track { background: transparent; }
-#detailContent::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-#detailContent::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+ /* =====================================================================
+    Scrollbar Custom
+ ===================================================================== */
+ #detailContent::-webkit-scrollbar { width: 5px; }
+ #detailContent::-webkit-scrollbar-track { background: transparent; }
+ #detailContent::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+ #detailContent::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-#permohonanList::-webkit-scrollbar { width: 4px; }
-#permohonanList::-webkit-scrollbar-track { background: transparent; }
-#permohonanList::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+ #permohonanList::-webkit-scrollbar { width: 4px; }
+ #permohonanList::-webkit-scrollbar-track { background: transparent; }
+ #permohonanList::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 
-/* =====================================================================
-   FullCalendar Tweaks
-===================================================================== */
-.fc .fc-button-group { gap: 6px; }
-.fc .fc-button {
+ /* =====================================================================
+    FullCalendar Tweaks
+ ===================================================================== */
+ .fc .fc-button-group { gap: 6px; }
+ .fc .fc-button {
  margin: 0 !important;
  padding: 7px 14px !important;
  font-size: 13px !important;
  font-weight: 500 !important;
  border-radius: 8px !important;
-}
-.fc .fc-button-primary {
+ }
+ .fc .fc-button-primary {
  background-color: #3b82f6 !important;
  border-color: #3b82f6 !important;
-}
-.fc .fc-button-primary:hover {
+ }
+ .fc .fc-button-primary:hover {
  background-color: #2563eb !important;
  border-color: #2563eb !important;
-}
-.fc .fc-button-active {
+ }
+ .fc .fc-button-active {
  background-color: #1d4ed8 !important;
  border-color: #1d4ed8 !important;
-}
-.fc .fc-toolbar-chunk { display: flex; align-items: center; gap: 8px; }
+ }
+ .fc .fc-toolbar-chunk { display: flex; align-items: center; gap: 8px; }
 
-.fc-daygrid-event {
+ .calendar-loading {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ min-height: 520px;
+ color: #9ca3af;
+ }
+
+ .fc-daygrid-event {
  display: flex !important;
  align-items: center !important;
  justify-content: center !important;
  text-align: center !important;
  min-height: 32px !important;
-}
-.fc-event {
+ }
+ .fc-event {
  display: flex !important;
  align-items: center !important;
  justify-content: center !important;
  text-align: center !important;
-}
-.fc-event-main {
+ }
+ .fc-event-main {
  display: flex !important;
  align-items: center !important;
  justify-content: center !important;
  width: 100% !important;
  height: 100% !important;
-}
-.fc-event-title {
+ }
+ .fc-event-title {
  width: 100% !important;
  text-align: center !important;
-}
+ }
 </style>
 
 
 {{-- =====================================================================
  SCRIPTS
-===================================================================== --}}
+ ===================================================================== --}}
 <script>
+// -----------------------------------------------------------------------
+// Fallback SwalHelper  -  aman jika layout belum menyediakan SwalHelper
+// -----------------------------------------------------------------------
 if (typeof SwalHelper === 'undefined') {
  var SwalHelper = {
  loading: function(msg) {
@@ -632,19 +696,29 @@ if (typeof SwalHelper === 'undefined') {
  };
 }
 
+// -----------------------------------------------------------------------
+// State
+// -----------------------------------------------------------------------
 let selectedPernikahanId = null;
 let currentPernikahanData = null;
 let calendarInitialized = false;
-let calendarInstance = null;
+let calendarInstance = null; // Referensi ke FullCalendar instance
 
+// -----------------------------------------------------------------------
+// Data events untuk kalender (di-render dari PHP)
+// -----------------------------------------------------------------------
 const calendarEventsData = @json($calendarEventsData);
 
+// -----------------------------------------------------------------------
+// Inisialisasi FullCalendar
+// -----------------------------------------------------------------------
 function initCalendar() {
  const calendarEl = document.getElementById('calendar');
  if (!calendarEl) return;
 
+ // Cek apakah FullCalendar sudah ter-load
  if (typeof FullCalendar === 'undefined') {
- console.error('FullCalendar belum ter-load.');
+ console.error('FullCalendar belum ter-load. Periksa CDN di @@push scripts.');
  calendarEl.innerHTML = '<p class="text-center text-red-500 py-10">FullCalendar gagal dimuat. Refresh halaman.</p>';
  return;
  }
@@ -675,21 +749,29 @@ function initCalendar() {
  });
 
  cal.render();
- calendarInstance = cal;
+ calendarInstance = cal; // Simpan referensi calendar
  calendarInitialized = true;
+ console.log('FullCalendar berhasil diinisialisasi dengan ' + calendarEventsData.length + ' events');
  } catch (error) {
  console.error('Gagal inisialisasi FullCalendar:', error);
+ calendarEl.innerHTML = '<p class="text-center text-red-500 py-10">Gagal memuat kalender: ' + error.message + '</p>';
  }
 }
 
+// Jalankan setelah halaman sepenuhnya dimuat
 window.addEventListener('load', function() {
+ // Tunggu sebentar untuk memastikan semua script ter-load
  setTimeout(function() {
- if (!calendarInitialized) initCalendar();
+ if (!calendarInitialized) {
+ initCalendar();
+ }
  }, 100);
 });
 
+
 // -----------------------------------------------------------------------
-// Modal Detail
+// FIX 2  --  Modal Detail
+// Menggunakan style="display:flex/none" agar tidak bentrok Tailwind hidden
 // -----------------------------------------------------------------------
 function showDetail(pernikahanId) {
  if (!pernikahanId) return;
@@ -720,16 +802,12 @@ function showDetail(pernikahanId) {
  const p = data.data;
  currentPernikahanData = p;
 
- // Isi subtitle nomor antrian di header
- const subtitle = document.getElementById('modalSubtitle');
- if (subtitle) subtitle.textContent = p.nomor_antrian || '';
-
- // KTP files
+ //  --  --  KTP files  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  //
  const ktpEntries = [
- { key: 'mempelai_pria',   label: 'KTP Mempelai Pria' },
+ { key: 'mempelai_pria', label: 'KTP Mempelai Pria' },
  { key: 'mempelai_wanita', label: 'KTP Mempelai Wanita' },
- { key: 'saksi_1',         label: 'KTP Saksi 1' },
- { key: 'saksi_2',         label: 'KTP Saksi 2' },
+ { key: 'saksi_1', label: 'KTP Saksi 1' },
+ { key: 'saksi_2', label: 'KTP Saksi 2' },
  ];
  const ktpHtml = ktpEntries
  .filter(e => p.ktp_files && p.ktp_files[e.key])
@@ -740,39 +818,35 @@ function showDetail(pernikahanId) {
  <span>${e.label}</span>
  </div>
  <a href="${escHtml(p.ktp_files[e.key])}" target="_blank" rel="noopener" class="ktp-doc-btn">
- <i class="fas fa-eye"></i> Lihat
+ <i class="fas fa-external-link-alt"></i> Buka Dokumen
  </a>
  </div>
  `).join('');
 
- // Dokumen Final
+ //  --  --  Dokumen Final hasil penerbitan Disdukcapil  --  --  --  --  --  --  --  --  --  --  --  --  --  --  //
  const dokumenFinalEntries = [
  { key: 'akta_pernikahan', label: 'Akta Pernikahan' },
- { key: 'kk_pasangan',     label: 'KK Baru – Pasangan' },
- { key: 'kk_ortu_pria',    label: 'KK Baru – Ortu Pria' },
- { key: 'kk_ortu_wanita',  label: 'KK Baru – Ortu Wanita' },
+ { key: 'kk_pasangan', label: 'KK Baru  -  Pasangan' },
+ { key: 'kk_ortu_pria', label: 'KK Baru  -  Ortu Pria' },
+ { key: 'kk_ortu_wanita', label: 'KK Baru  -  Ortu Wanita' },
  ];
  const df = p.dokumen_final || {};
  const anyDfUploaded = dokumenFinalEntries.some(e => df[e.key]);
  const dokumenFinalHtml = anyDfUploaded ? `
  <div class="detail-section">
- <p class="detail-label"><i class="fas fa-folder-open text-emerald-500"></i>Dokumen Hasil Penerbitan Disdukcapil</p>
+ <p class="detail-label"><i class="fas fa-folder-open text-emerald-500 mr-1"></i>Dokumen Hasil Penerbitan Disdukcapil</p>
  <div class="mt-2 space-y-1">
  ${dokumenFinalEntries.map(e => df[e.key] ? `
  <div class="dokumen-final-row available">
- <span class="text-xs font-medium text-gray-700 flex items-center gap-2">
- <i class="fas fa-file-pdf text-emerald-600"></i>${e.label}
- </span>
-<a href="${escHtml(df[e.key])}" target="_blank" rel="noopener"
-   class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg flex-shrink-0">
-    <i class="fas fa-eye"></i> Lihat
-</a>
+ <span class="text-xs font-medium text-gray-700 flex items-center gap-2"><i class="fas fa-file-pdf text-emerald-600"></i>${e.label}</span>
+ <a href="${escHtml(df[e.key])}" target="_blank" rel="noopener"
+ class="text-xs text-blue-600 hover:text-blue-800 font-bold inline-flex items-center gap-1">
+ <i class="fas fa-external-link-alt"></i> Lihat
+ </a>
  </div>
  ` : `
  <div class="dokumen-final-row unavailable">
- <span class="text-xs text-gray-400 flex items-center gap-2">
- <i class="fas fa-file-pdf text-gray-300"></i>${e.label}
- </span>
+ <span class="text-xs text-gray-400 flex items-center gap-2"><i class="fas fa-file-pdf text-gray-300"></i>${e.label}</span>
  <span class="text-xs text-gray-400 italic">Belum tersedia</span>
  </div>
  `).join('')}
@@ -781,68 +855,41 @@ function showDetail(pernikahanId) {
  </div>
  ` : '';
 
- // Dokumen Keagamaan (status verifikasi)
- let dokumenKeagamaanHtml = '';
- if (p.dokumen_keagamaan && p.dokumen_keagamaan.length > 0) {
- const rows = p.dokumen_keagamaan.map(d => `
- <div class="ktp-doc-row">
- <div class="ktp-doc-info">
- <i class="fas fa-file-alt text-gray-400"></i>
- <span>${escHtml(d.jenis_dokumen_label || d.jenis_dokumen || '-')}</span>
- </div>
- ${d.file_url ? `
- <a href="${escHtml(d.file_url)}" target="_blank" rel="noopener" class="ktp-doc-btn">
- <i class="fas fa-eye"></i> Lihat
- </a>` : '<span class="text-xs text-gray-400">Belum ada file</span>'}
- </div>
- `).join('');
- dokumenKeagamaanHtml = `
- <div class="detail-section">
- <p class="detail-label"><i class="fas fa-file-upload text-purple-400"></i>Dokumen Keagamaan</p>
- <div class="ktp-doc-list mt-2">${rows}</div>
- </div>`;
- }
-
+ //  --  --  Build konten modal  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  //
  document.getElementById('detailContent').innerHTML = `
  <div>
- <!-- Status -->
- <div class="flex items-center justify-between mb-5">
- <span class="text-sm text-gray-500">Status</span>
+ <!-- Status + Nomor Antrian -->
+ <div class="flex items-center justify-between mb-4">
  <span class="status-pill ${escHtml(p.status_color)}">${escHtml(p.status_label)}</span>
+ <span class="detail-value mono">${escHtml(p.nomor_antrian)}</span>
  </div>
 
- <!-- Nomor Antrian -->
- <div class="bg-gray-50 rounded-xl px-4 py-3 mb-4">
- <p class="text-xs text-gray-400 mb-1">Nomor Antrian</p>
- <p class="font-mono font-bold text-blue-600 text-sm">${escHtml(p.nomor_antrian)}</p>
+ <!-- Mempelai -->
+ <div class="detail-section">
+ <p class="detail-label"><i class="fas fa-heart mr-1"></i>Mempelai</p>
+ <p class="detail-value">${escHtml(p.nama_mempelai_pria)}${p.nama_mempelai_wanita ? ' <span class="text-gray-400 font-normal">&amp;</span> ' + escHtml(p.nama_mempelai_wanita) : ''}</p>
  </div>
 
  <!-- Pemohon -->
- ${p.nama_pemohon ? `
  <div class="detail-section">
- <p class="detail-label"><i class="fas fa-user text-gray-400"></i>Pemohon</p>
+ <p class="detail-label"><i class="fas fa-user mr-1"></i>Pemohon</p>
  <p class="detail-value">${escHtml(p.nama_pemohon)}</p>
- ${p.alamat_pemohon ? `<p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
- <i class="fas fa-map-marker-alt text-blue-400"></i>${escHtml(p.alamat_pemohon)}
- </p>` : ''}
- </div>` : ''}
-
- <!-- Dokumen Keagamaan -->
- ${dokumenKeagamaanHtml}
+ ${p.alamat_pemohon ? `<p class="text-xs text-gray-500 mt-1 flex items-center gap-1"><i class="fas fa-map-marker-alt text-blue-400"></i>${escHtml(p.alamat_pemohon)}</p>` : ''}
+ </div>
 
  <!-- KTP -->
  ${ktpHtml ? `
  <div class="detail-section">
- <p class="detail-label"><i class="fas fa-id-card text-gray-400"></i>Berkas KTP</p>
+ <p class="detail-label"><i class="fas fa-id-card mr-1"></i>Berkas KTP</p>
  <div class="ktp-doc-list mt-2">${ktpHtml}</div>
  </div>` : ''}
 
- <!-- Jadwal -->
+ <!-- Tanggal & Gereja -->
  <div class="detail-section">
- <p class="detail-label"><i class="fas fa-calendar-alt text-gray-400"></i>Jadwal Pernikahan</p>
- <div class="mt-2">
+ <p class="detail-label"><i class="fas fa-calendar-alt mr-1"></i>Jadwal Pernikahan</p>
+ <div class="mt-2 space-y-2">
  <div class="info-row">
- <span class="info-row-key"><i class="fas fa-calendar text-blue-400"></i>Tanggal Pernikahan</span>
+ <span class="info-row-key"><i class="fas fa-calendar text-blue-400"></i>Tanggal</span>
  <span class="info-row-val">${escHtml(p.tanggal_perkawinan || '-')}</span>
  </div>
  <div class="info-row">
@@ -854,13 +901,13 @@ function showDetail(pernikahanId) {
 
  ${p.catatan_keagamaan ? `
  <div class="detail-section">
- <p class="detail-label"><i class="fas fa-sticky-note text-gray-400"></i>Catatan Keagamaan</p>
+ <p class="detail-label"><i class="fas fa-sticky-note mr-1"></i>Catatan Keagamaan</p>
  <p class="text-sm text-gray-700 mt-1 leading-relaxed">${escHtml(p.catatan_keagamaan)}</p>
  </div>` : ''}
 
  ${p.alasan_ditolak ? `
  <div class="detail-section">
- <p class="detail-label text-red-400"><i class="fas fa-ban"></i>Alasan Ditolak</p>
+ <p class="detail-label text-red-400"><i class="fas fa-ban mr-1"></i>Alasan Ditolak</p>
  <div class="mt-1 bg-red-50 border border-red-100 rounded-lg p-3">
  <p class="text-sm text-red-600">${escHtml(p.alasan_ditolak)}</p>
  </div>
@@ -871,12 +918,13 @@ function showDetail(pernikahanId) {
  ${p.can_konfirmasi ? `
  <div class="flex gap-3 pt-4 mt-2 border-t border-gray-100">
  <button onclick="openTolakModal('${escHtml(p.pernikahan_id)}')" class="modal-action-btn btn-tolak">
- <i class="fas fa-times"></i> Tolak
+ <i class="fas fa-times"></i>Tolak
  </button>
  <button onclick="openKonfirmasiModal('${escHtml(p.pernikahan_id)}')" class="modal-action-btn btn-konfirmasi">
- <i class="fas fa-check"></i> Konfirmasi
+ <i class="fas fa-check"></i>Konfirmasi
  </button>
- </div>` : ''}
+ </div>
+ ` : ''}
  </div>
  `;
 
@@ -890,6 +938,7 @@ function showDetail(pernikahanId) {
 }
 
 function closeDetailModal() { modalHide('detailModal'); }
+
 
 // -----------------------------------------------------------------------
 // Modal: Konfirmasi
@@ -936,11 +985,27 @@ function submitKonfirmasi() {
  SwalHelper.close();
  if (data.success) {
  closeKonfirmasiModal();
+
+ // Tampilkan toast tanpa backdrop blur
  const Toast = Swal.mixin({
- toast: true, position: 'top-end',
- showConfirmButton: false, timer: 5000, timerProgressBar: true, backdrop: false,
+ toast: true,
+ position: 'top-end',
+ showConfirmButton: false,
+ timer: 5000,
+ timerProgressBar: true,
+ backdrop: false,
+ didOpen: (toast) => {
+ toast.addEventListener('mouseenter', Swal.stopTimer);
+ toast.addEventListener('mouseleave', Swal.resumeTimer);
+ }
  });
- Toast.fire({ icon: 'success', title: data.message || 'Konfirmasi berhasil', iconColor: '#22c55e' });
+ Toast.fire({
+ icon: 'success',
+ title: data.message || 'Konfirmasi berhasil',
+ iconColor: '#22c55e'
+ });
+
+ // Update UI tanpa reload
  updateUIAfterConfirm(selectedPernikahanId, 'approve');
  } else {
  SwalHelper.error(data.message || 'Gagal memproses konfirmasi');
@@ -948,6 +1013,7 @@ function submitKonfirmasi() {
  })
  .catch(() => { SwalHelper.close(); SwalHelper.error('Terjadi kesalahan'); });
 }
+
 
 // -----------------------------------------------------------------------
 // Modal: Tolak
@@ -981,18 +1047,38 @@ function submitTolak() {
  'Content-Type': 'application/json',
  'X-CSRF-TOKEN': '{{ csrf_token() }}',
  },
- body: JSON.stringify({ _token: '{{ csrf_token() }}', status: 'ditolak', catatan: alasan }),
+ body: JSON.stringify({
+ _token: '{{ csrf_token() }}',
+ status: 'ditolak',
+ catatan: alasan,
+ }),
  })
  .then(res => res.json())
  .then(data => {
  SwalHelper.close();
  if (data.success) {
  closeTolakModal();
+
+ // Tampilkan toast tanpa backdrop blur
  const Toast = Swal.mixin({
- toast: true, position: 'top-end',
- showConfirmButton: false, timer: 5000, timerProgressBar: true, backdrop: false,
+ toast: true,
+ position: 'top-end',
+ showConfirmButton: false,
+ timer: 5000,
+ timerProgressBar: true,
+ backdrop: false,
+ didOpen: (toast) => {
+ toast.addEventListener('mouseenter', Swal.stopTimer);
+ toast.addEventListener('mouseleave', Swal.resumeTimer);
+ }
  });
- Toast.fire({ icon: 'warning', title: data.message || 'Permohonan ditolak', iconColor: '#eab308' });
+ Toast.fire({
+ icon: 'warning',
+ title: data.message || 'Permohonan ditolak',
+ iconColor: '#eab308'
+ });
+
+ // Update UI tanpa reload
  updateUIAfterConfirm(selectedPernikahanId, 'reject');
  } else {
  SwalHelper.error(data.message || 'Gagal memproses penolakan');
@@ -1001,34 +1087,68 @@ function submitTolak() {
  .catch(() => { SwalHelper.close(); SwalHelper.error('Terjadi kesalahan'); });
 }
 
+
 // -----------------------------------------------------------------------
-// Filter list
+// FIX 3  --  Filter daftar permohonan
+// Menggunakan style.display (bukan Tailwind class toggle) agar konsisten
 // -----------------------------------------------------------------------
 function filterList(value) {
+ // Ambil value dari parameter atau dari select jika tidak diberikan
  const filter = value !== undefined ? value : document.getElementById('filterStatus').value;
+
  document.querySelectorAll('.permohonan-item').forEach(function(item) {
  const status = item.getAttribute('data-status');
  item.style.display = (filter === 'all' || status === filter) ? 'block' : 'none';
  });
 }
 
+
 // -----------------------------------------------------------------------
-// Update UI setelah confirm/reject
+// Update UI setelah confirm/reject tanpa reload
 // -----------------------------------------------------------------------
 async function updateUIAfterConfirm(pernikahanId, action) {
  try {
+ // Jika approve dan ada tanggal, tambahkan event ke FullCalendar
  if (action === 'approve' && currentPernikahanData && currentPernikahanData.tanggal_perkawinan_raw && calendarInstance) {
+ const tanggal = currentPernikahanData.tanggal_perkawinan_raw;
+ // Tambahkan event baru ke kalender
  calendarInstance.addEvent({
  id: pernikahanId,
- title: (currentPernikahanData.nama_mempelai_pria || '') +
- (currentPernikahanData.nama_mempelai_wanita ? ' & ' + currentPernikahanData.nama_mempelai_wanita : ''),
- start: currentPernikahanData.tanggal_perkawinan_raw,
+ title: (currentPernikahanData.nama_mempelai_pria || '') + (currentPernikahanData.nama_mempelai_wanita ? ' & ' + currentPernikahanData.nama_mempelai_wanita : '') || 'Pernikahan',
+ start: tanggal,
  backgroundColor: '#3b82f6',
  borderColor: 'transparent',
- extendedProps: { pernikahan_id: pernikahanId }
+ extendedProps: {
+ pernikahan_id: pernikahanId
+ }
  });
  }
 
+ // Update/remove item dari list
+ const listItem = document.querySelector(`.permohonan-item[onclick*="${pernikahanId}"]`);
+ if (listItem) {
+ if (action === 'approve') {
+ // Update status badge
+ const badge = listItem.querySelector('.bg-blue-100');
+ if (badge) {
+ badge.classList.remove('bg-blue-100', 'text-blue-700');
+ badge.classList.add('bg-green-100', 'text-green-700');
+ badge.innerHTML = '<i class="fas fa-check mr-1"></i>Disetujui';
+ }
+ } else if (action === 'reject') {
+ // Update ke status rejected
+ const badge = listItem.querySelector('.bg-blue-100, .bg-green-100');
+ if (badge) {
+ badge.classList.remove('bg-blue-100', 'text-blue-700', 'bg-green-100', 'text-green-700');
+ badge.classList.add('bg-red-100', 'text-red-700');
+ badge.innerHTML = '<i class="fas fa-times mr-1"></i>Ditolak';
+ }
+ // Update data-status attribute
+ listItem.setAttribute('data-status', 'rejected');
+ }
+ }
+
+ // Refresh list dari server untuk data terbaru
  const listResponse = await fetch(window.location.href);
  const listText = await listResponse.text();
  const parser = new DOMParser();
@@ -1036,27 +1156,34 @@ async function updateUIAfterConfirm(pernikahanId, action) {
  const newList = newDoc.getElementById('permohonanList');
  if (newList) {
  document.getElementById('permohonanList').innerHTML = newList.innerHTML;
+ // Re-attach filter jika ada
  const currentFilter = document.getElementById('filterStatus')?.value || 'all';
  filterList(currentFilter);
  }
+
  } catch (error) {
  console.error('Error updating UI:', error);
  }
 }
 
+
 // -----------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------
+
+/** Tampilkan modal (flex agar konten center) */
 function modalShow(id) {
  const el = document.getElementById(id);
  if (el) el.style.display = 'flex';
 }
 
+/** Sembunyikan modal */
 function modalHide(id) {
  const el = document.getElementById(id);
  if (el) el.style.display = 'none';
 }
 
+/** Escape HTML untuk konten yang disisipkan ke innerHTML */
 function escHtml(str) {
  if (str === null || str === undefined) return '';
  return String(str)
@@ -1069,6 +1196,9 @@ function escHtml(str) {
 
 function refreshPage() { location.reload(); }
 
+// -----------------------------------------------------------------------
+// Tutup modal saat klik backdrop
+// -----------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
  ['detailModal', 'konfirmasiModal', 'tolakModal'].forEach(function(id) {
  const el = document.getElementById(id);
@@ -1079,14 +1209,16 @@ document.addEventListener('DOMContentLoaded', function() {
  });
 });
 
+
 // ====================================================================
-// AUTO-REFRESH
+// AUTO-REFRESH: Check update status pernikahan dari admin
 // ====================================================================
 let autoRefreshInterval = null;
 let lastCheckTime = new Date().toISOString();
 let isChecking = false;
-let knownStatuses = new Map();
+let knownStatuses = new Map(); // Simpan status yang sudah diketahui
 
+// Inisialisasi knownStatuses dari data awal
 @php
  $initialStatuses = [];
  foreach($pernikahan as $item) {
@@ -1102,6 +1234,7 @@ initialData.forEach(item => {
  knownStatuses.set(item.id, item.status);
 });
 
+// Fungsi check update dari server
 async function checkStatusUpdates() {
  if (isChecking) return;
  isChecking = true;
@@ -1109,27 +1242,46 @@ async function checkStatusUpdates() {
  try {
  const response = await fetch(`{{ route('keagamaan.pernikahan.check-updates') }}?last_check=${encodeURIComponent(lastCheckTime)}`, {
  method: 'GET',
- headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+ headers: {
+ 'Accept': 'application/json',
+ 'X-Requested-With': 'XMLHttpRequest'
+ },
  credentials: 'same-origin'
  });
 
  const data = await response.json();
- if (data.timestamp) lastCheckTime = data.timestamp;
+
+ if (data.timestamp) {
+ lastCheckTime = data.timestamp;
+ }
 
  if (data.success && data.has_updates && data.updates.length > 0) {
+ console.log(' Updates detected:', data.updates);
+
+ // Cek perubahan status
  data.updates.forEach(update => {
  const oldStatus = knownStatuses.get(update.pernikahan_id);
  const newStatus = update.status;
 
+ // Jika status berubah
  if (oldStatus && oldStatus !== newStatus) {
+ console.log(`Status changed for ${(update.nama_mempelai_pria || '') + (update.nama_mempelai_wanita ? ' & ' + update.nama_mempelai_wanita : '')}: ${oldStatus} -> ${newStatus}`);
+
+ // Update knownStatuses
  knownStatuses.set(update.pernikahan_id, newStatus);
 
+ // Jika berubah ke Disetujui
  if (newStatus === 'TANGGAL_DISETUJUI') {
  const Toast = Swal.mixin({
- toast: true, position: 'top-end',
- showConfirmButton: true, confirmButtonText: 'Lihat',
- confirmButtonColor: '#16a34a', timer: 0, backdrop: false,
+ toast: true,
+ position: 'top-end',
+ showConfirmButton: true,
+ confirmButtonText: 'Lihat',
+ confirmButtonColor: '#16a34a',
+ timer: 0,
+ backdrop: false,
  });
+
  Toast.fire({
  icon: 'success',
  title: 'Tanggal Disetujui!',
@@ -1141,14 +1293,20 @@ async function checkStatusUpdates() {
  </div>
  `,
  }).then((result) => {
- if (result.isConfirmed) location.reload();
+ if (result.isConfirmed) {
+ location.reload();
+ }
  });
  }
  }
  });
 
+ // Update UI jika ada perubahan
+ if (data.updates.length > 0) {
  await refreshUIFromServer();
  }
+ }
+
  } catch (error) {
  console.error('Error checking updates:', error);
  } finally {
@@ -1156,6 +1314,7 @@ async function checkStatusUpdates() {
  }
 }
 
+// Refresh UI dari server
 async function refreshUIFromServer() {
  try {
  const response = await fetch(window.location.href);
@@ -1163,34 +1322,60 @@ async function refreshUIFromServer() {
  const parser = new DOMParser();
  const newDoc = parser.parseFromString(html, 'text/html');
 
+ // Update list permohonan
  const newList = newDoc.getElementById('permohonanList');
  if (newList) {
  document.getElementById('permohonanList').innerHTML = newList.innerHTML;
+ // Re-apply filter
  const currentFilter = document.getElementById('filterStatus')?.value || 'all';
  filterList(currentFilter);
  }
+
+ // Update statistics jika ada
+ const newStats = newDoc.querySelectorAll('.grid.grid-cols-2.md\\:grid-cols-4 .text-2xl');
+ if (newStats.length > 0) {
+ const currentStats = document.querySelectorAll('.grid.grid-cols-2.md\\:grid-cols-4 .text-2xl');
+ newStats.forEach((stat, i) => {
+ if (currentStats[i]) {
+ currentStats[i].textContent = stat.textContent;
+ }
+ });
+ }
+
  } catch (error) {
  console.error('Error refreshing UI:', error);
  }
 }
 
+// Mulai auto-refresh
 function startAutoRefresh(intervalSeconds = 10) {
  stopAutoRefresh();
+ console.log(` Auto-refresh started (every ${intervalSeconds}s)`);
+
  setTimeout(() => {
  checkStatusUpdates();
- autoRefreshInterval = setInterval(() => checkStatusUpdates(), intervalSeconds * 1000);
+ autoRefreshInterval = setInterval(() => {
+ checkStatusUpdates();
+ }, intervalSeconds * 1000);
  }, 2000);
 }
 
+// Stop auto-refresh
 function stopAutoRefresh() {
  if (autoRefreshInterval) {
  clearInterval(autoRefreshInterval);
  autoRefreshInterval = null;
+ console.log(' Auto-refresh stopped');
  }
 }
 
+// Mulai auto-refresh saat page load
 startAutoRefresh(10);
-window.addEventListener('beforeunload', stopAutoRefresh);
+
+// Stop auto-refresh saat page akan unload
+window.addEventListener('beforeunload', function() {
+ stopAutoRefresh();
+});
 </script>
 
 @endsection

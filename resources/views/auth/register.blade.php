@@ -44,8 +44,6 @@
     @if(auth()->check())
         <script>window.location.href = "{{ route('admin.dashboard') }}";</script>
     @endif
-    {{-- SweetAlert Final Fix --}}
-    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
 </head>
 <body class="bg-animated min-h-screen flex items-center justify-center p-4">
 @include('components.page-loading')
@@ -208,11 +206,11 @@
                 <div class="flex-1 h-px bg-gray-200"></div>
             </div>
 
-            <!-- Back to Home -->
-            <div class="text-center mt-6">
-                <a href="{{ route('home') }}" data-style-guide-skip class="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition">
+            <!-- Back to Login -->
+            <div class="text-center">
+                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition">
                     <i class="fas fa-arrow-left"></i>
-                    Kembali ke Beranda
+                    Kembali ke Login
                 </a>
             </div>
         </div>
@@ -410,7 +408,5 @@
     </style>
 <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
 <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
-    {{-- SweetAlert Final Fix --}}
-    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 </body>
 </html>

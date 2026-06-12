@@ -9,11 +9,11 @@ $serviceConfig = [
         'id'           => 'kk',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.asset('downloads/formulir/F-1.02.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
             'KTP Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Kartu Keluarga Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Surat keterangan/bukti perubahan Peristiwa Kependudukan (cth: Paspor, SKPWNI) dan Peristiwa Penting.',
-            'Formulir F-1.06 (Formulir Pernyataan Perubahan Elemen Data Kependudukan) <a href="'.asset('downloads/formulir/F-1.06.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.06 (Formulir Pernyataan Perubahan Elemen Data Kependudukan)',
         ],
         'penjelasan'   => [
             'Penduduk mengisi F1.02',
@@ -26,10 +26,10 @@ $serviceConfig = [
             ['name' => 'layanan_id', 'value' => 'kk_perubahan',  'type' => 'hidden'],
             ['type' => 'heading', 'label' => 'Informasi Pendaftaran'],
             ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'placeholder' => 'Nomor Antrian', 'type' => 'text'],
-            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['type' => 'heading', 'label' => 'Data Pemohon'],
             ['name' => 'nama_pemohon', 'label' => 'Nama Pemohon', 'placeholder' => 'Nama Pemohon', 'type' => 'text'],
             ['name' => 'nik_pemohon', 'label' => 'Nomor Induk Kependudukan', 'placeholder' => '16 Digit NIK Pemohon', 'type' => 'text'],
+            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['name' => 'alamat_pemohon', 'label' => 'Alamat', 'placeholder' => 'Alamat Lengkap', 'type' => 'textarea'],
         ],
         'files' => [
@@ -47,7 +47,7 @@ $serviceConfig = [
         'id'           => 'ganti_kepala_kk',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.asset('downloads/formulir/F-1.02.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
             'KTP Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Kartu Keluarga Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Akte Kematian Kepala Keluarga',
@@ -64,10 +64,10 @@ $serviceConfig = [
             ['name' => 'layanan_id', 'value' => 'kk_ganti_kepala', 'type' => 'hidden'],
             ['type' => 'heading', 'label' => 'Informasi Pendaftaran'],
             ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'placeholder' => 'Nomor Antrian', 'type' => 'text'],
-            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['type' => 'heading', 'label' => 'Data Pemohon'],
             ['name' => 'nama_pemohon', 'label' => 'Nama Pemohon', 'placeholder' => 'Nama Pemohon', 'type' => 'text'],
             ['name' => 'nik_pemohon', 'label' => 'Nomor Induk Kependudukan', 'placeholder' => '16 Digit NIK Pemohon', 'type' => 'text'],
+            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['name' => 'alamat_pemohon', 'label' => 'Alamat', 'placeholder' => 'Alamat Lengkap', 'type' => 'textarea'],
         ],
         'files' => [
@@ -84,7 +84,7 @@ $serviceConfig = [
         'id'           => 'kk_hilang_rusak',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.asset('downloads/formulir/F-1.02.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
             'KTP Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Surat kehilangan dari kepolisian (jika hilang) atau KK yang rusak',
         ],
@@ -96,10 +96,10 @@ $serviceConfig = [
             ['name' => 'layanan_id', 'value' => 'kk_hilang', 'type' => 'hidden'],
             ['type' => 'heading', 'label' => 'Informasi Pengajuan'],
             ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'placeholder' => 'Nomor Antrian', 'type' => 'text'],
-            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['type' => 'heading', 'label' => 'Data Pemohon'],
             ['name' => 'nama_pemohon', 'label' => 'Nama Pemohon', 'placeholder' => 'Nama Pemohon', 'type' => 'text'],
             ['name' => 'nik_pemohon', 'label' => 'Nomor Induk Kependudukan', 'placeholder' => '16 Digit NIK Pemohon', 'type' => 'text'],
+            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['name' => 'alamat_pemohon', 'label' => 'Alamat', 'placeholder' => 'Alamat Lengkap', 'type' => 'textarea'],
         ],
         'files' => [
@@ -114,7 +114,7 @@ $serviceConfig = [
         'id'           => 'pisah_kk',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.asset('downloads/formulir/F-1.02.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
             'KK lama',
             'Berumur sekurang-kurangnya 17 (tujuh belas) tahun atau sudah kawin.',
         ],
@@ -127,10 +127,10 @@ $serviceConfig = [
             ['name' => 'layanan_id', 'value' => 'kk_pisah', 'type' => 'hidden'],
             ['type' => 'heading', 'label' => 'Informasi Pengajuan'],
             ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'placeholder' => 'Nomor Antrian', 'type' => 'text'],
-            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['type' => 'heading', 'label' => 'Data Pemohon'],
             ['name' => 'nama_pemohon', 'label' => 'Nama Pemohon', 'placeholder' => 'Nama Pemohon', 'type' => 'text'],
             ['name' => 'nik_pemohon', 'label' => 'Nomor Induk Kependudukan', 'placeholder' => '16 Digit NIK Pemohon', 'type' => 'text'],
+            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor Kartu Keluarga', 'placeholder' => 'Nomor Kartu Keluarga', 'type' => 'text'],
             ['name' => 'alamat_pemohon', 'label' => 'Alamat', 'placeholder' => 'Alamat Lengkap', 'type' => 'textarea'],
         ],
         'files' => [
@@ -147,7 +147,7 @@ $serviceConfig = [
         'id'           => 'akte_kelahiran',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran) <a href="'.asset('downloads/formulir/F-2.01.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
             'Surat keterangan kelahiran dari rumah sakit/Puskesmas/bidan/kepala desa.',
             'Buku nikah/kutipan akta perkawinan orang tua',
             'KK dan KTP orang tua',
@@ -160,10 +160,10 @@ $serviceConfig = [
             ['name' => 'layanan_id', 'value' => 'akte_kelahiran', 'type' => 'hidden'],
             ['type' => 'heading', 'label' => 'Informasi Pengajuan'],
             ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'placeholder' => 'Nomor Antrian', 'type' => 'text'],
-            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor KK Pemohon', 'placeholder' => 'Nomor KK Pemohon', 'type' => 'text'],
             ['type' => 'heading', 'label' => 'Akte Kelahiran'],
             ['name' => 'nama_pemohon', 'label' => 'Nama Pemohon', 'placeholder' => 'Masukkan Nama Pemohon', 'type' => 'text'],
             ['name' => 'nik_pemohon', 'label' => 'NIK Pemohon', 'placeholder' => 'Masukkan NIK Pemohon', 'type' => 'text'],
+            ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor KK Pemohon', 'placeholder' => 'Nomor KK Pemohon', 'type' => 'text'],
             ['name' => 'alamat', 'label' => 'Alamat Pemohon', 'placeholder' => 'Alamat Pemohon', 'type' => 'textarea'],
         ],
         'files' => [
@@ -174,9 +174,9 @@ $serviceConfig = [
             ['name' => 'kk_pemohon', 'label' => 'Kartu Keluarga Pemohon'],
             ['name' => 'file_surat_lahir', 'label' => 'Surat Keterangan Lahir (RS/Bidan/Nakhoda/Kades)'],
             ['name' => 'file_buku_nikah', 'label' => 'Buku Nikah / Akta Perkawinan'],
-            ['name' => 'file_sptjm_kelahiran', 'label' => 'SPTJM Kebenaran Data Kelahiran (F-2.03) — Jika tidak ada surat lahir <a href="'.asset('downloads/formulir/F-2.03.pdf').'" download target="_blank" class="inline-flex items-center gap-1 ml-1 text-blue-500 hover:text-blue-700 text-xs font-semibold hover:underline"><i class=\"fas fa-download\"></i> Unduh F-2.03</a>', 'required' => false],
-            ['name' => 'file_sptjm_pasutri', 'label' => 'SPTJM Kebenaran Pasangan Suami Istri (F-2.04) — Jika tidak ada buku nikah <a href="'.asset('downloads/formulir/F-2.04.pdf').'" download target="_blank" class="inline-flex items-center gap-1 ml-1 text-blue-500 hover:text-blue-700 text-xs font-semibold hover:underline"><i class=\"fas fa-download\"></i> Unduh F-2.04</a>', 'required' => false],
-            ['name' => 'file_berita_acara_polisi', 'label' => 'Berita Acara Kepolisian — Untuk anak tidak diketahui asal usulnya', 'required' => false],
+            ['name' => 'file_sptjm_kelahiran', 'label' => 'SPTJM Kebenaran Data Kelahiran (F-2.03) - Jika tidak ada surat lahir', 'required' => false],
+            ['name' => 'file_sptjm_pasutri', 'label' => 'SPTJM Kebenaran Pasangan Suami Istri (F-2.04) - Jika tidak ada buku nikah', 'required' => false],
+            ['name' => 'file_berita_acara_polisi', 'label' => 'Berita Acara Kepolisian - Untuk anak tidak diketahui asal usulnya', 'required' => false],
         ],
     ],
     'akte_kematian' => [
@@ -185,7 +185,7 @@ $serviceConfig = [
         'id'    => 'akte_kematian',
         'persyaratan' => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kematian) <a href="'.asset('downloads/formulir/F-2.01.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kematian) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
             'Fotokopi surat kematian dari dokter atau kepala desa/lurah',
             'Fotokopi KK/KTP yang meninggal dunia.',
             'Fotokopi KK/KTP pemohon.',
@@ -200,22 +200,22 @@ $serviceConfig = [
         'fields' => [
             ['name' => 'layanan_id', 'value' => 'akte_kematian', 'type' => 'hidden'],
             ['type' => 'heading', 'label' => 'Informasi Pengajuan'],
-            ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'placeholder' => 'Masukkan Nomor Antrian', 'type' => 'text'],
+            ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'placeholder' => 'Masukkan Nomor Antrian', 'type' => 'text',],
             ['type' => 'heading', 'label' => 'Data Pemohon'],
             ['name' => 'nik_pemohon', 'label' => 'NIK Pemohon', 'placeholder' => '16 digit NIK Pemohon', 'type' => 'text'],
             ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor KK Pemohon', 'placeholder' => '16 digit Nomor KK', 'type' => 'text'],
             ['name' => 'nama_pemohon', 'label' => 'Nama Lengkap Pemohon', 'placeholder' => 'Masukkan Nama Lengkap Pemohon', 'type' => 'text'],
-            ['name' => 'hubungan_pemohon', 'label' => 'Hubungan dengan Jenazah', 'placeholder' => 'Contoh: Anak / Suami / Istri / Ketua RT', 'type' => 'text'],
             ['name' => 'alamat_pemohon', 'label' => 'Alamat Pemohon', 'placeholder' => 'Alamat Domisili', 'type' => 'textarea'],
+            ['name' => 'hubungan_pemohon', 'label' => 'Hubungan dengan Jenazah', 'placeholder' => 'Contoh: Anak / Suami / Istri / Ketua RT', 'type' => 'text'],
         ],
         'files' => [
             ['name' => 'formulir_f201', 'label' => 'Scan/Foto Asli Formulir F-2.01 yang telah diisi'],
             ['name' => 'surat_keterangan_kematian', 'label' => 'Scan/Foto Asli Surat Keterangan Kematian (Dokter/Kades)'],
             ['name' => 'ktp_pemohon', 'label' => 'Scan/Foto Asli KTP Pemohon'],
             ['name' => 'kartu_keluarga_pemohon', 'label' => 'Scan/Foto Asli KK Pemohon'],
-            ['name' => 'ktp_almarhum', 'label' => 'Scan/Foto Asli KTP Almarhum'],
-            ['name' => 'ktp_saksi1', 'label' => 'Scan/Foto Asli KTP Saksi 1'],
-            ['name' => 'ktp_saksi2', 'label' => 'Scan/Foto Asli KTP Saksi 2'],
+            ['name' => 'ktp_almarhum', 'label' => 'Scan/Foto Asli KTP Almarhum '],
+            ['name' => 'ktp_saksi1', 'label' => 'Scan/Foto Asli KTP Saksi 1 '],
+            ['name' => 'ktp_saksi2', 'label' => 'Scan/Foto Asli KTP Saksi 2 '],
         ],
     ],
     'lahir_mati' => [
@@ -224,7 +224,7 @@ $serviceConfig = [
         'id'    => 'lahir_mati',
         'persyaratan' => [
             'Wajib Mengambil Nomor Antrian',
-            'Mengisi Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran Mati) <a href="'.asset('downloads/formulir/F-2.01.pdf').'" class="text-blue-600 font-bold hover:underline ml-1" download target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Mengisi Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran Mati) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
             'Fotokopi surat keterangan lahir mati (RS/Bidan/Kades).',
             'Fotokopi KK Orang Tua.',
             'Fotokopi Saksi 1 dan Saksi 2 yang mengetahui peristiwa lahir mati.',
@@ -242,16 +242,16 @@ $serviceConfig = [
             ['name' => 'nik_pemohon', 'label' => 'NIK Pemohon', 'placeholder' => '16 digit NIK Pemohon', 'type' => 'text'],
             ['name' => 'nomor_kk_pemohon', 'label' => 'Nomor KK Pemohon', 'placeholder' => '16 digit Nomor KK', 'type' => 'text'],
             ['name' => 'nama_pemohon', 'label' => 'Nama Lengkap Pemohon', 'placeholder' => 'Masukkan Nama Lengkap Pemohon', 'type' => 'text'],
-            ['name' => 'hubungan_pemohon', 'label' => 'Hubungan dengan Jenazah Bayi', 'placeholder' => 'Contoh: Ayah / Ibu / Bidan', 'type' => 'text'],
             ['name' => 'alamat_pemohon', 'label' => 'Alamat Pemohon', 'placeholder' => 'Alamat Domisili', 'type' => 'textarea'],
+            ['name' => 'hubungan_pemohon', 'label' => 'Hubungan dengan Jenazah Bayi', 'placeholder' => 'Contoh: Ayah / Ibu / Bidan', 'type' => 'text'],
         ],
         'files' => [
             ['name' => 'formulir_f201', 'label' => 'Scan/Foto Asli Formulir F-2.01 yang telah diisi'],
             ['name' => 'surat_keterangan_lahir_mati', 'label' => 'Scan/Foto Asli Surat Ket. Lahir Mati (RS/Bidan/Kades)'],
             ['name' => 'ktp_pemohon', 'label' => 'Scan/Foto Asli KTP Pemohon'],
             ['name' => 'kartu_keluarga_pemohon', 'label' => 'Scan/Foto Asli KK Pemohon'],
-            ['name' => 'ktp_saksi1', 'label' => 'Scan/Foto Asli KTP Saksi 1'],
-            ['name' => 'ktp_saksi2', 'label' => 'Scan/Foto Asli KTP Saksi 2'],
+            ['name' => 'ktp_saksi1', 'label' => 'Scan/Foto Asli KTP Saksi 1 '],
+            ['name' => 'ktp_saksi2', 'label' => 'Scan/Foto Asli KTP Saksi 2 '],
         ],
     ],
     'perkawinan' => [
@@ -282,9 +282,8 @@ $serviceConfig = [
         ],
         'fields' => [
             ['name' => 'layanan_id', 'value' => 'perkawinan', 'type' => 'hidden'],
-            ['type' => 'heading', 'label' => 'Informasi Pengajuan'],
-            ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'type' => 'text', 'placeholder' => 'Contoh: ABC-123-456', 'required' => true],
             ['type' => 'heading', 'label' => 'Data Pemohon'],
+            ['name' => 'nomor_antrian', 'label' => 'Nomor Antrian', 'type' => 'text', 'placeholder' => 'Contoh: ABC-123-456', 'required' => true],
             ['name' => 'nama_pemohon', 'label' => 'Nama Pemohon', 'type' => 'text', 'placeholder' => 'Nama lengkap sesuai KTP', 'required' => true],
             ['name' => 'nik_pemohon', 'label' => 'NIK Pemohon', 'type' => 'text', 'placeholder' => '16 digit NIK', 'maxlength' => 16, 'required' => true],
             ['name' => 'alamat_pemohon', 'label' => 'Alamat Pemohon', 'type' => 'textarea', 'placeholder' => 'Alamat lengkap', 'required' => true],
@@ -298,7 +297,6 @@ $serviceConfig = [
     ],
 ];
 
-// Sisa kode $kategoriLayanan, $colorMap, $layananById tidak berubah sama sekali
 $kategoriLayanan = [
     'Kartu Keluarga (KK)' => [
         'icon'    => 'fa-id-card',
@@ -524,7 +522,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 </div>
             @endif
 
-            <form id="serviceForm" method="POST" action="{{ route('pernikahan.store.layanan-mandiri') }}" enctype="multipart/form-data" novalidate>
+            <form id="serviceForm" method="POST" action="{{ route('pernikahan.store.layanan-mandiri') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="foto_wajah" id="foto_wajah">
 
@@ -660,8 +658,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 </div>
 
 @push('styles')
-{{-- swal-final-fix.css sudah di-include oleh layout utama --}}
-
 <style>
     /* ═══════════════════════════════════════════════════════════
        NUCLEAR CSS OVERRIDE — Sembunyikan SEMUA tombol saat loading
@@ -784,13 +780,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 @endpush
 
 @push('scripts')
-{{-- SWEETALERT2 ASSETS — jangan ubah urutan --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-<script src="{{ asset('js/sweetalert-disdukcapil.js') }}"></script>
-<script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
-{{-- swal-final-fix.js sudah di-include oleh layout utama --}}
-
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 
@@ -1166,28 +1155,17 @@ function renderField(field) {
     if (field.name && (field.name.toLowerCase().includes('nik') || field.name.toLowerCase().includes('nomor_kk'))) {
         extraAttr = 'oninput="this.value = this.value.replace(/[^0-9]/g, \'\').slice(0, 16);" maxlength="16"';
     }
-    var autoFields = ['nik_pemohon', 'nama_pemohon', 'alamat_pemohon', 'alamat'];
-    var isReadonly = autoFields.includes(field.name);
-    var readonlyAttr = isReadonly ? 'readonly style="background:#f3f4f6; cursor:not-allowed; color:#6b7280;"' : '';
-
     if (field.type === 'textarea')
-        return '<textarea name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + cls + ' h-24 resize-none" ' + fieldId + ' ' + readonlyAttr + ' required></textarea>';
+        return '<textarea name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + cls + ' h-24 resize-none" ' + fieldId + ' required></textarea>';
     if (field.type === 'select')
         return '<select name="' + field.name + '" class="' + cls + '" ' + fieldId + ' required>' +
                '<option value="">Pilih...</option>' +
                (field.options||[]).map(function(o){ return '<option value="' + o + '">' + o + '</option>'; }).join('') +
                '</select>';
-    return '<input type="' + field.type + '" name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + cls + '" ' + fieldId + ' ' + extraAttr + ' ' + fieldEvents + ' ' + readonlyAttr + ' ' + (field.required !== false ? 'required' : '') + '>';
+    return '<input type="' + field.type + '" name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + cls + '" ' + fieldId + ' ' + extraAttr + ' ' + fieldEvents + ' ' + (field.required !== false ? 'required' : '') + '>';
 }
 
 function goToStep(step) {
-    /* FIX: Reset state Step 4 saat kembali dari Step 5 (Konfirmasi)
-       agar tombol "Mulai Verifikasi" tidak terjebak disabled.
-       Guard `currentStep > 4` mencegah reset saat initial load. */
-    if (step === 4 && currentStep > 4) {
-        resetLiveness();
-    }
-
     currentStep = step;
     document.querySelectorAll('.step-content').forEach(function(el) { el.classList.add('hidden'); });
     var active = document.getElementById('step' + step);
@@ -1221,44 +1199,30 @@ function validateAndGoStep3() {
         .querySelectorAll('input[required],textarea[required],select[required]');
     var valid = true;
     var hasEmpty = false;
-    var emptyLabels = [];
-    var invalidNik = false;
+    var errMsg = 'Ada Dokumen yang Perlu dilengkapi';
     inputs.forEach(function(input) {
         input.style.borderColor = '';
         var val = input.value.trim();
-        if (!val) {
+        if (!val) { input.style.borderColor = '#ef4444'; valid = false; hasEmpty = true; }
+        else if (val && (input.name.toLowerCase().includes('nik') || input.name.toLowerCase().includes('nomor_kk')) && val.length !== 16) {
             input.style.borderColor = '#ef4444';
             valid = false;
-            hasEmpty = true;
-            var lbl = (input.labels && input.labels[0]) ? input.labels[0].textContent.replace('*', '').trim() : (input.placeholder || input.name || input.id);
-            emptyLabels.push(lbl);
-        } else if (val && (input.name.toLowerCase().includes('nik') || input.name.toLowerCase().includes('nomor_kk')) && val.length !== 16) {
-            input.style.borderColor = '#ef4444';
-            valid = false;
-            invalidNik = true;
+            errMsg = 'Nomor harus tepat 16 angka!';
         }
     });
-    if (!valid) {
-        if (invalidNik) {
-            notifValidasiGagal(['NIK / Nomor KK harus tepat 16 angka']);
-        } else if (emptyLabels.length > 0) {
-            notifValidasiGagal(emptyLabels);
-        } else {
-            notifFormBelumLengkap();
-        }
-        return;
-    }
+    if (hasEmpty) errMsg = 'Ada Dokumen yang Perlu dilengkapi';
+    if (!valid) { showToast(errMsg, 'warning'); return; }
     goToStep(3);
 }
 
 function validateAndGoStep4() {
     var valid = true;
-    var missingLabels = [];
+    var missingLabel = '';
     currentConfig.files.forEach(function(file) {
         if (file.required === false) return;
         var input = document.querySelector('input[name="' + file.name + '"]');
         if (!input || !input.files || input.files.length === 0) {
-            missingLabels.push(file.label);
+            if (!missingLabel) missingLabel = file.label;
             valid = false;
             var lbl = input ? input.closest('label') : null;
             if (lbl) {
@@ -1267,10 +1231,7 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) {
-        notifValidasiGagal(missingLabels);
-        return;
-    }
+    if (!valid) { showToast('Ada Dokumen yang Perlu dilengkapi', 'warning'); return; }
     goToStep(4);
 }
 
@@ -1356,7 +1317,7 @@ function onLivenessPassed() {
     video.parentNode.insertBefore(preview, video);
     document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
     document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
-    showSuccess('Verifikasi Wajah Berhasil');
+    showToast('Verifikasi Wajah Berhasil', 'success');
     setTimeout(function() { goToStep(5); }, 900);
 }
 function setOverlay(text) { document.getElementById('liveness-overlay').textContent = text; }
@@ -1516,37 +1477,33 @@ function autoFillFromAntrian(nomorAntrian) {
             if (!data.success) {
                 var errorCode = data.error_code;
                 if (errorCode === 'NOT_FOUND') {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Nomor antrian tidak ditemukan',
-                        problem  : data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
-                        solution : data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.'
-                    });
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
+                        data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.',
+                        'Nomor antrian tidak ditemukan'
+                    );
                     input.value = '';
                 } else if (errorCode === 'ALREADY_USED') {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Nomor antrian sudah digunakan',
-                        problem  : data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
-                        solution : data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.'
-                    });
+                    showErrorToast(
+                        data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
+                        data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
+                        'Nomor antrian sudah digunakan'
+                    );
                     input.value = '';
                 } else if (errorCode === 'INVALID_SERVICE') {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Nomor antrian tidak sesuai layanan',
-                        problem  : data.problem || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.',
-                        solution : data.solution || 'Pilih layanan yang sesuai atau buat nomor antrian baru.',
-                        timer    : 7000
-                    });
+                    showErrorToast(
+                        data.problem || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.',
+                        data.solution || 'Pilih layanan yang sesuai atau buat nomor antrian baru.',
+                        'Nomor antrian tidak sesuai layanan',
+                        7000
+                    );
                     input.value = '';
                 } else {
-                    fireToast({
-                        type     : 'error',
-                        title    : 'Gagal mengambil data antrian',
-                        problem  : data.problem || data.message || 'Gagal mengambil data antrian.',
-                        solution : data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.'
-                    });
+                    showErrorToast(
+                        data.problem || data.message || 'Gagal mengambil data antrian.',
+                        data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.',
+                        'Gagal mengambil data antrian'
+                    );
                 }
                 return;
             }
@@ -1559,17 +1516,16 @@ function autoFillFromAntrian(nomorAntrian) {
                 if (nikInput    && data.data.nik)          nikInput.value    = data.data.nik;
                 if (namaInput   && data.data.nama_lengkap) namaInput.value   = data.data.nama_lengkap;
                 if (alamatInput && data.data.alamat)       alamatInput.value = data.data.alamat;
-                showSuccess('Berhasil Mengambil Data dari Nomor Antrian');
+                showToast('Berhasil Mengambil Data dari Nomor Antrian', 'success');
             }
         })
         .catch(function(error) {
             console.error('autoFillFromAntrian error:', error);
-            fireToast({
-                type     : 'error',
-                title    : 'Gagal mengambil data antrian',
-                problem  : 'Sistem gagal mengambil data antrian.',
-                solution : 'Periksa koneksi internet, lalu masukkan nomor antrian kembali.'
-            });
+            showErrorToast(
+                'Sistem gagal mengambil data antrian.',
+                'Periksa koneksi internet, lalu masukkan nomor antrian kembali.',
+                'Gagal mengambil data antrian'
+            );
         })
         .finally(function() {
             if (input) input.classList.remove('loading');
@@ -1602,46 +1558,11 @@ function isPdfOnlyInput(input) {
 function validateSelectedFile(input) {
     var file = input.files && input.files[0] ? input.files[0] : null;
     if (!file) return true;
-    var name = file.name;
-    var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
     if (isPdfOnlyInput(input)) {
-        var isPdf = file.type === 'application/pdf' || name.toLowerCase().endsWith('.pdf');
-        if (!isPdf) {
-            input.value = '';
-            fireToast({
-                type: 'error',
-                title: 'Format File Tidak Didukung',
-                problem: 'File "' + name + '" berformat ' + (file.type || 'tidak dikenal') + ', tidak diizinkan.',
-                solution: 'Pilih ulang file dengan format PDF sesuai ketentuan.',
-                timer: 6000
-            });
-            return false;
-        }
-    } else {
-        var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-        if (allowedTypes.indexOf(file.type) === -1) {
-            input.value = '';
-            fireToast({
-                type: 'error',
-                title: 'Format File Tidak Didukung',
-                problem: 'File "' + name + '" berformat ' + (file.type || 'tidak dikenal') + ', tidak diizinkan.',
-                solution: 'Pilih file dengan format PDF, JPG, atau PNG sesuai ketentuan.',
-                timer: 6000
-            });
-            return false;
-        }
+        var isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        if (!isPdf) { input.value = ''; showToast('Hanya file PDF yang diperbolehkan', 'error'); return false; }
     }
-    if (file.size > 2 * 1024 * 1024) {
-        input.value = '';
-        fireToast({
-            type: 'error',
-            title: 'File Terlalu Besar',
-            problem: 'File "' + name + '" berukuran ' + sizeMB + ' MB, melebihi batas 2 MB.',
-            solution: 'Kompres file terlebih dahulu atau pilih file lain yang ukurannya di bawah 2 MB.',
-            timer: 7000
-        });
-        return false;
-    }
+    if (file.size > 2 * 1024 * 1024) { input.value = ''; showToast('Maksimal ukuran file: 2MB', 'error'); return false; }
     return true;
 }
 function clearFileInput(fieldName) {
@@ -1675,38 +1596,6 @@ function showToast(message, type) {
     }).fire();
 }
 
-function formatValidationErrors(errors) {
-    if (!errors || typeof errors !== 'object') return '';
-
-    var messages = [];
-    Object.keys(errors).forEach(function(key) {
-        var value = errors[key];
-        if (Array.isArray(value)) {
-            value.forEach(function(item) { messages.push(item); });
-        } else if (typeof value === 'string') {
-            messages.push(value);
-        }
-    });
-
-    if (!messages.length) return '';
-
-    return '<ul class="text-left list-disc pl-5 space-y-1">' +
-        messages.map(function(item) { return '<li>' + item + '</li>'; }).join('') +
-        '</ul>';
-}
-
-function showValidationAlert(message, errors) {
-    var htmlErrors = formatValidationErrors(errors);
-
-    return Swal.fire({
-        icon              : 'error',
-        title             : 'Data belum valid',
-        html              : htmlErrors || (message || 'Periksa kembali data yang Anda isi.'),
-        confirmButtonText : 'Periksa Lagi',
-        confirmButtonColor: '#dc2626'
-    });
-}
-
 /* ═══════════════════════════════════════════════════════════════════
    Close modal
    ═══════════════════════════════════════════════════════════════════ */
@@ -1727,25 +1616,10 @@ async function handleKirimPengajuan() {
 
     /* Guard: verifikasi wajah harus selesai */
     if (livenessValue !== '1') {
-        notifFormBelumLengkap();
-        showError('Verifikasi Wajah Belum Selesai', 'Verifikasi wajah belum dilakukan atau belum lulus.', 'Selesaikan verifikasi wajah (liveness) terlebih dahulu sebelum mengirim pengajuan.');
+        showToast('Harap selesaikan verifikasi wajah terlebih dahulu.', 'error');
         goToStep(4);
         return;
     }
-
-    var confirmResult = await Swal.fire({
-        icon              : 'question',
-        title             : 'Kirim Pengajuan?',
-        text              : 'Pastikan data dan berkas yang Anda isi sudah benar.',
-        showCancelButton  : true,
-        confirmButtonText : 'Ya, Kirim',
-        cancelButtonText  : 'Cek Lagi',
-        confirmButtonColor: '#16a34a',
-        cancelButtonColor : '#6b7280',
-        reverseButtons    : true
-    });
-
-    if (!confirmResult.isConfirmed) return;
 
     var form           = document.getElementById('serviceForm');
     var nikInput       = document.querySelector('[name="nik_pemohon"]');
@@ -1779,9 +1653,9 @@ async function handleKirimPengajuan() {
                 Swal.close();
                 if (btnSubmit) btnSubmit.disabled = false;
                 if (checkData.error_code === 'DAILY_LIMIT_EXCEEDED') {
-                    showWarning(checkData.message || 'Anda sudah mengajukan layanan ini hari ini.');
+                    showToast(checkData.message || 'Anda sudah mengajukan layanan ini hari ini.', 'warning');
                 } else {
-                    showError(checkData.message || 'Terjadi kesalahan validasi', 'Validasi gagal saat memeriksa batas harian.', 'Periksa data pengajuan dan coba lagi, atau hubungi admin jika masalah berlanjut.');
+                    showToast(checkData.message || 'Terjadi kesalahan validasi', 'error');
                 }
                 return;
             }
@@ -1805,50 +1679,29 @@ async function handleKirimPengajuan() {
     fetch(form.action, {
         method  : 'POST',
         body    : formData,
-        headers : {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept'          : 'application/json'
-        }
+        headers : { 'X-Requested-With': 'XMLHttpRequest' }
     })
-    .then(function(response) {
-        return response.json().then(function(data) {
-            return { ok: response.ok, status: response.status, data: data };
-        });
-    })
-    .then(function(result) {
-        var data = result.data || {};
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
         Swal.close();
         if (btnSubmit) btnSubmit.disabled = false;
-
-        if (result.ok && data.success) {
-            Swal.fire({
-                icon              : 'success',
-                title             : 'Pengajuan Berhasil',
-                text              : data.message || 'Pengajuan dokumen berhasil dilakukan.',
-                confirmButtonText : 'OK',
-                confirmButtonColor: '#16a34a'
-            }).then(function() {
-                form.reset();
-                closeModal();
-                goToStep(1);
-                document.getElementById('liveness_passed').value = '0';
-                document.getElementById('foto_wajah').value = '';
-            });
-            return;
+        if (data.success) {
+            /* ── Toast sukses kanan atas ── */
+            showToast('Pengajuan Dokumen Berhasil dilakukan', 'success');
+            form.reset();
+            closeModal();
+            goToStep(1);
+            document.getElementById('liveness_passed').value = '0';
+            document.getElementById('foto_wajah').value = '';
+        } else {
+            showToast(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'error');
         }
-
-        if (result.status === 422 || data.errors) {
-            showValidationAlert(data.message, data.errors);
-            return;
-        }
-
-        showError(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'Server menolak atau gagal memproses pengajuan Anda.', 'Periksa kembali isian formulir, koneksi internet, lalu coba kirim ulang.');;
     })
     .catch(function(error) {
         Swal.close();
         if (btnSubmit) btnSubmit.disabled = false;
         console.error('Submit error:', error);
-        showError('Gagal mengirim pengajuan', 'Tidak berhasil mengirim data ke server.', 'Periksa koneksi internet Anda, lalu coba kirim ulang pengajuan.');
+        showToast('Gagal mengirim pengajuan. Silakan coba lagi.', 'error');
     });
 }
 
@@ -1866,11 +1719,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     @if(session('error'))
-    showError('{!! addslashes(session("error")) !!}');
+    showToast('{!! addslashes(session("error")) !!}', 'error');
     @endif
 
     @if(session('success'))
-    showSuccess('{{ addslashes(session("success")) }}');
+    showToast('{{ addslashes(session("success")) }}', 'success');
     @endif
 
 }); /* end DOMContentLoaded */

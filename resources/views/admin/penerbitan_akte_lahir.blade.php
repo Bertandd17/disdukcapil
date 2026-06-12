@@ -77,7 +77,7 @@
                             @if($data->status == 'Proses Cetak')
                                 <button type="button"
                                     onclick='openUploadModal("{{ $data->uuid }}", {!! json_encode($data->nama_pemohon) !!})'
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-all h-[44px]">
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
                                     <i class="fas fa-upload"></i> Upload Berkas
                                 </button>
                             @endif

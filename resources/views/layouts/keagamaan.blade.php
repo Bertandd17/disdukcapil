@@ -30,8 +30,11 @@
     {{-- SweetAlert global styles (toast transparan, tanpa backdrop abu-abu) --}}
     @include('admin.partials.sweetalert-styles')
 
-    {{-- Notifikasi Disdukcapil (file final tunggal: toast top-end HIJAU/MERAH, modal putih, tanpa backdrop) --}}
-    <script src="{{ asset('js/notifikasi-disdukcapil.js') }}?v={{ filemtime(public_path('js/notifikasi-disdukcapil.js')) }}"></script>
+    <!-- SweetAlert2 Disdukcapil Notification System -->
+    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+
+    <!-- Notifikasi Disdukcapil Helper -->
+    <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -172,9 +175,6 @@
 
     <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
 
-    {{-- SweetAlert Final Fix --}}
-    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}?v={{ filemtime(public_path('css/swal-final-fix.css')) }}">
-
     @stack('styles')
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -278,26 +278,43 @@
             },
 
             confirm: function(title, text, callback) {
-                window.SwalHelper.konfirmasiDisdukcapil({
-                    judul: title,
-                    pesan: text,
-                    tipe: 'konfirmasi',
-                    labelOk: 'Konfirmasi',
-                    onKonfirmasi: function() {
-                        if (callback) callback();
+                Swal.fire({
+                    title: title,
+                    html: '<p class="text-gray-600">' + text + '</p>',
+                    showCancelButton: true,
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-popup swal2-modal',
+                        confirmButton: 'swal-btn-primary',
+                        cancelButton: 'swal-btn-cancel'
                     }
+                }).then(function(result) {
+                    if (result.isConfirmed && callback) callback();
                 });
             },
 
             deleteConfirm: function(title, text, callback) {
-                window.SwalHelper.konfirmasiDisdukcapil({
-                    judul: title,
-                    pesan: text,
-                    tipe: 'hapus',
-                    labelOk: 'Hapus',
-                    onKonfirmasi: function() {
-                        if (callback) callback();
+                Swal.fire({
+                    title: title,
+                    html: '<p class="text-gray-600">' + text + '</p>',
+                    icon: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-popup swal2-modal',
+                        confirmButton: 'swal-btn-delete',
+                        cancelButton: 'swal-btn-cancel'
                     }
+                }).then(function(result) {
+                    if (result.isConfirmed && callback) callback();
                 });
             },
 
@@ -327,39 +344,40 @@
                     confirmButtonClass = 'swal-btn-success';
                 }
 
-                var pesanHtml = '<p class="text-gray-600 text-sm mb-2">' + cfg.message + '</p>';
-                if (cfg.subMessage) pesanHtml += '<p class="text-gray-500 text-sm">' + cfg.subMessage + '</p>';
+                var html = '<div class="text-center">'
+                    + '<p class="text-gray-600 text-sm mb-2">' + cfg.message + '</p>';
+                if (cfg.subMessage) html += '<p class="text-gray-500 text-sm">' + cfg.subMessage + '</p>';
+                html += '</div>';
 
-                var tipe = 'konfirmasi';
-                if (cfg.confirmColor === 'var(--danger-red)' || cfg.iconColor === 'var(--danger-red)' || /fa-trash/.test(cfg.iconClass || '')) {
-                    tipe = 'hapus';
-                } else if (cfg.confirmColor === 'var(--warning-orange)' || cfg.iconColor === 'var(--warning-orange)') {
-                    tipe = 'warning';
-                }
-
-                window.SwalHelper.konfirmasiDisdukcapil({
-                    judul: cfg.title,
-                    pesan: pesanHtml,
-                    tipe: tipe,
-                    labelOk: cfg.confirmText || 'Konfirmasi',
-                    labelBatal: cfg.cancelText || 'Batal',
-                    onKonfirmasi: function() {
+                Swal.fire({
+                    title: cfg.title,
+                    html: html,
+                    icon: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: cfg.reverseButtons,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'swal2-popup swal2-modal',
+                        confirmButton: confirmButtonClass,
+                        cancelButton: 'swal-btn-cancel'
+                    }
+                }).then(function(result) {
+                    if (result.isConfirmed) {
                         if (cfg.showLoadingAfterConfirm) {
                             Swal.fire({
                                 title: cfg.loadingTitle,
                                 html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                                     + '<p class="text-gray-600 mt-4">' + cfg.loadingMessage + '</p>',
                                 allowOutsideClick: false,
-                                allowEscapeKey: false,
                                 showConfirmButton: false,
-                                showDenyButton: false,
-                                showCancelButton: false,
                                 customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                             });
                         }
                         if (typeof cfg.onConfirm === 'function') cfg.onConfirm();
-                    },
-                    onBatal: function() {
+                    } else {
                         if (typeof cfg.onCancel === 'function') cfg.onCancel();
                     }
                 });
@@ -371,10 +389,7 @@
                     html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                         + '<p class="text-gray-600 mt-4">Mohon tunggu sebentar...</p>',
                     allowOutsideClick: false,
-                    allowEscapeKey: false,
                     showConfirmButton: false,
-                    showDenyButton: false,
-                    showCancelButton: false,
                     customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                 });
             },
@@ -418,9 +433,6 @@
     <script src="{{ asset('js/disdukcapil-toast.js') }}"></script>
     <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
     <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
-
-    {{-- SweetAlert Final Fix (PALING AKHIR - setelah semua Swal dimuat) --}}
-    <script src="{{ asset('js/swal-final-fix.js') }}?v={{ filemtime(public_path('js/swal-final-fix.js')) }}"></script>
 
     @stack('scripts')
 

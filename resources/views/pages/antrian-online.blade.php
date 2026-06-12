@@ -1,4 +1,4 @@
-﻿@extends('layouts.user')
+@extends('layouts.user')
 
 @section('content')
 @php
@@ -900,7 +900,7 @@
  if (oldStatus && newStatus && oldStatus !== newStatus) {
  changed = true;
  if (window.SwalHelper && window.SwalHelper.info) {
- window.SwalHelper.info('Status Diperbarui', key + ': ' + oldStatus + ' → ' + newStatus);
+ window.SwalHelper.info('Status Diperbarui', key + ': ' + oldStatus + ' ? ' + newStatus);
  }
  }
  if (newStatus) window.__lacakPollState.lastStatuses[key] = newStatus;
@@ -1042,16 +1042,16 @@
  }
  })
  .catch(function(err) {
- console.error('[DEBUG] Search Error:', err);
+ console.error('Search Error:', err);
  if (resultsContainer) {
- resultsContainer.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-3xl text-red-500"></i></div><p class="text-gray-500 font-medium">Data tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Periksa nomor pengajuan Anda.</p></div>';
+ resultsContainer.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-3xl text-red-500"></i></div><p class="text-gray-500 font-medium">Gagal mencari data.</p><p class="text-sm text-gray-400 mt-1">' + (err.message || 'Terjadi kesalahan koneksi') + '</p></div>';
  }
- // Gunakan notifikasi error — pesan ke user tetap sederhana & ramah warga
- SwalHelper.error('Data Tidak Ditemukan', 'Data tidak ditemukan. Periksa nomor pengajuan Anda dan coba lagi.');
+ // Gunakan notifikasi error
+ SwalHelper.error('Gagal Mencari Data!', 'Gagal mencari data: ' + (err.message || 'Terjadi kesalahan koneksi'));
  });
  } catch (err) {
- console.error('[DEBUG] Unexpected error in searchAntrian:', err);
- SwalHelper.error('Terjadi Kesalahan', 'Sistem mengalami gangguan sementara. Silakan coba beberapa saat lagi.');
+ console.error('Unexpected error in searchAntrian:', err);
+ SwalHelper.error('Terjadi kesalahan!', 'Terjadi kesalahan: ' + err.message);
  }
  };
 
@@ -1085,9 +1085,9 @@
  }
  })
  .catch(function(err) {
- console.error('[DEBUG] Search Pernikahan Error:', err);
- container.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-3xl text-red-500"></i></div><p class="text-gray-500 font-medium">Data tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Periksa nomor pengajuan Anda.</p></div>';
- SwalHelper.error('Data Tidak Ditemukan', 'Data tidak ditemukan. Periksa nomor pengajuan Anda dan coba lagi.');
+ console.error('Search Pernikahan Error:', err);
+ container.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-3xl text-red-500"></i></div><p class="text-gray-500 font-medium">Gagal mencari data pernikahan.</p><p class="text-sm text-gray-400 mt-1">' + (err.message || 'Terjadi kesalahan koneksi') + '</p></div>';
+ SwalHelper.error('Gagal Mencari Data!', 'Gagal mencari data pernikahan: ' + (err.message || 'Terjadi kesalahan koneksi'));
  });
  };
 
@@ -1146,28 +1146,7 @@
  '<div><i class="fas fa-calendar mr-1 text-purple-500"></i>' + (item.tanggal_perkawinan || '-') + '</div>' +
  '<div><i class="fas fa-church mr-1 text-purple-500"></i>' + (item.nama_gereja || '-') + '</div>' +
  '</div>' +
-
- // Alasan penolakan (jika ada)
- (function() {
- if (item.alasan_ditolak) {
- var safeAlasan = String(item.alasan_ditolak)
- .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
- return '<div class="mt-3 p-3 bg-red-50 border-l-4 border-red-500 rounded-r-lg">' +
- '<div class="flex items-start gap-2">' +
- '<i class="fas fa-exclamation-circle text-red-500 mt-0.5 flex-shrink-0"></i>' +
- '<div class="flex-1 min-w-0">' +
- '<p class="text-xs font-bold text-red-700 uppercase tracking-wide mb-1">Alasan Penolakan</p>' +
- '<p class="text-sm text-red-800 break-words">' + safeAlasan + '</p>' +
- '</div></div></div>';
- }
- return '';
- })() +
- '</div>' +
- (item.status === 'DITOLAK_KEAGAMAAN' || item.status === 'TANGGAL_DITOLAK' || item.status === 'DOKUMEN_PERLU_PERBAIKAN'
- ? '<div class="mt-4 pt-3 border-t border-gray-100 text-center">' +
- '<p class="text-xs text-red-600 font-semibold"><i class="fas fa-info-circle mr-1"></i>Pengajuan perlu perhatian, lihat detail di atas.</p>' +
- '</div>'
- : '');
+ '</div>';
  }).join('');
 
  container.innerHTML = html;
@@ -1319,7 +1298,7 @@
  return;
  }
 
- // Fallback: belum ada dokumen final → tampilkan modal detail
+ // Fallback: belum ada dokumen final ? tampilkan modal detail
  if (typeof window.showAntrianDetail === 'function') {
  window.showAntrianDetail(data);
  } else {
@@ -1347,39 +1326,9 @@
  });
  }
 
- // ── Global helper: deteksi status tolak & ekstrak alasan ──
- // Catatan: data historis admin menulis status="Tolak" + alasan disisipkan di field
- // `keterangan` berformat "Permohonan ditolak. Alasan: <alasan>". Field
- // `alasan_penolakan` baru belakangan ditambahkan dan belum tentu terisi.
- // Helper ini didefinisikan di sini (sebelum renderSearchResults) agar tersedia
- // pada pemanggilan pertama di dalam body fungsi tersebut.
- window.isRejectedStatus = function(status) {
- if (!status) return false;
- var s = String(status).toLowerCase();
- return s === 'tolak' || s === 'ditolak' || s === 'dibatalkan' || s === 'batal' || s === 'rejected' || s === 'batal';
- };
-
- window.extractAlasan = function(lb) {
- if (!lb) return '';
- if (lb.alasan_penolakan) return lb.alasan_penolakan;
- if (lb.keterangan) {
-     var c = lb.keterangan;
-     var idx = c.lastIndexOf('Alasan:');
-     if (idx !== -1) {
-         return c.substring(idx + 7).trim();
-     }
-     var idx2 = c.indexOf('Alasan:');
-     if (idx2 !== -1) {
-         return c.substring(idx2 + 7).trim();
-     }
-     return c;
- }
- return '';
- };
-
  window.renderSearchResults = function(results) {
  console.log('Rendering results:', results);
-
+ 
  if (!results || results.length === 0) {
  document.getElementById('searchResults').innerHTML = 
  '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-inbox text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Tidak ada data antrian.</p></div>'; return;
@@ -1455,23 +1404,18 @@
  'Ditolak': 5,
  'Dibatalkan': 5
  };
- var currentStep = hasPernikahan
- ? (antrian.pernikahan.step || stepMap[statusAntrian] || 1)
- : (stepMap[statusAntrian] || 1);
+//  var currentStep = hasPernikahan ? (antrian.pernikahan.step || 1) : (stepMap[statusAntrian] || 1);
+var currentStep = hasPernikahan 
+    ? (antrian.pernikahan.step || stepMap[statusAntrian] || 1) 
+    : (stepMap[statusAntrian] || 1);
  var stepWidth = (currentStep / 5) * 100;
- var isRejected = window.isRejectedStatus(statusAntrian);
- var progressLabel = isRejected ? statusAntrian : ('Step ' + currentStep + ' dari 5');
- var progressBarColor = isRejected
- ? 'bg-gradient-to-r from-red-500 to-rose-500'
- : 'bg-gradient-to-r from-green-500 to-emerald-500';
- var progressTextColor = isRejected ? 'text-red-600' : 'text-gray-500';
  var progressHtml = '<div class="mt-3">' +
- '<div class="flex justify-between text-xs ' + progressTextColor + ' mb-1">' +
+ '<div class="flex justify-between text-xs text-gray-500 mb-1">' +
  '<span>Progress</span>' +
- '<span>' + progressLabel + '</span>' +
+ '<span>Step ' + currentStep + ' dari 5</span>' +
  '</div>' +
  '<div class="w-full bg-gray-200 rounded-full h-2">' +
- '<div class="' + progressBarColor + ' h-2 rounded-full transition-all duration-500" style="width: ' + stepWidth + '%"></div>' +
+ '<div class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-500" style="width: ' + stepWidth + '%"></div>' +
  '</div>' +
  '</div>';
 
@@ -1487,35 +1431,6 @@
  '<div><i class="fas fa-id-card mr-1 text-green-500"></i>' + nikText + '</div>' +
  '<div><i class="fas fa-calendar mr-1 text-green-500"></i>' + tglPengajuan + '</div>' +
  '</div>';
-
- // Cari alasan penolakan dari lacak_berkas (ambil entri status Tolak/Ditolak/Dibatalkan yang terbaru)
- var alasanPenolakanHtml = '';
- if (antrian.lacak_berkas && antrian.lacak_berkas.length > 0) {
- var rejected = antrian.lacak_berkas.filter(function(lb) {
- return window.isRejectedStatus(lb.status) && window.extractAlasan(lb);
- });
- if (rejected.length > 0) {
- var lastReject = rejected[rejected.length - 1];
- var alasanText = window.extractAlasan(lastReject)
- .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
- var tglReject = '-';
- if (lastReject.tanggal) {
- try {
- tglReject = new Date(lastReject.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
- } catch (e) { tglReject = lastReject.tanggal; }
- }
- alasanPenolakanHtml = '<div class="mt-3 p-3 bg-red-50 border-l-4 border-red-500 rounded-r-lg">' +
- '<div class="flex items-start gap-2">' +
- '<i class="fas fa-exclamation-circle text-red-500 mt-0.5 flex-shrink-0"></i>' +
- '<div class="flex-1 min-w-0">' +
- '<p class="text-xs font-bold text-red-700 uppercase tracking-wide mb-1">Alasan Penolakan</p>' +
- '<p class="text-sm text-red-800 break-words">' + alasanText + '</p>' +
- '<p class="text-[10px] text-red-500 mt-1"><i class="fas fa-clock mr-1"></i>' + tglReject + '</p>' +
- '</div>' +
- '</div>' +
- '</div>';
- }
- }
 
  var timelineHtml = '';
  if (antrian.lacak_berkas && antrian.lacak_berkas.length > 0) {
@@ -1543,23 +1458,23 @@
 
  if (anyUploaded) {
  var rows = dfItems.map(function(it) {
- var url = df[it.key];
- if (url) {
- var downloadUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
- return '<div style="display:flex;align-items:center;justify-content:space-between;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;margin-bottom:6px;">' +
- '<span style="font-size:12px;color:#374151;font-weight:500;display:flex;align-items:center;gap:6px;">' +
- '<i class="fas fa-file-pdf" style="color:#059669;"></i>' + it.label + '</span>' +
- '<a href="' + downloadUrl + '" onclick="event.stopPropagation()" ' +
- 'style="display:inline-flex;align-items:center;gap:6px;background:#2563eb;color:#ffffff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;white-space:nowrap;">' +
- '<i class="fas fa-download"></i> Download</a>' +
- '</div>';
- }
- return '<div style="display:flex;align-items:center;justify-content:space-between;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px;margin-bottom:6px;">' +
- '<span style="font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:6px;">' +
- '<i class="fas fa-file-pdf" style="color:#d1d5db;"></i>' + it.label + '</span>' +
- '<span style="font-size:12px;color:#9ca3af;font-style:italic;">Belum tersedia</span>' +
- '</div>';
- }).join('');
+    var url = df[it.key];
+    if (url) {
+        var downloadUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
+        return '<div style="display:flex;align-items:center;justify-content:space-between;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;margin-bottom:6px;">' +
+            '<span style="font-size:12px;color:#374151;font-weight:500;display:flex;align-items:center;gap:6px;">' +
+            '<i class="fas fa-file-pdf" style="color:#059669;"></i>' + it.label + '</span>' +
+            '<a href="' + downloadUrl + '" onclick="event.stopPropagation()" ' +
+            'style="display:inline-flex;align-items:center;gap:6px;background:#2563eb;color:#ffffff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;white-space:nowrap;">' +
+            '<i class="fas fa-download"></i> Download</a>' +
+            '</div>';
+    }
+    return '<div style="display:flex;align-items:center;justify-content:space-between;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px;margin-bottom:6px;">' +
+        '<span style="font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:6px;">' +
+        '<i class="fas fa-file-pdf" style="color:#d1d5db;"></i>' + it.label + '</span>' +
+        '<span style="font-size:12px;color:#9ca3af;font-style:italic;">Belum tersedia</span>' +
+        '</div>';
+}).join('');
 
  var uploadedAt = antrian.pernikahan.dokumen_final_uploaded_at
  ? '<p class="text-[10px] text-gray-400 mt-2"><i class="fas fa-clock mr-1"></i>Diupload: ' + antrian.pernikahan.dokumen_final_uploaded_at + '</p>'
@@ -1592,19 +1507,13 @@
  '</div>' +
  progressHtml +
  infoGridHtml +
- alasanPenolakanHtml +
  timelineHtml +
  dokumenFinalHtml +
- // Tombol "Lihat" disembunyikan untuk status Ditolak/Dibatalkan
- (statusAntrian === 'Ditolak' || statusAntrian === 'Dibatalkan'
- ? '<div class="mt-4 pt-3 border-t border-gray-100 text-center">' +
- '<p class="text-xs text-red-600 font-semibold"><i class="fas fa-info-circle mr-1"></i>Pengajuan telah ditolak, lihat alasan di atas.</p>' +
- '</div>'
- : '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
+ '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
  '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
  '<i class="fas fa-eye"></i><span>Lihat</span>' +
  '</button>' +
- '</div>') +
+ '</div>' +
  '</div>';
  }).join('');
  document.getElementById('searchResults').innerHTML = html;
@@ -1647,7 +1556,7 @@
  }, duration / steps);
  }
 
- // Pengiriman form & alur tiket: dihandle oleh public/js/antrian-ocr.js (draft → OCR → finalize).
+ // Pengiriman form & alur tiket: dihandle oleh public/js/antrian-ocr.js (draft ? OCR ? finalize).
 
  // Confetti Animation
  function createConfetti() {
@@ -1735,69 +1644,32 @@
  }
 
  // resetForm: didefinisikan di antrian-ocr.js (konfirmasi Swal + reset multi-step).
-
- // ============================================================
- // Show Antrian Detail — DIPERBAIKI: sinkron status & step
- // dengan kartu hasil (support antrian pernikahan & biasa)
- // ============================================================
+ 
+ // Show Antrian Detail dengan SweetAlert - desain mengikuti modal pernikahan
  window.showAntrianDetail = function(antrian) {
  console.log('Showing antrian detail:', antrian);
 
- // ── Status config antrian biasa ───────────────────────────
  var statusConfigMap = {
- 'Menunggu':         { hex: '#f59e0b', label: 'Menunggu',         icon: 'fa-clock',       step: 1 },
- 'Dokumen Diterima': { hex: '#3b82f6', label: 'Dokumen Diterima', icon: 'fa-file-check',  step: 2 },
- 'Verifikasi Data':  { hex: '#6366f1', label: 'Verifikasi Data',  icon: 'fa-search',      step: 3 },
- 'Proses Cetak':     { hex: '#a855f7', label: 'Proses Cetak',     icon: 'fa-print',       step: 4 },
- 'Siap Pengambilan': { hex: '#10b981', label: 'Siap Pengambilan', icon: 'fa-box-open',    step: 5 },
- 'Selesai':          { hex: '#22c55e', label: 'Selesai',          icon: 'fa-check-circle',step: 5 },
- 'Ditolak':          { hex: '#ef4444', label: 'Ditolak',          icon: 'fa-ban',         step: 3 },
- 'Dibatalkan':       { hex: '#f43f5e', label: 'Dibatalkan',       icon: 'fa-times',       step: 1 }
+ 'Menunggu': { hex: '#f59e0b', label: 'Menunggu', icon: 'fa-clock', step: 1 },
+ 'Dokumen Diterima': { hex: '#3b82f6', label: 'Dokumen Diterima', icon: 'fa-file-check', step: 2 },
+ 'Verifikasi Data': { hex: '#6366f1', label: 'Verifikasi Data', icon: 'fa-search', step: 3 },
+ 'Proses Cetak': { hex: '#a855f7', label: 'Proses Cetak', icon: 'fa-print', step: 4 },
+ 'Siap Pengambilan': { hex: '#10b981', label: 'Siap Pengambilan', icon: 'fa-box-open', step: 5 },
+ 'Selesai': { hex: '#22c55e', label: 'Selesai', icon: 'fa-check-circle', step: 5 },
+ 'Ditolak': { hex: '#ef4444', label: 'Ditolak', icon: 'fa-ban', step: 5 },
+ 'Dibatalkan': { hex: '#f43f5e', label: 'Dibatalkan', icon: 'fa-times', step: 5 }
  };
 
- // ── Status config antrian pernikahan ─────────────────────
- var statusPernikahanConfigMap = {
- 'MENUNGGU_KONFIRMASI_KEAGAMAAN':        { hex: '#f59e0b', label: 'Menunggu Konfirmasi Keagamaan', icon: 'fa-clock',               step: 1 },
- 'DITOLAK_KEAGAMAAN':                    { hex: '#ef4444', label: 'Ditolak',                       icon: 'fa-times-circle',         step: 1 },
- 'MENUNGGU_APPROVE_TANGGAL':             { hex: '#3b82f6', label: 'Menunggu Persetujuan Tanggal',  icon: 'fa-calendar-check',       step: 2 },
- 'TANGGAL_DITOLAK':                      { hex: '#f97316', label: 'Tanggal Ditolak',               icon: 'fa-calendar-times',       step: 2 },
- 'TANGGAL_DISETUJUI':                    { hex: '#22c55e', label: 'Tanggal Disetujui',             icon: 'fa-check-circle',         step: 3 },
- 'DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI': { hex: '#a855f7', label: 'Menunggu Verifikasi Dokumen',  icon: 'fa-search',               step: 3 },
- 'DOKUMEN_PERLU_PERBAIKAN':              { hex: '#f97316', label: 'Dokumen Perlu Perbaikan',       icon: 'fa-exclamation-triangle', step: 3 },
- 'DOKUMEN_DIVERIFIKASI':                 { hex: '#14b8a6', label: 'Dokumen Diverifikasi',          icon: 'fa-clipboard-check',      step: 4 },
- 'SELESAI':                              { hex: '#10b981', label: 'Selesai',                       icon: 'fa-check-double',         step: 5 }
- };
-
- // ── Deteksi jenis antrian ─────────────────────────────────
- var hasPernikahan = !!(antrian.pernikahan && antrian.pernikahan.status);
- var statusAntrian, statusConfig;
-
- if (hasPernikahan) {
- // Sama persis dengan logika di kartu renderSearchResults
- var pCfg = statusPernikahanConfigMap[antrian.pernikahan.status]
- || statusPernikahanConfigMap['MENUNGGU_KONFIRMASI_KEAGAMAAN'];
- statusAntrian = antrian.pernikahan.status_label || pCfg.label;
- statusConfig = {
- hex:   pCfg.hex,
- label: statusAntrian,
- icon:  pCfg.icon,
- step:  antrian.pernikahan.step || pCfg.step // prioritaskan step dari server
- };
- } else {
- statusAntrian = antrian.status_antrian || 'Menunggu';
- statusConfig  = statusConfigMap[statusAntrian] || statusConfigMap['Menunggu'];
- }
-
- // ── Data umum ─────────────────────────────────────────────
  var nomorAntrian = antrian.nomor_antrian || '-';
- var namaLengkap  = antrian.nama_lengkap  || '-';
- var nik          = antrian.nik           || '-';
- var namaLayanan  = (antrian.layanan && antrian.layanan.nama_layanan)
- ? antrian.layanan.nama_layanan
- : 'Layanan Umum';
- var stepWidth    = (statusConfig.step / 5) * 100;
+ var namaLengkap = antrian.nama_lengkap || '-';
+ var nik = antrian.nik || '-';
+ var namaLayanan = (antrian.layanan && antrian.layanan.nama_layanan) ? antrian.layanan.nama_layanan : 'Layanan Umum';
+ var statusAntrian = antrian.status_antrian || 'Menunggu';
+ var statusConfig = statusConfigMap[statusAntrian] || statusConfigMap['Menunggu'];
+ var stepVal = statusConfig.step;
+ var stepWidth = (statusConfig.step / 5) * 100;
 
- // ── Format tanggal ────────────────────────────────────────
+ // Format tanggal pembuatan
  var createdDate = '-';
  if (antrian.created_at) {
  try {
@@ -1808,27 +1680,33 @@
  } catch (e) { createdDate = antrian.created_at; }
  }
 
- // ── Dokumen hasil (lacak_berkas) – antrian biasa ──────────
- var dokumenHtml = '';
+ // Dokumen final: ambil semua lacak_berkas yang punya file/download_url
  var dokumenItems = [];
  if (Array.isArray(antrian.lacak_berkas)) {
  antrian.lacak_berkas.forEach(function(lb) {
  if (lb && lb.download_url) {
  var tgl = '-';
- var src = lb.tanggal || lb.created_at;
- if (src) {
+ if (lb.tanggal) {
  try {
- tgl = new Date(src).toLocaleDateString('id-ID', {
- day: '2-digit', month: 'short', year: 'numeric'
+ tgl = new Date(lb.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+ } catch (e) { tgl = lb.tanggal; }
+ } else if (lb.created_at) {
+ try {
+ tgl = new Date(lb.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+ } catch (e) { tgl = lb.created_at; }
+ }
+ dokumenItems.push({
+ label: lb.status || 'Dokumen',
+ tanggal: tgl,
+ url: lb.download_url
  });
- } catch (e) { tgl = src; }
- }
- dokumenItems.push({ label: lb.status || 'Dokumen', tanggal: tgl, url: lb.download_url });
  }
  });
  }
+
+ var dokumenHtml = '';
  if (dokumenItems.length > 0) {
- var dokRows = dokumenItems.map(function(it) {
+ var rows = dokumenItems.map(function(it) {
  var viewUrl = it.url + (it.url.indexOf('?') === -1 ? '?' : '&') + 'inline=1';
  return '<div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 text-xs">' +
  '<div class="flex items-center gap-2">' +
@@ -1836,261 +1714,98 @@
  '<div>' +
  '<p class="text-gray-700 font-semibold">' + it.label + '</p>' +
  '<p class="text-[10px] text-gray-400">' + it.tanggal + '</p>' +
- '</div></div>' +
- '<a href="' + viewUrl + '" target="_blank" rel="noopener" ' +
- 'class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm inline-flex items-center gap-1 transition">' +
- '<i class="fas fa-eye"></i> Lihat Dokumen</a>' +
+ '</div>' +
+ '</div>' +
+ '<a href="' + viewUrl + '" target="_blank" rel="noopener" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm inline-flex items-center gap-1 transition">' +
+ '<i class="fas fa-eye"></i> Lihat Dokumen' +
+ '</a>' +
  '</div>';
  }).join('');
+
  dokumenHtml =
  '<div class="mb-4">' +
- '<p class="text-xs font-semibold text-gray-700 mb-2">' +
- '<i class="fas fa-folder-open text-emerald-600 mr-1"></i>' +
- 'Dokumen Hasil Penerbitan Disdukcapil</p>' +
- '<div class="space-y-2">' + dokRows + '</div>' +
+ '<p class="text-xs font-semibold text-gray-700 mb-2"><i class="fas fa-folder-open text-emerald-600 mr-1"></i>Dokumen Hasil Penerbitan Disdukcapil</p>' +
+ '<div class="space-y-2">' + rows + '</div>' +
  '</div>';
  }
 
- // ── Dokumen final pernikahan (Akta + 3 KK) ───────────────
- var dokumenPernikahanHtml = '';
- if (hasPernikahan && antrian.pernikahan.dokumen_final) {
- var df = antrian.pernikahan.dokumen_final;
- var dfItems = [
- { key: 'akta_pernikahan',  label: 'Akta Pernikahan' },
- { key: 'kk_pasangan',     label: 'KK Baru – Pasangan' },
- { key: 'kk_ortu_pria',    label: 'KK Baru – Ortu Pria' },
- { key: 'kk_ortu_wanita',  label: 'KK Baru – Ortu Wanita' }
- ];
- var anyUploaded = dfItems.some(function(it) { return !!df[it.key]; });
- if (anyUploaded) {
- var dfRows = dfItems.map(function(it) {
- var url = df[it.key];
- if (url) {
- var dlUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
- return '<div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 text-xs">' +
- '<span class="flex items-center gap-2 text-gray-700 font-semibold">' +
- '<i class="fas fa-file-pdf text-emerald-600"></i>' + it.label + '</span>' +
- '<a href="' + dlUrl + '" onclick="event.stopPropagation()" ' +
- 'class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm inline-flex items-center gap-1 transition">' +
- '<i class="fas fa-download"></i> Download</a>' +
- '</div>';
- }
- return '<div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs">' +
- '<span class="flex items-center gap-2 text-gray-400">' +
- '<i class="fas fa-file-pdf text-gray-300"></i>' + it.label + '</span>' +
- '<span class="text-gray-400 italic text-xs">Belum tersedia</span>' +
- '</div>';
- }).join('');
- var uploadedAt = antrian.pernikahan.dokumen_final_uploaded_at
- ? '<p class="text-[10px] text-gray-400 mt-2"><i class="fas fa-clock mr-1"></i>Diupload: ' +
- antrian.pernikahan.dokumen_final_uploaded_at + '</p>'
- : '';
- dokumenPernikahanHtml =
- '<div class="mb-4">' +
- '<p class="text-xs font-semibold text-gray-700 mb-2">' +
- '<i class="fas fa-folder-open text-emerald-600 mr-1"></i>' +
- 'Dokumen Hasil Penerbitan Disdukcapil</p>' +
- '<div class="space-y-2">' + dfRows + '</div>' +
- uploadedAt +
- '</div>';
- }
- }
-
- // ── Catatan pernikahan ────────────────────────────────────
- var catatanHtml = '';
- if (hasPernikahan) {
- var p = antrian.pernikahan;
- if (p.catatan_keagamaan || p.catatan_admin || p.alasan_ditolak) {
- catatanHtml =
- '<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">' +
- '<p class="text-xs font-semibold text-yellow-800 mb-2">' +
- '<i class="fas fa-info-circle mr-1"></i>Catatan</p>' +
- (p.catatan_keagamaan ? '<p class="text-xs text-gray-700 mb-1"><strong>Keagamaan:</strong> ' + p.catatan_keagamaan + '</p>' : '') +
- (p.catatan_admin     ? '<p class="text-xs text-gray-700 mb-1"><strong>Admin:</strong> '      + p.catatan_admin     + '</p>' : '') +
- (p.alasan_ditolak    ? '<p class="text-xs text-red-700"><strong>Alasan Ditolak:</strong> '   + p.alasan_ditolak    + '</p>' : '') +
- '</div>';
- }
- }
-
- // ── Alasan penolakan (dari lacak_berkas) ──────────────────
- var alasanPenolakanModalHtml = '';
- if (antrian.lacak_berkas && antrian.lacak_berkas.length > 0) {
- var rejectedRows = antrian.lacak_berkas.filter(function(lb) {
- return window.isRejectedStatus(lb.status) && window.extractAlasan(lb);
- });
- if (rejectedRows.length > 0) {
- var rejectCards = rejectedRows.map(function(r) {
- var tglR = '-';
- if (r.tanggal) {
- try {
- tglR = new Date(r.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
- } catch (e) { tglR = r.tanggal; }
- }
- var safeAlasan = window.extractAlasan(r)
- .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
- var iconColor = (r.status === 'Ditolak' || r.status === 'Tolak') ? 'text-red-500' : 'text-rose-500';
- return '<div class="flex items-start gap-3 p-3 bg-white border border-red-200 rounded-lg mb-2">' +
- '<i class="fas fa-exclamation-circle ' + iconColor + ' mt-1 flex-shrink-0"></i>' +
- '<div class="flex-1 min-w-0">' +
- '<div class="flex items-center gap-2 mb-1">' +
- '<span class="text-xs font-bold text-red-700">' + r.status + '</span>' +
- '<span class="text-[10px] text-gray-400"><i class="fas fa-clock mr-1"></i>' + tglR + '</span>' +
- '</div>' +
- '<p class="text-sm text-gray-800 break-words">' + safeAlasan + '</p>' +
- '</div>' +
- '</div>';
- }).join('');
- alasanPenolakanModalHtml =
- '<div class="bg-red-50 border-l-4 border-red-500 rounded-r-xl p-4 mb-4">' +
- '<p class="text-sm font-bold text-red-700 mb-2 flex items-center gap-2">' +
- '<i class="fas fa-ban"></i>Alasan Penolakan</p>' +
- rejectCards +
- '</div>';
- }
- }
-
- // ── Timeline riwayat (dari lacak_berkas) ───────────────────
- var riwayatLacakHtml = '';
- if (antrian.lacak_berkas && antrian.lacak_berkas.length > 0) {
- var sortedLacak = antrian.lacak_berkas.slice().sort(function(a, b) {
- var da = new Date(a.tanggal || a.created_at || 0).getTime();
- var db = new Date(b.tanggal || b.created_at || 0).getTime();
- return da - db;
- });
- var riwayatItems = sortedLacak.map(function(lb) {
- var lbStatus = lb.status || '-';
- var lbColor = (statusColors[lbStatus] && statusColors[lbStatus].hex) || '#6b7280';
- var tglLb = '-';
- if (lb.tanggal) {
- try {
- tglLb = new Date(lb.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
- } catch (e) { tglLb = lb.tanggal; }
- }
- var safeKeterangan = '';
- if (lb.keterangan) {
- safeKeterangan = lb.keterangan
- .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
- }
- var alasanLb = window.extractAlasan(lb);
- var safeAlasanLb = '';
- if (alasanLb) {
- safeAlasanLb = alasanLb
- .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
- }
- return '<div class="flex items-start gap-3 mb-3">' +
- '<div class="w-3 h-3 rounded-full border-2 border-white shadow flex-shrink-0 mt-1" style="background-color:' + lbColor + '"></div>' +
- '<div class="flex-1 min-w-0">' +
- '<div class="flex items-center gap-2 flex-wrap">' +
- '<p class="text-sm font-bold text-gray-800">' + lbStatus + '</p>' +
- '<span class="text-[10px] text-gray-400">' + tglLb + '</span>' +
- '</div>' +
- (safeKeterangan ? '<p class="text-xs text-gray-600 mt-1 break-words">' + safeKeterangan + '</p>' : '') +
- (safeAlasanLb ? '<p class="text-xs text-red-600 mt-1 font-semibold break-words"><i class="fas fa-exclamation-circle mr-1"></i>Alasan: ' + safeAlasanLb + '</p>' : '') +
- '</div>' +
- '</div>';
- }).join('');
- riwayatLacakHtml =
- '<div class="mb-4">' +
- '<p class="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-2">' +
- '<i class="fas fa-history text-green-600"></i>Riwayat Status (' + antrian.lacak_berkas.length + ')</p>' +
- '<div class="bg-gray-50 rounded-xl p-3">' + riwayatItems + '</div>' +
- '</div>';
- }
-
- // ── Susun konten modal ────────────────────────────────────
  var modalContent =
  '<div class="p-6">' +
-
- // Header
  '<div class="flex items-center justify-between mb-4">' +
  '<div class="flex items-center gap-3">' +
  '<div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white">' +
- '<i class="fas fa-file-alt text-xl"></i></div>' +
+ '<i class="fas fa-file-alt text-xl"></i>' +
+ '</div>' +
  '<div>' +
  '<span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded">ANTRIAN ONLINE</span>' +
  '<h3 class="font-bold text-xl text-gray-800">' + nomorAntrian + '</h3>' +
- '</div></div>' +
+ '</div>' +
+ '</div>' +
  '<button onclick="Swal.close()" class="text-gray-400 hover:text-gray-600">' +
- '<i class="fas fa-times text-xl"></i></button>' +
+ '<i class="fas fa-times text-xl"></i>' +
+ '</button>' +
  '</div>' +
 
- // Status badge
  '<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-4">' +
  '<div class="flex items-center gap-3">' +
- '<div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl" style="background-color:' + statusConfig.hex + '">' +
- '<i class="fas ' + statusConfig.icon + '"></i></div>' +
+ '<div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl" style="background-color: ' + statusConfig.hex + '">' +
+ '<i class="fas ' + statusConfig.icon + '"></i>' +
+ '</div>' +
  '<div>' +
- '<p class="font-bold text-lg" style="color:' + statusConfig.hex + '">' + statusConfig.label + '</p>' +
+ '<p class="font-bold text-lg" style="color: ' + statusConfig.hex + '">' + statusConfig.label + '</p>' +
  '<p class="text-xs text-gray-500">Status saat ini</p>' +
- '</div></div></div>' +
+ '</div>' +
+ '</div>' +
+ '</div>' +
 
- // Alasan penolakan (jika ada)
- alasanPenolakanModalHtml +
-
- // Timeline riwayat (jika ada)
- riwayatLacakHtml +
-
- // Progress bar
  '<div class="mb-4">' +
  '<div class="flex justify-between text-xs text-gray-500 mb-1">' +
  '<span>Progress Pengajuan</span>' +
  '<span>Step ' + statusConfig.step + ' dari 5</span>' +
  '</div>' +
- '<div class="w-full bg-gray-200 rounded-full h-3" id="modalProgressBarWrap">' +
- '<div class="h-3 rounded-full transition-all duration-500" style="width:' + stepWidth + '%;background:linear-gradient(90deg,' + (window.isRejectedStatus(statusConfig.label) || (statusConfig.hex && statusConfig.hex.toLowerCase() === '#ef4444') ? '#ef4444,#f43f5e' : '#10b981,#22c55e') + ')"></div>' +
- '</div></div>' +
+ '<div class="w-full bg-gray-200 rounded-full h-3">' +
+ '<div class="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all" style="width: ' + stepWidth + '%"></div>' +
+ '</div>' +
+ '</div>' +
 
- // Info grid
  '<div class="bg-gray-50 rounded-xl p-4 space-y-3 mb-4">' +
- '<div class="flex justify-between"><span class="text-xs text-gray-500">Nama Pemohon</span>' +
- '<span class="font-semibold text-gray-800 text-sm">' + namaLengkap + '</span></div>' +
- '<div class="flex justify-between"><span class="text-xs text-gray-500">NIK</span>' +
- '<span class="font-mono text-gray-800 text-sm">' + nik + '</span></div>' +
- '<div class="flex justify-between"><span class="text-xs text-gray-500">Layanan</span>' +
- '<span class="font-semibold text-gray-800 text-sm">' + namaLayanan + '</span></div>' +
- '<div class="flex justify-between"><span class="text-xs text-gray-500">Tanggal Pengajuan</span>' +
- '<span class="font-semibold text-gray-800 text-sm">' + createdDate + '</span></div>' +
+ '<div class="flex justify-between">' +
+ '<span class="text-xs text-gray-500">Nama Pemohon</span>' +
+ '<span class="font-semibold text-gray-800 text-sm">' + namaLengkap + '</span>' +
+ '</div>' +
+ '<div class="flex justify-between">' +
+ '<span class="text-xs text-gray-500">NIK</span>' +
+ '<span class="font-mono text-gray-800 text-sm">' + nik + '</span>' +
+ '</div>' +
+ '<div class="flex justify-between">' +
+ '<span class="text-xs text-gray-500">Layanan</span>' +
+ '<span class="font-semibold text-gray-800 text-sm">' + namaLayanan + '</span>' +
+ '</div>' +
+ '<div class="flex justify-between">' +
+ '<span class="text-xs text-gray-500">Tanggal Pengajuan</span>' +
+ '<span class="font-semibold text-gray-800 text-sm">' + createdDate + '</span>' +
+ '</div>' +
  '</div>' +
 
- // Dokumen (pernikahan pakai dfRows, biasa pakai lacak_berkas)
- (hasPernikahan ? dokumenPernikahanHtml : dokumenHtml) +
+ dokumenHtml +
 
- // Catatan pernikahan
- catatanHtml +
-
- // Tombol aksi
  '<div class="flex gap-2">' +
- '<button onclick="window.copyNomorAntrianToClipboard(\'' + nomorAntrian + '\'); Swal.close();" ' +
- 'class="flex-1 py-2 bg-green-600 text-white rounded-lg font-semibold text-sm hover:bg-green-700">' +
- '<i class="fas fa-copy mr-1"></i> Salin Nomor</button>' +
- '<button onclick="Swal.close()" ' +
- 'class="flex-1 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold text-sm hover:bg-gray-300">' +
- 'Tutup</button>' +
+ '<button onclick="window.copyNomorAntrianToClipboard(\'' + nomorAntrian + '\'); Swal.close();" class="flex-1 py-2 bg-green-600 text-white rounded-lg font-semibold text-sm hover:bg-green-700">' +
+ '<i class="fas fa-copy mr-1"></i> Salin Nomor' +
+ '</button>' +
+ '<button onclick="Swal.close()" class="flex-1 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold text-sm hover:bg-gray-300">' +
+ 'Tutup' +
+ '</button>' +
  '</div>' +
-
  '</div>';
 
  Swal.fire({
  html: modalContent,
  showConfirmButton: false,
  width: '500px',
- customClass: { popup: 'rounded-2xl' },
- didOpen: function() {
- var pb = document.getElementById('modalProgressBar');
- if (!pb) return;
- // Sesuaikan warna progress bar sesuai status
- if (statusAntrian === 'Ditolak') {
- pb.style.background = 'linear-gradient(to right, #ef4444, #dc2626)';
- } else if (statusAntrian === 'Dibatalkan') {
- pb.style.background = 'linear-gradient(to right, #f43f5e, #e11d48)';
- } else if (statusAntrian === 'Siap Pengambilan' || statusAntrian === 'Selesai') {
- pb.style.background = 'linear-gradient(to right, #10b981, #059669)';
- } else {
- pb.style.background = 'linear-gradient(to right, #22c55e, #10b981)';
- }
- }
+ customClass: { popup: 'rounded-2xl' }
  });
- };
+ }
 
  // Copy Nomor Antrian to Clipboard
  window.copyNomorAntrianToClipboard = function(text) {

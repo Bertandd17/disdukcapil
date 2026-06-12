@@ -23,10 +23,10 @@
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    
     <!-- SweetAlert Disdukcapil -->
     <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
-
+    
     <style>
         .swal2-loader {
             display: inline-block;
@@ -444,10 +444,6 @@ echo json_encode([
                 title: 'Menyimpan data...',
                 text: 'Mohon tunggu sebentar',
                 allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                showDenyButton: false,
-                showCancelButton: false,
                 didOpen: () => {
                     Swal.showLoading();
                 }
@@ -552,10 +548,6 @@ echo json_encode([
                 title: 'Mengunggah file...',
                 text: selectedFile.name,
                 allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                showDenyButton: false,
-                showCancelButton: false,
                 didOpen: () => {
                     Swal.showLoading();
                 }
@@ -670,9 +662,5 @@ echo json_encode([
     </div>
 
 <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
-</body>
-
-{{-- SweetAlert Final Fix --}}
-<script src="{{ asset('js/swal-final-fix.js') }}"></script>
 </body>
 </html>

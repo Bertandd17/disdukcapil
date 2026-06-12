@@ -22,7 +22,7 @@ class LahirMatiController extends Controller
             'nama_pemohon'                => 'required|string',
             'alamat_pemohon'              => 'required|string',
             'hubungan_pemohon'            => 'required|string',
-            'foto_wajah'                  => 'nullable|string',
+
             'ktp_pemohon'                 => 'nullable|file|mimes:pdf|max:2048',
             'kartu_keluarga_pemohon'      => 'nullable|file|mimes:pdf|max:2048',
             'ktp_saksi1'                  => 'nullable|file|mimes:pdf|max:2048',
@@ -66,15 +66,20 @@ class LahirMatiController extends Controller
 
         try {
             $nomorAntrian = $antrian->nomor_antrian;
+
+            // Ambil data teks, kecualikan field file
             $data = $request->except([
-                'ktp_pemohon', 'kartu_keluarga_pemohon', 'ktp_saksi1', 'ktp_saksi2',
-                'formulir_f201', 'surat_keterangan_lahir_mati', 'foto_wajah'
+                'ktp_pemohon', 'kartu_keluarga_pemohon', 'ktp_saksi1',
+                'ktp_saksi2', 'formulir_f201', 'surat_keterangan_lahir_mati',
             ]);
 
             $data['status']     = 'Verifikasi Data';
             $data['layanan_id'] = 'lahir_mati';
+
+            // Timpa nomor antrian dengan nilai resmi dari DB
             $data['nomor_antrian'] = $nomorAntrian;
 
+            // Handle file uploads ke disk 'private'
             $fileUploads = [
                 'ktp_pemohon'                 => 'lahir_mati/pemohon',
                 'kartu_keluarga_pemohon'      => 'lahir_mati/kk',
@@ -90,20 +95,16 @@ class LahirMatiController extends Controller
                 }
             }
 
-            if ($request->filled('foto_wajah')) {
-                $base64   = preg_replace('/^data:image\/\w+;base64,/', '', $request->foto_wajah);
-                $decoded  = base64_decode($base64);
-                $filename = 'wajah_' . uniqid() . '_' . time() . '.jpg';
-                Storage::disk('private')->put("lahir_mati/{$filename}", $decoded);
-                $data['foto_wajah'] = "lahir_mati/{$filename}";
-            }
-
+            // Simpan ke tabel lahir_mati
             $lahirMati = LahirMati::create($data);
 
+            // Update antrian_online_id pada record lahir mati
             $lahirMati->update(['antrian_online_id' => $antrian->antrian_online_id]);
 
+            // Update status antrian
             $antrian->update(['status_antrian' => 'Verifikasi Data']);
 
+            // Buat lacak berkas
             Lacak_Berkas_Model::create([
                 'antrian_online_id' => $antrian->antrian_online_id,
                 'status'            => 'Verifikasi Data',

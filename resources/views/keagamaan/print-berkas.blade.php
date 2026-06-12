@@ -115,8 +115,6 @@
             }
         }
     </style>
-    {{-- SweetAlert Final Fix --}}
-    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
 </head>
 <body>
     {{-- Print Button (no print) --}}
@@ -391,7 +389,5 @@
         <p>Kabupaten Toba, Sumatera Utara</p>
         <p style="margin-top: 10px; font-size: 9pt;">Dicetak: {{ date('d F Y H:i') }}</p>
     </div>
-    {{-- SweetAlert Final Fix --}}
-    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 </body>
 </html>

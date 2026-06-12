@@ -17,19 +17,26 @@ class LahirMati extends Model
         'uuid',
         'layanan_id',
         'nomor_antrian',
+        // 'antrian_online_id',
+        
+        // Data Pemohon (Sesuai Konsep Baru)
         'nik_pemohon',
         'nomor_kk_pemohon',
         'nama_pemohon',
         'alamat_pemohon',
         'hubungan_pemohon',
+        
+        // Data Berkas
         'ktp_pemohon',
         'kartu_keluarga_pemohon',
         'ktp_saksi1',
         'ktp_saksi2',
         'formulir_f201',
         'surat_keterangan_lahir_mati',
-        'foto_wajah',
+        
+        // 'keterangan',
         'status',
+        // 'jenis_layanan',
         'alasan_penolakan',
     ];
 

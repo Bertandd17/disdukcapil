@@ -424,16 +424,29 @@
         }
 
         window.resetForm = function () {
-            if (window.SwalHelper && typeof window.SwalHelper.konfirmasiDisdukcapil === 'function') {
-                window.SwalHelper.konfirmasiDisdukcapil({
-                    judul: 'Konfirmasi Reset',
-                    pesan: 'Nomor antrian saat ini akan hilang. Lanjutkan?',
-                    tipe: 'konfirmasi',
-                    labelOk: 'Konfirmasi',
-                    onKonfirmasi: function () {
-                        performResetUi();
-                        toastSuccess('Form direset. Silakan ambil nomor antrian baru');
-                    }
+            if (window.Swal && typeof window.Swal.fire === 'function') {
+                window.Swal.fire({
+                    title: 'Konfirmasi Reset',
+                    text: 'Nomor antrian saat ini akan hilang. Lanjutkan?',
+                    icon: false,
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#e5e7eb',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                }).then(function (r) {
+                    if (!r.isConfirmed) return;
+                    performResetUi();
+                    window.Swal.fire({
+                        icon: 'success',
+                        title: 'Form direset',
+                        text: 'Silakan ambil nomor antrian baru',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-end',
+                    });
                 });
             } else if (window.confirm('Ambil antrian baru? Nomor saat ini akan hilang.')) {
                 performResetUi();

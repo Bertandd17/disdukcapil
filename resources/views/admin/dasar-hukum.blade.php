@@ -1,5 +1,3 @@
-{{-- SweetAlert dimuat oleh layouts.admin --}}
-
 @extends('layouts.admin')
 
 @section('styles')
