@@ -241,7 +241,8 @@
       "Bash(echo \"=== Push ===\")",
       "Bash(echo \"=== 2. Status ===\")",
       "Bash(echo \"=== Diff ===\")",
-      "Bash(echo \"=== Log ===\")"
+      "Bash(echo \"=== Log ===\")",
+      "Bash(echo \"Nothing to commit\")"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
