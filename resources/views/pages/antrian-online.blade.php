@@ -1267,6 +1267,8 @@
  // Berlaku untuk semua layanan KECUALI pernikahan (pernikahan tetap pakai modal detail)
  window.findDokumenFinalUrl = function(data) {
  if (!data) return null;
+ // Skip untuk antrian Ditolak: tidak relevan membuka dokumen, langsung modal detail
+ if (data.status_antrian === 'Ditolak') return null;
  // Skip pernikahan: jangan auto-open PDF, biarkan modal detail yang menangani
  if (data.pernikahan && data.pernikahan.status) return null;
  // Cek lacak_berkas: ambil yang punya download_url, prioritaskan paling baru
@@ -1409,15 +1411,46 @@ var currentStep = hasPernikahan
     ? (antrian.pernikahan.step || stepMap[statusAntrian] || 1) 
     : (stepMap[statusAntrian] || 1);
  var stepWidth = (currentStep / 5) * 100;
+ // Override progress bar untuk status Ditolak: full merah
+ var isDitolak = (statusAntrian === 'Ditolak');
+ if (isDitolak) {
+ currentStep = 5;
+ stepWidth = 100;
+ }
+ var progressGradient = isDitolak ? 'from-red-500 to-rose-600' : 'from-green-500 to-emerald-500';
  var progressHtml = '<div class="mt-3">' +
  '<div class="flex justify-between text-xs text-gray-500 mb-1">' +
  '<span>Progress</span>' +
  '<span>Step ' + currentStep + ' dari 5</span>' +
  '</div>' +
  '<div class="w-full bg-gray-200 rounded-full h-2">' +
- '<div class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-500" style="width: ' + stepWidth + '%"></div>' +
+ '<div class="bg-gradient-to-r ' + progressGradient + ' h-2 rounded-full transition-all duration-500" style="width: ' + stepWidth + '%"></div>' +
  '</div>' +
  '</div>';
+
+ // Alasan Penolakan block (hanya untuk status Ditolak)
+ var alasanPenolakanHtml = '';
+ if (isDitolak) {
+ var alasanText = (antrian.alasan_penolakan && String(antrian.alasan_penolakan).trim() !== '')
+ ? antrian.alasan_penolakan
+ : 'Alasan tidak dicantumkan oleh petugas.';
+ // Escape untuk mencegah XSS
+ var alasanEscaped = String(alasanText)
+ .replace(/&/g, '&amp;')
+ .replace(/</g, '&lt;')
+ .replace(/>/g, '&gt;')
+ .replace(/"/g, '&quot;')
+ .replace(/'/g, '&#39;');
+ alasanPenolakanHtml = '<div class="mt-3 bg-red-50 border border-red-200 rounded-lg p-3">' +
+ '<div class="flex items-start gap-2">' +
+ '<i class="fas fa-circle-exclamation text-red-500 mt-0.5"></i>' +
+ '<div class="flex-1 min-w-0">' +
+ '<p class="font-semibold text-red-700 text-sm">Alasan Penolakan</p>' +
+ '<p class="text-sm text-red-900 mt-1 break-words">' + alasanEscaped + '</p>' +
+ '</div>' +
+ '</div>' +
+ '</div>';
+ }
 
  // Info grid (NIK + Tanggal Pengajuan)
  var nikText = antrian.nik || '-';
@@ -1507,13 +1540,14 @@ var currentStep = hasPernikahan
  '</div>' +
  progressHtml +
  infoGridHtml +
+ alasanPenolakanHtml +
  timelineHtml +
  dokumenFinalHtml +
- '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
+ (!isDitolak ? '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
  '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
  '<i class="fas fa-eye"></i><span>Lihat</span>' +
  '</button>' +
- '</div>' +
+ '</div>' : '') +
  '</div>';
  }).join('');
  document.getElementById('searchResults').innerHTML = html;
@@ -1665,9 +1699,14 @@ var currentStep = hasPernikahan
  var nik = antrian.nik || '-';
  var namaLayanan = (antrian.layanan && antrian.layanan.nama_layanan) ? antrian.layanan.nama_layanan : 'Layanan Umum';
  var statusAntrian = antrian.status_antrian || 'Menunggu';
+ var isDitolak = (statusAntrian === 'Ditolak');
  var statusConfig = statusConfigMap[statusAntrian] || statusConfigMap['Menunggu'];
  var stepVal = statusConfig.step;
  var stepWidth = (statusConfig.step / 5) * 100;
+ // Paksa 100% merah untuk Ditolak
+ if (isDitolak) {
+ stepWidth = 100;
+ }
 
  // Format tanggal pembuatan
  var createdDate = '-';
@@ -1705,7 +1744,8 @@ var currentStep = hasPernikahan
  }
 
  var dokumenHtml = '';
- if (dokumenItems.length > 0) {
+ // Sembunyikan dokumenHtml untuk antrian Ditolak
+ if (!isDitolak && dokumenItems.length > 0) {
  var rows = dokumenItems.map(function(it) {
  var viewUrl = it.url + (it.url.indexOf('?') === -1 ? '?' : '&') + 'inline=1';
  return '<div class="flex items-center justify-between bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 text-xs">' +
@@ -1726,6 +1766,31 @@ var currentStep = hasPernikahan
  '<div class="mb-4">' +
  '<p class="text-xs font-semibold text-gray-700 mb-2"><i class="fas fa-folder-open text-emerald-600 mr-1"></i>Dokumen Hasil Penerbitan Disdukcapil</p>' +
  '<div class="space-y-2">' + rows + '</div>' +
+ '</div>';
+ }
+
+ var alasanPenolakanModalHtml = '';
+ if (isDitolak) {
+ var alasanText = (antrian.alasan_penolakan && String(antrian.alasan_penolakan).trim() !== '')
+ ? antrian.alasan_penolakan
+ : 'Alasan tidak dicantumkan oleh petugas.';
+ var alasanEscaped = String(alasanText)
+ .replace(/&/g, '&amp;')
+ .replace(/</g, '&lt;')
+ .replace(/>/g, '&gt;')
+ .replace(/"/g, '&quot;')
+ .replace(/'/g, '&#39;');
+ alasanPenolakanModalHtml =
+ '<div class="mb-4">' +
+ '<div class="bg-red-50 border border-red-200 rounded-xl p-4">' +
+ '<div class="flex items-start gap-3">' +
+ '<i class="fas fa-circle-exclamation text-red-500 mt-0.5"></i>' +
+ '<div class="flex-1 min-w-0">' +
+ '<p class="text-sm font-semibold text-red-700 mb-1">Alasan Penolakan</p>' +
+ '<p class="text-sm text-red-900 break-words">' + alasanEscaped + '</p>' +
+ '</div>' +
+ '</div>' +
+ '</div>' +
  '</div>';
  }
 
@@ -1764,7 +1829,7 @@ var currentStep = hasPernikahan
  '<span>Step ' + statusConfig.step + ' dari 5</span>' +
  '</div>' +
  '<div class="w-full bg-gray-200 rounded-full h-3">' +
- '<div class="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all" style="width: ' + stepWidth + '%"></div>' +
+ '<div class="bg-gradient-to-r ' + (isDitolak ? 'from-red-500 to-rose-600' : 'from-green-500 to-emerald-500') + ' h-3 rounded-full transition-all" style="width: ' + stepWidth + '%"></div>' +
  '</div>' +
  '</div>' +
 
@@ -1786,6 +1851,8 @@ var currentStep = hasPernikahan
  '<span class="font-semibold text-gray-800 text-sm">' + createdDate + '</span>' +
  '</div>' +
  '</div>' +
+
+ alasanPenolakanModalHtml +
 
  dokumenHtml +
 
