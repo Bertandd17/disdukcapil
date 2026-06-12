@@ -107,8 +107,7 @@
                             problem: 'Library SweetAlert tidak termuat di halaman ini.',
                             solution: 'Muat ulang halaman (F5) untuk menyegarkan script, atau lanjutkan logout dengan konfirmasi browser.'
                         });
-                    }
-                    if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
+                    } else {
                         document.getElementById('logoutForm').submit();
                     }
                 }

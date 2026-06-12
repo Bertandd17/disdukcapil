@@ -383,5 +383,45 @@
     <script src="{{ asset('js/disdukcapil-toast.js') }}"></script>
     <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
     <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+    <script>
+        (function() {
+            if (typeof window.__nativeAlert === 'function') return;
+            window.__nativeAlert = window.alert.bind(window);
+            window.__nativeConfirm = window.confirm.bind(window);
+            var classify = function(msg) {
+                var s = String(msg || '');
+                if (/error|gagal|tidak valid|harus|wajib|invalid|kosong|gagal/i.test(s)) return 'error';
+                if (/berhasil|sukses|success|tersimpan|terkirim/i.test(s)) return 'success';
+                if (/perhatian|hati-hati|warning|kadaluarsa|habis/i.test(s)) return 'warning';
+                return 'info';
+            };
+            var toToast = function(type, msg) {
+                if (typeof fireToast !== 'function') return false;
+                var opts = { type: type, icon: type, title: String(msg || ''), timer: 5000 };
+                if (type === 'error') {
+                    opts.problem = String(msg || '');
+                    opts.solution = 'Periksa data yang dimasukkan dan coba lagi.';
+                } else if (type === 'warning') {
+                    opts.problem = String(msg || '');
+                    opts.solution = 'Mohon perhatikan pesan ini sebelum melanjutkan.';
+                }
+                fireToast(opts);
+                return true;
+            };
+            window.alert = function(msg) {
+                if (toToast(classify(msg), msg)) return;
+                window.__nativeAlert(msg);
+            };
+            window.__nativeConfirm = window.confirm;
+            window.confirm = function(msg) {
+                if (typeof notifKonfirmasi === 'function') {
+                    return new Promise(function(resolve) {
+                        notifKonfirmasi(String(msg || 'Apakah Anda yakin?'), function() { resolve(true); }, function() { resolve(false); });
+                    });
+                }
+                return window.__nativeConfirm(msg);
+            };
+        })();
+    </script>
 </body>
 </html>

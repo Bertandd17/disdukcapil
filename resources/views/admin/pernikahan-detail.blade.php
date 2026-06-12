@@ -404,10 +404,6 @@ function approveTanggal() {
             problem: 'Tindakan ini akan menyetujui tanggal perkawinan yang diajukan.',
             solution: 'Pastikan data pemohon sudah diverifikasi sebelum melanjutkan.'
         });
-    } else {
-        if (confirm('Setujui tanggal perkawinan ini?')) {
-            onConfirm();
-        }
     }
 }
 
