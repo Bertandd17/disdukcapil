@@ -79,5 +79,26 @@
         }
     };
 
-    console.log('[SwalFix] Loaded — Disdukcapil Toba v1.0');
+    // Defensive: paksa sembunyikan tombol deny jika ada yang lolos
+    var _denyObserver = null;
+    function _hideDenyIfPresent() {
+        var denyBtn = document.querySelector('.swal2-container:not(.swal2-toast) .swal2-deny');
+        if (denyBtn) {
+            denyBtn.style.display = 'none';
+            denyBtn.setAttribute('aria-hidden', 'true');
+        }
+    }
+    function _watchDeny() {
+        _hideDenyIfPresent();
+        if (_denyObserver) return;
+        _denyObserver = new MutationObserver(function() { _hideDenyIfPresent(); });
+        _denyObserver.observe(document.body, { childList: true, subtree: true });
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _watchDeny);
+    } else {
+        _watchDeny();
+    }
+
+    console.log('[SwalFix] Loaded — Disdukcapil Toba v1.1');
 })();
