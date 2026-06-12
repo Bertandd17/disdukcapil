@@ -486,6 +486,20 @@ class Antrian_Online_Controller extends Controller
         $transformedData = $data_antrian->map(function ($item) {
             $pernikahanData = $this->buildPernikahanData($item->nomor_antrian);
 
+            // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
+            $alasanPenolakan = null;
+            if ($item->status_antrian === 'Ditolak' && $item->lacak_berkas) {
+                $latestTolak = $item->lacak_berkas
+                    ->where('status', 'Ditolak')
+                    ->sortByDesc(function ($lb) {
+                        return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
+                    })
+                    ->first();
+                if ($latestTolak) {
+                    $alasanPenolakan = $latestTolak->alasan_penolakan;
+                }
+            }
+
             return [
                 'antrian_online_id' => $item->antrian_online_id,
                 'nomor_antrian' => $item->nomor_antrian,
@@ -494,6 +508,7 @@ class Antrian_Online_Controller extends Controller
                 'alamat' => $item->alamat,
                 'layanan_id' => $item->layanan_id,
                 'status_antrian' => $item->status_antrian,
+                'alasan_penolakan' => $alasanPenolakan,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
                 'layanan' => $item->layanan ? [
@@ -506,6 +521,7 @@ class Antrian_Online_Controller extends Controller
                         'status' => $lb->status,
                         'tanggal' => $lb->tanggal ?: ($lb->created_at ? $lb->created_at->format('d M Y') : date('d M Y')),
                         'keterangan' => $lb->keterangan,
+                        'alasan_penolakan' => $lb->alasan_penolakan,
                         'file_berkas' => $lb->file_berkas,
                         'download_url' => $lb->file_berkas ? route('lacak-berkas.download-final', ['id' => $lb->lacak_berkas_id]) : null,
                     ];
@@ -780,11 +796,26 @@ class Antrian_Online_Controller extends Controller
                 'lacak_berkas_id' => $item->lacak_berkas_id,
                 'status' => $item->status,
                 'keterangan' => $item->keterangan,
+                'alasan_penolakan' => $item->alasan_penolakan,
                 'tanggal' => $item->tanggal ?: ($item->created_at ? $item->created_at->format('d M Y') : date('d M Y')),
                 'file_berkas' => $item->file_berkas,
                 'download_url' => $item->file_berkas ? route('lacak-berkas.download-final', ['id' => $item->lacak_berkas_id]) : null,
             ];
         });
+
+        // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
+        $alasanPenolakan = null;
+        if ($antrian->status_antrian === 'Ditolak') {
+            $latestTolak = $antrian->lacak_berkas
+                ->where('status', 'Ditolak')
+                ->sortByDesc(function ($lb) {
+                    return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
+                })
+                ->first();
+            if ($latestTolak) {
+                $alasanPenolakan = $latestTolak->alasan_penolakan;
+            }
+        }
 
         return response()->json([
             'success' => true,
@@ -795,6 +826,7 @@ class Antrian_Online_Controller extends Controller
                 'nik' => $antrian->nik,
                 'alamat' => $antrian->alamat,
                 'status_antrian' => $antrian->status_antrian,
+                'alasan_penolakan' => $alasanPenolakan,
                 'layanan' => $antrian->layanan ? $antrian->layanan->nama_layanan : '-',
                 'created_at' => $antrian->created_at,
                 'riwayat' => $riwayat,
@@ -1438,7 +1470,7 @@ class Antrian_Online_Controller extends Controller
         $searchUpper = strtoupper($search);
         $searchClean = str_replace('-', '', $searchUpper);
 
-        $query = Antrian_Online_Model::with(['layanan'])
+        $query = Antrian_Online_Model::with(['layanan', 'lacak_berkas'])
             ->where(function ($q) use ($search, $searchUpper, $searchClean) {
                 // Search by nomor_antrian (case-insensitive, multiple strategies)
                 $q->whereRaw("UPPER(nomor_antrian) LIKE ?", ['%' . $searchUpper . '%'])
@@ -1456,13 +1488,39 @@ class Antrian_Online_Controller extends Controller
             ->get();
 
         $formatted_data = $data_antrian->map(function ($item) {
+            // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
+            $alasanPenolakan = null;
+            if ($item->status_antrian === 'Ditolak' && $item->lacak_berkas) {
+                $latestTolak = $item->lacak_berkas
+                    ->where('status', 'Ditolak')
+                    ->sortByDesc(function ($lb) {
+                        return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
+                    })
+                    ->first();
+                if ($latestTolak) {
+                    $alasanPenolakan = $latestTolak->alasan_penolakan;
+                }
+            }
+
             return [
                 'antrian_online_id' => $item->antrian_online_id,
                 'nomor_antrian' => $item->nomor_antrian,
                 'nama_lengkap' => $item->nama_lengkap,
                 'status_antrian' => $item->status_antrian,
+                'alasan_penolakan' => $alasanPenolakan,
                 'nama_layanan' => $item->layanan ? $item->layanan->nama_layanan : '-',
                 'created_at' => $item->created_at->format('d M Y H:i'),
+                'lacak_berkas' => $item->lacak_berkas ? $item->lacak_berkas->map(function ($lb) {
+                    return [
+                        'lacak_berkas_id' => $lb->lacak_berkas_id,
+                        'status' => $lb->status,
+                        'keterangan' => $lb->keterangan,
+                        'alasan_penolakan' => $lb->alasan_penolakan,
+                        'tanggal' => $lb->tanggal ?: ($lb->created_at ? $lb->created_at->format('d M Y') : date('d M Y')),
+                        'file_berkas' => $lb->file_berkas,
+                        'download_url' => $lb->file_berkas ? route('lacak-berkas.download-final', ['id' => $lb->lacak_berkas_id]) : null,
+                    ];
+                }) : [],
             ];
         });
 
@@ -1528,6 +1586,7 @@ class Antrian_Online_Controller extends Controller
                 'lacak_berkas_id' => $item->lacak_berkas_id,
                 'status' => $item->status,
                 'keterangan' => $item->keterangan,
+                'alasan_penolakan' => $item->alasan_penolakan,
                 'tanggal' => $item->created_at->format('d M Y H:i'),
                 'file_berkas' => $item->file_berkas,
                 'download_url' => $item->file_berkas ? route('lacak-berkas.download-final', ['id' => $item->lacak_berkas_id]) : null,
@@ -1543,6 +1602,20 @@ class Antrian_Online_Controller extends Controller
             ],
         ])->merge($riwayat);
 
+        // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
+        $alasanPenolakan = null;
+        if ($antrian->status_antrian === 'Ditolak') {
+            $latestTolak = $antrian->lacak_berkas
+                ->where('status', 'Ditolak')
+                ->sortByDesc(function ($lb) {
+                    return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
+                })
+                ->first();
+            if ($latestTolak) {
+                $alasanPenolakan = $latestTolak->alasan_penolakan;
+            }
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -1550,6 +1623,7 @@ class Antrian_Online_Controller extends Controller
                 'nomor_antrian' => $antrian->nomor_antrian,
                 'nama_lengkap' => $antrian->nama_lengkap,
                 'status_antrian' => $antrian->status_antrian,
+                'alasan_penolakan' => $alasanPenolakan,
                 'nama_layanan' => $antrian->layanan ? $antrian->layanan->nama_layanan : '-',
                 'riwayat' => $riwayat_with_initial,
             ],
