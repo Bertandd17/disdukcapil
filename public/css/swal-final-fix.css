@@ -1,9 +1,42 @@
-/* SweetAlert2 CSS Fix — Disdukcapil Toba */
+/* SweetAlert2 CSS Fix — Disdukcapil Toba v2.0
+ * Mendukung swal-final-fix.js v2.0 (3-bug fix)
+ * Bertujuan: hide deny button di SEMUA popup, hide button di modal loading */
 
 .swal2-container { z-index: 99999 !important; }
 .swal2-backdrop  { z-index: 99998 !important; }
 .swal2-toast     { position: fixed !important; z-index: 100000 !important; }
 
+/* === BUG 1 & 3: Tombol deny (No) SELALU tersembunyi di semua popup === */
+.swal2-popup:not(.swal2-toast) .swal2-deny,
+.swal2-actions .swal2-deny {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* === BUG 2: Modal loading TIDAK BOLEH punya tombol apapun === */
+.swal2-popup.swal-dd-loading .swal2-confirm,
+.swal2-popup.swal-dd-loading .swal2-cancel,
+.swal2-popup.swal-dd-loading .swal2-deny,
+.swal2-popup.swal-dd-loading .swal2-actions,
+.swal2-popup.swal-dd-loading .swal2-footer {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.swal2-popup.swal-dd-loading .swal2-loader {
+    display: block !important;
+}
+
+/* === Font & layout === */
 .swal2-popup,
 .swal2-title,
 .swal2-html-container,
@@ -21,3 +54,24 @@
 
 .swal2-html-container * { font-size: inherit !important; }
 .swal2-loading { display: inline-block !important; }
+
+/* Sembunyikan tombol deny (No) sepenuhnya dari layout & dari aksesibilitas */
+.swal2-popup .swal2-deny,
+.swal2-popup .swal2-deny.swal2-styled {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Mode loading: sembunyikan semua action buttons, sisakan spinner saja */
+.swal2-popup.swal-dd-loading .swal2-actions,
+.swal2-popup.swal-dd-loading .swal2-confirm,
+.swal2-popup.swal-dd-loading .swal2-cancel,
+.swal2-popup.swal-dd-loading .swal2-deny {
+    display: none !important;
+}
+.swal2-action  { min-width: 0 !important; }

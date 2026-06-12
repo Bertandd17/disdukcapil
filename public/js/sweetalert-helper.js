@@ -204,6 +204,8 @@
             title: title,
             html: `<p>${text}</p>`,
             showCancelButton: true,
+            showConfirmButton: true,
+            showDenyButton: false,
             confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             reverseButtons: true,
@@ -220,6 +222,8 @@
             html: `<p>${text || 'Data yang dihapus tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?'}</p>`,
             icon: false,
             showCancelButton: true,
+            showConfirmButton: true,
+            showDenyButton: false,
             confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             reverseButtons: true,
@@ -235,6 +239,8 @@
             title: title,
             html: `<p>${text}</p>`,
             showCancelButton: true,
+            showConfirmButton: true,
+            showDenyButton: false,
             confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             reverseButtons: true,
@@ -285,6 +291,8 @@
             html: htmlContent,
             icon: false,
             showCancelButton: true,
+            showConfirmButton: true,
+            showDenyButton: false,
             confirmButtonColor: config.confirmColor,
             cancelButtonColor: config.cancelColor,
             confirmButtonText: 'Konfirmasi',
@@ -309,7 +317,10 @@
                             </div>
                         `,
                         showConfirmButton: false,
-                        allowOutsideClick: false
+                        showCancelButton: false,
+                        showDenyButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
                     });
                 }
                 if (config.onConfirm && typeof config.onConfirm === 'function') {
@@ -498,6 +509,8 @@
                 </div>
             `,
             showConfirmButton: false,
+            showCancelButton: false,
+            showDenyButton: false,
             allowOutsideClick: false,
             allowEscapeKey: false
         });
