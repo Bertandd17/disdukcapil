@@ -62,7 +62,8 @@
         // Pastikan konfirmasi 2 tombol tidak punya deny (FIX BUG "No" BUTTON)
         if (params.showCancelButton === true && params.showConfirmButton === true && !params._allowDeny) {
             params.showDenyButton = false;
-            if (params.cancelButtonText && /No\b/i.test(params.cancelButtonText)) {
+            delete params.denyButtonText;
+            if (params.cancelButtonText && /^No$/i.test(params.cancelButtonText.trim())) {
                 params.cancelButtonText = 'Batal';
             }
             // STRIP: sembunyikan deny button dari DOM agar tidak tampil

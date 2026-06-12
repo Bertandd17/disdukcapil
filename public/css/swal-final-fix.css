@@ -23,8 +23,17 @@
 .swal2-loading { display: inline-block !important; }
 
 /* Paksa sembunyikan deny button (pengaman terakhir agar tidak ada tombol "No" ekstra) */
-.swal2-deny {
+.swal2-deny,
+button.swal2-deny,
+.swal2-actions .swal2-deny {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
 }
