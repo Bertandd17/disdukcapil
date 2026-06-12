@@ -235,7 +235,10 @@
       "Bash(awk -F\"'\" '{print $2}')",
       "Bash(git ls-remote *)",
       "Bash(set GIT_EXEC_PATH=C:/Program Files/Git/mingw64/libexec/git-core)",
-      "Bash(GIT_EXEC_PATH=\"/C/Program Files/Git/mingw64/libexec/git-core\" git push *)"
+      "Bash(GIT_EXEC_PATH=\"/C/Program Files/Git/mingw64/libexec/git-core\" git push *)",
+      "Bash(echo \"=== Add ===\")",
+      "Bash(echo \"=== Commit ===\")",
+      "Bash(echo \"=== Push ===\")"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
