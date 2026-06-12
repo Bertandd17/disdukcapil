@@ -317,6 +317,10 @@
         </div>
     </div>
 
+    <!-- SweetAlert2 Final Fix — prevent extraneous buttons -->
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
+
     <!-- Load SweetAlert Helper Global -->
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
     <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>

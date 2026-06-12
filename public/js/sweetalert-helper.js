@@ -150,6 +150,10 @@
             html: message,
             confirmButtonText: '<i class="fas fa-check mr-2"></i>OK',
             confirmButtonColor: 'var(--success-green)',
+            showCancelButton: false,
+            showDenyButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
             zIndex: 9999
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
@@ -163,6 +167,10 @@
             html: message,
             confirmButtonText: '<i class="fas fa-times mr-2"></i>Tutup',
             confirmButtonColor: 'var(--danger-red)',
+            showCancelButton: false,
+            showDenyButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
             zIndex: 9999
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
@@ -176,6 +184,10 @@
             html: message,
             confirmButtonText: '<i class="fas fa-exclamation-triangle mr-2"></i>OK',
             confirmButtonColor: 'var(--warning-orange)',
+            showCancelButton: false,
+            showDenyButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
             zIndex: 9999
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
@@ -189,6 +201,10 @@
             html: message,
             confirmButtonText: '<i class="fas fa-info-circle mr-2"></i>OK',
             confirmButtonColor: 'var(--info-blue)',
+            showCancelButton: false,
+            showDenyButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
             zIndex: 9999
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
@@ -204,11 +220,14 @@
             title: title,
             html: `<p>${text}</p>`,
             showCancelButton: true,
+            showDenyButton: false,
             confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             reverseButtons: true,
             confirmButtonColor: 'var(--success-green)',
-            cancelButtonColor: 'var(--neutral-600)'
+            cancelButtonColor: 'var(--neutral-600)',
+            allowOutsideClick: false,
+            allowEscapeKey: false
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
         });
@@ -220,11 +239,14 @@
             html: `<p>${text || 'Data yang dihapus tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan?'}</p>`,
             icon: false,
             showCancelButton: true,
+            showDenyButton: false,
             confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             reverseButtons: true,
             confirmButtonColor: 'var(--danger-red)',
-            cancelButtonColor: 'var(--neutral-600)'
+            cancelButtonColor: 'var(--neutral-600)',
+            allowOutsideClick: false,
+            allowEscapeKey: false
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
         });
@@ -235,11 +257,14 @@
             title: title,
             html: `<p>${text}</p>`,
             showCancelButton: true,
+            showDenyButton: false,
             confirmButtonText: 'Konfirmasi',
             cancelButtonText: 'Batal',
             reverseButtons: true,
             confirmButtonColor: 'var(--primary-blue-main)',
-            cancelButtonColor: 'var(--neutral-600)'
+            cancelButtonColor: 'var(--neutral-600)',
+            allowOutsideClick: false,
+            allowEscapeKey: false
         }).then((result) => {
             if (result.isConfirmed && callback) callback();
         });
@@ -285,6 +310,7 @@
             html: htmlContent,
             icon: false,
             showCancelButton: true,
+            showDenyButton: false,
             confirmButtonColor: config.confirmColor,
             cancelButtonColor: config.cancelColor,
             confirmButtonText: 'Konfirmasi',
@@ -309,7 +335,10 @@
                             </div>
                         `,
                         showConfirmButton: false,
-                        allowOutsideClick: false
+                        showCancelButton: false,
+                        showDenyButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
                     });
                 }
                 if (config.onConfirm && typeof config.onConfirm === 'function') {
@@ -498,6 +527,8 @@
                 </div>
             `,
             showConfirmButton: false,
+            showCancelButton: false,
+            showDenyButton: false,
             allowOutsideClick: false,
             allowEscapeKey: false
         });

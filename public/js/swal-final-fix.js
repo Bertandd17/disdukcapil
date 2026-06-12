@@ -25,7 +25,7 @@
         ].some(function(keyword) { return title.indexOf(keyword) !== -1; });
 
         // Paksa: modal loading TIDAK BOLEH punya tombol
-        if (isLoadingModal) {
+        if (isLoadingModal || (params.showConfirmButton === false && !params.showCancelButton && !params.showDenyButton && params.didOpen)) {
             params.showConfirmButton = false;
             params.showCancelButton = false;
             params.showDenyButton = false;
@@ -39,6 +39,14 @@
                 params.showCancelButton = true;
             }
             delete params.denyButtonText;
+        }
+
+        // Pastikan konfirmasi 2 tombol tidak punya deny (FIX BUG "No" BUTTON)
+        if (params.showCancelButton === true && params.showConfirmButton === true && !params._allowDeny) {
+            params.showDenyButton = false;
+            if (params.cancelButtonText && /No\b/i.test(params.cancelButtonText)) {
+                params.cancelButtonText = 'Batal';
+            }
         }
 
         try {
