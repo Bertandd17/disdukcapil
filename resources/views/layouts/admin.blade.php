@@ -36,6 +36,10 @@
     <!-- SweetAlert Global Fix untuk Admin -->
     <script src="{{ asset('js/admin-sweetalert-fix.js') }}"></script>
 
+    <!-- SweetAlert2 Final Fix — paksa 3 flag false pada loading modal & auto-strip deny button -->
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
@@ -412,7 +416,10 @@
                                 html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                                     + '<p class="text-gray-600 mt-4">' + cfg.loadingMessage + '</p>',
                                 allowOutsideClick: false,
+                                allowEscapeKey: false,
                                 showConfirmButton: false,
+                                showDenyButton: false,
+                                showCancelButton: false,
                                 customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                             });
                         }
@@ -558,7 +565,10 @@
                     html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
                         + '<p class="text-gray-600 mt-4">Mohon tunggu sebentar...</p>',
                     allowOutsideClick: false,
+                    allowEscapeKey: false,
                     showConfirmButton: false,
+                    showDenyButton: false,
+                    showCancelButton: false,
                     customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
                 });
             },

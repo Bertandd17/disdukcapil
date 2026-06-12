@@ -677,7 +677,7 @@ if (typeof SwalHelper === 'undefined') {
  var SwalHelper = {
  loading: function(msg) {
  if (typeof Swal !== 'undefined') {
- Swal.fire({ title: msg || 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+ Swal.fire({ title: msg || 'Memproses...', allowOutsideClick: false, allowEscapeKey: false, showConfirmButton: false, showDenyButton: false, showCancelButton: false, didOpen: () => Swal.showLoading() });
  }
  },
  close: function() {
