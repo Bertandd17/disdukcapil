@@ -97,6 +97,7 @@
                                 showConfirmButton: false,
                                 showDenyButton: false,
                                 showCancelButton: false,
+                                didOpen: function() { Swal.showLoading(); },
                                 customClass: { popup: 'swal-dd-modal', htmlContainer: 'swal2-html-container' }
                             });
                             document.getElementById('logoutForm').submit();
