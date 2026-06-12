@@ -289,47 +289,88 @@
             }
         });
 
-        // Form submission dengan SweetAlert Helper
+        // Form submission dengan SweetAlert2 (swal-final-fix.js)
         const registerForm = document.getElementById('registerForm');
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const submitBtn = this.querySelector('button[type="submit"]');
 
-            // Tampilkan konfirmasi menggunakan helper global
-            SwalHelper.confirm(
-                'Konfirmasi Registrasi',
-                'Pastikan semua data yang Anda masukkan sudah benar. Registrasi hanya dapat dilakukan sekali. Lanjutkan?',
-                function() {
-                    // Disable button dan ubah teks
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Memproses...';
+            // Modal Konfirmasi 2-tombol (Batal + Konfirmasi)
+            Swal.fire({
+                icon: 'question',
+                title: 'Konfirmasi Registrasi',
+                html: 'Pastikan semua data yang Anda masukkan sudah benar. Registrasi hanya dapat dilakukan sekali. Lanjutkan?',
+                showCancelButton: true,
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                confirmButtonColor: '#16a34a',
+                cancelButtonColor: '#e5e7eb',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                buttonsStyling: true
+            }).then((result) => {
+                if (!result.isConfirmed) return;
 
-                    // Tampilkan loading menggunakan helper global
-                    SwalHelper.loading('Memproses Registrasi', 'Sedang membuat akun admin...');
+                // Disable button dan ubah teks
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Memproses...';
 
-                    // Submit form dengan delay untuk update UI
-                    setTimeout(() => {
-                        registerForm.submit();
-                    }, 500);
-                }
-            );
+                // Modal Loading — hanya spinner, tanpa tombol (swal-final-fix.js memaksa 3 flag false)
+                Swal.fire({
+                    title: 'Memproses Registrasi',
+                    html: '<div class="flex flex-col items-center gap-3 py-2">' +
+                          '<i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i>' +
+                          '<p class="text-gray-600 text-sm">Sedang membuat akun admin...</p>' +
+                          '</div>',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+
+                // Submit form dengan delay untuk update UI
+                setTimeout(() => {
+                    registerForm.submit();
+                }, 500);
+            });
         });
 
         // Tampilkan pesan error/success dari session (jika ada)
         @if(session('error'))
-        SwalHelper.error(
-            'Registrasi gagal.',
-            @json(session('error_solution') ?? session('error') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.')
-        );
+        Swal.fire({
+            icon: 'error',
+            title: 'Registrasi Gagal',
+            html: @json(session('error_solution') ?? session('error') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.'),
+            confirmButtonText: 'Tutup',
+            confirmButtonColor: '#dc2626',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        });
         @endif
 
         @if(session('success'))
-        SwalHelper.success(@json(session('success')));
+        Swal.fire({
+            icon: 'success',
+            title: 'Registrasi Berhasil',
+            text: @json(session('success')),
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#16a34a',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        });
         @endif
 
         @if(session('warning'))
-        SwalHelper.warning(@json(session('warning')));
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian',
+            text: @json(session('warning')),
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f59e0b',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        });
         @endif
     </script>
 

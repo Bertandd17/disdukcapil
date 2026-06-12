@@ -33,9 +33,6 @@
     <!-- Notifikasi Disdukcapil Helper -->
     <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
 
-    <!-- SweetAlert Global Fix untuk Admin -->
-    <script src="{{ asset('js/admin-sweetalert-fix.js') }}"></script>
-
     <!-- SweetAlert2 Final Fix — paksa 3 flag false pada loading modal & auto-strip deny button -->
     <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>

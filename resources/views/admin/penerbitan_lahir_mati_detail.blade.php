@@ -203,16 +203,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: 'Konfirmasi Penerimaan',
                 html: 'Lanjutkan permohonan ke tahap <strong>' + statusBerikut + '</strong>?',
                 showCancelButton: true,
-                showDenyButton: false,
                 confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#16a34a',
                 cancelButtonColor: '#e5e7eb',
-                reverseButtons: true,
-                didOpen: () => {
-                    const deny = Swal.getDenyButton();
-                    if (deny) deny.style.setProperty('display', 'none', 'important');
-                }
+                reverseButtons: true
             }).then((res) => {
                 if (res.isConfirmed) {
                     inputStatus.value = statusBerikut;
@@ -233,16 +228,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 inputPlaceholder: 'Tulis alasan penolakan di sini...',
                 inputAttributes: { 'aria-label': 'Alasan penolakan', 'maxlength': '500' },
                 showCancelButton: true,
-                showDenyButton: false,
                 confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#e5e7eb',
                 reverseButtons: true,
-                didOpen: () => {
-                    const deny = Swal.getDenyButton();
-                    if (deny) deny.style.setProperty('display', 'none', 'important');
-                },
                 inputValidator: (value) => {
                     if (!value || value.trim().length < 5) {
                         return 'Alasan penolakan wajib diisi (minimal 5 karakter).';
