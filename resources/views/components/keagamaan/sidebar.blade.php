@@ -100,6 +100,14 @@
                         }
                     });
                 } else {
+                    if (typeof fireToast !== 'undefined') {
+                        fireToast({
+                            type: 'warning', icon: 'warning',
+                            title: 'Konfirmasi keluar sistem',
+                            problem: 'Library SweetAlert tidak termuat di halaman ini.',
+                            solution: 'Muat ulang halaman (F5) untuk menyegarkan script, atau lanjutkan logout dengan konfirmasi browser.'
+                        });
+                    }
                     if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
                         document.getElementById('logoutForm').submit();
                     }

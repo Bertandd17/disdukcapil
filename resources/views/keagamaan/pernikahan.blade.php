@@ -686,12 +686,16 @@ if (typeof SwalHelper === 'undefined') {
  success: function(msg) {
  if (typeof Swal !== 'undefined') {
  Swal.fire({ icon: 'success', title: 'Berhasil', text: msg, timer: 2000, showConfirmButton: false });
- } else { alert(msg); }
+ } else if (typeof fireToast !== 'undefined') {
+ fireToast({ type: 'success', icon: 'success', title: msg || 'Berhasil', timer: 4000 });
+ } else if (window.__nativeAlert) { window.__nativeAlert(msg); }
  },
  error: function(msg) {
  if (typeof Swal !== 'undefined') {
  Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
- } else { alert('Error: ' + msg); }
+ } else if (typeof fireToast !== 'undefined') {
+ fireToast({ type: 'error', icon: 'error', title: 'Gagal', problem: 'Terjadi kesalahan pada proses ini.', solution: 'Periksa data yang dimasukkan dan coba lagi.' });
+ } else if (window.__nativeAlert) { window.__nativeAlert('Error: ' + msg); }
  }
  };
 }

@@ -28,8 +28,12 @@
     var toastError = function (msg) {
         if (window.SwalHelper && typeof window.SwalHelper.toastError === 'function') {
             window.SwalHelper.toastError(msg);
-        } else {
-            alert(msg);
+        } else if (typeof fireToast === 'function') {
+            fireToast({ type: 'error', icon: 'error', title: 'Terjadi kesalahan', problem: 'Terjadi kesalahan pada sistem.', solution: 'Periksa data yang dimasukkan dan coba lagi.', timer: 5000 });
+        } else if (window.__nativeAlert) {
+            window.__nativeAlert(msg);
+        } else if (window.console && typeof window.console.error === 'function') {
+            window.console.error(msg);
         }
     };
     var toastSuccess = function (msg) {
@@ -447,6 +451,10 @@
                         toast: true,
                         position: 'top-end',
                     });
+                });
+            } else if (typeof notifKonfirmasi === 'function') {
+                notifKonfirmasi('Ambil antrian baru? Nomor saat ini akan hilang.', function() {
+                    performResetUi();
                 });
             } else if (window.confirm('Ambil antrian baru? Nomor saat ini akan hilang.')) {
                 performResetUi();

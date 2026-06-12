@@ -191,11 +191,18 @@
                         }
                     });
                 } else {
-                    console.warn('SwalHelper dan Swal tidak tersedia, menggunakan konfirmasi default browser');
+                    console.warn('SwalHelper dan Swal tidak tersedia, menggunakan fallback');
+                    if (typeof fireToast !== 'undefined') {
+                        fireToast({
+                            type: 'warning', icon: 'warning',
+                            title: 'Konfirmasi keluar sistem',
+                            problem: 'Library SweetAlert tidak termuat di halaman ini.',
+                            solution: 'Muat ulang halaman (F5) untuk menyegarkan script, atau lanjutkan logout dengan konfirmasi browser.'
+                        });
+                    }
                     if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
                         document.getElementById('logoutForm').submit();
                     } else {
-                        // Resume auto-logout timer jika user batal
                         if (window.resumeAutoLogoutReset) {
                             window.resumeAutoLogoutReset();
                         }

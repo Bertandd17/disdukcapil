@@ -382,7 +382,7 @@
 
 <script>
 function approveTanggal() {
-    if (confirm('Setujui tanggal perkawinan ini?')) {
+    const onConfirm = function() {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '{{ route('admin.pernikahan.approve-tanggal', $pernikahan->pernikahan_id) }}';
@@ -393,6 +393,21 @@ function approveTanggal() {
         form.appendChild(csrf);
         document.body.appendChild(form);
         form.submit();
+    };
+
+    if (typeof notifKonfirmasi === 'function') {
+        notifKonfirmasi('Setujui tanggal perkawinan ini?', onConfirm);
+    } else if (typeof fireToast !== 'undefined') {
+        fireToast({
+            type: 'warning', icon: 'warning',
+            title: 'Konfirmasi persetujuan tanggal',
+            problem: 'Tindakan ini akan menyetujui tanggal perkawinan yang diajukan.',
+            solution: 'Pastikan data pemohon sudah diverifikasi sebelum melanjutkan.'
+        });
+    } else {
+        if (confirm('Setujui tanggal perkawinan ini?')) {
+            onConfirm();
+        }
     }
 }
 
