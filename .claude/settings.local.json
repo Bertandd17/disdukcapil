@@ -238,7 +238,10 @@
       "Bash(GIT_EXEC_PATH=\"/C/Program Files/Git/mingw64/libexec/git-core\" git push *)",
       "Bash(echo \"=== Add ===\")",
       "Bash(echo \"=== Commit ===\")",
-      "Bash(echo \"=== Push ===\")"
+      "Bash(echo \"=== Push ===\")",
+      "Bash(echo \"=== 2. Status ===\")",
+      "Bash(echo \"=== Diff ===\")",
+      "Bash(echo \"=== Log ===\")"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
