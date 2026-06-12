@@ -21,11 +21,12 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- SweetAlert2 -->
+    <!-- SweetAlert2 — Disdukcapil Toba (semua di head) -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- SweetAlert Disdukcapil -->
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
+    <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
     <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset('js/swal-final-fix.js') }}"></script>
     
     <style>
         .swal2-loader {

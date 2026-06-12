@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
 
     <script>
         tailwind.config = {
@@ -225,7 +226,6 @@
     <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
 
     <!-- SweetAlert2 Final Fix — prevent extraneous buttons -->
-    <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>
 
     <script>
