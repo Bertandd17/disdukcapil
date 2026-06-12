@@ -245,7 +245,10 @@
       "Bash(echo \"Nothing to commit\")",
       "Bash(grep -l \"swal-final-fix\" resources/views/auth/*.blade.php)",
       "Bash(grep -l \"swal-final-fix\" resources/views/layouts/*.blade.php)",
-      "Bash(xargs -I {} basename {})"
+      "Bash(xargs -I {} basename {})",
+      "Bash(cd \"D:/Semester 6/PA 3/Project/PA3/.claude/worktrees/fix-sweetalert-extraneous-buttons\")",
+      "Bash(git -c gpg.format=ssh -c commit.gpgsign=false commit -m \"fix\\(sweetalert-final\\): resolve merge conflict in settings.local.json\")",
+      "Bash(GIT_EXEC_PATH=\"C:/Program Files/Git/mingw64/libexec/git-core\" git -c credential.helper= push origin worktree-fix-sweetalert-extraneous-buttons)"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"
