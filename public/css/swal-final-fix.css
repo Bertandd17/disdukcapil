@@ -1,75 +1,23 @@
-/**
- * SweetAlert2 CSS Final Fix
- *
- * FIX 5: Prevent SweetAlert2 from causing layout shifts
- * FIX: Ensure consistent font-family in Swal (use Plus Jakarta Sans)
- * FIX: Handle Swal backdrop properly
- * FIX: Prevent double-backdrop stacking
- */
+/* SweetAlert2 CSS Fix — Disdukcapil Toba */
 
-/* FIX 5: Prevent layout shifts from Swal */
-.swal2-container {
-    z-index: 99999 !important;
-}
+.swal2-container { z-index: 99999 !important; }
+.swal2-backdrop  { z-index: 99998 !important; }
+.swal2-toast     { position: fixed !important; z-index: 100000 !important; }
 
-/* FIX: Consistent font-family for all Swal elements */
 .swal2-popup,
 .swal2-title,
 .swal2-html-container,
 .swal2-confirm,
 .swal2-cancel,
-.swal2-content,
-.swal2-footer,
-.swal2-input,
-.swal2-select,
-.swal2-radio,
-.swal2-checkbox,
-.swal2-validation-message {
+.swal2-content {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-/* FIX: Handle backdrop properly - prevent double backdrop */
-.swal2-backdrop {
-    z-index: 99998 !important;
-}
-
-.swal2-container {
-    z-index: 99999 !important;
-}
-
-/* FIX: Ensure toast doesn't cause layout shift */
-.swal2-toast {
-    position: fixed !important;
-    z-index: 100000 !important;
-}
-
-/* FIX: Prevent Swal from breaking layout with overflow */
 .swal2-html-container {
     overflow: auto !important;
     max-height: 70vh !important;
     padding: 1rem 0 !important;
 }
 
-/* FIX: Ensure content is readable */
-.swal2-html-container p {
-    margin: 0.5em 0 !important;
-    line-height: 1.6 !important;
-}
-
-/* FIX: Prevent font-size issues in Swal content */
-.swal2-html-container * {
-    font-size: inherit !important;
-}
-
-/* FIX: Ensure proper spacing in custom HTML */
-.swal2-html-container > *:first-child {
-    margin-top: 0 !important;
-}
-.swal2-html-container > *:last-child {
-    margin-bottom: 0 !important;
-}
-
-/* FIX: Loading spinner should not cause layout shift */
-.swal2-loading {
-    display: inline-block !important;
-}
+.swal2-html-container * { font-size: inherit !important; }
+.swal2-loading { display: inline-block !important; }
