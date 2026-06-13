@@ -163,7 +163,7 @@
                         </div>
                         
                         @if($berkas->{$dok['field']})
-                            <a href="{{ route('admin.lihat-berkas-kematian', ['uuid' => $berkas->uuid, 'field' => $dok['field']]) }}" target="_blank"
+                            <a href="{{ route('admin.lihat-berkas-lahir-mati', ['uuid' => $berkas->uuid, 'field' => $dok['field']]) }}" target="_blank"
                             class="w-full bg-green-600 text-white hover:bg-green-700 py-2 rounded-lg text-sm font-semibold transition text-center flex items-center justify-center">
                                 <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
                             </a>
@@ -175,6 +175,18 @@
                     </div>
                     @endforeach
                 </div>
+
+                @if($berkas->foto_wajah)
+                <div class="mt-6 border-t pt-6">
+                    <h3 class="text-md font-semibold mb-4">Foto Verifikasi Wajah</h3>
+                    <img
+                        src="{{ route('admin.lihat-berkas-lahir-mati', ['uuid' => $berkas->uuid, 'field' => 'foto_wajah']) }}"
+                        class="w-40 h-40 rounded-xl object-cover border shadow"
+                        alt="Foto Wajah Pemohon"
+                    >
+                </div>
+                @endif
+
             </div>
         </div>
 

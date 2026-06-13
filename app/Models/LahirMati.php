@@ -33,6 +33,7 @@ class LahirMati extends Model
         'ktp_saksi2',
         'formulir_f201',
         'surat_keterangan_lahir_mati',
+        'foto_wajah',
         
         // 'keterangan',
         'status',

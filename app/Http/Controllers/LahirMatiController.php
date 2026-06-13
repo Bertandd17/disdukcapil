@@ -22,7 +22,7 @@ class LahirMatiController extends Controller
             'nama_pemohon'                => 'required|string',
             'alamat_pemohon'              => 'required|string',
             'hubungan_pemohon'            => 'required|string',
-
+            'foto_wajah'                  => 'nullable|string',
             'ktp_pemohon'                 => 'nullable|file|mimes:pdf|max:2048',
             'kartu_keluarga_pemohon'      => 'nullable|file|mimes:pdf|max:2048',
             'ktp_saksi1'                  => 'nullable|file|mimes:pdf|max:2048',
@@ -71,6 +71,7 @@ class LahirMatiController extends Controller
             $data = $request->except([
                 'ktp_pemohon', 'kartu_keluarga_pemohon', 'ktp_saksi1',
                 'ktp_saksi2', 'formulir_f201', 'surat_keterangan_lahir_mati',
+                'foto_wajah',
             ]);
 
             $data['status']     = 'Verifikasi Data';
@@ -93,6 +94,14 @@ class LahirMatiController extends Controller
                 if ($request->hasFile($inputName)) {
                     $data[$inputName] = $request->file($inputName)->store($storagePath, 'private');
                 }
+            }
+
+            if ($request->filled('foto_wajah')) {
+                $base64   = preg_replace('/^data:image\/\w+;base64,/', '', $request->foto_wajah);
+                $decoded  = base64_decode($base64);
+                $filename = 'wajah_' . uniqid() . '_' . time() . '.jpg';
+                Storage::disk('private')->put("lahir_mati/{$filename}", $decoded);
+                $data['foto_wajah'] = "lahir_mati/{$filename}";
             }
 
             // Simpan ke tabel lahir_mati

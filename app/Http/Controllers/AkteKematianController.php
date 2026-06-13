@@ -22,7 +22,7 @@ class AkteKematianController extends Controller
             'nama_pemohon'              => 'required|string',
             'alamat_pemohon'            => 'required|string',
             'hubungan_pemohon'          => 'required|string',
-            
+            'foto_wajah'                => 'nullable|string',
             'ktp_pemohon'               => 'nullable|file|mimes:pdf|max:2048',
             'kartu_keluarga_pemohon'    => 'nullable|file|mimes:pdf|max:2048',
             'formulir_f201'             => 'nullable|file|mimes:pdf|max:2048',
@@ -70,8 +70,9 @@ class AkteKematianController extends Controller
 
             // 2. Ambil semua data teks
             $data = $request->except([
-                'ktp_pemohon', 'kartu_keluarga_pemohon', 'formulir_f201', 
-                'surat_keterangan_kematian', 'ktp_almarhum', 'ktp_saksi1', 'ktp_saksi2'
+                'ktp_pemohon', 'kartu_keluarga_pemohon', 'formulir_f201',
+                'surat_keterangan_kematian', 'ktp_almarhum', 'ktp_saksi1', 'ktp_saksi2',
+                'foto_wajah',
             ]);
             
             $data['status'] = 'Verifikasi Data';
@@ -95,6 +96,14 @@ class AkteKematianController extends Controller
                 if ($request->hasFile($inputName)) {
                     $data[$inputName] = $request->file($inputName)->store($storagePath, 'private');
                 }
+            }
+
+            if ($request->filled('foto_wajah')) {
+                $base64   = preg_replace('/^data:image\/\w+;base64,/', '', $request->foto_wajah);
+                $decoded  = base64_decode($base64);
+                $filename = 'wajah_' . uniqid() . '_' . time() . '.jpg';
+                Storage::disk('private')->put("akte_kematian/{$filename}", $decoded);
+                $data['foto_wajah'] = "akte_kematian/{$filename}";
             }
 
             // 5. Simpan ke database Akte Kematian
@@ -162,6 +171,21 @@ class AkteKematianController extends Controller
         $selesai            = (clone $baseCount)->where('status', 'Siap Pengambilan')->count();
 
         return view('admin.penerbitan_akte_kematian', compact('dataKematian', 'jumlah', 'menungguVerifikasi', 'dalamProses', 'selesai'));
+    }
+
+    private function invalidAntrianResponse(Request $request, string $message)
+    {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => $message,
+            ], 422);
+        }
+
+        return back()->with('error', [
+            'title'   => 'Nomor Antrian Tidak Valid.',
+            'message' => $message,
+        ])->withInput();
     }
 
     public function detail($uuid)
