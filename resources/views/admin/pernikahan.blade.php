@@ -352,11 +352,13 @@ if (typeof window.SwalHelper === 'undefined') {
                 showCancelButton : true,
                 showConfirmButton: true,
                 showDenyButton   : false,
-                confirmButtonText: 'Ya, Lanjutkan',
+                confirmButtonText: 'Konfirmasi',
                 cancelButtonText : 'Batal',
                 confirmButtonColor: '#0052CC',
                 cancelButtonColor : '#6b7280',
-                reverseButtons    : true
+                reverseButtons    : true,
+                allowOutsideClick : false,
+                allowEscapeKey    : false
             }).then((r) => { if (r.isConfirmed && onYes) onYes(); else if (r.isDismissed && onNo) onNo(); });
         }
     };
@@ -729,8 +731,8 @@ async function executeConfirm() {
     const reason = document.getElementById('confirmReason').value;
 
     if ((action === 'reject' || action === 'reject_doc') && !reason.trim()) {
-        if (typeof SwalHelper !== 'undefined' && SwalHelper.warning) {
-            SwalHelper.warning('Alasan harus diisi');
+        if (typeof SwalHelper !== 'undefined' && SwalHelper.toastError) {
+            SwalHelper.toastError('Alasan penolakan wajib diisi.', 'Tulis alasan penolakan dengan jelas sebelum melanjutkan.');
         }
         return;
     }
@@ -766,13 +768,13 @@ async function executeConfirm() {
         if (result.success) {
             closeConfirmModal();
             closeModal();
-            SwalHelper.success(result.message || 'Operasi berhasil');
+            SwalHelper.toastSuccess(result.message || 'Operasi berhasil');
             setTimeout(() => window.location.reload(), 1500);
         } else {
-            SwalHelper.error(result.message || 'Operasi gagal');
+            SwalHelper.toastError(result.message || 'Operasi gagal', 'Periksa data permohonan pernikahan dan coba lagi.');
         }
     } catch (error) {
-        SwalHelper.error('Terjadi kesalahan');
+        SwalHelper.toastError('Terjadi kesalahan', 'Periksa koneksi internet, lalu coba lagi.');
     }
 }
 
@@ -790,13 +792,13 @@ async function verifyAllDocuments(id) {
 
         if (result.success) {
             closeModal();
-            SwalHelper.success('Semua dokumen diverifikasi');
+            SwalHelper.toastSuccess('Semua dokumen diverifikasi');
             setTimeout(() => window.location.reload(), 1500);
         } else {
-            SwalHelper.error(result.message || 'Verifikasi gagal');
+            SwalHelper.toastError(result.message || 'Verifikasi gagal', 'Periksa kelengkapan dokumen, lalu coba verifikasi kembali.');
         }
     } catch (error) {
-        SwalHelper.error('Terjadi kesalahan');
+        SwalHelper.toastError('Terjadi kesalahan', 'Periksa koneksi internet, lalu coba lagi.');
     }
 }
 
@@ -805,12 +807,12 @@ async function handleFileUpload(input, id, type) {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-        SwalHelper.error('Ukuran file maksimal 5MB');
+        SwalHelper.toastError('Ukuran file maksimal 5MB.', 'Kompres file atau pilih file dengan ukuran di bawah 5MB.');
         return;
     }
 
     if (file.type !== 'application/pdf') {
-        SwalHelper.error('File harus berformat PDF');
+        SwalHelper.toastError('File harus berformat PDF.', 'Pilih ulang file dengan format PDF sesuai ketentuan.');
         return;
     }
 
@@ -833,14 +835,14 @@ async function handleFileUpload(input, id, type) {
         SwalHelper.close();
 
         if (result.success) {
-            SwalHelper.success('Berkas berhasil diupload');
+            SwalHelper.toastSuccess('Berkas berhasil diupload');
             showDetail(id);
         } else {
-            SwalHelper.error(result.message || 'Upload gagal');
+            SwalHelper.toastError(result.message || 'Upload gagal', 'Periksa format dan ukuran file, lalu coba unggah kembali.');
         }
     } catch (error) {
         SwalHelper.close();
-        SwalHelper.error('Terjadi kesalahan');
+        SwalHelper.toastError('Terjadi kesalahan', 'Periksa koneksi internet, lalu coba lagi.');
     }
 }
 
@@ -890,8 +892,8 @@ document.getElementById('confirmModal').addEventListener('click', function(e) {
     const KEYWORD_TO_ICON = [
         { icon: 'success', kw: ['berhasil', 'sukses', 'tersimpan', 'telah dikirim', 'terkirim', 'disimpan'] },
         { icon: 'error',   kw: ['gagal', 'error', 'tidak dapat', 'tidak bisa', 'ditolak', 'gagal disimpan'] },
-        { icon: 'warning', kw: ['perlu', 'belum', 'lengkapi', 'perhatian', 'warning', 'kurang'] },
-        { icon: 'info',    kw: ['info', 'informasi', 'catatan', 'pemberitahuan', 'sedang'] }
+        { icon: 'error',   kw: ['perlu', 'belum', 'lengkapi', 'perhatian', 'warning', 'kurang'] },
+        { icon: 'error',   kw: ['info', 'informasi', 'catatan', 'pemberitahuan', 'sedang'] }
     ];
 
     function classify(text) {

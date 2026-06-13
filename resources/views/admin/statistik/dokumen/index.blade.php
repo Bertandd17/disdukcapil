@@ -438,30 +438,16 @@
             btn.innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i> Generate';
             if (r.success) {
                 closeGenerateModal();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: r.message,
-                    confirmButtonColor: '#16a34a'
-                }).then(() => {
-                    window.location.reload();
-                });
+                SwalHelper.toastSuccess(r.message, 'Berhasil!');
+                setTimeout(() => { window.location.reload(); }, 1000);
             } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Informasi',
-                    text: r.message || 'Tidak ada data untuk periode ini'
-                });
+                SwalHelper.toastError(r.message || 'Tidak ada data untuk periode ini', 'Pilih periode lain atau pastikan data sumber tersedia.');
             }
         })
         .catch(err => {
             btn.disabled = false;
             btn.innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i> Generate';
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: 'Terjadi kesalahan koneksi'
-            });
+            SwalHelper.toastError('Terjadi kesalahan koneksi', 'Periksa koneksi internet, lalu coba lagi.');
         });
     });
 
@@ -479,7 +465,10 @@
                 confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch(f.action, {
@@ -489,7 +478,8 @@
                     .then(r => r.json())
                     .then(r => {
                         if (r.success) {
-                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 5000 });
+                            if (window.toastSuccess) window.toastSuccess(r.message, 'Data berhasil dihapus', 2000);
+                            else Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 2000 });
                             setTimeout(() => { window.location.reload(); }, 1000);
                         }
                     });

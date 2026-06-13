@@ -31,18 +31,6 @@
                 background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
                 color: '#ffffff'
             },
-            warning: {
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                color: '#ffffff'
-            },
-            info: {
-                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                color: '#ffffff'
-            },
-            question: {
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                color: '#ffffff'
-            },
             modal: {
                 background: '#ffffff',
                 color: '#1f2937'
@@ -213,7 +201,7 @@
     function notifFormBelumLengkap() {
         Swal.fire({
             ...SwalDisdukcapil.toastDefaults,
-            icon: 'warning',
+            icon: 'error',
             title: '<span style="color: #d97706; font-weight: 700;">Form Belum Lengkap!</span>',
             html: `
                 <div style="text-align: center; padding: 10px 0;">
@@ -635,7 +623,7 @@
     function notifNomorAntrian(nomorAntrian, jenisLayanan, estimasiWaktu) {
         Swal.fire({
             ...SwalDisdukcapil.toastDefaults,
-            icon: 'info',
+            icon: 'success',
             title: '<span style="color: #2563eb; font-weight: 700;">Nomor Antrian Anda</span>',
             html: `
                 <div style="text-align: center; padding: 10px 0;">
@@ -723,7 +711,7 @@
     function notifCariKosong(keyword) {
         Swal.fire({
             ...SwalDisdukcapil.toastDefaults,
-            icon: 'warning',
+            icon: 'error',
             title: '<span style="color: #d97706; font-weight: 700;">Tidak Ditemukan</span>',
             html: `
                 <div style="text-align: center; padding: 10px 0;">

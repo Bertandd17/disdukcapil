@@ -25,7 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset_v('js/sweetalert-disdukcapil.js') }}"></script>
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>
     
     <style>
@@ -670,6 +670,6 @@ echo json_encode([
         </div>
     </div>
 
-<script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+<script src="{{ asset_v('js/style-guide-enhancer.js') }}"></script>
 </body>
 </html>

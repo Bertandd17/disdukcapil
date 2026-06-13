@@ -434,23 +434,18 @@
                     text: 'Nomor antrian saat ini akan hilang. Lanjutkan?',
                     icon: false,
                     showCancelButton: true,
+                    showDenyButton: false,
                     confirmButtonColor: '#dc2626',
                     cancelButtonColor: '#e5e7eb',
                     confirmButtonText: 'Konfirmasi',
                     cancelButtonText: 'Batal',
                     reverseButtons: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
                 }).then(function (r) {
                     if (!r.isConfirmed) return;
                     performResetUi();
-                    window.Swal.fire({
-                        icon: 'success',
-                        title: 'Form direset',
-                        text: 'Silakan ambil nomor antrian baru',
-                        timer: 1500,
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top-end',
-                    });
+                    toastSuccess('Form Direset', 'Silakan ambil nomor antrian baru', 1500);
                 });
             } else if (typeof notifKonfirmasi === 'function') {
                 notifKonfirmasi('Ambil antrian baru? Nomor saat ini akan hilang.', function() {
@@ -458,7 +453,7 @@
                 });
             } else if (typeof fireToast !== 'undefined') {
                 fireToast({
-                    type: 'warning', icon: 'warning',
+                    type: 'error', icon: 'error',
                     title: 'Ambil antrian baru?',
                     problem: 'Tindakan ini akan menghapus nomor antrian yang sedang diambil.',
                     solution: 'Pilih tombol "Ambil" pada langkah berikutnya untuk konfirmasi ulang.'

@@ -619,7 +619,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                                 class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
-                        <button type="button" id="btnStartLiveness" onclick="startLiveness()"
+                        <button type="button" id="btnStartLiveness" onclick="handleLivenessAction()"
                                 class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fas fa-camera text-sm"></i> Mulai Verifikasi
                         </button>
@@ -678,63 +678,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
         overflow: hidden !important;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       TOAST COLORS — Hijau/Kuning/Merah/Biru sesuai tipe
-       Class disuntik via customClass.popup = swal-toast-{type}
-       dari helper showToast() di bawah.
-       ═══════════════════════════════════════════════════════════ */
-    .swal-toast-success {
-        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #15803d !important;
-    }
-    .swal-toast-success .swal2-title,
-    .swal-toast-success .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-success .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-warning {
-        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b45309 !important;
-    }
-    .swal-toast-warning .swal2-title,
-    .swal-toast-warning .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-warning .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-error {
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #b91c1c !important;
-    }
-    .swal-toast-error .swal2-title,
-    .swal-toast-error .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-error .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
-    .swal-toast-info {
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
-        color: #ffffff !important;
-        border-left: 4px solid #1d4ed8 !important;
-    }
-    .swal-toast-info .swal2-title,
-    .swal-toast-info .swal2-icon {
-        color: #ffffff !important;
-    }
-    .swal-toast-info .swal2-timer-progress-bar {
-        background: rgba(255, 255, 255, 0.6) !important;
-    }
-
+    /* Toast styling ditangani global oleh sweetalert-disdukcapil.js (swal-dd-toast) */
     /* ═══════════════════════════════════════════════════════════
        General styles
        ═══════════════════════════════════════════════════════════ */
@@ -785,97 +729,13 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
-   INTERCEPTOR GLOBAL — Paksa SEMUA loading modal tanpa tombol OK/No/Cancel
-   (FASE 4 — Ditempatkan setelah SweetAlert2, sebelum @stack('scripts'))
-   ═══════════════════════════════════════════════════════════════════ */
-(function installSwalLoadingInterceptor() {
-    function patchSwal(Swal) {
-        if (!Swal || Swal.__loadingInterceptorInstalled) return;
-
-        var _originalFire = Swal.fire.bind(Swal);
-
-        Swal.fire = function(config) {
-            if (!config || typeof config !== 'object') {
-                return _originalFire.apply(this, arguments);
-            }
-
-            var isLoading = (
-                (typeof config.didOpen === 'function' &&
-                    config.didOpen.toString().includes('showLoading')) ||
-                config.showLoading === true ||
-                (config.title && (
-                    config.title.toString().includes('Memproses') ||
-                    config.title.toString().includes('Memuat') ||
-                    config.title.toString().includes('Menyimpan') ||
-                    config.title.toString().includes('Mengirim') ||
-                    config.title.toString().includes('Memeriksa') ||
-                    config.title.toString().includes('Loading') ||
-                    config.title.toString().includes('Tunggu')
-                ))
-            );
-
-            if (isLoading) {
-                config.showConfirmButton = false;
-                config.showDenyButton    = false;
-                config.showCancelButton  = false;
-                config.allowOutsideClick = false;
-                config.allowEscapeKey    = false;
-            }
-
-            return _originalFire(config);
-        };
-
-        /* Patch mixin juga (penting untuk Swal.mixin({...}).fire()) */
-        var _originalMixin = Swal.mixin.bind(Swal);
-        Swal.mixin = function(defaults) {
-            var mixinInstance = _originalMixin(defaults);
-            var _mixinFire    = mixinInstance.fire.bind(mixinInstance);
-
-            mixinInstance.fire = function(config) {
-                if (!config || typeof config !== 'object') {
-                    return _mixinFire.apply(this, arguments);
-                }
-                var isLoading = (
-                    (typeof config.didOpen === 'function' &&
-                        config.didOpen.toString().includes('showLoading')) ||
-                    config.showLoading === true ||
-                    (config.title && (
-                        config.title.toString().includes('Memproses') ||
-                        config.title.toString().includes('Memuat') ||
-                        config.title.toString().includes('Menyimpan') ||
-                        config.title.toString().includes('Mengirim') ||
-                        config.title.toString().includes('Memeriksa') ||
-                        config.title.toString().includes('Loading') ||
-                        config.title.toString().includes('Tunggu')
-                    ))
-                );
-                if (isLoading) {
-                    config.showConfirmButton = false;
-                    config.showDenyButton    = false;
-                    config.showCancelButton  = false;
-                    config.allowOutsideClick = false;
-                    config.allowEscapeKey    = false;
-                }
-                return _mixinFire(config);
-            };
-
-            return mixinInstance;
-        };
-
-        Swal.__loadingInterceptorInstalled = true;
-    }
-
-    /* Coba pasang sekarang (jika Swal sudah ada), lalu ulang saat DOM ready */
-    if (typeof window.Swal !== 'undefined') patchSwal(window.Swal);
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof window.Swal !== 'undefined') patchSwal(window.Swal);
-    });
-})();
-
-/* ═══════════════════════════════════════════════════════════════════
-   Helper — Loading Modal TANPA TOMBOL (FASE 3)
+   Helper — Loading Modal TANPA TOMBOL
+   (Normalisasi global ditangani swal-final-fix.js di layouts/user)
    ═══════════════════════════════════════════════════════════════════ */
 function showLoadingModal(title, text) {
+    if (typeof Swal !== 'undefined' && Swal.isVisible && Swal.isVisible()) {
+        Swal.close();
+    }
     return Swal.fire({
         title             : title  || 'Memproses...',
         text              : text   || 'Mohon tunggu sebentar',
@@ -902,6 +762,7 @@ let livenessStarted    = false;
 
 const BLINK_THRESHOLD = 0.25;
 const BLINK_TARGET    = 2;
+const SUBMIT_TIMEOUT_MS = 120000;
 
 const routeMap = {
     'kk':              "{{ route('kk.store') }}",
@@ -1191,6 +1052,12 @@ function goToStep(step) {
     }
     document.getElementById('modalStepLabel').textContent = 'Langkah ' + step + ' dari 5 – ' + labels[step-1];
     document.getElementById('modalContent').scrollTop = 0;
+    if (step === 4) {
+        stopCamera();
+        livenessStarted = false;
+        faceMeshInstance = null;
+        updateLivenessStepUI();
+    }
     if (step === 5) buildSummary();
 }
 
@@ -1211,7 +1078,14 @@ function validateAndGoStep3() {
         }
     });
     if (hasEmpty) errMsg = 'Ada Dokumen yang Perlu dilengkapi';
-    if (!valid) { showToast(errMsg, 'warning'); return; }
+    if (!valid) {
+        if (errMsg.indexOf('16 angka') !== -1) {
+            showErrorToast('Nomor harus tepat 16 angka.', 'Masukkan NIK atau nomor KK sesuai dokumen kependudukan (16 digit).');
+        } else {
+            showErrorToast('Ada kolom wajib yang belum diisi.', 'Lengkapi semua data pada langkah ini, lalu lanjutkan.');
+        }
+        return;
+    }
     goToStep(3);
 }
 
@@ -1231,7 +1105,13 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) { showToast('Ada Dokumen yang Perlu dilengkapi', 'warning'); return; }
+    if (!valid) {
+        showErrorToast(
+            'Dokumen wajib belum diunggah' + (missingLabel ? ': ' + missingLabel : '') + '.',
+            'Unggah semua berkas PDF yang wajib, lalu lanjutkan ke langkah berikutnya.'
+        );
+        return;
+    }
     goToStep(4);
 }
 
@@ -1306,19 +1186,73 @@ function onLivenessPassed() {
     document.getElementById('foto_wajah').value = canvas.toDataURL('image/jpeg', 0.85);
     stopCamera();
     document.getElementById('liveness_passed').value = '1';
-    document.getElementById('btnStartLiveness').disabled = true;
-    var preview = document.createElement('img');
-    preview.src = document.getElementById('foto_wajah').value;
-    preview.className = 'w-full rounded-xl';
-    preview.style.maxHeight = '260px';
-    preview.style.objectFit = 'cover';
-    preview.id = 'foto-preview';
-    video.style.display = 'none';
-    video.parentNode.insertBefore(preview, video);
-    document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
-    document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
-    showToast('Verifikasi Wajah Berhasil', 'success');
+    blinkCount = BLINK_TARGET;
+    showLivenessCompletedUI();
+    showSuccessToast('Verifikasi Wajah Berhasil');
     setTimeout(function() { goToStep(5); }, 900);
+}
+function handleLivenessAction() {
+    if (document.getElementById('liveness_passed').value === '1' &&
+        document.getElementById('foto_wajah').value) {
+        goToStep(5);
+        return;
+    }
+    startLiveness();
+}
+function setLivenessActionButton(mode) {
+    var btn = document.getElementById('btnStartLiveness');
+    if (!btn) return;
+    if (mode === 'next') {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-arrow-right text-sm"></i> Selanjutnya';
+    } else {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-camera text-sm"></i> Mulai Verifikasi';
+    }
+}
+function showLivenessCompletedUI() {
+    var fotoWajah = document.getElementById('foto_wajah').value;
+    var video = document.getElementById('video');
+    var preview = document.getElementById('foto-preview');
+    if (!preview && fotoWajah) {
+        preview = document.createElement('img');
+        preview.src = fotoWajah;
+        preview.className = 'w-full rounded-xl';
+        preview.style.maxHeight = '260px';
+        preview.style.objectFit = 'cover';
+        preview.id = 'foto-preview';
+        video.parentNode.insertBefore(preview, video);
+    } else if (preview && fotoWajah) {
+        preview.src = fotoWajah;
+    }
+    video.style.display = 'none';
+    var overlay = document.getElementById('liveness-overlay');
+    overlay.textContent = '✓ Verifikasi wajah selesai';
+    overlay.className = 'absolute bottom-0 left-0 right-0 bg-green-600/80 text-white text-center py-2 text-sm font-semibold';
+    document.getElementById('blinkCount').textContent = String(BLINK_TARGET);
+    for (var i = 1; i <= BLINK_TARGET; i++) {
+        var dot = document.getElementById('blink-dot-' + i);
+        if (dot) {
+            dot.className = 'w-8 h-8 rounded-full border-2 border-green-500 bg-green-500 flex items-center justify-center text-xs font-bold text-white';
+            dot.innerHTML = '<i class="fas fa-check text-xs"></i>';
+        }
+    }
+    setLivenessActionButton('next');
+}
+function updateLivenessStepUI() {
+    var passed = document.getElementById('liveness_passed').value === '1';
+    var fotoWajah = document.getElementById('foto_wajah').value;
+    if (passed && fotoWajah) {
+        showLivenessCompletedUI();
+        return;
+    }
+    var old = document.getElementById('foto-preview');
+    if (old) old.remove();
+    document.getElementById('video').style.display = '';
+    var overlay = document.getElementById('liveness-overlay');
+    overlay.textContent = 'Tekan "Mulai Verifikasi" untuk mengaktifkan kamera';
+    overlay.className = 'absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center py-2 text-sm font-semibold';
+    setLivenessActionButton('start');
 }
 function setOverlay(text) { document.getElementById('liveness-overlay').textContent = text; }
 function startLiveness() {
@@ -1372,8 +1306,7 @@ function resetLiveness() {
     document.getElementById('liveness_passed').value = '0';
     document.getElementById('liveness-overlay').textContent = 'Tekan "Mulai Verifikasi" untuk mengaktifkan kamera';
     document.getElementById('liveness-overlay').className = 'absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center py-2 text-sm font-semibold';
-    var btn = document.getElementById('btnStartLiveness');
-    if (btn) btn.disabled = false;
+    setLivenessActionButton('start');
     for (var i = 1; i <= BLINK_TARGET; i++) {
         var dot = document.getElementById('blink-dot-' + i);
         if (dot) { dot.className = 'w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-400'; dot.textContent = i; }
@@ -1446,12 +1379,154 @@ function stripToastHtml(message) {
     return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
 }
 
-function showErrorToast(problem, solution, title, timer) {
-    title = title || 'Terjadi kesalahan';
-    timer = timer || 6000;
+function showSuccessToast(title, html) {
+    if (typeof fireToast === 'function') {
+        return fireToast({ type: 'success', icon: 'success', title: title || 'Berhasil', html: html || undefined, timer: 5000 });
+    }
+    if (window.SwalHelper && SwalHelper.toastSuccess) {
+        return html ? SwalHelper.toastSuccess(html, title) : SwalHelper.toastSuccess(title);
+    }
+}
+
+function showErrorToast(problem, solution, title) {
     var cleanProblem  = stripToastHtml(problem  || 'Terjadi kesalahan saat memproses permintaan.');
     var cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
-    return showToast(cleanProblem + ' ' + cleanSolution, 'error');
+    if (typeof fireToast === 'function') {
+        return fireToast({
+            type: 'error',
+            icon: 'error',
+            title: title || 'Terjadi kesalahan',
+            problem: cleanProblem,
+            solution: cleanSolution,
+            timer: 5000
+        });
+    }
+    if (window.SwalHelper && SwalHelper.toastError) {
+        return SwalHelper.toastError(cleanProblem, cleanSolution);
+    }
+}
+
+function escapeHtmlText(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+async function parseJsonResponse(response) {
+    var contentType = (response.headers.get('content-type') || '').toLowerCase();
+    var text = await response.text();
+
+    if (!text || !text.trim()) {
+        return {
+            success: false,
+            message: response.ok
+                ? 'Server tidak mengembalikan respons.'
+                : 'Gagal memproses permintaan (HTTP ' + response.status + ').',
+            problem: response.status === 419
+                ? 'Sesi halaman habis atau token keamanan tidak valid.'
+                : 'Server tidak mengembalikan data.',
+            solution: response.status === 419
+                ? 'Muat ulang halaman, isi ulang formulir, lalu kirim kembali.'
+                : 'Periksa koneksi internet dan ukuran berkas, lalu coba lagi.'
+        };
+    }
+
+    if (contentType.indexOf('application/json') !== -1 || text.trim().charAt(0) === '{') {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            return {
+                success: false,
+                message: 'Respons server tidak valid.',
+                problem: 'Format respons dari server tidak dapat dibaca.',
+                solution: 'Coba lagi. Jika masalah berlanjut, hubungi petugas layanan.'
+            };
+        }
+    }
+
+    return {
+        success: false,
+        message: 'Gagal memproses permintaan (HTTP ' + response.status + ').',
+        problem: response.status === 419
+            ? 'Sesi halaman habis atau token keamanan tidak valid.'
+            : 'Server mengembalikan respons yang tidak diharapkan.',
+        solution: response.status === 419
+            ? 'Muat ulang halaman, isi ulang formulir, lalu kirim kembali.'
+            : 'Periksa kelengkapan berkas dan koneksi internet, lalu coba lagi.'
+    };
+}
+
+async function submitPengajuanForm(form, btnSubmit) {
+    if (!form || !form.action || form.action === '#' || form.action.endsWith('#')) {
+        showErrorToast(
+            'URL pengiriman tidak valid.',
+            'Tutup modal, pilih layanan kembali, lalu coba kirim pengajuan.'
+        );
+        return;
+    }
+
+    var formData = new FormData(form);
+    var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    if (csrfMeta && !formData.get('_token')) {
+        formData.set('_token', csrfMeta.content);
+    }
+
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function() { controller.abort(); }, SUBMIT_TIMEOUT_MS);
+
+    try {
+        var response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            signal: controller.signal
+        });
+
+        var data = await parseJsonResponse(response);
+
+        if (data.success) {
+            showSuccessToast(data.message || 'Pengajuan Dokumen Berhasil dilakukan');
+            form.reset();
+            closeModal();
+            goToStep(1);
+            document.getElementById('liveness_passed').value = '0';
+            document.getElementById('foto_wajah').value = '';
+        } else {
+            var validationMsg = '';
+            if (data.errors) {
+                validationMsg = Object.keys(data.errors).map(function(key) {
+                    var val = data.errors[key];
+                    return Array.isArray(val) ? val.join(' ') : val;
+                }).join(' ');
+            }
+            showErrorToast(
+                data.problem || data.message || 'Terjadi kesalahan saat mengirim pengajuan.',
+                data.solution || validationMsg || 'Periksa kelengkapan data dan berkas, lalu coba kirim kembali.'
+            );
+        }
+    } catch (error) {
+        console.error('Submit error:', error);
+        if (error.name === 'AbortError') {
+            showErrorToast(
+                'Waktu pengiriman habis.',
+                'Periksa koneksi internet atau kurangi ukuran berkas, lalu coba lagi.'
+            );
+        } else {
+            showErrorToast(
+                'Gagal mengirim pengajuan.',
+                'Periksa koneksi internet, lalu coba lagi.'
+            );
+        }
+    } finally {
+        clearTimeout(timeoutId);
+        Swal.close();
+        if (btnSubmit) btnSubmit.disabled = false;
+    }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1516,7 +1591,10 @@ function autoFillFromAntrian(nomorAntrian) {
                 if (nikInput    && data.data.nik)          nikInput.value    = data.data.nik;
                 if (namaInput   && data.data.nama_lengkap) namaInput.value   = data.data.nama_lengkap;
                 if (alamatInput && data.data.alamat)       alamatInput.value = data.data.alamat;
-                showToast('Berhasil Mengambil Data dari Nomor Antrian', 'success');
+                showSuccessToast(
+                    'Berhasil Mengambil Data dari Nomor Antrian',
+                    'Data pemohon dari nomor antrian <strong>' + escapeHtmlText(nomorAntrian.trim()) + '</strong> telah diisi otomatis ke formulir.'
+                );
             }
         })
         .catch(function(error) {
@@ -1560,9 +1638,17 @@ function validateSelectedFile(input) {
     if (!file) return true;
     if (isPdfOnlyInput(input)) {
         var isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-        if (!isPdf) { input.value = ''; showToast('Hanya file PDF yang diperbolehkan', 'error'); return false; }
+        if (!isPdf) {
+            input.value = '';
+            showErrorToast('Hanya file PDF yang diperbolehkan.', 'Pilih ulang file dengan format PDF sesuai ketentuan.');
+            return false;
+        }
     }
-    if (file.size > 2 * 1024 * 1024) { input.value = ''; showToast('Maksimal ukuran file: 2MB', 'error'); return false; }
+    if (file.size > 2 * 1024 * 1024) {
+        input.value = '';
+        showErrorToast('Maksimal ukuran file: 2MB.', 'Kompres file atau pilih file dengan ukuran di bawah 2MB.');
+        return false;
+    }
     return true;
 }
 function clearFileInput(fieldName) {
@@ -1573,27 +1659,13 @@ function clearFileInput(fieldName) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Toast helper
+   Toast helper — success/error only via fireToast
    ═══════════════════════════════════════════════════════════════════ */
 function showToast(message, type) {
-    type = type || 'info';
-    var iconMap = { success:'success', error:'error', warning:'warning', info:'info' };
-    Swal.mixin({
-        toast             : true,
-        position          : 'top-end',
-        showConfirmButton : false,
-        showDenyButton    : false,
-        showCancelButton  : false,
-        timer             : 4000,
-        timerProgressBar  : true,
-        icon              : iconMap[type] || 'info',
-        title             : message,
-        customClass       : { popup: 'swal-toast-' + (type || 'info') },
-        didOpen           : function(toast) {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
-    }).fire();
+    if (type === 'success') {
+        return showSuccessToast(message);
+    }
+    return showErrorToast(message);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1614,95 +1686,52 @@ async function handleKirimPengajuan() {
     var livenessInput = document.getElementById('liveness_passed');
     var livenessValue = (livenessInput && livenessInput.value) ? livenessInput.value : '0';
 
-    /* Guard: verifikasi wajah harus selesai */
     if (livenessValue !== '1') {
-        showToast('Harap selesaikan verifikasi wajah terlebih dahulu.', 'error');
+        showErrorToast(
+            'Verifikasi wajah belum selesai.',
+            'Selesaikan verifikasi wajah pada langkah Verifikasi, lalu kirim pengajuan kembali.'
+        );
         goToStep(4);
         return;
     }
 
     var form           = document.getElementById('serviceForm');
+    var btnSubmit      = document.getElementById('btnSubmit');
     var nikInput       = document.querySelector('[name="nik_pemohon"]');
     var layananIdInput = document.querySelector('[name="layanan_id"]');
     var nik            = nikInput      ? nikInput.value.trim()      : '';
     var layananId      = layananIdInput ? layananIdInput.value.trim() : '';
 
-    /* Disable tombol supaya tidak double-submit */
-    var btnSubmit = document.getElementById('btnSubmit');
     if (btnSubmit) btnSubmit.disabled = true;
 
     if (nik && layananId) {
-        /* ── Cek daily limit ── */
         showLoadingModal('Memeriksa...', 'Mohon tunggu sebentar');
-
         try {
             var controller = new AbortController();
             var timeoutId  = setTimeout(function() { controller.abort(); }, 10000);
-
             var checkResponse = await fetch(
                 '/api/antrian/check-daily-limit?nik=' + encodeURIComponent(nik) + '&layanan_id=' + encodeURIComponent(layananId),
-                { signal: controller.signal }
+                { signal: controller.signal, headers: { 'Accept': 'application/json' } }
             );
             clearTimeout(timeoutId);
-
-            if (!checkResponse.ok) throw new Error('HTTP ' + checkResponse.status);
-
-            var checkData = await checkResponse.json();
-
+            var checkData = await parseJsonResponse(checkResponse);
             if (!checkData.success) {
                 Swal.close();
                 if (btnSubmit) btnSubmit.disabled = false;
-                if (checkData.error_code === 'DAILY_LIMIT_EXCEEDED') {
-                    showToast(checkData.message || 'Anda sudah mengajukan layanan ini hari ini.', 'warning');
-                } else {
-                    showToast(checkData.message || 'Terjadi kesalahan validasi', 'error');
-                }
+                showErrorToast(
+                    checkData.problem || checkData.message || 'Validasi pengajuan gagal.',
+                    checkData.solution || 'Periksa data yang dimasukkan, lalu coba lagi.'
+                );
                 return;
             }
-
-            /* Daily limit OK — lanjut submit */
-            showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
-
         } catch (error) {
             Swal.close();
             console.error('Daily limit check error:', error);
-            /* Jika timeout, fail open dan lanjut submit */
-            showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
         }
-    } else {
-        showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
     }
 
-    /* ── Submit form via fetch (TANPA native submit — bypass semua interceptor) ── */
-    var formData = new FormData(form);
-
-    fetch(form.action, {
-        method  : 'POST',
-        body    : formData,
-        headers : { 'X-Requested-With': 'XMLHttpRequest' }
-    })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
-        Swal.close();
-        if (btnSubmit) btnSubmit.disabled = false;
-        if (data.success) {
-            /* ── Toast sukses kanan atas ── */
-            showToast('Pengajuan Dokumen Berhasil dilakukan', 'success');
-            form.reset();
-            closeModal();
-            goToStep(1);
-            document.getElementById('liveness_passed').value = '0';
-            document.getElementById('foto_wajah').value = '';
-        } else {
-            showToast(data.message || 'Terjadi kesalahan saat mengirim pengajuan', 'error');
-        }
-    })
-    .catch(function(error) {
-        Swal.close();
-        if (btnSubmit) btnSubmit.disabled = false;
-        console.error('Submit error:', error);
-        showToast('Gagal mengirim pengajuan. Silakan coba lagi.', 'error');
-    });
+    showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
+    await submitPengajuanForm(form, btnSubmit);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1715,15 +1744,16 @@ document.addEventListener('DOMContentLoaded', function() {
         serviceForm.addEventListener('submit', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-        }, true); /* capture phase — mencegat sebelum listener lain */
+            handleKirimPengajuan();
+        }, true);
     }
 
     @if(session('error'))
-    showToast('{!! addslashes(session("error")) !!}', 'error');
+    showErrorToast(@json(session('error')), @json(session('error_solution') ?? ''));
     @endif
 
     @if(session('success'))
-    showToast('{{ addslashes(session("success")) }}', 'success');
+    showSuccessToast(@json(session('success')));
     @endif
 
 }); /* end DOMContentLoaded */

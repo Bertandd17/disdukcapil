@@ -684,19 +684,21 @@ if (typeof SwalHelper === 'undefined') {
  if (typeof Swal !== 'undefined') Swal.close();
  },
  success: function(msg) {
- if (typeof Swal !== 'undefined') {
- Swal.fire({ icon: 'success', title: 'Berhasil', text: msg, timer: 2000, showConfirmButton: false });
- } else if (typeof fireToast !== 'undefined') {
- fireToast({ type: 'success', icon: 'success', title: msg || 'Berhasil', timer: 4000 });
+ if (typeof fireToast !== 'undefined') {
+ fireToast({ type: 'success', icon: 'success', title: msg || 'Berhasil', timer: 5000 });
+ } else if (typeof Swal !== 'undefined') {
+ Swal.fire({ icon: 'success', title: 'Berhasil', text: msg, timer: 5000, showConfirmButton: false, toast: true, position: 'top-end' });
  } else if (window.__nativeAlert) { window.__nativeAlert(msg); }
  },
- error: function(msg) {
- if (typeof Swal !== 'undefined') {
- Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
- } else if (typeof fireToast !== 'undefined') {
- fireToast({ type: 'error', icon: 'error', title: 'Gagal', problem: 'Terjadi kesalahan pada proses ini.', solution: 'Periksa data yang dimasukkan dan coba lagi.' });
- } else if (window.__nativeAlert) { window.__nativeAlert('Error: ' + msg); }
- }
+ toastSuccess: function(msg) { SwalHelper.success(msg); },
+ error: function(problem, solution) {
+ if (typeof fireToast !== 'undefined') {
+ fireToast({ type: 'error', icon: 'error', title: 'Terjadi kesalahan', problem: problem || 'Terjadi kesalahan saat memproses permintaan.', solution: solution || 'Periksa data yang dimasukkan dan coba lagi.', timer: 5000 });
+ } else if (typeof Swal !== 'undefined') {
+ Swal.fire({ icon: 'error', title: 'Gagal', text: problem });
+ } else if (window.__nativeAlert) { window.__nativeAlert('Error: ' + problem); }
+ },
+ toastError: function(problem, solution) { SwalHelper.error(problem, solution); }
  };
 }
 
@@ -799,7 +801,7 @@ function showDetail(pernikahanId) {
  SwalHelper.close();
 
  if (!data.success) {
- SwalHelper.error(data.message || 'Gagal memuat detail');
+ SwalHelper.toastError(data.message || 'Gagal memuat detail', 'Muat ulang halaman, lalu coba buka detail kembali.');
  return;
  }
 
@@ -937,7 +939,7 @@ function showDetail(pernikahanId) {
  .catch(err => {
  SwalHelper.close();
  console.error('showDetail error:', err);
- SwalHelper.error('Terjadi kesalahan saat memuat detail');
+ SwalHelper.toastError('Terjadi kesalahan saat memuat detail', 'Periksa koneksi internet, lalu coba lagi.');
  });
 }
 
@@ -1012,10 +1014,10 @@ function submitKonfirmasi() {
  // Update UI tanpa reload
  updateUIAfterConfirm(selectedPernikahanId, 'approve');
  } else {
- SwalHelper.error(data.message || 'Gagal memproses konfirmasi');
+ SwalHelper.toastError(data.message || 'Gagal memproses konfirmasi', 'Periksa data permohonan, lalu coba konfirmasi kembali.');
  }
  })
- .catch(() => { SwalHelper.close(); SwalHelper.error('Terjadi kesalahan'); });
+ .catch(() => { SwalHelper.close(); SwalHelper.toastError('Terjadi kesalahan', 'Periksa koneksi internet, lalu coba lagi.'); });
 }
 
 
@@ -1039,7 +1041,7 @@ function submitTolak() {
 
  const alasan = document.getElementById('tolakAlasan').value.trim();
  if (!alasan) {
- SwalHelper.error('Alasan penolakan wajib diisi');
+ SwalHelper.toastError('Alasan penolakan wajib diisi.', 'Tulis alasan penolakan dengan jelas sebelum melanjutkan.');
  return;
  }
 
@@ -1063,32 +1065,15 @@ function submitTolak() {
  if (data.success) {
  closeTolakModal();
 
- // Tampilkan toast tanpa backdrop blur
- const Toast = Swal.mixin({
- toast: true,
- position: 'top-end',
- showConfirmButton: false,
- timer: 5000,
- timerProgressBar: true,
- backdrop: false,
- didOpen: (toast) => {
- toast.addEventListener('mouseenter', Swal.stopTimer);
- toast.addEventListener('mouseleave', Swal.resumeTimer);
- }
- });
- Toast.fire({
- icon: 'warning',
- title: data.message || 'Permohonan ditolak',
- iconColor: '#eab308'
- });
+ SwalHelper.toastSuccess(data.message || 'Permohonan ditolak');
 
  // Update UI tanpa reload
  updateUIAfterConfirm(selectedPernikahanId, 'reject');
  } else {
- SwalHelper.error(data.message || 'Gagal memproses penolakan');
+ SwalHelper.toastError(data.message || 'Gagal memproses penolakan', 'Periksa alasan penolakan, lalu coba lagi.');
  }
  })
- .catch(() => { SwalHelper.close(); SwalHelper.error('Terjadi kesalahan'); });
+ .catch(() => { SwalHelper.close(); SwalHelper.toastError('Terjadi kesalahan', 'Periksa koneksi internet, lalu coba lagi.'); });
 }
 
 

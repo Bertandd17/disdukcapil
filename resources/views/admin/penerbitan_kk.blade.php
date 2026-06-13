@@ -168,13 +168,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     @if(session('success'))
-        if (typeof SwalHelper !== 'undefined') SwalHelper.success("{{ session('success') }}");
+        SwalHelper.toastSuccess(@json(session('success')));
     @endif
     @if(session('upload_error'))
-        if (typeof SwalHelper !== 'undefined') SwalHelper.error("{{ session('upload_error') }}");
+        SwalHelper.toastError(@json(session('upload_error')), 'Periksa file yang diunggah (format PDF, ukuran maksimal) dan coba lagi.');
     @endif
     @if($errors->any())
-        if (typeof SwalHelper !== 'undefined') SwalHelper.error("{{ $errors->first() }}");
+        SwalHelper.toastError(@json($errors->first()), 'Pastikan semua field wajib telah diisi dengan benar.');
     @endif
 });
 </script>

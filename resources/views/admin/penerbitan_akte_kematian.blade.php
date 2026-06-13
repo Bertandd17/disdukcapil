@@ -175,13 +175,13 @@ document.getElementById('uploadBerkasModal').addEventListener('click', function(
     if (e.target === this) closeUploadModal();
 });
 @if(session('success'))
-    SwalHelper.success("{{ session('success') }}");
+    SwalHelper.toastSuccess(@json(session('success')));
 @endif
 @if(session('upload_error'))
-    SwalHelper.error("{{ session('upload_error') }}");
+    SwalHelper.toastError(@json(session('upload_error')), 'Periksa file yang diunggah (format PDF, ukuran maksimal) dan coba lagi.');
 @endif
 @if($errors->any())
-    SwalHelper.error("{{ $errors->first() }}");
+    SwalHelper.toastError(@json($errors->first()), 'Pastikan semua field wajib telah diisi dengan benar.');
 @endif
 </script>
 @endpush

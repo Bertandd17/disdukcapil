@@ -229,16 +229,16 @@ document.getElementById('uploadForm').addEventListener('submit', function(e) {
     .then(data => {
         SwalHelper.close();
         if (data.success) {
-            SwalHelper.success(data.message);
+            SwalHelper.toastSuccess(data.message);
             closeUploadModal();
             setTimeout(() => location.reload(), 1500);
         } else {
-            SwalHelper.error(data.message || 'Gagal mengupload berkas');
+            SwalHelper.toastError(data.message || 'Gagal mengupload berkas', 'Periksa format dan ukuran file PDF, lalu coba unggah kembali.');
         }
     })
     .catch(error => {
         SwalHelper.close();
-        SwalHelper.error('Terjadi kesalahan saat mengupload berkas');
+        SwalHelper.toastError('Terjadi kesalahan saat mengupload berkas', 'Periksa koneksi internet, lalu coba lagi.');
     });
 });
 

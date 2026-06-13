@@ -33,7 +33,7 @@
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
 
     <!-- SweetAlert2 Disdukcapil Notification System -->
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset_v('js/sweetalert-disdukcapil.js') }}"></script>
 
     <!-- Notifikasi Disdukcapil Helper -->
     <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
@@ -147,7 +147,7 @@
         }
     </style>
 
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="{{ asset_v('css/page-loading.css') }}">
 
     @stack('styles')
 </head>
@@ -163,23 +163,23 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
-                SwalHelper.success(@json(session('success')));
+                SwalHelper.toastSuccess(@json(session('success')));
             @endif
 
             @if(session('error'))
                 @php($flashError = session('error'))
-                SwalHelper.error(
-                    @json(is_array($flashError) ? ($flashError['title'] ?? 'Terjadi kesalahan') : 'Terjadi kesalahan'),
-                    @json(is_array($flashError) ? ($flashError['message'] ?? 'Periksa data yang Anda masukkan, lalu coba lagi.') : $flashError)
+                SwalHelper.toastError(
+                    @json(is_array($flashError) ? ($flashError['message'] ?? $flashError['title'] ?? 'Terjadi kesalahan') : $flashError),
+                    @json(session('error_solution') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.')
                 );
             @endif
 
-            @if(session('info'))
-                SwalHelper.info(@json(session('info')));
+            @if(session('warning'))
+                SwalHelper.toastError(@json(session('warning')), 'Periksa kembali data atau aksi yang dilakukan, lalu coba lagi.');
             @endif
 
-            @if(session('warning'))
-                SwalHelper.warning(@json(session('warning')));
+            @if(session('info'))
+                SwalHelper.toastError(@json(session('info')), 'Periksa kembali informasi yang ditampilkan, lalu lanjutkan.');
             @endif
         });
 
@@ -197,8 +197,8 @@
             observer.observe(element);
         });
     </script>
-    <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-    <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+    <script src="{{ asset_v('js/page-loading.js') }}"></script>
+    <script src="{{ asset_v('js/style-guide-enhancer.js') }}"></script>
     <script>
         (function() {
             if (typeof window.__nativeAlert === 'function') return;

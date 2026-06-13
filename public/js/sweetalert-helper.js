@@ -134,13 +134,23 @@
             '</div>';
     }
 
-    function toastSuccess(message, title, duration = 5000) {
-        var resolvedTitle = (typeof message === 'string' && arguments.length >= 1)
-            ? (arguments.length >= 2 && title ? String(title) : String(message))
-            : 'Berhasil';
-        var resolvedHtml = (typeof message === 'string' && arguments.length >= 2 && title)
-            ? String(message)
-            : null;
+    function toastSuccess(message, title, duration) {
+        var cfg = {
+            type: 'success',
+            icon: 'success',
+            timer: 5000
+        };
+
+        if (typeof message === 'string' && arguments.length >= 2 && title) {
+            cfg.title = String(title);
+            cfg.html = String(message);
+        } else {
+            cfg.title = String(message || 'Berhasil');
+        }
+
+        if (typeof window.fireToast === 'function') {
+            return fireToast(cfg);
+        }
 
         return Swal.fire({
             toast: true,
@@ -151,8 +161,8 @@
             backdrop: false,
             icon: 'success',
             iconColor: 'var(--success-green)',
-            title: resolvedTitle,
-            html: resolvedHtml,
+            title: cfg.title,
+            html: cfg.html || undefined,
             customClass: {
                 popup: 'swal2-toast swal-dd-toast swal-dd-success'
             },
@@ -163,15 +173,38 @@
         });
     }
 
-    function toastError(masalah, solusi, duration = 5000) {
-        var problemText = (typeof masalah === 'string' && masalah) ? String(masalah) : 'Terjadi kesalahan saat memproses permintaan.';
-        var solutionText = (typeof solusi === 'string' && solusi) ? String(solusi) : solusiError(problemText);
+    function stripHtmlToText(value) {
+        if (value == null) return '';
+        var div = document.createElement('div');
+        div.innerHTML = String(value);
+        return (div.textContent || div.innerText || String(value)).replace(/\s+/g, ' ').trim();
+    }
+
+    /**
+     * Error toast — selalu delegasi ke fireToast() dari sweetalert-disdukcapil.js
+     * dengan format { problem, solution } (Masalah + Cara memperbaiki).
+     */
+    function toastError(masalah, solusi, duration) {
+        var problemText = stripHtmlToText(masalah) || 'Terjadi kesalahan saat memproses permintaan.';
+        var solutionText = stripHtmlToText(solusi) || solusiError(problemText);
+        var timerMs = (typeof duration === 'number' && duration > 0) ? duration : 5000;
+
+        if (typeof window.fireToast === 'function') {
+            return fireToast({
+                type: 'error',
+                icon: 'error',
+                title: 'Terjadi kesalahan',
+                problem: problemText,
+                solution: solutionText,
+                timer: timerMs
+            });
+        }
 
         return Swal.fire({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 5000,
+            timer: timerMs,
             timerProgressBar: true,
             backdrop: false,
             icon: 'error',
@@ -585,6 +618,9 @@
         loading: showLoading,
         close: closeSwal
     });
+
+    window.toastSuccess = toastSuccess;
+    window.toastError = toastError;
 
     console.log('✓ SweetAlert Helper loaded');
 

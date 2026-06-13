@@ -1093,10 +1093,10 @@ async function executeConfirm() {
  const reason = document.getElementById('confirmReason').value;
 
  if ((action === 'reject' || action === 'reject_doc') && !reason.trim()) {
- if (typeof SwalHelper !== 'undefined' && SwalHelper.warning) {
- SwalHelper.warning('Alasan harus diisi');
+ if (typeof SwalHelper !== 'undefined' && SwalHelper.toastError) {
+ SwalHelper.toastError('Alasan penolakan wajib diisi.', 'Tulis alasan penolakan dengan jelas sebelum melanjutkan.');
  } else if (typeof showToast === 'function') {
- showToast('error', 'Alasan harus diisi');
+ showToast('error', 'Alasan penolakan wajib diisi.', 'Tulis alasan penolakan dengan jelas sebelum melanjutkan.');
  }
  return;
  }
@@ -1153,24 +1153,28 @@ async function executeConfirm() {
  }
 }
 
-function showToast(type, message) {
- const Toast = Swal.mixin({
- toast: true,
- position: 'top-end',
- showConfirmButton: false,
- timer: 5000,
- timerProgressBar: true,
- background: '#ffffff',
- backdrop: false,
- showClass: { popup: 'swal2-show', backdrop: '' },
- hideClass: { popup: 'swal2-hide', backdrop: '' }
- });
+function showToast(type, message, solution) {
+ if (type === 'warning' || type === 'info') type = 'error';
 
- Toast.fire({
- icon: type === 'success' ? 'success' : 'error',
- title: message,
- iconColor: type === 'success' ? '#22c55e' : '#ef4444'
- });
+ if (type === 'success') {
+  if (typeof window.toastSuccess === 'function') {
+   window.toastSuccess(message, 'Operasi berhasil');
+   return;
+  }
+  if (window.SwalHelper && SwalHelper.toastSuccess) {
+   SwalHelper.toastSuccess(message, 'Operasi berhasil');
+   return;
+  }
+ }
+
+ var sol = solution || 'Periksa kembali data permohonan pernikahan dan coba lagi.';
+ if (typeof window.toastError === 'function') {
+  window.toastError(message, sol);
+  return;
+ }
+ if (window.SwalHelper && SwalHelper.toastError) {
+  SwalHelper.toastError(message, sol);
+ }
 }
 
 async function updateUIAfterAction(pernikahanId, action) {

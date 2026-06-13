@@ -241,7 +241,14 @@
     function fireToast(opts) {
         opts = normalizeEmptyRequiredToast(opts || {});
         opts = normalizeErrorToast(opts || {});
-        var type = opts.type || 'info';
+        // Normalisasi: hanya support success dan error untuk toast
+        var rawType = (opts.type || opts.icon || '').toLowerCase();
+        if (rawType === 'warning' || rawType === 'info' || rawType === 'question') {
+            opts.type = 'error';
+            opts.icon = 'error';
+            if (!opts.title) opts.title = 'Terjadi kesalahan';
+        }
+        var type = opts.type || 'success';
         var timer = 5000;
         var cfg = {
             toast: true,
@@ -577,8 +584,8 @@
         var jl = escapeHtml(jenisLayanan || '-');
         var et = escapeHtml(estimasiWaktu || '-');
         return fireToast({
-            type: 'info',
-            icon: 'info',
+            type: 'success',
+            icon: 'success',
             title: 'Nomor Antrian Anda',
             html: '<div class="swal-dd-antrian">' +
                   '<div class="swal-dd-antrian-no">' + no + '</div>' +
@@ -614,8 +621,8 @@
     function notifCariKosong(keyword) {
         var kw = escapeHtml(keyword || '');
         return fireToast({
-            type: 'warning',
-            icon: 'warning',
+            type: 'error',
+            icon: 'error',
             title: 'Data tidak ditemukan',
             html: 'Tidak ada data untuk "<strong>' + kw + '</strong>".',
             timer: 5000
@@ -708,19 +715,28 @@
         // SwalHelper.success/error/warning/info + toastSuccess/Error/Warning/Info
         // + modalSuccess/Error/Warning/Info â†’ toast & modal gradient baru
         if (window.SwalHelper) {
-            var ts = function (m, d) { return fireToast({ type: 'success', icon: 'success', title: m || 'Berhasil', timer: 5000 }); };
-            var te = function (m, d) {
-                var hasDetail = typeof d === 'string' && d.trim() !== '';
+            var ts = function (message, title) {
+                var cfg = { type: 'success', icon: 'success', timer: 5000 };
+                if (arguments.length >= 2 && title) {
+                    cfg.title = String(title);
+                    cfg.html = String(message);
+                } else {
+                    cfg.title = String(message || 'Berhasil');
+                }
+                return fireToast(cfg);
+            };
+            var te = function (problem, solution) {
                 return fireToast({
                     type: 'error',
                     icon: 'error',
-                    title: hasDetail ? (m || 'Terjadi kesalahan') : 'Terjadi kesalahan',
-                    problem: hasDetail ? d : (m || 'Terjadi kesalahan saat memproses permintaan.'),
+                    title: 'Terjadi kesalahan',
+                    problem: problem || 'Terjadi kesalahan saat memproses permintaan.',
+                    solution: solution || defaultErrorSolution(problem),
                     timer: 5000
                 });
             };
-            var tw = function (m, d) { return fireToast({ type: 'warning', icon: 'warning', title: m || 'Perhatian', timer: 5000 }); };
-            var ti = function (m, d) { return fireToast({ type: 'info',    icon: 'info',    title: m || 'Informasi', timer: 5000 }); };
+            var tw = te;
+            var ti = te;
 
             window.SwalHelper.success      = ts;
             window.SwalHelper.error        = te;
@@ -756,7 +772,8 @@
 
         // notifToast(icon, judul, pesan, durasi) â€” signature lama
         window.notifToast = function (icon, judul, pesan, durasi) {
-            var t = (icon === 'success' || icon === 'error' || icon === 'warning' || icon === 'info') ? icon : 'info';
+            var t = (icon === 'success' || icon === 'error' || icon === 'warning' || icon === 'info') ? icon : 'error';
+            if (t === 'warning' || t === 'info') t = 'error';
             return fireToast({
                 type: t,
                 icon: t,
@@ -766,14 +783,16 @@
             });
         };
         window.showToast = function (type, message, duration) {
-            var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'info';
+            var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'error';
+            if (t === 'warning' || t === 'info') t = 'error';
             return fireToast({ type: t, icon: t, title: message || '', timer: 5000 });
         };
 
         // DToast.show(type, message, duration)
         window.DToast = {
             show: function (type, message, duration) {
-                var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'info';
+                var t = (type === 'success' || type === 'error' || type === 'warning' || type === 'info') ? type : 'error';
+                if (t === 'warning' || t === 'info') t = 'error';
                 return fireToast({ type: t, icon: t, title: message || '', timer: 5000 });
             },
             dismiss: function () { if (window.Swal) window.Swal.close(); }
@@ -783,8 +802,8 @@
         window.Notifikasi = window.Notifikasi || {};
         window.Notifikasi.success = function (m) { return fireToast({ type: 'success', icon: 'success', title: m, timer: 5000 }); };
         window.Notifikasi.error = function (m) { return fireToast({ type: 'error', icon: 'error', title: m, timer: 5000 }); };
-        window.Notifikasi.warning = function (m) { return fireToast({ type: 'warning', icon: 'warning', title: m, timer: 5000 }); };
-        window.Notifikasi.info = function (m) { return fireToast({ type: 'info', icon: 'info', title: m, timer: 5000 }); };
+        window.Notifikasi.warning = function (m) { return fireToast({ type: 'error', icon: 'error', title: m, timer: 5000 }); };
+        window.Notifikasi.info = function (m) { return fireToast({ type: 'error', icon: 'error', title: m, timer: 5000 }); };
         window.Notifikasi.confirm = function (msg, onYes, onNo) { return notifKonfirmasi(msg, onYes, onNo); };
     }
 
@@ -853,6 +872,11 @@
             // Cabang TOAST
             opt = normalizeEmptyRequiredToast(opt) || opt;
             opt = normalizeErrorToast(opt) || opt;
+            // Normalisasi: hanya success dan error untuk toast
+            if (opt.icon === 'warning' || opt.icon === 'info' || opt.icon === 'question') {
+                opt.icon = 'error';
+                if (!opt.title) opt.title = 'Terjadi kesalahan';
+            }
             var hasIcon = (opt.icon === 'success' || opt.icon === 'error' || opt.icon === 'warning' || opt.icon === 'info');
             var iconClass = hasIcon ? (' swal-dd-' + opt.icon) : '';
             var ddClass = 'swal-dd-toast' + (mode === 'mixin' ? '' : iconClass);

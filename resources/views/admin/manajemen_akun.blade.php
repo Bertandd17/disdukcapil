@@ -278,23 +278,27 @@
             });
         }
 
-        function showToast(type, message) {
-            if (window.SwalHelper && typeof window.SwalHelper[type] === 'function') {
-                window.SwalHelper[type](message);
-                return;
+        function showToast(type, message, solution) {
+            if (type === 'warning' || type === 'info') type = 'error';
+
+            if (type === 'success') {
+                if (typeof window.toastSuccess === 'function') {
+                    window.toastSuccess(message, 'Operasi berhasil');
+                    return;
+                }
+                if (window.SwalHelper && SwalHelper.toastSuccess) {
+                    SwalHelper.toastSuccess(message, 'Operasi berhasil');
+                    return;
+                }
             }
 
-            if (window.Swal) {
-                Swal.fire({
-                    icon: type,
-                    title: message,
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: type === 'success' ? 3000 : 5000,
-                    timerProgressBar: true,
-                    backdrop: false
-                });
+            var sol = solution || 'Periksa kembali data akun dan coba lagi.';
+            if (typeof window.toastError === 'function') {
+                window.toastError(message, sol);
+                return;
+            }
+            if (window.SwalHelper && SwalHelper.toastError) {
+                SwalHelper.toastError(message, sol);
             }
         }
 

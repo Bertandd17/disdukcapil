@@ -14,13 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style-guide.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="{{ asset_v('css/page-loading.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset_v('js/sweetalert-disdukcapil.js') }}"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -319,19 +319,15 @@
             }
 
             @if(session('success'))
-                SwalHelper.toastSuccess("{{ session('success') }}");
+                SwalHelper.toastSuccess(@json(session('success')));
             @endif
 
             @if(session('error'))
-                SwalHelper.toastError("{{ session('error') }}");
-            @endif
-
-            @if(session('info'))
-                SwalHelper.toastInfo("{{ session('info') }}");
-            @endif
-
-            @if(session('warning'))
-                SwalHelper.toastWarning("{{ session('warning') }}");
+                (function() {
+                    var __err = @json(session('error'));
+                    var __sol = @json(session('error_solution') || 'Periksa jawaban keamanan Anda, lalu coba lagi.');
+                    SwalHelper.toastError(__err, __sol);
+                })();
             @endif
 
             @if ($errors->any())
@@ -356,8 +352,8 @@
             @endif
         });
     </script>
-<script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-<script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+<script src="{{ asset_v('js/page-loading.js') }}"></script>
+<script src="{{ asset_v('js/style-guide-enhancer.js') }}"></script>
 </body>
 
 </html>

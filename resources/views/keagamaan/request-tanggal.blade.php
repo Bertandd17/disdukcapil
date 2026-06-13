@@ -691,18 +691,18 @@ function submitRequest() {
         if (data.success) {
             currentStep = 4;
             updateStepUI();
-            SwalHelper.success(data.message);
+            SwalHelper.toastSuccess(data.message);
         } else {
             btnSubmit.disabled = false;
             btnSubmit.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Kirim Request';
-            SwalHelper.error(data.message || 'Gagal mengirim request');
+            SwalHelper.toastError(data.message || 'Gagal mengirim request', 'Periksa tanggal dan data permohonan, lalu coba kirim kembali.');
         }
     })
     .catch(error => {
         SwalHelper.close();
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Kirim Request';
-        SwalHelper.error('Terjadi kesalahan saat mengirim request');
+        SwalHelper.toastError('Terjadi kesalahan saat mengirim request', 'Periksa koneksi internet, lalu coba lagi.');
         console.error('Error:', error);
     });
 }
@@ -790,12 +790,12 @@ function showRequestDetail(pernikahanId) {
             `;
             document.getElementById('detailModal').classList.remove('hidden');
         } else {
-            SwalHelper.error(data.message || 'Gagal memuat detail');
+            SwalHelper.toastError(data.message || 'Gagal memuat detail', 'Muat ulang halaman, lalu coba buka detail kembali.');
         }
     })
     .catch(error => {
         SwalHelper.close();
-        SwalHelper.error('Terjadi kesalahan saat memuat detail');
+        SwalHelper.toastError('Terjadi kesalahan saat memuat detail', 'Periksa koneksi internet, lalu coba lagi.');
     });
 }
 

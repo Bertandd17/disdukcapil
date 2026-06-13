@@ -15,6 +15,7 @@
 
     function S() { return window.SwalDisdukcapil || null; }
     function toastBy(type, message, timer) {
+        if (type === 'warning' || type === 'info') type = 'error';
         if (!S()) {
             if (window.Swal) window.Swal.fire({ toast: true, position: 'top-end', icon: type, title: message, timer: 5000, showConfirmButton: false });
             return;
@@ -25,8 +26,8 @@
     // --- Toast singkat lama ---
     window.showSuccess = function (m) { toastBy('success', m, 4000); };
     window.showError   = function (m) { toastBy('error',   m, 4000); };
-    window.showInfo    = function (m) { toastBy('info',    m, 4000); };
-    window.showWarning = function (m) { toastBy('warning', m, 4000); };
+    window.showInfo    = function (m) { toastBy('error',   m, 4000); };
+    window.showWarning = function (m) { toastBy('error',   m, 4000); };
 
     // --- Konfirmasi & loading lama ---
     window.showConfirm = function (title, text, onConfirm) {
@@ -64,8 +65,8 @@
     window.Notifikasi = window.Notifikasi || {};
     window.Notifikasi.success       = window.showSuccess;
     window.Notifikasi.error         = window.showError;
-    window.Notifikasi.info          = window.showInfo;
-    window.Notifikasi.warning       = window.showWarning;
+    window.Notifikasi.info          = window.showError;
+    window.Notifikasi.warning       = window.showError;
     window.Notifikasi.confirm       = function (msg, onYes, onNo) { return window.notifKonfirmasi(msg, onYes, onNo); };
     window.Notifikasi.deleteConfirm = window.showDeleteConfirm;
     window.Notifikasi.loading       = window.showLoading;

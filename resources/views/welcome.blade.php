@@ -12,7 +12,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/style-guide.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+        <link rel="stylesheet" href="{{ asset_v('css/page-loading.css') }}">
 
         <!-- Styles -->
             <style>
@@ -274,8 +274,8 @@
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif
-        <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-        <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+        <script src="{{ asset_v('js/page-loading.js') }}"></script>
+        <script src="{{ asset_v('js/style-guide-enhancer.js') }}"></script>
     </body>
 </html>
 

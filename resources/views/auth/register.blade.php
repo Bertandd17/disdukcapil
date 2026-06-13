@@ -11,7 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style-guide.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="{{ asset_v('css/page-loading.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
@@ -223,7 +223,7 @@
 
     <!-- Load SweetAlert Helper Global -->
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset_v('js/sweetalert-disdukcapil.js') }}"></script>
 
     <!-- SweetAlert2 Final Fix — prevent extraneous buttons -->
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>
@@ -354,48 +354,16 @@
 
         // Tampilkan pesan error/success dari session (jika ada) — pattern toast global
         @if(session('error'))
-        (function() {
-            var __err = @json(session('error'));
-            var __sol = @json(session('error_solution'));
-            if (typeof toastError === 'function') {
-                toastError(__err, __sol);
-            } else if (window.SwalHelper && SwalHelper.toastError) {
-                SwalHelper.toastError(__err, __sol);
-            } else if (typeof fireToast === 'function') {
-                fireToast({ type: 'error', icon: 'error', title: 'Registrasi Gagal', problem: __err, solution: __sol, timer: 6000 });
-            } else {
-                Swal.fire({ icon: 'error', title: 'Registrasi Gagal', text: __err, confirmButtonText: 'Tutup', confirmButtonColor: '#dc2626' });
-            }
-        })();
+        SwalHelper.toastError(
+            @json(session('error')),
+            @json(session('error_solution') ?? 'Periksa kembali data registrasi, lalu coba lagi.')
+        );
         @endif
 
         @if(session('success'))
-        (function() {
-            var __msg = @json(session('success'));
-            if (typeof toastSuccess === 'function') {
-                toastSuccess(__msg);
-            } else if (window.SwalHelper && SwalHelper.toastSuccess) {
-                SwalHelper.toastSuccess(__msg);
-            } else {
-                Swal.fire({ icon: 'success', title: 'Registrasi Berhasil', text: __msg, timer: 2000, showConfirmButton: false, toast: true, position: 'top-end' });
-            }
-        })();
+        SwalHelper.toastSuccess(@json(session('success')));
         @endif
 
-        @if(session('warning'))
-        (function() {
-            var __msg = @json(session('warning'));
-            if (typeof toastError === 'function') {
-                toastError(__msg, 'Periksa kembali data Anda, lalu coba lagi.');
-            } else if (window.SwalHelper && SwalHelper.toastError) {
-                SwalHelper.toastError(__msg, 'Periksa kembali data Anda, lalu coba lagi.');
-            } else if (typeof fireToast === 'function') {
-                fireToast({ type: 'error', icon: 'error', title: 'Perhatian', problem: __msg, solution: 'Periksa kembali data Anda, lalu coba lagi.', timer: 6000 });
-            } else {
-                Swal.fire({ icon: 'warning', title: 'Perhatian', text: __msg, confirmButtonText: 'OK', confirmButtonColor: '#f59e0b' });
-            }
-        })();
-        @endif
     </script>
 
     <style>
@@ -475,7 +443,7 @@
             background: linear-gradient(to right, #10b981 0%, #10b981 50%, #10b981 100%);
         }
     </style>
-<script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-<script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+<script src="{{ asset_v('js/page-loading.js') }}"></script>
+<script src="{{ asset_v('js/style-guide-enhancer.js') }}"></script>
 </body>
 </html>

@@ -181,14 +181,14 @@
             const id = btn.getAttribute('data-berita-id');
             const el = document.getElementById('berita-payload-' + id);
             if (!el) {
-                SwalHelper.error('Error!', 'Data berita tidak ditemukan');
+                SwalHelper.toastError('Data berita tidak ditemukan.', 'Muat ulang halaman, lalu coba edit kembali.');
                 return;
             }
             try {
                 const item = JSON.parse(el.textContent);
                 openBeritaModal('edit', item);
             } catch (err) {
-                SwalHelper.error('Gagal memuat data berita.');
+                SwalHelper.toastError('Gagal memuat data berita.', 'Muat ulang halaman, lalu coba lagi.');
             }
         });
     });

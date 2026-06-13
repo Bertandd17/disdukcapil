@@ -140,10 +140,14 @@
                 title: 'Konfirmasi Logout',
                 html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
                 showCancelButton: true,
+                showDenyButton: false,
                 confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#dc2626',
-                reverseButtons: true
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then(function (r) { if (r.isConfirmed) doSubmit(); });
         } else {
             doSubmit();

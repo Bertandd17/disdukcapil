@@ -264,7 +264,7 @@ window.handlePenghargaanFile = function(input) {
     if (!file) return;
     if (file.size > 512 * 1024) {
         input.value = '';
-        SwalHelper.error('Ukuran file maksimal 512 KB');
+        SwalHelper.toastError('Ukuran file maksimal 512 KB.', 'Kompres file atau pilih file dengan ukuran di bawah 512 KB.');
         return;
     }
     if (icon)      icon.className = 'fas fa-check-circle text-2xl text-green-500 mb-2';
@@ -339,7 +339,7 @@ window.clearPenghargaanFile = function() {
                 const item = JSON.parse(el.textContent);
                 openPenghargaanModal('edit', item);
             } catch (err) {
-                SwalHelper.error('Gagal memuat data penghargaan.');
+                SwalHelper.toastError('Gagal memuat data penghargaan.', 'Muat ulang halaman, lalu coba lagi.');
             }
         });
     });
@@ -391,10 +391,10 @@ window.clearPenghargaanFile = function() {
     reveal();
 
     @if(session('success'))
-        SwalHelper.success("{{ session('success') }}");
+        SwalHelper.toastSuccess(@json(session('success')));
     @endif
     @if(session('error'))
-        SwalHelper.error("{{ session('error') }}");
+        SwalHelper.toastError(@json(session('error')), @json(session('error_solution') ?? 'Periksa data penghargaan yang dimasukkan, lalu coba lagi.'));
     @endif
 })();
 </script>

@@ -274,7 +274,10 @@
                 confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch(f.action, {
@@ -288,10 +291,12 @@
                     .then(r => r.json())
                     .then(r => {
                         if (r.success) {
-                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 5000 });
+                            if (window.toastSuccess) window.toastSuccess(r.message, 'Data berhasil dihapus', 2000);
+                            else Swal.fire({ icon: 'success', title: 'Berhasil!', text: r.message, toast: true, position: 'top-end', timer: 2000 });
                             setTimeout(() => { window.location.reload(); }, 1000);
                         } else {
-                            Swal.fire({ icon: 'error', title: 'Gagal!', text: r.message });
+                            if (window.toastError) window.toastError(r.message, 'Periksa kembali data dan coba lagi');
+                            else Swal.fire({ icon: 'error', title: 'Gagal!', text: r.message });
                         }
                     });
                 }
@@ -299,24 +304,15 @@
         });
     });
 
-    // E5 FIX: SweetAlert sukses HANYA dari session flash (server-side)
     @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: '{{ session('success') }}',
-        toast: true,
-        position: 'top-end',
-        timer: 5000
-    });
+        SwalHelper.toastSuccess(@json(session('success')));
     @endif
 
     @if(session('error'))
-    Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: '{{ session('error') }}'
-    });
+        SwalHelper.toastError(
+            @json(session('error')),
+            @json(session('error_solution') ?? 'Periksa data statistik yang dimasukkan, lalu coba lagi.')
+        );
     @endif
 })();
 </script>

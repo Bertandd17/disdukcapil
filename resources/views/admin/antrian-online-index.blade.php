@@ -546,6 +546,7 @@
                 text: confirmationText,
                 icon: hasUploads ? 'question' : 'warning',
                 showCancelButton: true,
+                showDenyButton: false,
                 confirmButtonColor: hasUploads ? '#16a34a' : '#f59e0b',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',
@@ -565,6 +566,7 @@
                 text: 'Mohon tunggu sebentar',
                 showConfirmButton: false,
                 showCancelButton: false,
+                showDenyButton: false,
                 allowOutsideClick: false,
                 allowEscapeKey: false,
                 didOpen: () => Swal.showLoading()
@@ -679,7 +681,7 @@
         const queueData = allQueueData.find(q => q.antrian_online_id == id);
         if (!queueData) {
             if (typeof SwalHelper !== 'undefined') {
-                SwalHelper.modalError('Error', 'Data antrian tidak ditemukan');
+                SwalHelper.toastError('Data antrian tidak ditemukan.', 'Muat ulang halaman untuk menyegarkan data antrian dari server.');
             } else if (typeof fireToast !== 'undefined') {
                 fireToast({
                     type: 'error', icon: 'error',

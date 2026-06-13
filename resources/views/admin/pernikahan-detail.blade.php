@@ -399,10 +399,10 @@ function approveTanggal() {
         notifKonfirmasi('Setujui tanggal perkawinan ini?', onConfirm);
     } else if (typeof fireToast !== 'undefined') {
         fireToast({
-            type: 'warning', icon: 'warning',
-            title: 'Konfirmasi persetujuan tanggal',
+            type: 'error', icon: 'error',
+            title: 'Konfirmasi diperlukan',
             problem: 'Tindakan ini akan menyetujui tanggal perkawinan yang diajukan.',
-            solution: 'Pastikan data pemohon sudah diverifikasi sebelum melanjutkan.'
+            solution: 'Pastikan data pemohon sudah diverifikasi, lalu lakukan konfirmasi melalui dialog.'
         });
     }
 }

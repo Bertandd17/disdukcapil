@@ -39,7 +39,7 @@
     <script src="{{ asset('js/sweetalert-helper.js') }}"></script>
 
     <!-- SweetAlert2 Disdukcapil Notification System -->
-    <script src="{{ asset('js/sweetalert-disdukcapil.js') }}?v={{ filemtime(public_path('js/sweetalert-disdukcapil.js')) }}"></script>
+    <script src="{{ asset_v('js/sweetalert-disdukcapil.js') }}"></script>
 
     <!-- Notifikasi Disdukcapil Helper -->
     <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>
@@ -174,7 +174,7 @@
         }
     </style>
 
-    <link rel="stylesheet" href="{{ asset('css/page-loading.css') }}?v={{ filemtime(public_path('css/page-loading.css')) }}">
+    <link rel="stylesheet" href="{{ asset_v('css/page-loading.css') }}">
 
     @stack('styles')
 </head>
@@ -288,10 +288,14 @@
                     title: title,
                     html: '<p class="text-gray-600 text-sm">' + text + '</p>',
                     showCancelButton: true,
+                    showDenyButton: false,
                     confirmButtonColor: 'var(--success-green)',
                     cancelButtonColor: 'var(--neutral-600)',
                     confirmButtonText: 'Konfirmasi',
                     cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
                     showClass: {
                         popup: 'swal2-show',
                         backdrop: 'swal2-backdrop-show',
@@ -316,10 +320,14 @@
                     html: '<p class="text-gray-600 text-sm">' + text + '</p>',
                     icon: false,
                     showCancelButton: true,
+                    showDenyButton: false,
                     confirmButtonColor: 'var(--danger-red)',
                     cancelButtonColor: 'var(--neutral-600)',
                     confirmButtonText: 'Konfirmasi',
                     cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
                     showClass: {
                         popup: 'swal2-show',
                         backdrop: 'swal2-backdrop-show',
@@ -365,31 +373,31 @@
         // Show SweetAlert for session messages on page load
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
-                SwalHelper.success(@json(session('success')));
+                SwalHelper.toastSuccess(@json(session('success')));
             @endif
 
             @if(session('error'))
                 @php($flashError = session('error'))
-                SwalHelper.error(
-                    @json(is_array($flashError) ? ($flashError['title'] ?? 'Terjadi kesalahan') : 'Terjadi kesalahan'),
-                    @json(is_array($flashError) ? ($flashError['message'] ?? 'Periksa data yang Anda masukkan, lalu coba lagi.') : $flashError)
+                SwalHelper.toastError(
+                    @json(is_array($flashError) ? ($flashError['message'] ?? $flashError['title'] ?? 'Terjadi kesalahan') : $flashError),
+                    @json(session('error_solution') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.')
                 );
             @endif
 
-            @if(session('info'))
-                SwalHelper.info(@json(session('info')));
+            @if(session('warning'))
+                SwalHelper.toastError(@json(session('warning')), 'Periksa kembali data atau aksi yang dilakukan, lalu coba lagi.');
             @endif
 
-            @if(session('warning'))
-                SwalHelper.warning(@json(session('warning')));
+            @if(session('info'))
+                SwalHelper.toastError(@json(session('info')), 'Periksa kembali informasi yang ditampilkan, lalu lanjutkan.');
             @endif
         });
     </script>
 
     {{-- Custom toast (override SwalHelper toast methods) --}}
     <script src="{{ asset('js/disdukcapil-toast.js') }}"></script>
-    <script src="{{ asset('js/page-loading.js') }}?v={{ filemtime(public_path('js/page-loading.js')) }}"></script>
-    <script src="{{ asset('js/style-guide-enhancer.js') }}?v={{ filemtime(public_path('js/style-guide-enhancer.js')) }}"></script>
+    <script src="{{ asset_v('js/page-loading.js') }}"></script>
+    <script src="{{ asset_v('js/style-guide-enhancer.js') }}"></script>
     <script>
         (function() {
             if (typeof window.__nativeAlert === 'function') return;
@@ -397,22 +405,21 @@
             window.__nativeConfirm = window.confirm.bind(window);
             var classify = function(msg) {
                 var s = String(msg || '');
-                if (/error|gagal|tidak valid|harus|wajib|invalid|kosong|gagal/i.test(s)) return 'error';
                 if (/berhasil|sukses|success|tersimpan|terkirim/i.test(s)) return 'success';
-                if (/perhatian|hati-hati|warning|kadaluarsa|habis/i.test(s)) return 'warning';
-                return 'info';
+                return 'error';
             };
             var toToast = function(type, msg) {
                 if (typeof fireToast !== 'function') return false;
-                var opts = { type: type, icon: type, title: String(msg || ''), timer: 5000 };
-                if (type === 'error') {
-                    opts.problem = String(msg || '');
-                    opts.solution = 'Periksa data yang dimasukkan dan coba lagi.';
-                } else if (type === 'warning') {
-                    opts.problem = String(msg || '');
-                    opts.solution = 'Mohon perhatikan pesan ini sebelum melanjutkan.';
+                if (type === 'success') {
+                    fireToast({ type: 'success', icon: 'success', title: String(msg || 'Berhasil'), timer: 5000 });
+                    return true;
                 }
-                fireToast(opts);
+                fireToast({
+                    type: 'error', icon: 'error', title: 'Terjadi kesalahan',
+                    problem: String(msg || 'Terjadi kesalahan saat memproses permintaan.'),
+                    solution: 'Periksa data yang dimasukkan dan coba lagi.',
+                    timer: 5000
+                });
                 return true;
             };
             window.alert = function(msg) {

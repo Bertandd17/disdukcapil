@@ -161,7 +161,7 @@
                 const item = JSON.parse(el.textContent);
                 openVisiMisiModal('edit', item);
             } catch (err) {
-                SwalHelper.error('Gagal memuat data visi misi.');
+                SwalHelper.toastError('Gagal memuat data visi misi.', 'Muat ulang halaman, lalu coba lagi.');
             }
         });
     });
@@ -194,10 +194,10 @@
     window.addEventListener('scroll', reveal);
     reveal();
     @if(session('success'))
-        SwalHelper.success("{{ session('success') }}");
+        SwalHelper.toastSuccess(@json(session('success')));
     @endif
     @if(session('error'))
-        SwalHelper.error("{{ session('error') }}");
+        SwalHelper.toastError(@json(session('error')), @json(session('error_solution') ?? 'Periksa data visi misi yang dimasukkan, lalu coba lagi.'));
     @endif
 })();
 </script>

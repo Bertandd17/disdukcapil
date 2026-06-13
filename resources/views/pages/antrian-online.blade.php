@@ -816,6 +816,30 @@
 
 {{-- Search Antrian Functions - didefinisikan sebelum antrian-ocr.js agar selalu tersedia --}}
 <script>
+ // Toast helpers — success/error only, format konsisten dengan sweetalert-disdukcapil.js
+ function toastSuccess(title, html) {
+ if (typeof fireToast === 'function') {
+ return fireToast({ type: 'success', icon: 'success', title: title || 'Berhasil', html: html || undefined, timer: 5000 });
+ }
+ if (window.SwalHelper && SwalHelper.toastSuccess) {
+ return html ? SwalHelper.toastSuccess(html, title) : SwalHelper.toastSuccess(title);
+ }
+ }
+ function toastError(problem, solution, title) {
+ if (typeof fireToast === 'function') {
+ return fireToast({
+ type: 'error', icon: 'error',
+ title: title || 'Terjadi kesalahan',
+ problem: problem || 'Terjadi kesalahan saat memproses permintaan.',
+ solution: solution || 'Periksa data atau aksi yang sedang dilakukan, lalu coba lagi.',
+ timer: 5000
+ });
+ }
+ if (window.SwalHelper && SwalHelper.toastError) {
+ return SwalHelper.toastError(problem, solution);
+ }
+ }
+
  // Helper: deteksi format nomor antrian (ABC-123-456 atau ABC123)
  // Hanya true jika: 3 huruf di awal DAN ada angka setelahnya
  window.isQueueNumberFormat = function(input) {
@@ -899,9 +923,7 @@
  var oldStatus = window.__lacakPollState.lastStatuses[key];
  if (oldStatus && newStatus && oldStatus !== newStatus) {
  changed = true;
- if (window.SwalHelper && window.SwalHelper.info) {
- window.SwalHelper.info('Status Diperbarui', key + ': ' + oldStatus + ' ? ' + newStatus);
- }
+ toastSuccess('Status Diperbarui', key + ': ' + oldStatus + ' → ' + newStatus);
  }
  if (newStatus) window.__lacakPollState.lastStatuses[key] = newStatus;
  });
@@ -926,7 +948,7 @@
 
  if (!searchInput) {
  console.error('searchInput element not found');
- SwalHelper.error('Error!', 'Elemen input tidak ditemukan');
+ toastError('Elemen input pencarian tidak ditemukan.', 'Muat ulang halaman, lalu coba cari lagi.');
  return;
  }
 
@@ -937,7 +959,7 @@
  console.log('Layanan ID:', layananId);
 
  if (!searchValue) {
- SwalHelper.warning('Peringatan!', 'Masukkan kata kunci pencarian');
+ toastError('Kata kunci pencarian kosong.', 'Masukkan nama lengkap atau nomor antrian, lalu tekan tombol Cari.');
  return;
  }
 
@@ -1030,7 +1052,7 @@
  }
 
  // Notifikasi cari berhasil
- SwalHelper.success('Ditemukan!', data.data.length + ' data ditemukan untuk "' + searchValue + '"');
+ toastSuccess('Ditemukan!', data.data.length + ' data ditemukan untuk "' + searchValue + '"');
  } else {
  console.log('No results found. Message:', data.message || 'No message');
  window.stopLacakPolling();
@@ -1038,7 +1060,10 @@
  resultsContainer.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data antrian tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan nama atau nomor antrian yang dimasukkan benar.</p><div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg inline-block"><p class="text-sm text-yellow-700"><i class="fas fa-lightbulb mr-1"></i><strong>Tips:</strong> Gunakan nama lengkap sesuai KTP. Coba juga dengan nama lain yang mirip.</p></div>' + debugInfo + '</div>';
 
  // Tampilkan notifikasi cari kosong
- SwalHelper.info('Tidak Ditemukan', 'Data untuk "' + searchValue + '" tidak ditemukan dalam sistem');
+ toastError(
+ 'Data untuk "' + searchValue + '" tidak ditemukan dalam sistem.',
+ 'Pastikan nama atau nomor antrian yang dimasukkan benar. Gunakan nama lengkap sesuai KTP.'
+ );
  }
  })
  .catch(function(err) {
@@ -1047,11 +1072,14 @@
  resultsContainer.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-3xl text-red-500"></i></div><p class="text-gray-500 font-medium">Gagal mencari data.</p><p class="text-sm text-gray-400 mt-1">' + (err.message || 'Terjadi kesalahan koneksi') + '</p></div>';
  }
  // Gunakan notifikasi error
- SwalHelper.error('Gagal Mencari Data!', 'Gagal mencari data: ' + (err.message || 'Terjadi kesalahan koneksi'));
+ toastError(
+ 'Gagal mencari data: ' + (err.message || 'Terjadi kesalahan koneksi'),
+ 'Periksa koneksi internet, lalu coba lagi.'
+ );
  });
  } catch (err) {
  console.error('Unexpected error in searchAntrian:', err);
- SwalHelper.error('Terjadi kesalahan!', 'Terjadi kesalahan: ' + err.message);
+ toastError('Terjadi kesalahan: ' + err.message, 'Muat ulang halaman, lalu coba lagi.');
  }
  };
 
@@ -1078,16 +1106,22 @@
  .then(function(data) {
  if (data.success && data.data) {
  window.renderPernikahanResult([data.data], container);
- SwalHelper.success('Ditemukan!', 'Data pernikahan ditemukan untuk "' + nomorAntrian + '"');
+ toastSuccess('Ditemukan!', 'Data pernikahan ditemukan untuk "' + nomorAntrian + '"');
  } else {
  container.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data pernikahan tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan nomor antrian pernikahan yang dimasukkan benar (format: PNK-XXXXXXXX).</p></div>';
- SwalHelper.info('Tidak Ditemukan', 'Data pernikahan untuk "' + nomorAntrian + '" tidak ditemukan');
+ toastError(
+ 'Data pernikahan untuk "' + nomorAntrian + '" tidak ditemukan.',
+ 'Pastikan nomor antrian pernikahan benar (format: PNK-XXXXXXXX).'
+ );
  }
  })
  .catch(function(err) {
  console.error('Search Pernikahan Error:', err);
  container.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-3xl text-red-500"></i></div><p class="text-gray-500 font-medium">Gagal mencari data pernikahan.</p><p class="text-sm text-gray-400 mt-1">' + (err.message || 'Terjadi kesalahan koneksi') + '</p></div>';
- SwalHelper.error('Gagal Mencari Data!', 'Gagal mencari data pernikahan: ' + (err.message || 'Terjadi kesalahan koneksi'));
+ toastError(
+ 'Gagal mencari data pernikahan: ' + (err.message || 'Terjadi kesalahan koneksi'),
+ 'Periksa koneksi internet, lalu coba lagi.'
+ );
  });
  };
 
@@ -1263,6 +1297,144 @@
  // Render Search Results
  window.__antrianRegistry = window.__antrianRegistry || {};
 
+ // --- Progress & riwayat antrian (selaras lacak_berkas) ---
+ window.ANTRIAN_STEP_MAP = {
+ 'Menunggu': 1,
+ 'Dokumen Diterima': 2,
+ 'Verifikasi Data': 3,
+ 'Proses Cetak': 4,
+ 'Siap Pengambilan': 5,
+ 'Selesai': 5,
+ 'Ditolak': null,
+ 'Dibatalkan': null
+ };
+
+ window.sortLacakBerkasChronological = function(items) {
+ if (!Array.isArray(items) || items.length === 0) return [];
+ return items.slice().sort(function(a, b) {
+ var da = new Date(a.created_at || a.tanggal || 0).getTime();
+ var db = new Date(b.created_at || b.tanggal || 0).getTime();
+ return da - db;
+ });
+ };
+
+ window.formatLacakDate = function(lb) {
+ var raw = lb.tanggal || lb.created_at;
+ if (!raw) return '-';
+ try {
+ return new Date(raw).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+ } catch (e) {
+ return String(raw);
+ }
+ };
+
+ /**
+ * Hitung progress dari riwayat lacak_berkas, bukan status terminal saja.
+ * Antrian Ditolak: step = tahap terakhir sebelum penolakan (bukan 5/5).
+ */
+ window.resolveAntrianProgress = function(antrian) {
+ var status = antrian.status_antrian || 'Menunggu';
+ var isDitolak = status === 'Ditolak';
+ var isDibatalkan = status === 'Dibatalkan';
+ var lacakSorted = window.sortLacakBerkasChronological(antrian.lacak_berkas || []);
+ var totalSteps = 5;
+
+ if (isDitolak || isDibatalkan) {
+ var failedAtStatus = null;
+ for (var i = lacakSorted.length - 1; i >= 0; i--) {
+ var st = lacakSorted[i].status;
+ if (st && st !== 'Ditolak' && st !== 'Dibatalkan') {
+ failedAtStatus = st;
+ break;
+ }
+ }
+ if (!failedAtStatus) {
+ failedAtStatus = 'Menunggu';
+ }
+ var failedAtStep = window.ANTRIAN_STEP_MAP[failedAtStatus] || 1;
+ var progressSubtitle = isDitolak
+ ? 'Ditolak setelah tahap <strong>' + failedAtStatus + '</strong> (Step ' + failedAtStep + ' dari ' + totalSteps + ')'
+ : 'Dibatalkan pada tahap <strong>' + failedAtStatus + '</strong> (Step ' + failedAtStep + ' dari ' + totalSteps + ')';
+
+ return {
+ isDitolak: isDitolak,
+ isDibatalkan: isDibatalkan,
+ isTerminal: true,
+ currentStep: failedAtStep,
+ totalSteps: totalSteps,
+ stepWidth: Math.round((failedAtStep / totalSteps) * 100),
+ failedAtStatus: failedAtStatus,
+ failedAtStep: failedAtStep,
+ progressLabel: 'Step ' + failedAtStep + ' dari ' + totalSteps,
+ progressSubtitle: progressSubtitle,
+ lacakSorted: lacakSorted
+ };
+ }
+
+ var currentStep = window.ANTRIAN_STEP_MAP[status] || 1;
+ return {
+ isDitolak: false,
+ isDibatalkan: false,
+ isTerminal: false,
+ currentStep: currentStep,
+ totalSteps: totalSteps,
+ stepWidth: Math.round((currentStep / totalSteps) * 100),
+ failedAtStatus: null,
+ failedAtStep: null,
+ progressLabel: 'Step ' + currentStep + ' dari ' + totalSteps,
+ progressSubtitle: null,
+ lacakSorted: lacakSorted
+ };
+ };
+
+ window.buildLacakTimelineHtml = function(lacakSorted, statusColors) {
+ if (!lacakSorted || lacakSorted.length === 0) return '';
+
+ var items = lacakSorted.map(function(lb, idx) {
+ var st = lb.status || '-';
+ var isReject = st === 'Ditolak';
+ var isCancel = st === 'Dibatalkan';
+ var cfg = statusColors[st];
+ var dotColor = cfg ? cfg.hex : (isReject ? '#ef4444' : (isCancel ? '#f43f5e' : '#6b7280'));
+ var tgl = window.formatLacakDate(lb);
+ var isLast = idx === lacakSorted.length - 1;
+ var alasanHtml = '';
+ if (isReject && lb.alasan_penolakan && String(lb.alasan_penolakan).trim() !== '') {
+ var alasanEsc = String(lb.alasan_penolakan)
+ .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+ .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+ alasanHtml = '<p class="text-[11px] text-red-700 mt-0.5 break-words"><i class="fas fa-comment-dots mr-1"></i>' + alasanEsc + '</p>';
+ }
+ var keteranganHtml = '';
+ if (!isReject && lb.keterangan && String(lb.keterangan).trim() !== '') {
+ var ketEsc = String(lb.keterangan)
+ .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+ keteranganHtml = '<p class="text-[10px] text-gray-500 mt-0.5">' + ketEsc + '</p>';
+ }
+
+ return '<li class="flex gap-2 ' + (isLast ? '' : 'pb-2') + '">' +
+ '<div class="flex flex-col items-center flex-shrink-0">' +
+ '<div class="w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm" style="background-color:' + dotColor + '"></div>' +
+ (isLast ? '' : '<div class="w-0.5 flex-1 bg-gray-200 min-h-[12px] mt-0.5"></div>') +
+ '</div>' +
+ '<div class="flex-1 min-w-0 pb-1">' +
+ '<p class="text-xs font-semibold ' + (isReject ? 'text-red-700' : (isCancel ? 'text-rose-700' : 'text-gray-800')) + '">' +
+ (isReject ? '<i class="fas fa-ban mr-1"></i>' : (isCancel ? '<i class="fas fa-times mr-1"></i>' : '<i class="fas fa-check-circle mr-1 text-green-600"></i>')) +
+ st +
+ '</p>' +
+ '<p class="text-[10px] text-gray-400">' + tgl + '</p>' +
+ alasanHtml +
+ keteranganHtml +
+ '</div>' +
+ '</li>';
+ }).join('');
+
+ return '<div class="mt-4 pt-4 border-t border-gray-100">' +
+ '<p class="text-xs font-semibold text-gray-700 mb-2"><i class="fas fa-history mr-1"></i>Riwayat Status (' + lacakSorted.length + ')</p>' +
+ '<ol class="list-none m-0 p-0">' + items + '</ol>' +
+ '</div>';
+ };
+
  // Helper: cari URL dokumen PDF final yang sudah diupload admin
  // Berlaku untuk semua layanan KECUALI pernikahan (pernikahan tetap pakai modal detail)
  window.findDokumenFinalUrl = function(data) {
@@ -1395,37 +1567,27 @@
 
  var prefixText = nomorAntrian.substring(0, 2);
 
- // Progress step (1-5) berdasarkan status antrian (untuk layanan non-pernikahan)
- var stepMap = {
- 'Menunggu': 1,
- 'Dokumen Diterima': 2,
- 'Verifikasi Data': 3,
- 'Proses Cetak': 4,
- 'Siap Pengambilan': 5,
- 'Selesai': 5,
- 'Ditolak': 5,
- 'Dibatalkan': 5
- };
-//  var currentStep = hasPernikahan ? (antrian.pernikahan.step || 1) : (stepMap[statusAntrian] || 1);
-var currentStep = hasPernikahan 
-    ? (antrian.pernikahan.step || stepMap[statusAntrian] || 1) 
-    : (stepMap[statusAntrian] || 1);
- var stepWidth = (currentStep / 5) * 100;
- // Override progress bar untuk status Ditolak: full merah
- var isDitolak = (statusAntrian === 'Ditolak');
- if (isDitolak) {
- currentStep = 5;
- stepWidth = 100;
- }
- var progressGradient = isDitolak ? 'from-red-500 to-rose-600' : 'from-green-500 to-emerald-500';
+ // Progress selaras riwayat lacak_berkas (bukan paksa 5/5 saat Ditolak)
+ var progressInfo = window.resolveAntrianProgress(antrian);
+ var isDitolak = progressInfo.isDitolak;
+ var isDibatalkan = progressInfo.isDibatalkan;
+ var isTerminal = progressInfo.isTerminal;
+ var currentStep = progressInfo.currentStep;
+ var stepWidth = progressInfo.stepWidth;
+ var progressGradient = isDitolak ? 'from-red-500 to-rose-600' : (isDibatalkan ? 'from-rose-400 to-rose-600' : 'from-green-500 to-emerald-500');
+ var progressSubtitleHtml = progressInfo.progressSubtitle
+ ? '<p class="text-xs text-red-700 mt-1 font-medium">' + progressInfo.progressSubtitle + '</p>'
+ : '';
  var progressHtml = '<div class="mt-3">' +
  '<div class="flex justify-between text-xs text-gray-500 mb-1">' +
  '<span>Progress</span>' +
- '<span>Step ' + currentStep + ' dari 5</span>' +
+ '<span>' + progressInfo.progressLabel + '</span>' +
  '</div>' +
- '<div class="w-full bg-gray-200 rounded-full h-2">' +
+ '<div class="w-full bg-gray-200 rounded-full h-2 relative overflow-hidden">' +
  '<div class="bg-gradient-to-r ' + progressGradient + ' h-2 rounded-full transition-all duration-500" style="width: ' + stepWidth + '%"></div>' +
+ (isTerminal ? '<div class="absolute top-0 h-2 w-1 bg-red-800 rounded-full" style="left: calc(' + stepWidth + '% - 2px)"></div>' : '') +
  '</div>' +
+ progressSubtitleHtml +
  '</div>';
 
  // Alasan Penolakan block (hanya untuk status Ditolak)
@@ -1434,7 +1596,6 @@ var currentStep = hasPernikahan
  var alasanText = (antrian.alasan_penolakan && String(antrian.alasan_penolakan).trim() !== '')
  ? antrian.alasan_penolakan
  : 'Alasan tidak dicantumkan oleh petugas.';
- // Escape untuk mencegah XSS
  var alasanEscaped = String(alasanText)
  .replace(/&/g, '&amp;')
  .replace(/</g, '&lt;')
@@ -1466,15 +1627,10 @@ var currentStep = hasPernikahan
  '</div>';
 
  var timelineHtml = '';
- if (antrian.lacak_berkas && antrian.lacak_berkas.length > 0) {
- var dots = antrian.lacak_berkas.slice(-5).map(function(lb) {
- var lbStatus = lb.status || '-';
- var lbColor = statusColors[lbStatus] ? statusColors[lbStatus].hex : '#6b7280';
- return '<div class="w-3 h-3 rounded-full border-2 border-white shadow" style="background-color: ' + lbColor + '"></div>';
- }).join('');
- timelineHtml = '<div class="mt-4 pt-4 border-t border-gray-100"><p class="text-xs text-gray-500 mb-2"><i class="fas fa-history mr-1"></i>Riwayat: ' + antrian.lacak_berkas.length + ' update status</p><div class="flex gap-1">' + dots + '</div></div>';
- } else if (hasPernikahan && antrian.pernikahan.history_count > 0) {
+ if (hasPernikahan && antrian.pernikahan.history_count > 0 && (!antrian.lacak_berkas || antrian.lacak_berkas.length === 0)) {
  timelineHtml = '<div class="mt-4 pt-4 border-t border-gray-100"><p class="text-xs text-gray-500"><i class="fas fa-history mr-1"></i>Riwayat: ' + antrian.pernikahan.history_count + ' update status</p></div>';
+ } else if (progressInfo.lacakSorted.length > 0) {
+ timelineHtml = window.buildLacakTimelineHtml(progressInfo.lacakSorted, statusColors);
  }
 
  // Dokumen final dari pernikahan (Akta + 3 KK)
@@ -1521,10 +1677,10 @@ var currentStep = hasPernikahan
  }
  }
 
- // Override warna header card untuk status Ditolak: konsisten merah
- var headerIconGradient = isDitolak ? 'from-red-500 to-rose-600' : 'from-green-500 to-emerald-600';
- var headerAccentText = isDitolak ? 'text-red-600' : 'text-green-600';
- var headerAccentBg = isDitolak ? 'bg-red-100' : 'bg-green-100';
+ // Override warna header card untuk status terminal
+ var headerIconGradient = isDitolak ? 'from-red-500 to-rose-600' : (isDibatalkan ? 'from-rose-400 to-rose-600' : 'from-green-500 to-emerald-600');
+ var headerAccentText = isDitolak ? 'text-red-600' : (isDibatalkan ? 'text-rose-600' : 'text-green-600');
+ var headerAccentBg = isDitolak ? 'bg-red-100' : (isDibatalkan ? 'bg-rose-100' : 'bg-green-100');
 
  return '<div class="search-result-card bg-white border-2 ' + statusStyle.border + ' rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer" style="animation-delay: ' + (index * 0.1) + 's" data-card-antrian-key="' + regKey + '">' +
  '<div class="flex items-center gap-2 mb-3">' +
@@ -1548,7 +1704,7 @@ var currentStep = hasPernikahan
  alasanPenolakanHtml +
  timelineHtml +
  dokumenFinalHtml +
- (!isDitolak ? '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
+ (!isTerminal ? '<div class="mt-4 pt-3 border-t border-gray-100 flex justify-end">' +
  '<button type="button" data-action="lihat-antrian" data-antrian-key="' + regKey + '" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm inline-flex items-center gap-2 transition-all">' +
  '<i class="fas fa-eye"></i><span>Lihat</span>' +
  '</button>' +
@@ -1559,7 +1715,7 @@ var currentStep = hasPernikahan
  };
 </script>
 
-<script src="{{ asset('js/antrian-ocr.js') }}?v={{ time() }}" defer></script>
+<script src="{{ asset_v('js/antrian-ocr.js') }}" defer></script>
 <script>
  // Load Statistics on Page Load
  function loadStatistics() {
@@ -1621,12 +1777,10 @@ var currentStep = hasPernikahan
  const copyBtn = document.getElementById('copyBtn');
  
  if (!ticketNumber || ticketNumber === '-') {
- Swal.fire({
- icon: 'error',
- title: 'Gagal Menyalin',
- text: 'Nomor antrian tidak ditemukan',
- confirmButtonColor: '#16a34a',
- });
+ toastError(
+ 'Nomor antrian tidak ditemukan.',
+ 'Pastikan nomor antrian sudah terbuat sebelum menyalin.'
+ );
  return;
  }
  
@@ -1636,15 +1790,7 @@ var currentStep = hasPernikahan
  copyBtn.classList.remove('from-gray-100', 'to-gray-200', 'hover:from-gray-200', 'hover:to-gray-300');
  copyBtn.classList.add('from-green-500', 'to-green-600', 'text-white');
  
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: 'Nomor antrian ' + ticketNumber + ' telah disalin',
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end',
- });
+ toastSuccess('Berhasil Disalin!', 'Nomor antrian ' + ticketNumber + ' telah disalin');
  
  setTimeout(function() {
  copyBtn.innerHTML = originalText;
@@ -1661,22 +1807,12 @@ var currentStep = hasPernikahan
  textarea.select();
  try {
  document.execCommand('copy');
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: 'Nomor antrian ' + ticketNumber + ' telah disalin',
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end',
- });
+ toastSuccess('Berhasil Disalin!', 'Nomor antrian ' + ticketNumber + ' telah disalin');
  } catch (err) {
- Swal.fire({
- icon: 'error',
- title: 'Gagal Menyalin',
- text: 'Tidak dapat menyalin nomor antrian',
- confirmButtonColor: '#16a34a',
- });
+ toastError(
+ 'Tidak dapat menyalin nomor antrian.',
+ 'Salin nomor secara manual atau coba lagi setelah memberi izin clipboard pada browser.'
+ );
  }
  document.body.removeChild(textarea);
  });
@@ -1704,14 +1840,16 @@ var currentStep = hasPernikahan
  var nik = antrian.nik || '-';
  var namaLayanan = (antrian.layanan && antrian.layanan.nama_layanan) ? antrian.layanan.nama_layanan : 'Layanan Umum';
  var statusAntrian = antrian.status_antrian || 'Menunggu';
- var isDitolak = (statusAntrian === 'Ditolak');
+ var progressInfo = window.resolveAntrianProgress(antrian);
+ var isDitolak = progressInfo.isDitolak;
+ var isDibatalkan = progressInfo.isDibatalkan;
+ var isTerminal = progressInfo.isTerminal;
  var statusConfig = statusConfigMap[statusAntrian] || statusConfigMap['Menunggu'];
- var stepVal = statusConfig.step;
- var stepWidth = (statusConfig.step / 5) * 100;
- // Paksa 100% merah untuk Ditolak
- if (isDitolak) {
- stepWidth = 100;
- }
+ var stepVal = progressInfo.currentStep;
+ var stepWidth = progressInfo.stepWidth;
+ var progressSubtitleModal = progressInfo.progressSubtitle
+ ? '<p class="text-xs text-red-700 mt-1 font-medium text-center">' + progressInfo.progressSubtitle + '</p>'
+ : '';
 
  // Format tanggal pembuatan
  var createdDate = '-';
@@ -1785,12 +1923,16 @@ var currentStep = hasPernikahan
  .replace(/>/g, '&gt;')
  .replace(/"/g, '&quot;')
  .replace(/'/g, '&#39;');
+ var ditolakPadaHtml = progressInfo.failedAtStatus
+ ? '<p class="text-xs text-red-600 mb-2"><i class="fas fa-map-marker-alt mr-1"></i>Ditolak setelah tahap <strong>' + progressInfo.failedAtStatus + '</strong> (Step ' + progressInfo.failedAtStep + ' dari 5)</p>'
+ : '';
  alasanPenolakanModalHtml =
  '<div class="mb-4">' +
  '<div class="bg-red-50 border border-red-200 rounded-xl p-4">' +
  '<div class="flex items-start gap-3">' +
  '<i class="fas fa-circle-exclamation text-red-500 mt-0.5"></i>' +
  '<div class="flex-1 min-w-0">' +
+ ditolakPadaHtml +
  '<p class="text-sm font-semibold text-red-700 mb-1">Alasan Penolakan</p>' +
  '<p class="text-sm text-red-900 break-words">' + alasanEscaped + '</p>' +
  '</div>' +
@@ -1798,6 +1940,20 @@ var currentStep = hasPernikahan
  '</div>' +
  '</div>';
  }
+
+ var statusColorsModal = {
+ 'Menunggu': { hex: '#f59e0b' },
+ 'Dokumen Diterima': { hex: '#22c55e' },
+ 'Verifikasi Data': { hex: '#6366f1' },
+ 'Proses Cetak': { hex: '#a855f7' },
+ 'Siap Pengambilan': { hex: '#10b981' },
+ 'Selesai': { hex: '#22c55e' },
+ 'Ditolak': { hex: '#ef4444' },
+ 'Dibatalkan': { hex: '#f43f5e' }
+ };
+ var timelineModalHtml = progressInfo.lacakSorted.length > 0
+ ? window.buildLacakTimelineHtml(progressInfo.lacakSorted, statusColorsModal)
+ : '';
 
  var modalContent =
  '<div class="p-6">' +
@@ -1831,11 +1987,13 @@ var currentStep = hasPernikahan
  '<div class="mb-4">' +
  '<div class="flex justify-between text-xs text-gray-500 mb-1">' +
  '<span>Progress Pengajuan</span>' +
- '<span>Step ' + statusConfig.step + ' dari 5</span>' +
+ '<span>' + progressInfo.progressLabel + '</span>' +
  '</div>' +
- '<div class="w-full bg-gray-200 rounded-full h-3">' +
- '<div class="bg-gradient-to-r ' + (isDitolak ? 'from-red-500 to-rose-600' : 'from-green-500 to-emerald-500') + ' h-3 rounded-full transition-all" style="width: ' + stepWidth + '%"></div>' +
+ '<div class="w-full bg-gray-200 rounded-full h-3 relative overflow-hidden">' +
+ '<div class="bg-gradient-to-r ' + (isDitolak ? 'from-red-500 to-rose-600' : (isDibatalkan ? 'from-rose-400 to-rose-600' : 'from-green-500 to-emerald-500')) + ' h-3 rounded-full transition-all" style="width: ' + stepWidth + '%"></div>' +
+ (isTerminal ? '<div class="absolute top-0 h-3 w-1 bg-red-800 rounded-full" style="left: calc(' + stepWidth + '% - 2px)"></div>' : '') +
  '</div>' +
+ progressSubtitleModal +
  '</div>' +
 
  '<div class="bg-gray-50 rounded-xl p-4 space-y-3 mb-4">' +
@@ -1858,6 +2016,8 @@ var currentStep = hasPernikahan
  '</div>' +
 
  alasanPenolakanModalHtml +
+
+ timelineModalHtml +
 
  dokumenHtml +
 
@@ -1883,15 +2043,7 @@ var currentStep = hasPernikahan
  window.copyNomorAntrianToClipboard = function(text) {
  if (navigator.clipboard && navigator.clipboard.writeText) {
  navigator.clipboard.writeText(text).then(() => {
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: `Nomor antrian ${text} telah disalin`,
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end'
- });
+ toastSuccess('Berhasil Disalin!', 'Nomor antrian ' + text + ' telah disalin');
  }).catch(() => {
  fallbackCopyNomor(text);
  });
@@ -1909,22 +2061,12 @@ var currentStep = hasPernikahan
  textarea.select();
  try {
  document.execCommand('copy');
- Swal.fire({
- icon: 'success',
- title: 'Berhasil Disalin!',
- text: `Nomor antrian ${text} telah disalin`,
- timer: 2000,
- showConfirmButton: false,
- toast: true,
- position: 'top-end'
- });
+ toastSuccess('Berhasil Disalin!', 'Nomor antrian ' + text + ' telah disalin');
  } catch (err) {
- Swal.fire({
- icon: 'error',
- title: 'Gagal Menyalin',
- text: 'Tidak dapat menyalin nomor antrian',
- confirmButtonColor: '#16a34a',
- });
+ toastError(
+ 'Tidak dapat menyalin nomor antrian.',
+ 'Salin nomor secara manual atau coba lagi setelah memberi izin clipboard pada browser.'
+ );
  }
  document.body.removeChild(textarea);
  }

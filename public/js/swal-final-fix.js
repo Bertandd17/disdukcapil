@@ -35,50 +35,56 @@
             return _originalFire(params);
         }
 
+        // DEFAULT GLOBAL: paksa showDenyButton = false di SEMUA modal.
+        // Project ini tidak pernah butuh tombol deny ke-3.
+        // Kalau ada yang benar-benar butuh, set _allowDeny: true.
+        if (!params._allowDeny) {
+            params.showDenyButton = false;
+            delete params.denyButtonText;
+        }
+
         var title = (params.title || '').toLowerCase();
-        var isLoadingModal = [
+        var isToast = params.toast === true;
+        var isConfirmModal = !isToast && params.showCancelButton === true;
+        var isLoadingModal = !isToast && [
             'memproses', 'memuat', 'loading', 'mohon tunggu',
             'harap tunggu', 'menyimpan', 'mengirim', 'menghapus',
-            'sedang memproses', 'sedang mengakhiri'
+            'sedang memproses', 'sedang mengakhiri', 'memeriksa',
+            'mengunggah', 'sedang membuat', 'sedang mengupload'
         ].some(function(keyword) { return title.indexOf(keyword) !== -1; });
+
+        // Modal konfirmasi 2-tombol: standarisasi Batal + Konfirmasi
+        if (isConfirmModal && !params._allowDeny) {
+            params.showDenyButton = false;
+            delete params.denyButtonText;
+            if (params.allowOutsideClick !== true) params.allowOutsideClick = false;
+            if (params.allowEscapeKey !== true) params.allowEscapeKey = false;
+            if (params.reverseButtons === undefined) params.reverseButtons = true;
+        }
 
         // Paksa: modal loading TIDAK BOLEH punya tombol
         if (isLoadingModal || (params.showConfirmButton === false && !params.showCancelButton && !params.showDenyButton && params.didOpen)) {
             params.showConfirmButton = false;
             params.showCancelButton = false;
             params.showDenyButton = false;
+            if (params.allowOutsideClick !== true) params.allowOutsideClick = false;
+            if (params.allowEscapeKey !== true) params.allowEscapeKey = false;
         }
 
-        // Paksa: hapus deny button kecuali benar-benar dibutuhkan
-        if (params.showDenyButton === true && !params._allowDeny) {
-            params.showDenyButton = false;
-            if (params.denyButtonText && !params.cancelButtonText) {
-                params.cancelButtonText = params.denyButtonText;
-                params.showCancelButton = true;
-            }
-            delete params.denyButtonText;
-        }
-
-        // Pastikan konfirmasi 2 tombol tidak punya deny (FIX BUG "No" BUTTON)
-        if (params.showCancelButton === true && params.showConfirmButton === true && !params._allowDeny) {
-            params.showDenyButton = false; // Matikan deny button
-            delete params.denyButtonText;  // Hapus teks deny button
-
-            // Opsi: Jika ingin tombol Batal tetap tampil, biarkan saja.
-            // Jika ingin hanya ada 1 tombol (Konfirmasi), set showCancelButton = false.
-            // Untuk kasus ini, kita biarkan Batal tetap ada tapi pastikan No hilang.
-
-            // STRIP: sembunyikan deny button dari DOM agar tidak tampil
+        // Untuk SEMUA modal (apapun tipenya), pastikan deny button di-strip dari DOM.
+        // SweetAlert2 v11 tetap me-render .swal2-deny di DOM walau showDenyButton=false.
+        if (!params._allowDeny) {
             var origDidOpen = params.didOpen || function() {};
             params.didOpen = function(toast) {
                 origDidOpen(toast);
                 setTimeout(stripDenyButton, 0);
+                setTimeout(stripDenyButton, 50);
             };
-            // Juga pasang di willOpen untuk kasus modal tanpa didOpen
             var origWillOpen = params.willOpen || function() {};
             params.willOpen = function(toast) {
                 origWillOpen(toast);
                 setTimeout(stripDenyButton, 50);
+                setTimeout(stripDenyButton, 150);
             };
         }
 

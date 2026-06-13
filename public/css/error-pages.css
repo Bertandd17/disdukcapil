@@ -1,0 +1,175 @@
+/**
+ * Halaman error (403, 404, 419, 500) — muat penuh di viewport 100% zoom
+ */
+.error-page {
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    align-items: flex-start;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .error-page {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}
+
+.error-page__container {
+    width: 100%;
+    max-width: 36rem;
+}
+
+.error-page__hero {
+    margin-bottom: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .error-page__hero {
+        margin-bottom: 1.25rem;
+    }
+}
+
+.error-page__code {
+    font-size: clamp(2.5rem, 11vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.error-page__logo-wrap {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.error-page__logo-ring {
+    width: 4.5rem;
+    height: 4.5rem;
+}
+
+@media (min-width: 640px) {
+    .error-page__logo-wrap {
+        width: 4.25rem;
+        height: 4.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .error-page__logo-ring {
+        width: 5.5rem;
+        height: 5.5rem;
+    }
+}
+
+.error-page__card {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .error-page__card {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .error-page__card {
+        padding: 1.5rem;
+    }
+}
+
+.error-page__card-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.75rem;
+}
+
+.error-page__card-icon i {
+    font-size: 1.35rem;
+}
+
+@media (min-width: 640px) {
+    .error-page__card-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .error-page__card-icon i {
+        font-size: 1.5rem;
+    }
+}
+
+.error-page__tips {
+    gap: 0.5rem;
+}
+
+.error-page__tip {
+    padding: 0.625rem 0.75rem;
+    gap: 0.625rem;
+}
+
+.error-page__tip-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.875rem;
+}
+
+.error-page__actions {
+    gap: 0.5rem;
+}
+
+.error-page__actions.grid {
+    gap: 0.5rem;
+}
+
+.error-page__btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+    .error-page__btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9375rem;
+    }
+}
+
+/* Layar pendek (laptop 768px tinggi, zoom 100%) */
+@media (max-height: 820px) {
+    .error-page {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .error-page__hero {
+        margin-bottom: 0.5rem;
+    }
+
+    .error-page__code {
+        font-size: clamp(2.25rem, 9vw, 4rem);
+        margin-bottom: 0.25rem;
+    }
+
+    .error-page .float-animation {
+        animation: none;
+    }
+
+    .error-page .animate-bounce-slow {
+        animation: none;
+    }
+
+    .error-page__card-inner {
+        margin-bottom: 0.75rem;
+    }
+
+    .error-page__card-inner > p {
+        margin-bottom: 0.75rem;
+    }
+
+    .error-page__tips-wrap {
+        margin-bottom: 0.75rem;
+    }
+}

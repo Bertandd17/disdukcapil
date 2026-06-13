@@ -616,7 +616,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                                 class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
-                        <button type="button" id="btnStartLiveness" onclick="startLiveness()"
+                        <button type="button" id="btnStartLiveness" onclick="handleLivenessAction()"
                                 class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fas fa-camera text-sm"></i> Mulai Verifikasi
                         </button>
@@ -642,7 +642,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                                 class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl font-bold transition flex items-center justify-center gap-2">
                             <i class="fas fa-arrow-left text-sm"></i> Kembali
                         </button>
-                        <button type="submit" id="btnSubmit" form="serviceForm"
+                        <button type="button" id="btnSubmit" onclick="handleKirimPengajuan()"
                                 class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg flex items-center justify-center gap-2">
                             <i class="fas fa-paper-plane text-sm"></i> Kirim Pengajuan
                         </button>
@@ -743,6 +743,23 @@ let livenessStarted    = false;
 
 const BLINK_THRESHOLD = 0.25;
 const BLINK_TARGET    = 2;
+const SUBMIT_TIMEOUT_MS = 120000;
+
+function showLoadingModal(title, text) {
+    if (typeof Swal !== 'undefined' && Swal.isVisible && Swal.isVisible()) {
+        Swal.close();
+    }
+    return Swal.fire({
+        title: title || 'Memproses...',
+        text: text || 'Mohon tunggu sebentar',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        showDenyButton: false,
+        showCancelButton: false,
+        didOpen: () => Swal.showLoading()
+    });
+}
 
 const routeMap = {
     'kk':              "{{ route('kk.store') }}",
@@ -1046,6 +1063,12 @@ function goToStep(step) {
     }
     document.getElementById('modalStepLabel').textContent = `Langkah ${step} dari 5 – ${labels[step-1]}`;
     document.getElementById('modalContent').scrollTop = 0;
+    if (step === 4) {
+        stopCamera();
+        livenessStarted = false;
+        faceMeshInstance = null;
+        updateLivenessStepUI();
+    }
     if (step === 5) buildSummary();
 }
 
@@ -1054,7 +1077,7 @@ function validateAndGoStep3() {
         .querySelectorAll('input[required],textarea[required],select[required]');
     let valid = true;
     let hasEmpty = false;
-    let errMsg = 'Ada kolom yang wajib diisi';
+    let errMsg = 'Nomor harus tepat 16 angka.';
     inputs.forEach(input => {
         input.style.borderColor = '';
         let val = input.value.trim();
@@ -1062,11 +1085,23 @@ function validateAndGoStep3() {
         else if (val && (input.name.toLowerCase().includes('nik') || input.name.toLowerCase().includes('nomor_kk')) && val.length !== 16) {
             input.style.borderColor = '#ef4444';
             valid = false;
-            errMsg = `Nomor harus tepat 16 angka!`;
+            errMsg = 'Nomor harus tepat 16 angka.';
         }
     });
-    if (hasEmpty) errMsg = 'Ada kolom yang wajib diisi';
-    if (!valid) { showToast(errMsg, 'error'); return; }
+    if (!valid) {
+        if (hasEmpty) {
+            showErrorToast(
+                'Ada kolom wajib yang belum diisi.',
+                'Lengkapi semua data pada langkah Data sesuai dokumen resmi, lalu lanjutkan.'
+            );
+        } else {
+            showErrorToast(
+                'Nomor harus tepat 16 angka.',
+                'Masukkan NIK atau nomor KK sesuai dokumen kependudukan (16 digit).'
+            );
+        }
+        return;
+    }
     goToStep(3);
 }
 
@@ -1086,7 +1121,13 @@ function validateAndGoStep4() {
             }
         }
     });
-    if (!valid) { showToast('Ada kolom yang wajib diisi', 'error'); return; }
+    if (!valid) {
+        showErrorToast(
+            'Dokumen wajib belum diunggah' + (missingLabel ? ': ' + missingLabel : '') + '.',
+            'Unggah semua berkas yang wajib dalam format PDF, lalu lanjutkan ke langkah berikutnya.'
+        );
+        return;
+    }
     goToStep(4);
 }
 
@@ -1121,7 +1162,7 @@ function stripToastHtml(message) {
     return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
 }
 
-function showErrorToast(problem, solution, title = 'Terjadi kesalahan', timer = 6000) {
+function showErrorToast(problem, solution, title = 'Terjadi kesalahan', timer = 5000) {
     const cleanProblem = stripToastHtml(problem || 'Terjadi kesalahan saat memproses permintaan.');
     const cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
 
@@ -1136,7 +1177,202 @@ function showErrorToast(problem, solution, title = 'Terjadi kesalahan', timer = 
         });
     }
 
-    return showToast(`${cleanProblem} ${cleanSolution}`, 'error');
+    if (typeof window.SwalHelper !== 'undefined' && typeof SwalHelper.toastError === 'function') {
+        return SwalHelper.toastError(cleanProblem, cleanSolution, timer);
+    }
+
+    return showToast(cleanProblem, 'error', cleanSolution);
+}
+
+function showSuccessToast(title, html) {
+    if (typeof window.fireToast === 'function') {
+        return window.fireToast({
+            type: 'success',
+            icon: 'success',
+            title: title || 'Berhasil',
+            html: html || undefined,
+            timer: 5000
+        });
+    }
+
+    if (typeof window.SwalHelper !== 'undefined' && typeof SwalHelper.toastSuccess === 'function') {
+        return html ? SwalHelper.toastSuccess(html, title || 'Berhasil') : SwalHelper.toastSuccess(title || 'Berhasil');
+    }
+
+    return showToast(title || 'Berhasil', 'success');
+}
+
+function escapeHtmlText(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+async function parseJsonResponse(response) {
+    const contentType = (response.headers.get('content-type') || '').toLowerCase();
+    const text = await response.text();
+
+    if (!text || !text.trim()) {
+        return {
+            success: false,
+            message: response.ok
+                ? 'Server tidak mengembalikan respons.'
+                : 'Gagal memproses permintaan (HTTP ' + response.status + ').',
+            problem: response.status === 419
+                ? 'Sesi halaman habis atau token keamanan tidak valid.'
+                : 'Server tidak mengembalikan data.',
+            solution: response.status === 419
+                ? 'Muat ulang halaman, isi ulang formulir, lalu kirim kembali.'
+                : 'Periksa koneksi internet dan ukuran berkas, lalu coba lagi.'
+        };
+    }
+
+    if (contentType.includes('application/json') || text.trim().charAt(0) === '{') {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            return {
+                success: false,
+                message: 'Respons server tidak valid.',
+                problem: 'Format respons dari server tidak dapat dibaca.',
+                solution: 'Coba lagi. Jika masalah berlanjut, hubungi petugas layanan.'
+            };
+        }
+    }
+
+    return {
+        success: false,
+        message: 'Gagal memproses permintaan (HTTP ' + response.status + ').',
+        problem: response.status === 419
+            ? 'Sesi halaman habis atau token keamanan tidak valid.'
+            : 'Server mengembalikan respons yang tidak diharapkan.',
+        solution: response.status === 419
+            ? 'Muat ulang halaman, isi ulang formulir, lalu kirim kembali.'
+            : 'Periksa kelengkapan berkas dan koneksi internet, lalu coba lagi.'
+    };
+}
+
+async function submitPengajuanForm(form, btnSubmit) {
+    if (!form || !form.action || form.action === '#' || form.action.endsWith('#')) {
+        showErrorToast(
+            'URL pengiriman tidak valid.',
+            'Tutup modal, pilih layanan kembali, lalu coba kirim pengajuan.'
+        );
+        return;
+    }
+
+    const formData = new FormData(form);
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    if (csrfMeta && !formData.get('_token')) {
+        formData.set('_token', csrfMeta.content);
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            signal: controller.signal
+        });
+
+        const data = await parseJsonResponse(response);
+
+        if (data.success) {
+            showSuccessToast(
+                data.message || 'Pengajuan dokumen berhasil dikirim',
+                'Permohonan Anda akan diverifikasi oleh petugas Disdukcapil.'
+            );
+            form.reset();
+            closeModal();
+            goToStep(1);
+            document.getElementById('liveness_passed').value = '0';
+            document.getElementById('foto_wajah').value = '';
+        } else {
+            showErrorToast(
+                data.problem || data.message || 'Terjadi kesalahan saat mengirim pengajuan.',
+                data.solution || (data.errors && Object.values(data.errors).flat().join(' ')) || 'Periksa kelengkapan data dan berkas, lalu coba kirim kembali.'
+            );
+        }
+    } catch (error) {
+        console.error('Submit error:', error);
+        if (error.name === 'AbortError') {
+            showErrorToast(
+                'Waktu pengiriman habis.',
+                'Periksa koneksi internet atau kurangi ukuran berkas, lalu coba lagi.'
+            );
+        } else {
+            showErrorToast(
+                'Gagal mengirim pengajuan.',
+                'Periksa koneksi internet, lalu coba lagi.'
+            );
+        }
+    } finally {
+        clearTimeout(timeoutId);
+        Swal.close();
+        if (btnSubmit) btnSubmit.disabled = false;
+    }
+}
+
+async function handleKirimPengajuan() {
+    const livenessInput = document.getElementById('liveness_passed');
+    const livenessValue = livenessInput?.value || '0';
+
+    if (livenessValue !== '1') {
+        showErrorToast(
+            'Verifikasi wajah belum selesai.',
+            'Selesaikan verifikasi wajah pada langkah Verifikasi, lalu kirim pengajuan kembali.'
+        );
+        goToStep(4);
+        return;
+    }
+
+    const form = document.getElementById('serviceForm');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const nikInput = document.querySelector('[name="nik_pemohon"]');
+    const layananIdInput = document.querySelector('[name="layanan_id"]');
+    const nik = nikInput ? nikInput.value.trim() : '';
+    const layananId = layananIdInput ? layananIdInput.value.trim() : '';
+
+    if (btnSubmit) btnSubmit.disabled = true;
+
+    if (nik && layananId) {
+        showLoadingModal('Memeriksa...', 'Mohon tunggu sebentar');
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+            const checkResponse = await fetch(
+                '/api/antrian/check-daily-limit?nik=' + encodeURIComponent(nik) + '&layanan_id=' + encodeURIComponent(layananId),
+                { signal: controller.signal, headers: { 'Accept': 'application/json' } }
+            );
+            clearTimeout(timeoutId);
+
+            const checkData = await parseJsonResponse(checkResponse);
+
+            if (!checkData.success) {
+                Swal.close();
+                if (btnSubmit) btnSubmit.disabled = false;
+                showErrorToast(
+                    checkData.problem || checkData.message || 'Validasi pengajuan gagal.',
+                    checkData.solution || 'Periksa data yang dimasukkan, lalu coba lagi.'
+                );
+                return;
+            }
+        } catch (error) {
+            Swal.close();
+            console.error('Daily limit check error:', error);
+        }
+    }
+
+    showLoadingModal('Memproses...', 'Mohon tunggu sebentar');
+    await submitPengajuanForm(form, btnSubmit);
 }
 
 // Fungsi autofill data pemohon dari nomor antrian
@@ -1251,7 +1487,10 @@ function autoFillFromAntrian(nomorAntrian) {
                     console.log('✗ Alamat field not found or no data');
                 }
 
-                showToast('Data berhasil diambil dari nomor antrian', 'success');
+                showSuccessToast(
+                    'Berhasil Mengambil Data dari Nomor Antrian',
+                    'Data pemohon dari nomor antrian <strong>' + escapeHtmlText(nomorAntrian.trim()) + '</strong> telah diisi otomatis ke formulir.'
+                );
             } else {
                 console.log('=== NO SUCCESS AND NO DATA ===');
                 console.log('data.success:', data.success);
@@ -1316,19 +1555,76 @@ function onLivenessPassed() {
     document.getElementById('foto_wajah').value = canvas.toDataURL('image/jpeg', 0.85);
     stopCamera();
     document.getElementById('liveness_passed').value = '1';
-    document.getElementById('btnStartLiveness').disabled = true;
-    const preview = document.createElement('img');
-    preview.src = document.getElementById('foto_wajah').value;
-    preview.className = 'w-full rounded-xl';
-    preview.style.maxHeight = '260px';
-    preview.style.objectFit = 'cover';
-    preview.id = 'foto-preview';
-    video.style.display = 'none';
-    video.parentNode.insertBefore(preview, video);
-    document.getElementById('liveness-overlay').textContent = '✓ Foto berhasil diambil!';
-    document.getElementById('liveness-overlay').classList.replace('bg-black/50','bg-green-600/80');
-    showToast('Verifikasi wajah berhasil! Foto tersimpan.', 'success');
+    blinkCount = BLINK_TARGET;
+    showLivenessCompletedUI();
+    showSuccessToast(
+        'Verifikasi Wajah Berhasil',
+        'Foto wajah tersimpan. Anda dapat melanjutkan ke langkah konfirmasi.'
+    );
     setTimeout(() => goToStep(5), 900);
+}
+function handleLivenessAction() {
+    if (document.getElementById('liveness_passed').value === '1' &&
+        document.getElementById('foto_wajah').value) {
+        goToStep(5);
+        return;
+    }
+    startLiveness();
+}
+function setLivenessActionButton(mode) {
+    const btn = document.getElementById('btnStartLiveness');
+    if (!btn) return;
+    if (mode === 'next') {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-arrow-right text-sm"></i> Selanjutnya';
+    } else {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-camera text-sm"></i> Mulai Verifikasi';
+    }
+}
+function showLivenessCompletedUI() {
+    const fotoWajah = document.getElementById('foto_wajah').value;
+    const video = document.getElementById('video');
+    let preview = document.getElementById('foto-preview');
+    if (!preview && fotoWajah) {
+        preview = document.createElement('img');
+        preview.src = fotoWajah;
+        preview.className = 'w-full rounded-xl';
+        preview.style.maxHeight = '260px';
+        preview.style.objectFit = 'cover';
+        preview.id = 'foto-preview';
+        video.parentNode.insertBefore(preview, video);
+    } else if (preview && fotoWajah) {
+        preview.src = fotoWajah;
+    }
+    video.style.display = 'none';
+    const overlay = document.getElementById('liveness-overlay');
+    overlay.textContent = '✓ Verifikasi wajah selesai';
+    overlay.className = 'absolute bottom-0 left-0 right-0 bg-green-600/80 text-white text-center py-2 text-sm font-semibold';
+    document.getElementById('blinkCount').textContent = String(BLINK_TARGET);
+    for (let i = 1; i <= BLINK_TARGET; i++) {
+        const dot = document.getElementById(`blink-dot-${i}`);
+        if (dot) {
+            dot.className = 'w-8 h-8 rounded-full border-2 border-green-500 bg-green-500 flex items-center justify-center text-xs font-bold text-white';
+            dot.innerHTML = '<i class="fas fa-check text-xs"></i>';
+        }
+    }
+    setLivenessActionButton('next');
+}
+function updateLivenessStepUI() {
+    const passed = document.getElementById('liveness_passed').value === '1';
+    const fotoWajah = document.getElementById('foto_wajah').value;
+    if (passed && fotoWajah) {
+        showLivenessCompletedUI();
+        return;
+    }
+    const old = document.getElementById('foto-preview');
+    if (old) old.remove();
+    document.getElementById('video').style.display = '';
+    const overlay = document.getElementById('liveness-overlay');
+    overlay.textContent = 'Tekan "Mulai Verifikasi" untuk mengaktifkan kamera';
+    overlay.className = 'absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center py-2 text-sm font-semibold';
+    setLivenessActionButton('start');
 }
 function setOverlay(text) { document.getElementById('liveness-overlay').textContent = text; }
 function startLiveness() {
@@ -1382,8 +1678,7 @@ function resetLiveness() {
     document.getElementById('liveness_passed').value = '0';
     document.getElementById('liveness-overlay').textContent = 'Tekan "Mulai Verifikasi" untuk mengaktifkan kamera';
     document.getElementById('liveness-overlay').className = 'absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center py-2 text-sm font-semibold';
-    const btn = document.getElementById('btnStartLiveness');
-    if (btn) btn.disabled = false;
+    setLivenessActionButton('start');
     for (let i = 1; i <= BLINK_TARGET; i++) {
         const dot = document.getElementById(`blink-dot-${i}`);
         if (dot) { dot.className = 'w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-400'; dot.textContent = i; }
@@ -1486,14 +1781,20 @@ function validateSelectedFile(input) {
         const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
         if (!isPdf) {
             input.value = '';
-            showToast('Hanya file PDF yang diperbolehkan', 'error');
+            showErrorToast(
+                'Hanya file PDF yang diperbolehkan.',
+                'Pilih ulang file dengan format PDF sesuai ketentuan layanan.'
+            );
             return false;
         }
     }
 
     if (file.size > 2 * 1024 * 1024) {
         input.value = '';
-        showToast('Maksimal ukuran file: 2MB', 'error');
+        showErrorToast(
+            'Maksimal ukuran file: 2MB.',
+            'Kompres file atau pilih file dengan ukuran di bawah 2MB.'
+        );
         return false;
     }
 
@@ -1505,27 +1806,11 @@ function clearFileInput(fieldName) {
     input.value = '';
     handleFileSelect(input, fieldName);
 }
-function showToast(message, type = 'info') {
-    const iconMap = {
-        success: 'success',
-        error: 'error',
-        warning: 'warning',
-        info: 'info'
-    };
-    const icon = iconMap[type] || 'info';
-    Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        icon: icon,
-        title: message,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
-    }).fire();
+function showToast(message, type = 'error', solution) {
+    if (type === 'success') {
+        return showSuccessToast(message);
+    }
+    return showErrorToast(message, solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
 }
 function closeModal() {
     stopCamera();
@@ -1534,291 +1819,23 @@ function closeModal() {
     document.body.style.overflow = 'auto';
 }
 
-// Pastikan DOM sudah dimuat sebelum memasang event listener
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('=== DOM LOADED - Attaching submit listener ===');
-
     const serviceForm = document.getElementById('serviceForm');
-    const livenessInput = document.getElementById('liveness_passed');
-    console.log('serviceForm found:', !!serviceForm);
-    console.log('liveness_passed element found:', !!livenessInput);
-    console.log('liveness_passed initial value:', livenessInput?.value);
-
     if (serviceForm) {
-        serviceForm.addEventListener('submit', async function(e) {
-            console.log('=== FORM SUBMIT EVENT TRIGGERED ===');
-            console.log('liveness_passed value:', livenessInput?.value);
-
-            // Cek verifikasi wajah dengan aman
-            const livenessValue = livenessInput?.value || '0';
-            if (livenessValue !== '1') {
-                console.warn('=== VERIFIKASI WAJAH BELUM LULUS ===');
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                showToast('Harap selesaikan verifikasi wajah terlebih dahulu.', 'error');
-                goToStep(4);
-                return;
-            }
-
+        serviceForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            console.log('=== PREVENTING DEFAULT SUBMIT, PROCEEDING WITH FETCH ===');
-
-    const form = this;
-
-    // Ambil NIK dan layanan_id dari form
-    const nikInput = document.querySelector('[name="nik_pemohon"]');
-    const layananIdInput = document.querySelector('[name="layanan_id"]');
-
-    const nik = nikInput ? nikInput.value.trim() : '';
-    const layananId = layananIdInput ? layananIdInput.value.trim() : '';
-
-    // Validasi daily limit sebelum submit (dengan timeout 10 detik)
-    if (nik && layananId) {
-        // Show loading untuk cek daily limit
-        Swal.fire({
-            title: 'Memeriksa...',
-            text: 'Mohon tunggu sebentar',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            didOpen: () => Swal.showLoading()
-        });
-
-        try {
-            // Tambah timeout 10 detik untuk mencegah hang forever
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-            const checkResponse = await fetch(`/api/antrian/check-daily-limit?nik=${encodeURIComponent(nik)}&layanan_id=${encodeURIComponent(layananId)}`, {
-                signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-
-            if (!checkResponse.ok) {
-                throw new Error(`HTTP ${checkResponse.status}`);
-            }
-
-            const checkData = await checkResponse.json();
-            console.log('Daily limit check result:', checkData);
-
-            if (!checkData.success) {
-                Swal.close();
-
-                // SEMUA error pakai toast di kanan atas
-                if (checkData.error_code === 'DAILY_LIMIT_EXCEEDED') {
-                    Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 5000,
-                        timerProgressBar: true,
-                        icon: 'warning',
-                        title: 'Batas Harian Tercapai',
-                        html: checkData.message || 'Anda sudah mengajukan layanan ini hari ini.',
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire();
-                } else {
-                    Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 5000,
-                        timerProgressBar: true,
-                        icon: 'error',
-                        title: 'Validasi Gagal',
-                        text: checkData.message || 'Terjadi kesalahan validasi',
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire();
-                }
-                return;
-            }
-
-            // Lanjut submit jika daily limit OK
-            Swal.fire({
-                title: 'Memproses...',
-                text: 'Mohon tunggu sebentar',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                showDenyButton: false,
-                showCancelButton: false,
-                didOpen: () => Swal.showLoading()
-            });
-
-        } catch (error) {
-            Swal.close();
-            console.error('Daily limit check error:', error);
-
-            // Jika timeout, langsung lanjut submit (fail open)
-            if (error.name === 'AbortError') {
-                console.warn('Daily limit check timeout, proceeding with submission');
-            }
-
-            // Show loading untuk submit
-            Swal.fire({
-                title: 'Memproses...',
-                text: 'Mohon tunggu sebentar',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                showDenyButton: false,
-                showCancelButton: false,
-                didOpen: () => Swal.showLoading()
-            });
-        }
-    } else {
-        // Show loading jika tidak ada nik/layanan_id
-        Swal.fire({
-            title: 'Memproses...',
-            text: 'Mohon tunggu sebentar',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            didOpen: () => Swal.showLoading()
-        });
+            e.stopImmediatePropagation();
+            handleKirimPengajuan();
+        }, true);
     }
 
-    const formData = new FormData(form);
-
-    // DEBUG: Log URL yang akan digunakan
-    console.log('=== SUBMITTING FORM TO ===');
-    console.log('form.action:', form.action);
-    console.log('form.method:', form.method);
-    console.log('formData keys:', [...formData.keys()]);
-
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        Swal.close();
-
-        if (data.success) {
-            // SweetAlert toast di kanan atas
-            Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-                icon: 'success',
-                title: 'Berhasil!',
-                text: data.message || 'Pengajuan berkas berhasil dikirim',
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer);
-                    toast.addEventListener('mouseleave', Swal.resumeTimer);
-                }
-            }).fire();
-
-            // Reset form dan tutup modal
-            form.reset();
-            closeModal();
-            goToStep(1);
-
-            // Reset liveness
-            document.getElementById('liveness_passed').value = '0';
-            document.getElementById('foto_wajah').value = '';
-
-        } else {
-            // Error handling pakai toast di kanan atas
-            Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Terjadi kesalahan saat mengirim pengajuan',
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer);
-                    toast.addEventListener('mouseleave', Swal.resumeTimer);
-                }
-            }).fire();
-        }
-    })
-    .catch(error => {
-        Swal.close();
-        console.error('Error:', error);
-        // Error catch pakai toast di kanan atas
-        Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            icon: 'error',
-            title: 'Terjadi Kesalahan!',
-            text: 'Gagal mengirim pengajuan. Silakan coba lagi.',
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        }).fire();
-    });
-        }); // End submit event listener
-
-        // Debug: Add click listener to submit button
-        const btnSubmit = document.getElementById('btnSubmit');
-        if (btnSubmit) {
-            console.log('btnSubmit found, attaching click listener for debug');
-            btnSubmit.addEventListener('click', function(e) {
-                console.log('=== SUBMIT BUTTON CLICKED ===');
-                console.log('liveness_passed at click:', livenessInput?.value);
-            });
-        } else {
-            console.error('btnSubmit NOT FOUND!');
-        }
-    } else {
-        console.error('serviceForm NOT FOUND!');
-    }
-}); // End DOMContentLoaded
-@if(session('error'))
-    document.addEventListener('DOMContentLoaded', function() {
-        Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            icon: 'error',
-            title: 'Gagal Memproses!',
-            html: '{!! session("error") !!}',
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        }).fire();
-    });
-@endif
-@if(session('success'))
-    document.addEventListener('DOMContentLoaded', function() {
-        Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            icon: 'success',
-            title: 'Berhasil Terkirim!',
-            text: '{{ session("success") }}',
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        }).fire();
-    });
-@endif
+    @if(session('error'))
+    showErrorToast(@json(session('error')), @json(session('error_solution') ?? ''));
+    @endif
+    @if(session('success'))
+    showSuccessToast(@json(session('success')));
+    @endif
+});
 </script>
 @endpush
 @endsection

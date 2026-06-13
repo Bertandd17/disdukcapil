@@ -207,7 +207,7 @@ window.clearDasarHukumFile = function() {
 
             if (file.size > 500 * 1024) {
                 this.value = '';
-                SwalHelper.error('Ukuran file maksimal 500 KB');
+                SwalHelper.toastError('Ukuran file maksimal 500 KB.', 'Kompres file atau pilih file dengan ukuran di bawah 500 KB.');
                 return;
             }
 
@@ -260,7 +260,7 @@ window.clearDasarHukumFile = function() {
                 const item = JSON.parse(el.textContent);
                 openDasarHukumModal('edit', item);
             } catch (err) {
-                SwalHelper.error('Gagal memuat data dasar hukum.');
+                SwalHelper.toastError('Gagal memuat data dasar hukum.', 'Muat ulang halaman, lalu coba lagi.');
             }
         });
     });
