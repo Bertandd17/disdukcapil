@@ -175,6 +175,7 @@
     </style>
 
     <link rel="stylesheet" href="{{ asset_v('css/page-loading.css') }}">
+    <link rel="stylesheet" href="{{ asset_v('css/site-footer.css') }}">
 
     @stack('styles')
 </head>
@@ -187,7 +188,7 @@
     {{-- Flash messages ditampilkan sebagai toast SweetAlert top-right pada DOMContentLoaded --}}
 
     {{-- Content --}}
-    <main class="flex-1 flex flex-col">
+    <main class="flex-1 flex flex-col has-fixed-site-footer--public">
         @yield('content')
     </main>
 

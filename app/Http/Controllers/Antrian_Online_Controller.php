@@ -358,24 +358,21 @@ class Antrian_Online_Controller extends Controller
     }
 
     /**
-     * Cari antrian berdasarkan nama, nomor antrian, atau NIK
+     * Cari antrian berdasarkan NIK atau nomor antrian
      */
     public function Cari_Antrian(Request $request)
     {
         // Support multiple search parameters
         $nomorAntrian = trim($request->input('nomor_antrian', ''));
-        $namaLengkap = trim($request->input('nama_lengkap', ''));
         $nik = trim($request->input('nik', ''));
         $search = trim($request->input('search', ''));
 
         // Log untuk debugging
         Log::info('Cari_Antrian called', [
             'nomor_antrian' => $nomorAntrian,
-            'nama_lengkap' => $namaLengkap,
-            'nik' => $nik,
+            'nik_masked' => $nik !== '' ? (substr(preg_replace('/\D/', '', $nik), 0, 6) . '****') : '',
             'search' => $search,
             'layanan_id' => $request->input('layanan_id'),
-            'all_params' => $request->all()
         ]);
 
         // Determine search strategy based on which parameter is provided
@@ -397,55 +394,39 @@ class Antrian_Online_Controller extends Controller
                 'nomor_antrian' => $searchUpper,
                 'cleaned' => $searchClean
             ]);
-        } elseif (!empty($namaLengkap)) {
-            // Search by name - menggunakan LIKE yang case-insensitive dan fleksibel
-            $searchLower = strtolower($namaLengkap);
-            $searchUpper = strtoupper($namaLengkap);
-            $searchCapitalized = ucwords(strtolower($namaLengkap));
-            
-            $query->where(function ($q) use ($namaLengkap, $searchLower, $searchUpper, $searchCapitalized) {
-                // Pencarian case-insensitive dengan berbagai format
-                $q->whereRaw('LOWER(nama_lengkap) LIKE ?', ['%' . $searchLower . '%'])
-                  ->orWhereRaw('UPPER(nama_lengkap) LIKE ?', ['%' . $searchUpper . '%'])
-                  ->orWhere('nama_lengkap', 'like', '%' . $namaLengkap . '%')
-                  ->orWhere('nama_lengkap', 'like', '%' . $searchCapitalized . '%')
-                  // Tambahan: cari juga di NIK dan alamat
-                  ->orWhere('nik', 'like', '%' . $namaLengkap . '%')
-                  ->orWhere('alamat', 'like', '%' . $namaLengkap . '%')
-                  // Fallback: cari dengan COLLATE utf8mb4_general_ci untuk case-insensitive
-                  ->orWhereRaw('nama_lengkap COLLATE utf8mb4_general_ci LIKE ?', ['%' . $namaLengkap . '%'])
-                  // Pencarian fuzzy dengan SOUNDEX untuk menangani kesalahan ketik
-                  ->orWhereRaw('SOUNDEX(nama_lengkap) = SOUNDEX(?)', [$namaLengkap]);
-            });
-            
-            Log::info('Searching by name', [
-                'nama_lengkap' => $namaLengkap,
-                'search_lower' => $searchLower,
-                'search_upper' => $searchUpper,
-                'search_capitalized' => $searchCapitalized
-            ]);
         } elseif (!empty($nik)) {
-            // Search by NIK
-            $query->where(function ($q) use ($nik) {
-                $q->where('nik', 'like', '%' . $nik . '%')
-                    ->orWhere('nama_lengkap', 'like', '%' . $nik . '%');
-            });
+            $nikDigits = preg_replace('/\D/', '', $nik);
+            if (strlen($nikDigits) !== 16) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'NIK harus 16 digit angka',
+                ], 422);
+            }
+
+            $query->where('nik', $nikDigits);
+
+            Log::info('Searching by NIK', [
+                'nik_masked' => substr($nikDigits, 0, 6) . '****' . substr($nikDigits, -4),
+            ]);
         } elseif (!empty($search)) {
-            // Generic search - try all fields
+            // Generic search - nomor antrian atau NIK
             $searchUpper = strtoupper($search);
             $searchClean = str_replace('-', '', $searchUpper);
-            
-            $query->where(function ($q) use ($search, $searchUpper, $searchClean) {
-                $q->whereRaw('LOWER(nama_lengkap) LIKE ?', ['%' . strtolower($search) . '%'])
-                  ->orWhere('nik', 'like', '%' . $search . '%')
-                  ->orWhere('nomor_antrian', $searchUpper)
-                  ->orWhere('nomor_antrian', 'like', '%' . $searchUpper . '%')
-                  ->orWhereRaw("REPLACE(UPPER(nomor_antrian), '-', '') LIKE ?", [$searchClean . '%']);
+            $searchDigits = preg_replace('/\D/', '', $search);
+
+            $query->where(function ($q) use ($search, $searchUpper, $searchClean, $searchDigits) {
+                $q->where('nomor_antrian', $searchUpper)
+                    ->orWhere('nomor_antrian', 'like', '%' . $searchUpper . '%')
+                    ->orWhereRaw("REPLACE(UPPER(nomor_antrian), '-', '') LIKE ?", [$searchClean . '%']);
+
+                if (strlen($searchDigits) === 16) {
+                    $q->orWhere('nik', $searchDigits);
+                }
             });
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Masukkan kata kunci pencarian (nomor antrian, nama, atau NIK)',
+                'message' => 'Masukkan nomor antrian atau NIK (16 digit)',
             ], 400);
         }
 
@@ -541,7 +522,7 @@ class Antrian_Online_Controller extends Controller
             'debug' => [
                 'params' => $request->all(),
                 'results_count' => $transformedData->count(),
-                'search_type' => !empty($nomorAntrian) ? 'nomor_antrian' : (!empty($namaLengkap) ? 'nama_lengkap' : (!empty($nik) ? 'nik' : 'search')),
+                'search_type' => !empty($nomorAntrian) ? 'nomor_antrian' : (!empty($nik) ? 'nik' : 'search'),
             ]
         ]);
     }
@@ -736,49 +717,51 @@ class Antrian_Online_Controller extends Controller
     }
 
     /**
-     * Lacak berkas berdasarkan nomor antrian atau nama lengkap
+     * Lacak berkas berdasarkan nomor antrian atau NIK
      */
     public function Lacak_Berkas(Request $request)
     {
-        // Support multiple parameter names
         $search = trim($request->input('search', ''));
         $nomorAntrian = trim($request->input('nomor_antrian', ''));
-        $namaLengkap = trim($request->input('nama_lengkap', ''));
+        $nik = trim($request->input('nik', ''));
 
-        // Determine primary search term
-        $searchTerm = $search ?: ($nomorAntrian ?: $namaLengkap);
+        if (!empty($nomorAntrian)) {
+            $searchTerm = $nomorAntrian;
+        } elseif (!empty($nik)) {
+            $searchTerm = preg_replace('/\D/', '', $nik);
+        } else {
+            $searchTerm = $search;
+        }
 
         if (empty($searchTerm)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Masukkan nomor antrian atau nama lengkap untuk melacak berkas',
+                'message' => 'Masukkan nomor antrian atau NIK (16 digit) untuk melacak berkas',
             ], 400);
         }
 
-        // Normalize search term
         $searchUpper = strtoupper($searchTerm);
         $searchClean = str_replace('-', '', $searchUpper);
-
-        // Detect if it's a queue number
-        $isQueueNumber = preg_match('/^[A-Z]{3}[-]?[\d]*[-]?[\d]*$/i', $searchTerm);
+        $isQueueNumber = (bool) preg_match('/^[A-Z]{3}[-]?[\d]*[-]?[\d]*$/i', $searchTerm);
 
         $query = Antrian_Online_Model::with(['layanan', 'lacak_berkas' => function ($q) {
             $q->orderBy('created_at', 'asc');
         }]);
 
-        // D8: Search all status (removed ->whereNotIn('status_antrian', ['selesai']))
-
         if ($isQueueNumber) {
-            // Search by queue number
             $query->where(function ($q) use ($searchUpper, $searchClean) {
                 $q->where('nomor_antrian', $searchUpper)
                     ->orWhere('nomor_antrian', 'like', $searchUpper . '%')
                     ->orWhere('nomor_antrian', 'like', '%' . $searchUpper . '%')
                     ->orWhereRaw("REPLACE(nomor_antrian, '-', '') LIKE ?", [$searchClean . '%']);
             });
+        } elseif (strlen(preg_replace('/\D/', '', $searchTerm)) === 16) {
+            $query->where('nik', preg_replace('/\D/', '', $searchTerm));
         } else {
-            // Search by name
-            $query->where('nama_lengkap', 'like', '%' . $searchTerm . '%');
+            return response()->json([
+                'success' => false,
+                'message' => 'Format tidak valid. Masukkan NIK 16 digit atau nomor antrian.',
+            ], 422);
         }
 
         $antrian = $query->first();
@@ -786,7 +769,7 @@ class Antrian_Online_Controller extends Controller
         if (!$antrian) {
             return response()->json([
                 'success' => false,
-                'message' => 'Data antrian tidak ditemukan. Silakan periksa kembali nomor antrian atau nama lengkap Anda.',
+                'message' => 'Data antrian tidak ditemukan. Silakan periksa kembali nomor antrian atau NIK Anda.',
             ], 404);
         }
 
@@ -1456,28 +1439,36 @@ class Antrian_Online_Controller extends Controller
      */
     public function Cari_Antrian_Post(Request $request)
     {
-        $search = trim($request->input('nama', ''));
+        $search = trim($request->input('nik', $request->input('nama', '')));
         $layananId = $request->input('layanan_id', '');
 
         if (empty($search)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Silakan masukkan nama lengkap atau nomor antrian untuk mencari',
+                'message' => 'Silakan masukkan NIK (16 digit) atau nomor antrian untuk mencari',
             ], 400);
         }
 
-        // Normalize search term
         $searchUpper = strtoupper($search);
         $searchClean = str_replace('-', '', $searchUpper);
+        $searchDigits = preg_replace('/\D/', '', $search);
+        $isQueueNumber = (bool) preg_match('/^[A-Z]{3}[-]?[\d]*[-]?[\d]*$/i', $search);
 
-        $query = Antrian_Online_Model::with(['layanan', 'lacak_berkas'])
-            ->where(function ($q) use ($search, $searchUpper, $searchClean) {
-                // Search by nomor_antrian (case-insensitive, multiple strategies)
-                $q->whereRaw("UPPER(nomor_antrian) LIKE ?", ['%' . $searchUpper . '%'])
-                    ->orWhereRaw("REPLACE(UPPER(nomor_antrian), '-', '') LIKE ?", [$searchClean . '%'])
-                    // Also search by nama_lengkap
-                    ->orWhere('nama_lengkap', 'like', '%' . $search . '%');
+        $query = Antrian_Online_Model::with(['layanan', 'lacak_berkas']);
+
+        if ($isQueueNumber) {
+            $query->where(function ($q) use ($searchUpper, $searchClean) {
+                $q->whereRaw('UPPER(nomor_antrian) LIKE ?', ['%' . $searchUpper . '%'])
+                    ->orWhereRaw("REPLACE(UPPER(nomor_antrian), '-', '') LIKE ?", [$searchClean . '%']);
             });
+        } elseif (strlen($searchDigits) === 16) {
+            $query->where('nik', $searchDigits);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Format tidak valid. Masukkan NIK 16 digit atau nomor antrian.',
+            ], 422);
+        }
 
         if (!empty($layananId)) {
             $query->where('layanan_id', $layananId);
@@ -1546,25 +1537,32 @@ class Antrian_Online_Controller extends Controller
         if (empty($search)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Masukkan nama atau nomor antrian untuk melacak berkas',
+                'message' => 'Masukkan NIK (16 digit) atau nomor antrian untuk melacak berkas',
             ], 400);
         }
 
-        // Normalize search term
         $searchUpper = strtoupper($search);
         $searchClean = str_replace('-', '', $searchUpper);
+        $searchDigits = preg_replace('/\D/', '', $search);
+        $isQueueNumber = (bool) preg_match('/^[A-Z]{3}[-]?[\d]*[-]?[\d]*$/i', $search);
 
-        // Cari berdasarkan nomor antrian atau nama lengkap dengan filter layanan
         $query = Antrian_Online_Model::with(['layanan', 'lacak_berkas' => function ($q) {
             $q->orderBy('created_at', 'asc');
-        }])
-            ->where(function ($q) use ($search, $searchUpper, $searchClean) {
-                // Search by nomor_antrian (case-insensitive, multiple strategies)
-                $q->whereRaw("UPPER(nomor_antrian) LIKE ?", ['%' . $searchUpper . '%'])
-                    ->orWhereRaw("REPLACE(UPPER(nomor_antrian), '-', '') LIKE ?", [$searchClean . '%'])
-                    // Also search by nama_lengkap
-                    ->orWhere('nama_lengkap', 'like', '%' . $search . '%');
+        }]);
+
+        if ($isQueueNumber) {
+            $query->where(function ($q) use ($searchUpper, $searchClean) {
+                $q->whereRaw('UPPER(nomor_antrian) LIKE ?', ['%' . $searchUpper . '%'])
+                    ->orWhereRaw("REPLACE(UPPER(nomor_antrian), '-', '') LIKE ?", [$searchClean . '%']);
             });
+        } elseif (strlen($searchDigits) === 16) {
+            $query->where('nik', $searchDigits);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Format tidak valid. Masukkan NIK 16 digit atau nomor antrian.',
+            ], 422);
+        }
 
         // Terapkan filter layanan jika layanan_id diberikan
         if (!empty($layananId)) {
@@ -1576,7 +1574,7 @@ class Antrian_Online_Controller extends Controller
         if (!$antrian) {
             return response()->json([
                 'success' => false,
-                'message' => 'Data antrian tidak ditemukan. Silakan periksa kembali nama atau nomor antrian Anda.',
+                'message' => 'Data antrian tidak ditemukan. Silakan periksa kembali NIK atau nomor antrian Anda.',
             ], 404);
         }
 

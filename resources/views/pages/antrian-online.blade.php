@@ -426,14 +426,14 @@
  <section class="py-16 bg-white">
  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
  <div class="text-center mb-12">
- <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mt-2">Lupa Nomor Antrian?</h2>
- <p class="text-gray-600 mt-3">Cari nomor antrian Anda dengan memasukkan nama atau nomor antrian</p>
+ <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mt-2">Lacak Status Berkas</h2>
+ <p class="text-gray-600 mt-3">Cari status berkas Anda dengan memasukkan NIK atau nomor antrian</p>
  </div>
 
  <div class="bg-gradient-to-br from-gray-50 to-emerald-50 rounded-2xl shadow-lg p-5 sm:p-8 border border-gray-100">
  <div class="grid md:grid-cols-3 gap-4 mb-6">
  <div class="md:col-span-2">
- <input type="text" id="searchInput" placeholder="Masukkan nama atau nomor antrian"
+ <input type="text" id="searchInput" placeholder="Masukkan NIK (16 digit) atau nomor antrian" inputmode="text" maxlength="20"
  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
  </div>
  <div>
@@ -895,6 +895,28 @@
  return letters + '-' + part1 + '-' + part2;
  };
 
+ window.normalizeNikInput = function(input) {
+ return String(input || '').replace(/\D/g, '');
+ };
+
+ window.isNikFormat = function(input) {
+ return /^\d{16}$/.test(window.normalizeNikInput(input));
+ };
+
+ window.buildLacakSearchParams = function(searchValue) {
+ var params = new URLSearchParams();
+ var trimmed = String(searchValue || '').trim();
+ if (!trimmed) return params;
+
+ if (window.isQueueNumberFormat(trimmed)) {
+ var formatted = window.formatQueueNumber ? window.formatQueueNumber(trimmed) : null;
+ params.append('nomor_antrian', formatted || trimmed.toUpperCase());
+ } else {
+ params.append('nik', window.normalizeNikInput(trimmed));
+ }
+ return params;
+ };
+
  // Fungsi pencarian antrian - global scope
  // ==== Auto-refresh status (polling) ====
  window.__lacakPollState = window.__lacakPollState || { interval: null, lastSearch: '', lastLayanan: '', lastStatuses: {} };
@@ -920,14 +942,7 @@
  if (!s) { window.stopLacakPolling(); return; }
  if (document.hidden) return;
 
- var params = new URLSearchParams();
- var isQueueNumber = window.isQueueNumberFormat ? window.isQueueNumberFormat(s) : false;
- if (isQueueNumber) {
- var formatted = window.formatQueueNumber ? window.formatQueueNumber(s) : null;
- params.append('nomor_antrian', formatted || s.toUpperCase());
- } else {
- params.append('nama_lengkap', s);
- }
+ var params = window.buildLacakSearchParams(s);
  if (window.__lacakPollState.lastLayanan) {
  params.append('layanan_id', window.__lacakPollState.lastLayanan);
  }
@@ -986,7 +1001,19 @@
  console.log('Layanan ID:', layananId);
 
  if (!searchValue) {
- toastError('Kata kunci pencarian kosong.', 'Masukkan nama lengkap atau nomor antrian, lalu tekan tombol Cari.');
+ toastError('Kata kunci pencarian kosong.', 'Masukkan NIK (16 digit) atau nomor antrian, lalu tekan tombol Cari.');
+ return;
+ }
+
+ var isQueueNumber = window.isQueueNumberFormat(searchValue);
+ if (!isQueueNumber && !window.isNikFormat(searchValue)) {
+ toastError(
+ 'Format pencarian tidak valid.',
+ 'Masukkan NIK 16 digit angka atau nomor antrian (contoh: ABC-123-456).'
+ );
+ if (resultsContainer) {
+ resultsContainer.innerHTML = '';
+ }
  return;
  }
 
@@ -1005,23 +1032,7 @@
  }
 
  // Build query params untuk antrian biasa
- var params = new URLSearchParams();
-
- // Deteksi apakah input adalah format nomor antrian
- var isQueueNumber = window.isQueueNumberFormat(searchValue);
-
- if (isQueueNumber) {
- var formattedNomor = window.formatQueueNumber(searchValue);
- if (formattedNomor) {
- params.append('nomor_antrian', formattedNomor);
- console.log('Searching queue number:', formattedNomor);
- } else {
- params.append('nomor_antrian', searchValue.toUpperCase());
- }
- } else {
- params.append('nama_lengkap', searchValue);
- console.log('Searching by name:', searchValue);
- }
+ var params = window.buildLacakSearchParams(searchValue);
 
  if (layananId) {
  params.append('layanan_id', layananId);
@@ -1083,13 +1094,13 @@
  } else {
  console.log('No results found. Message:', data.message || 'No message');
  window.stopLacakPolling();
- var debugInfo = data.debug ? '<br><small class="text-gray-400">Debug: Mencari ' + data.debug.search_type + ' = ' + (data.debug.params.nama_lengkap || data.debug.params.nomor_antrian || data.debug.params.search || 'kosong') + '</small>' : '';
- resultsContainer.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data antrian tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan nama atau nomor antrian yang dimasukkan benar.</p><div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg inline-block"><p class="text-sm text-yellow-700"><i class="fas fa-lightbulb mr-1"></i><strong>Tips:</strong> Gunakan nama lengkap sesuai KTP. Coba juga dengan nama lain yang mirip.</p></div>' + debugInfo + '</div>';
+ var debugInfo = data.debug ? '<br><small class="text-gray-400">Debug: Mencari ' + data.debug.search_type + ' = ' + (data.debug.params.nik || data.debug.params.nomor_antrian || data.debug.params.search || 'kosong') + '</small>' : '';
+ resultsContainer.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data antrian tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan NIK atau nomor antrian yang dimasukkan benar.</p><div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg inline-block"><p class="text-sm text-yellow-700"><i class="fas fa-lightbulb mr-1"></i><strong>Tips:</strong> Gunakan NIK 16 digit sesuai KTP atau nomor antrian yang Anda terima saat pendaftaran.</p></div>' + debugInfo + '</div>';
 
  // Tampilkan notifikasi cari kosong
  toastError(
  'Data untuk "' + searchValue + '" tidak ditemukan dalam sistem.',
- 'Pastikan nama atau nomor antrian yang dimasukkan benar. Gunakan nama lengkap sesuai KTP.'
+ 'Pastikan NIK (16 digit) atau nomor antrian yang dimasukkan benar.'
  );
  }
  })

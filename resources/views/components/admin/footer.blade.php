@@ -1,5 +1,5 @@
 {{-- Admin Footer --}}
-<footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+<footer class="site-footer site-footer--admin site-footer--fixed bg-white border-t border-gray-200 py-6">
     <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
             <div>

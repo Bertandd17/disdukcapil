@@ -1,0 +1,46 @@
+/**
+ * Footer tetap di bawah viewport — tidak ikut scroll konten
+ */
+:root {
+    --site-footer-height-public: 17.5rem;
+    --site-footer-height-admin: 5.5rem;
+}
+
+.site-footer--fixed {
+    position: fixed !important;
+    bottom: 0;
+    z-index: 35;
+}
+
+.site-footer--public {
+    left: 0;
+    right: 0;
+}
+
+.site-footer--admin {
+    left: 16rem;
+    right: 0;
+    transition: left 0.3s ease;
+}
+
+.main-content.expanded .site-footer--admin {
+    left: 5rem;
+}
+
+.has-fixed-site-footer--public {
+    padding-bottom: var(--site-footer-height-public);
+}
+
+.has-fixed-site-footer--admin {
+    padding-bottom: calc(var(--site-footer-height-admin) + 1rem);
+}
+
+@media (max-width: 768px) {
+    .site-footer--admin {
+        left: 0;
+    }
+
+    .main-content.expanded .site-footer--admin {
+        left: 0;
+    }
+}

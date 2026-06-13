@@ -11,15 +11,13 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  *
  * Security Features:
  * - nomor_antrian: string dengan format valid
- * - nama_lengkap: string untuk like query
+ * - nik: 16 digit untuk pencarian lacak berkas
  * - layanan_id: string untuk exact match
  */
 class CariAntrianRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -35,7 +33,7 @@ class CariAntrianRequest extends FormRequest
     {
         return [
             'nomor_antrian' => 'nullable|string|max:20|regex:/^[A-Z0-9\-]+$/',
-            'nama_lengkap' => 'nullable|string|max:100|regex:/^[\p{L}\s\.\-,]+$/u',
+            'nik' => 'nullable|string|regex:/^\d{16}$/',
             'layanan_id' => 'nullable|string|exists:layanan,layanan_id',
         ];
     }
@@ -50,8 +48,8 @@ class CariAntrianRequest extends FormRequest
         return [
             'nomor_antrian.string' => 'Nomor antrian harus berupa teks',
             'nomor_antrian.regex' => 'Format nomor antrian tidak valid',
-            'nama_lengkap.string' => 'Nama lengkap harus berupa teks',
-            'nama_lengkap.regex' => 'Nama hanya boleh mengandung huruf, spasi, titik, koma, dan tanda hubung',
+            'nik.string' => 'NIK harus berupa angka',
+            'nik.regex' => 'NIK harus 16 digit angka',
             'layanan_id.string' => 'ID layanan harus berupa teks',
             'layanan_id.exists' => 'Layanan tidak ditemukan',
         ];
@@ -59,11 +57,6 @@ class CariAntrianRequest extends FormRequest
 
     /**
      * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
     protected function failedValidation(Validator $validator): void
     {
@@ -78,21 +71,18 @@ class CariAntrianRequest extends FormRequest
 
     /**
      * Prepare inputs for validation.
-     *
-     * @return void
      */
     protected function prepareForValidation(): void
     {
-        // Trim dan sanitize input
         if ($this->has('nomor_antrian')) {
             $this->merge([
                 'nomor_antrian' => strtoupper(trim($this->nomor_antrian)),
             ]);
         }
 
-        if ($this->has('nama_lengkap')) {
+        if ($this->has('nik')) {
             $this->merge([
-                'nama_lengkap' => trim(strip_tags($this->nama_lengkap)),
+                'nik' => preg_replace('/\D/', '', trim($this->nik)),
             ]);
         }
     }

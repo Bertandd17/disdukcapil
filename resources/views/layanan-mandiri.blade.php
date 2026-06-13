@@ -2,6 +2,10 @@
 
 @section('content')
 @php
+$formDownloadAnchor = function (string $filename): string {
+    $href = asset('downloads/formulir/' . $filename);
+    return '<a href="' . e($href) . '" download="' . e($filename) . '" class="text-blue-600 font-bold hover:underline ml-1"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>';
+};
 $serviceConfig = [
     'kk_perubahan' => [
         'icon'         => 'fa-address-card',
@@ -9,7 +13,7 @@ $serviceConfig = [
         'id'           => 'kk',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) '.$formDownloadAnchor('F-1.02.pdf'),
             'KTP Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Kartu Keluarga Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Surat keterangan/bukti perubahan Peristiwa Kependudukan (cth: Paspor, SKPWNI) dan Peristiwa Penting.',
@@ -47,7 +51,7 @@ $serviceConfig = [
         'id'           => 'ganti_kepala_kk',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) '.$formDownloadAnchor('F-1.02.pdf'),
             'KTP Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Kartu Keluarga Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Akte Kematian Kepala Keluarga',
@@ -84,7 +88,7 @@ $serviceConfig = [
         'id'           => 'kk_hilang_rusak',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) '.$formDownloadAnchor('F-1.02.pdf'),
             'KTP Pemohon dengan Ukuran Berkas Maksimal 200 KB Berformat PDF',
             'Surat kehilangan dari kepolisian (jika hilang) atau KK yang rusak',
         ],
@@ -114,7 +118,7 @@ $serviceConfig = [
         'id'           => 'pisah_kk',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-1.02 (Formulir Pendaftaran Peristiwa Kependudukan) '.$formDownloadAnchor('F-1.02.pdf'),
             'KK lama',
             'Berumur sekurang-kurangnya 17 (tujuh belas) tahun atau sudah kawin.',
         ],
@@ -147,7 +151,7 @@ $serviceConfig = [
         'id'           => 'akte_kelahiran',
         'persyaratan'  => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran) '.$formDownloadAnchor('F-2.01.pdf'),
             'Surat keterangan kelahiran dari rumah sakit/Puskesmas/bidan/kepala desa.',
             'Buku nikah/kutipan akta perkawinan orang tua',
             'KK dan KTP orang tua',
@@ -185,7 +189,7 @@ $serviceConfig = [
         'id'    => 'akte_kematian',
         'persyaratan' => [
             'Wajib Mengambil Nomor Antrian',
-            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kematian) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Formulir F-2.01 (Formulir Permohonan Pencatatan Kematian) '.$formDownloadAnchor('F-2.01.pdf'),
             'Fotokopi surat kematian dari dokter atau kepala desa/lurah',
             'Fotokopi KK/KTP yang meninggal dunia.',
             'Fotokopi KK/KTP pemohon.',
@@ -224,7 +228,7 @@ $serviceConfig = [
         'id'    => 'lahir_mati',
         'persyaratan' => [
             'Wajib Mengambil Nomor Antrian',
-            'Mengisi Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran Mati) <a href="'.route('unduh-formulir').'" class="text-blue-600 font-bold hover:underline ml-1" target="_blank"><i class="fas fa-download mr-1"></i>Unduh di Sini</a>',
+            'Mengisi Formulir F-2.01 (Formulir Permohonan Pencatatan Kelahiran Mati) '.$formDownloadAnchor('F-2.01.pdf'),
             'Fotokopi surat keterangan lahir mati (RS/Bidan/Kades).',
             'Fotokopi KK Orang Tua.',
             'Fotokopi Saksi 1 dan Saksi 2 yang mengetahui peristiwa lahir mati.',
@@ -560,7 +564,7 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
                 </div>
 
                 <div id="step2" class="step-content p-5 space-y-4 hidden">
-                    <p class="text-sm text-gray-500 mb-1">Lengkapi data Anda dengan benar sesuai dokumen resmi.</p>
+                    <p class="text-sm text-gray-500 mb-1">Masukkan nomor antrian terlebih dahulu. NIK, nama, dan alamat pemohon terisi otomatis dari data antrian dan tidak dapat diubah manual.</p>
                     <div id="formFields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-100">
                         <button type="button" onclick="goToStep(1)"
@@ -674,6 +678,18 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
         outline: none; background: #fff;
     }
     .form-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px #dbeafe; }
+    .form-input.form-input--readonly,
+    .form-input[readonly] {
+        background: #f3f4f6;
+        color: #374151;
+        cursor: not-allowed;
+        border-color: #e5e7eb;
+    }
+    .form-input.form-input--readonly:focus,
+    .form-input[readonly]:focus {
+        border-color: #e5e7eb;
+        box-shadow: none;
+    }
     .form-input.loading {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' stroke='%233b82f6' stroke-width='4' fill='none' opacity='0.25'/%3E%3Cpath d='M12 2a10 10 0 0 1 10 10' stroke='%233b82f6' stroke-width='4' fill='none'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='1s' repeatCount='indefinite'/%3E%3C/path%3E%3C/svg%3E");
         background-repeat: no-repeat;
@@ -1006,11 +1022,18 @@ function getColorBadgeBg(color) {
     return map[color] || map.blue;
 }
 
+function isPemohonIdentityField(name) {
+    return ['nama_pemohon', 'nik_pemohon', 'alamat_pemohon', 'alamat'].includes(name);
+}
+
 function renderField(field) {
     const cls = 'form-input';
     let extraAttr = '';
     let fieldId = '';
     let fieldEvents = '';
+    const isReadonlyPemohon = isPemohonIdentityField(field.name);
+    const readonlyAttr = isReadonlyPemohon ? 'readonly aria-readonly="true"' : '';
+    const inputCls = cls + (isReadonlyPemohon ? ' form-input--readonly' : '');
 
     // Tambahkan ID khusus untuk field tertentu
     if (field.name === 'nomor_antrian') {
@@ -1025,18 +1048,18 @@ function renderField(field) {
         fieldId = 'id="alamatPemohonInput"';
     }
 
-    if (field.name && (field.name.toLowerCase().includes('nik') || field.name.toLowerCase().includes('nomor_kk'))) {
+    if (!isReadonlyPemohon && field.name && (field.name.toLowerCase().includes('nik') || field.name.toLowerCase().includes('nomor_kk'))) {
         extraAttr = `oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16);" maxlength="16"`;
     }
     const wajibAttr = field.required !== false ? 'data-wajib="true"' : '';
     if (field.type === 'textarea')
-        return `<textarea name="${field.name}" placeholder="${field.placeholder||''}" class="${cls} h-24 resize-none" ${fieldId} ${wajibAttr}></textarea>`;
+        return `<textarea name="${field.name}" placeholder="${field.placeholder||''}" class="${inputCls} h-24 resize-none" ${fieldId} ${readonlyAttr} ${wajibAttr}></textarea>`;
     if (field.type === 'select')
-        return `<select name="${field.name}" class="${cls}" ${fieldId} ${wajibAttr}>
+        return `<select name="${field.name}" class="${inputCls}" ${fieldId} ${wajibAttr}>
             <option value="">Pilih...</option>
             ${(field.options||[]).map(o=>`<option value="${o}">${o}</option>`).join('')}
         </select>`;
-    return `<input type="${field.type}" name="${field.name}" placeholder="${field.placeholder||''}" class="${cls}" ${fieldId} ${extraAttr} ${fieldEvents} ${wajibAttr}>`;
+    return `<input type="${field.type}" name="${field.name}" placeholder="${field.placeholder||''}" class="${inputCls}" ${fieldId} ${extraAttr} ${fieldEvents} ${readonlyAttr} ${wajibAttr}>`;
 }
 function goToStep(step) {
     currentStep = step;
