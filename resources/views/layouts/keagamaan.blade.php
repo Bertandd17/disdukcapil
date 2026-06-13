@@ -191,7 +191,7 @@
     <main class="main-content ml-64 min-h-screen flex flex-col">
         @include('components.keagamaan.navbar')
 
-        <div class="p-6 flex-1 min-h-0 has-fixed-site-footer--admin">
+        <div class="p-6 flex-1 min-h-0">
             {{-- Flash messages ditampilkan sebagai toast SweetAlert top-right pada DOMContentLoaded --}}
             @yield('content')
         </div>

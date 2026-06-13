@@ -188,7 +188,7 @@
     {{-- Flash messages ditampilkan sebagai toast SweetAlert top-right pada DOMContentLoaded --}}
 
     {{-- Content --}}
-    <main class="flex-1 flex flex-col has-fixed-site-footer--public">
+    <main class="flex-1 flex flex-col">
         @yield('content')
     </main>
 
