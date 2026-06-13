@@ -1,7 +1,7 @@
 @extends('layouts.user')
 
 @section('content')
-<main class="pt-0">
+<div class="page-content w-full">
     {{-- Hero Section --}}
     <section class="user-home-hero relative min-h-[600px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden">
         {{-- Background Figures --}}
@@ -951,7 +951,7 @@
             </div>
         </div>
     </section>
-</main>
+</div>
 
     {{-- Modal baca berita --}}
     <div class="news-modal-overlay" id="newsModalOverlay" onclick="closeNewsModal()">

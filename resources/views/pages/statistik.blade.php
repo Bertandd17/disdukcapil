@@ -1,7 +1,7 @@
 @extends('layouts.user')
 
 @section('content')
-<main class="pt-0">
+<div class="page-content w-full">
     {{-- Hero Section --}}
     <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,7 +102,7 @@
         </div>
     </section>
 
-</main>
+</div>
 @endsection
 
 @push('styles')

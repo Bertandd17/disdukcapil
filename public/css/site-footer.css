@@ -1,6 +1,8 @@
 /**
- * Footer sticky layout — mengikuti alur dokumen normal (bukan position: fixed).
- * Wrapper flex: body min-h-screen flex flex-col, main flex-1, footer shrink-0.
+ * Sticky footer — footer mengikuti alur dokumen normal.
+ * Body: min-h-screen flex flex-col
+ * Main: flex-grow
+ * Footer: shrink-0 (tinggi natural)
  */
 .site-footer {
     flex-shrink: 0;

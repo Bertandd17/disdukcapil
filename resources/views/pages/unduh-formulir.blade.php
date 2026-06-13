@@ -1,7 +1,7 @@
 @extends('layouts.user')
 
 @section('content')
-<main class="pt-0 bg-gray-50 min-h-screen pb-16">
+<div class="page-content w-full bg-gray-50 pb-16">
     {{-- Hero Section --}}
     <section class="relative bg-gradient-to-br from-blue-700 via-blue-800 to-cyan-900 text-white py-16 lg:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -171,5 +171,5 @@
         </div>
 
     </section>
-</main>
+</div>
 @endsection

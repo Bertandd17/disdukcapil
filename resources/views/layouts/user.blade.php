@@ -182,17 +182,18 @@
 <body class="bg-gray-50 min-h-screen flex flex-col">
     @include('components.page-loading')
 
-    {{-- Navbar --}}
+    {{-- Navbar (fixed) + spacer agar flex flow tetap benar --}}
     @include('components.user.navbar')
+    <div class="h-16 shrink-0" aria-hidden="true"></div>
 
     {{-- Flash messages ditampilkan sebagai toast SweetAlert top-right pada DOMContentLoaded --}}
 
-    {{-- Content --}}
-    <main class="flex-1 flex flex-col">
+    {{-- Konten halaman --}}
+    <main id="app-main" class="flex-grow flex flex-col w-full min-h-0">
         @yield('content')
     </main>
 
-    {{-- Footer --}}
+    {{-- Footer — setelah main, bukan di dalam main --}}
     @include('components.user.footer')
 
     {{-- Scripts --}}
