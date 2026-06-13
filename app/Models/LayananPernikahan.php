@@ -144,6 +144,10 @@ class LayananPernikahan extends Model
             }
         });
 
+        static::created(function (self $model): void {
+            \App\Services\PernikahanLacakBerkasService::recordStatus($model);
+        });
+
         static::updated(function (self $model): void {
             if ($model->isDirty('status') && $model->getOriginal('status') !== $model->status) {
                 StatusPerkawinanHistory::create([
@@ -153,6 +157,8 @@ class LayananPernikahan extends Model
                     'catatan' => 'Status berubah',
                     'changed_by' => auth()->id(),
                 ]);
+
+                \App\Services\PernikahanLacakBerkasService::recordStatus($model);
             }
         });
     }
@@ -253,6 +259,24 @@ class LayananPernikahan extends Model
     {
         $deadline = $this->getDeadlineUpload();
         return $deadline && $deadline->isPast();
+    }
+
+    /** @var array<string, int> */
+    public const STATUS_TO_STEP = [
+        self::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN => 1,
+        self::STATUS_DITOLAK_KEAGAMAAN => 1,
+        self::STATUS_MENUNGGU_APPROVE_TANGGAL => 2,
+        self::STATUS_TANGGAL_DITOLAK => 2,
+        self::STATUS_TANGGAL_DISETUJUI => 3,
+        self::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI => 3,
+        self::STATUS_DOKUMEN_PERLU_PERBAIKAN => 3,
+        self::STATUS_DOKUMEN_DIVERIFIKASI => 4,
+        self::STATUS_SELESAI => 5,
+    ];
+
+    public static function stepFromStatus(?string $status): int
+    {
+        return self::STATUS_TO_STEP[$status] ?? 1;
     }
 
     public function getStatusLabelAttribute(): string

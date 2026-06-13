@@ -7,6 +7,7 @@ use App\Http\Requests\SubmitPernikahanRequest;
 use App\Models\Antrian_Online_Model;
 use App\Models\DokumenPernikahan;
 use App\Models\LayananPernikahan;
+use App\Services\PernikahanLacakBerkasService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -458,17 +459,9 @@ class PernikahanController extends Controller
             }
 
             // Tentukan step berdasarkan status
-            $stepMap = [
-                LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN => 1,
-                LayananPernikahan::STATUS_DITOLAK_KEAGAMAAN => 1,
-                LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL => 2,
-                LayananPernikahan::STATUS_TANGGAL_DITOLAK => 2,
-                LayananPernikahan::STATUS_TANGGAL_DISETUJUI => 3,
-                LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI => 3,
-                LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN => 3,
-                LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI => 4,
-                LayananPernikahan::STATUS_SELESAI => 5,
-            ];
+            $step = LayananPernikahan::stepFromStatus($pernikahan->status);
+            PernikahanLacakBerkasService::backfillFromHistory($pernikahan);
+            $riwayat = PernikahanLacakBerkasService::buildRiwayat($pernikahan);
 
             return response()->json([
                 'success' => true,
@@ -477,12 +470,16 @@ class PernikahanController extends Controller
                     'nomor_antrian' => $pernikahan->nomor_antrian,
                     'status' => $pernikahan->status,
                     'status_label' => $pernikahan->status_label,
-                    'step' => $stepMap[$pernikahan->status] ?? 1,
+                    'step' => $step,
+                    'nama_pemohon' => $pernikahan->nama_pemohon,
+                    'nama_mempelai_pria' => $pernikahan->nama_mempelai_pria,
+                    'nama_mempelai_wanita' => $pernikahan->nama_mempelai_wanita,
                     'tanggal_perkawinan' => $pernikahan->tanggal_perkawinan?->format('d F Y'),
                     'nama_gereja' => $pernikahan->nama_gereja,
                     'catatan_keagamaan' => $pernikahan->catatan_keagamaan,
                     'catatan_admin' => $pernikahan->catatan_admin,
                     'alasan_ditolak' => $pernikahan->alasan_ditolak,
+                    'riwayat' => $riwayat,
                     'dokumen' => $pernikahan->dokumen->map(function ($doc) {
                         return [
                             'jenis_dokumen' => $doc->jenis_dokumen,

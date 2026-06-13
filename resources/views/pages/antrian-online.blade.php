@@ -917,7 +917,7 @@
 
  // Fungsi pencarian antrian - global scope
  // ==== Auto-refresh status (polling) ====
- window.__lacakPollState = window.__lacakPollState || { interval: null, lastSearch: '', lastLayanan: '', lastStatuses: {} };
+ window.__lacakPollState = window.__lacakPollState || { interval: null, lastSearch: '', lastLayanan: '', lastStatuses: {}, isPernikahanOnly: false };
 
  window.stopLacakPolling = function() {
  if (window.__lacakPollState.interval) {
@@ -927,11 +927,12 @@
  }
  };
 
- window.startLacakPolling = function(searchValue, layananId) {
+ window.startLacakPolling = function(searchValue, layananId, isPernikahanOnly) {
  window.stopLacakPolling();
  window.__lacakPollState.lastSearch = searchValue;
  window.__lacakPollState.lastLayanan = layananId || '';
- console.log('[Lacak Polling] Started for', searchValue);
+ window.__lacakPollState.isPernikahanOnly = !!isPernikahanOnly;
+ console.log('[Lacak Polling] Started for', searchValue, isPernikahanOnly ? '(pernikahan)' : '');
  window.__lacakPollState.interval = setInterval(window.pollLacakStatus, 10000);
  };
 
@@ -939,6 +940,33 @@
  var s = window.__lacakPollState.lastSearch;
  if (!s) { window.stopLacakPolling(); return; }
  if (document.hidden) return;
+
+ if (window.__lacakPollState.isPernikahanOnly) {
+ var apiUrl = '{{ url('/api/pernikahan/status/') }}' + encodeURIComponent(s);
+ fetch(apiUrl, {
+ method: 'GET',
+ headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+ })
+ .then(function(r) { return r.ok ? r.json() : null; })
+ .then(function(data) {
+ if (!data || !data.success || !data.data) return;
+ var container = document.getElementById('searchResults');
+ if (!container) return;
+ var item = data.data;
+ var key = item.nomor_antrian || item.pernikahan_id;
+ var newStatus = item.status || '';
+ var oldStatus = window.__lacakPollState.lastStatuses[key];
+ if (oldStatus && newStatus && oldStatus !== newStatus) {
+ toastSuccess('Status Diperbarui', key + ': ' + (item.status_label || newStatus));
+ }
+ if (newStatus) window.__lacakPollState.lastStatuses[key] = newStatus;
+ if (window.renderPernikahanResult) {
+ window.renderPernikahanResult([item], container);
+ }
+ })
+ .catch(function(e) { console.warn('[Lacak Polling] pernikahan error', e); });
+ return;
+ }
 
  var params = window.buildLacakSearchParams(s);
  if (window.__lacakPollState.lastLayanan) {
@@ -959,11 +987,14 @@
  var changed = false;
  data.data.forEach(function(item) {
  var key = item.nomor_antrian || item.antrian_online_id;
- var newStatus = item.status_antrian || item.status;
+ var newStatus = (item.pernikahan && item.pernikahan.status)
+ ? item.pernikahan.status
+ : (item.status_antrian || item.status);
  var oldStatus = window.__lacakPollState.lastStatuses[key];
  if (oldStatus && newStatus && oldStatus !== newStatus) {
+ var label = (item.pernikahan && item.pernikahan.status_label) ? item.pernikahan.status_label : newStatus;
+ toastSuccess('Status Diperbarui', key + ': ' + label);
  changed = true;
- toastSuccess('Status Diperbarui', key + ': ' + oldStatus + ' → ' + newStatus);
  }
  if (newStatus) window.__lacakPollState.lastStatuses[key] = newStatus;
  });
@@ -1020,16 +1051,15 @@
  resultsContainer.innerHTML = '<div class="text-center py-8"><div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-green-500 border-t-transparent mb-4"></div><p class="text-gray-500 font-medium">Mencari data antrian...</p></div>';
  }
 
- // Deteksi apakah ini adalah nomor antrian pernikahan (PNK-)
- var isPernikahan = searchValue.toUpperCase().startsWith('PNK-');
+ // Deteksi nomor antrian pernikahan (PNK-) atau coba antrian umum dulu
+ var isPernikahanPrefix = searchValue.toUpperCase().startsWith('PNK-');
 
- if (isPernikahan) {
- // Cari di tabel pernikahan
+ if (isPernikahanPrefix) {
  window.searchPernikahan(searchValue, resultsContainer);
  return;
  }
 
- // Build query params untuk antrian biasa
+ // Build query params untuk antrian (termasuk layanan pernikahan via nomor antrian umum)
  var params = window.buildLacakSearchParams(searchValue);
 
  if (layananId) {
@@ -1070,32 +1100,29 @@
  console.log('Rendering ' + data.data.length + ' results');
  window.renderSearchResults(data.data);
 
- // Seed status cache & start auto-refresh polling (skip pernikahan-only results)
+ // Seed status cache & start auto-refresh polling
  window.__lacakPollState.lastStatuses = {};
- var hasNonPernikahan = false;
  data.data.forEach(function(item) {
  var key = item.nomor_antrian || item.antrian_online_id;
- var st = item.status_antrian || item.status;
+ var st = (item.pernikahan && item.pernikahan.status)
+ ? item.pernikahan.status
+ : (item.status_antrian || item.status);
  if (key && st) window.__lacakPollState.lastStatuses[key] = st;
- if (!(item.nomor_antrian && String(item.nomor_antrian).indexOf('PNK-') === 0)) {
- hasNonPernikahan = true;
- }
  });
- if (hasNonPernikahan) {
- window.startLacakPolling(searchValue, layananId);
- } else {
- window.stopLacakPolling();
- }
+ window.startLacakPolling(searchValue, layananId, false);
 
  // Notifikasi cari berhasil
  toastSuccess('Ditemukan!', data.data.length + ' data ditemukan untuk "' + searchValue + '"');
  } else {
  console.log('No results found. Message:', data.message || 'No message');
+ // Fallback pernikahan hanya untuk nomor antrian (bukan NIK)
+ if (window.isQueueNumberFormat(searchValue)) {
+ window.searchPernikahan(searchValue, resultsContainer, true);
+ return;
+ }
  window.stopLacakPolling();
  var debugInfo = data.debug ? '<br><small class="text-gray-400">Debug: Mencari ' + data.debug.search_type + ' = ' + (data.debug.params.nik || data.debug.params.nomor_antrian || data.debug.params.search || 'kosong') + '</small>' : '';
  resultsContainer.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data antrian tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan NIK atau nomor antrian yang dimasukkan benar.</p><div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg inline-block"><p class="text-sm text-yellow-700"><i class="fas fa-lightbulb mr-1"></i><strong>Tips:</strong> Gunakan NIK 16 digit sesuai KTP atau nomor antrian yang Anda terima saat pendaftaran.</p></div>' + debugInfo + '</div>';
-
- // Tampilkan notifikasi cari kosong
  toastError(
  'Data untuk "' + searchValue + '" tidak ditemukan dalam sistem.',
  'Pastikan NIK (16 digit) atau nomor antrian yang dimasukkan benar.'
@@ -1119,9 +1146,9 @@
  }
  };
 
- // Fungsi pencarian pernikahan
- window.searchPernikahan = function(nomorAntrian, container) {
- var apiUrl = '{{ url('/api/pernikahan/status/') }}' + nomorAntrian;
+ // Fungsi pencarian pernikahan (isFallback = true jika dipanggil setelah antrian.search kosong)
+ window.searchPernikahan = function(nomorAntrian, container, isFallback) {
+ var apiUrl = '{{ url('/api/pernikahan/status/') }}' + encodeURIComponent(nomorAntrian);
 
  fetch(apiUrl, {
  method: 'GET',
@@ -1142,13 +1169,28 @@
  .then(function(data) {
  if (data.success && data.data) {
  window.renderPernikahanResult([data.data], container);
+ window.__lacakPollState.lastStatuses = {};
+ var key = data.data.nomor_antrian || data.data.pernikahan_id;
+ if (key && data.data.status) {
+ window.__lacakPollState.lastStatuses[key] = data.data.status;
+ }
+ window.startLacakPolling(nomorAntrian, '', true);
  toastSuccess('Ditemukan!', 'Data pernikahan ditemukan untuk "' + nomorAntrian + '"');
+ } else {
+ if (isFallback) {
+ window.stopLacakPolling();
+ container.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data antrian tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan NIK atau nomor antrian yang dimasukkan benar.</p></div>';
+ toastError(
+ 'Data untuk "' + nomorAntrian + '" tidak ditemukan dalam sistem.',
+ 'Pastikan NIK (16 digit) atau nomor antrian yang dimasukkan benar.'
+ );
  } else {
  container.innerHTML = '<div class="text-center py-8 animate-fade-in"><div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-3xl text-gray-400"></i></div><p class="text-gray-500 font-medium">Data pernikahan tidak ditemukan.</p><p class="text-sm text-gray-400 mt-1">Pastikan nomor antrian pernikahan yang dimasukkan benar (format: PNK-XXXXXXXX).</p></div>';
  toastError(
  'Data pernikahan untuk "' + nomorAntrian + '" tidak ditemukan.',
  'Pastikan nomor antrian pernikahan benar (format: PNK-XXXXXXXX).'
  );
+ }
  }
  })
  .catch(function(err) {
@@ -1183,16 +1225,23 @@
  var statusIcon = statusConfig.icon;
 
  // Progress bar untuk step
- var stepWidth = (item.step / 5) * 100;
+ var progressInfo = window.resolvePernikahanProgress(item, null);
+ var stepWidth = progressInfo.stepWidth;
  var progressHtml = '<div class="mt-3">' +
  '<div class="flex justify-between text-xs text-gray-500 mb-1">' +
  '<span>Progress</span>' +
- '<span>Step ' + item.step + ' dari 5</span>' +
+ '<span>' + progressInfo.progressLabel + '</span>' +
  '</div>' +
  '<div class="w-full bg-gray-200 rounded-full h-2">' +
- '<div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: ' + stepWidth + '%"></div>' +
+ '<div class="bg-gradient-to-r ' + progressInfo.progressGradient + ' h-2 rounded-full transition-all duration-500" style="width: ' + stepWidth + '%"></div>' +
  '</div>' +
+ (progressInfo.progressSubtitle ? '<p class="text-xs text-red-700 mt-1 font-medium">' + progressInfo.progressSubtitle + '</p>' : '') +
  '</div>';
+
+ var timelineHtml = '';
+ if (progressInfo.lacakSorted && progressInfo.lacakSorted.length > 0) {
+ timelineHtml = window.buildLacakTimelineHtml(progressInfo.lacakSorted, window.PERNIKAHAN_LACAK_COLORS);
+ }
 
  return '<div class="search-result-card bg-white border-2 ' + statusConfig.border + ' rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer" style="animation-delay: 0s" onclick="window.showPernikahanDetail(' + JSON.stringify(item).replace(/"/g, '&quot;') + ')">' +
  '<div class="flex items-center gap-2 mb-3">' +
@@ -1216,6 +1265,7 @@
  '<div><i class="fas fa-calendar mr-1 text-purple-500"></i>' + (item.tanggal_perkawinan || '-') + '</div>' +
  '<div><i class="fas fa-church mr-1 text-purple-500"></i>' + (item.nama_gereja || '-') + '</div>' +
  '</div>' +
+ timelineHtml +
  '</div>';
  }).join('');
 
@@ -1237,7 +1287,8 @@
  };
 
  var statusConfig = statusPernikahanConfig[pernikahan.status] || statusPernikahanConfig['MENUNGGU_KONFIRMASI_KEAGAMAAN'];
- var stepWidth = (pernikahan.step / 5) * 100;
+ var progressInfo = window.resolvePernikahanProgress(pernikahan, null);
+ var stepWidth = progressInfo.stepWidth;
 
  var modalContent = `
  <div class="p-6">
@@ -1271,7 +1322,7 @@
  <div class="mb-4">
  <div class="flex justify-between text-xs text-gray-500 mb-1">
  <span>Progress Pengajuan</span>
- <span>Step ${pernikahan.step} dari 5</span>
+ <span>Step ${progressInfo.currentStep} dari ${progressInfo.totalSteps}</span>
  </div>
  <div class="w-full bg-gray-200 rounded-full h-3">
  <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all" style="width: ${stepWidth}%"></div>
@@ -1343,6 +1394,30 @@
  'Selesai': 5,
  'Ditolak': null,
  'Dibatalkan': null
+ };
+
+ window.PERNIKAHAN_STEP_MAP = {
+ 'MENUNGGU_KONFIRMASI_KEAGAMAAN': 1,
+ 'DITOLAK_KEAGAMAAN': 1,
+ 'MENUNGGU_APPROVE_TANGGAL': 2,
+ 'TANGGAL_DITOLAK': 2,
+ 'TANGGAL_DISETUJUI': 3,
+ 'DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI': 3,
+ 'DOKUMEN_PERLU_PERBAIKAN': 3,
+ 'DOKUMEN_DIVERIFIKASI': 4,
+ 'SELESAI': 5
+ };
+
+ window.PERNIKAHAN_LACAK_COLORS = {
+ 'Konfirmasi Keagamaan': { hex: '#f59e0b' },
+ 'Ditolak': { hex: '#ef4444' },
+ 'Persetujuan Tanggal': { hex: '#3b82f6' },
+ 'Tanggal Ditolak': { hex: '#f97316' },
+ 'Tanggal Disetujui': { hex: '#22c55e' },
+ 'Verifikasi Dokumen': { hex: '#a855f7' },
+ 'Dokumen Perlu Perbaikan': { hex: '#f97316' },
+ 'Dokumen Diverifikasi': { hex: '#14b8a6' },
+ 'Selesai': { hex: '#10b981' }
  };
 
  window.sortLacakBerkasChronological = function(items) {
@@ -1420,6 +1495,48 @@
  progressLabel: 'Step ' + currentStep + ' dari ' + totalSteps,
  progressSubtitle: null,
  lacakSorted: lacakSorted
+ };
+ };
+
+ /**
+ * Hitung progress khusus layanan pernikahan dari status + riwayat lacak_berkas.
+ */
+ window.resolvePernikahanProgress = function(pernikahan, antrian) {
+ var totalSteps = 5;
+ var status = pernikahan.status || 'MENUNGGU_KONFIRMASI_KEAGAMAAN';
+ var isDitolak = status === 'DITOLAK_KEAGAMAAN' || status === 'TANGGAL_DITOLAK';
+ var lacakSorted = window.sortLacakBerkasChronological(
+ (pernikahan.riwayat && pernikahan.riwayat.length)
+ ? pernikahan.riwayat
+ : ((antrian && antrian.lacak_berkas) ? antrian.lacak_berkas : [])
+ );
+
+ if (isDitolak) {
+ var failedAtStep = window.PERNIKAHAN_STEP_MAP[status] || 1;
+ return {
+ isDitolak: true,
+ isTerminal: true,
+ currentStep: failedAtStep,
+ totalSteps: totalSteps,
+ stepWidth: Math.round((failedAtStep / totalSteps) * 100),
+ progressLabel: 'Step ' + failedAtStep + ' dari ' + totalSteps,
+ progressSubtitle: 'Permohonan ditolak pada tahap ' + failedAtStep,
+ lacakSorted: lacakSorted,
+ progressGradient: 'from-red-500 to-rose-600'
+ };
+ }
+
+ var currentStep = window.PERNIKAHAN_STEP_MAP[status] || 1;
+ return {
+ isDitolak: false,
+ isTerminal: status === 'SELESAI',
+ currentStep: currentStep,
+ totalSteps: totalSteps,
+ stepWidth: Math.round((currentStep / totalSteps) * 100),
+ progressLabel: 'Step ' + currentStep + ' dari ' + totalSteps,
+ progressSubtitle: null,
+ lacakSorted: lacakSorted,
+ progressGradient: 'from-purple-500 to-pink-500'
  };
  };
 
@@ -1603,14 +1720,18 @@
 
  var prefixText = nomorAntrian.substring(0, 2);
 
- // Progress selaras riwayat lacak_berkas (bukan paksa 5/5 saat Ditolak)
- var progressInfo = window.resolveAntrianProgress(antrian);
+ // Progress selaras status pernikahan + riwayat lacak_berkas
+ var progressInfo = hasPernikahan
+ ? window.resolvePernikahanProgress(antrian.pernikahan, antrian)
+ : window.resolveAntrianProgress(antrian);
  var isDitolak = progressInfo.isDitolak;
- var isDibatalkan = progressInfo.isDibatalkan;
+ var isDibatalkan = hasPernikahan ? false : progressInfo.isDibatalkan;
  var isTerminal = progressInfo.isTerminal;
  var currentStep = progressInfo.currentStep;
  var stepWidth = progressInfo.stepWidth;
- var progressGradient = isDitolak ? 'from-red-500 to-rose-600' : (isDibatalkan ? 'from-rose-400 to-rose-600' : 'from-green-500 to-emerald-500');
+ var progressGradient = progressInfo.progressGradient
+ ? progressInfo.progressGradient
+ : (isDitolak ? 'from-red-500 to-rose-600' : (isDibatalkan ? 'from-rose-400 to-rose-600' : 'from-green-500 to-emerald-500'));
  var progressSubtitleHtml = progressInfo.progressSubtitle
  ? '<p class="text-xs text-red-700 mt-1 font-medium">' + progressInfo.progressSubtitle + '</p>'
  : '';
@@ -1663,10 +1784,9 @@
  '</div>';
 
  var timelineHtml = '';
- if (hasPernikahan && antrian.pernikahan.history_count > 0 && (!antrian.lacak_berkas || antrian.lacak_berkas.length === 0)) {
- timelineHtml = '<div class="mt-4 pt-4 border-t border-gray-100"><p class="text-xs text-gray-500"><i class="fas fa-history mr-1"></i>Riwayat: ' + antrian.pernikahan.history_count + ' update status</p></div>';
- } else if (progressInfo.lacakSorted.length > 0) {
- timelineHtml = window.buildLacakTimelineHtml(progressInfo.lacakSorted, statusColors);
+ if (progressInfo.lacakSorted.length > 0) {
+ var timelineColors = hasPernikahan ? window.PERNIKAHAN_LACAK_COLORS : statusColors;
+ timelineHtml = window.buildLacakTimelineHtml(progressInfo.lacakSorted, timelineColors);
  }
 
  // Dokumen final dari pernikahan (Akta + 3 KK)

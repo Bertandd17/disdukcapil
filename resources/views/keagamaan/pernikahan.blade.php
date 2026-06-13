@@ -85,6 +85,18 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  }
  return '<span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700"><i class="fas fa-clock mr-1"></i>Pending</span>';
  };
+
+ // Tombol upload berkas hanya untuk status yang masih memerlukan unggahan
+ $canUploadBerkas = function ($item) {
+ if ($item->status === \App\Models\LayananPernikahan::STATUS_SELESAI) {
+ return false;
+ }
+ return in_array($item->status, [
+ \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
+ \App\Models\LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
+ \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
+ ], true);
+ };
 ?>
 
 <div class="min-h-screen bg-gray-50">
@@ -212,6 +224,14 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  <span><i class="fas fa-calendar mr-1"></i>{{ $item->tanggal_perkawinan->format('d M Y') }}</span>
  @endif
  </div>
+ @if($canUploadBerkas($item))
+ <div class="mt-3 pt-3 border-t border-gray-100" onclick="event.stopPropagation()">
+ <a href="{{ route('keagamaan.pernikahan.upload-berkas') }}"
+ class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition">
+ <i class="fas fa-upload"></i>Upload Berkas
+ </a>
+ </div>
+ @endif
  </div>
  @empty
  <div class="text-center py-8 text-gray-500">
@@ -929,6 +949,15 @@ function showDetail(pernikahanId) {
  <button onclick="openKonfirmasiModal('${escHtml(p.pernikahan_id)}')" class="modal-action-btn btn-konfirmasi">
  <i class="fas fa-check"></i>Konfirmasi
  </button>
+ </div>
+ ` : ''}
+
+ ${p.can_upload_berkas ? `
+ <div class="pt-4 mt-2 border-t border-gray-100">
+ <a href="${escHtml(p.upload_url)}"
+ class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition">
+ <i class="fas fa-upload"></i>Upload Berkas
+ </a>
  </div>
  ` : ''}
  </div>

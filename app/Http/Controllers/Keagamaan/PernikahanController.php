@@ -327,6 +327,13 @@ class PernikahanController extends Controller
                     'ktp_files' => $ktpFiles,
                     'dokumen_final' => $dokumenFinal,
                     'can_konfirmasi' => $pernikahan->status === LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN,
+                    'can_upload_berkas' => $pernikahan->status !== LayananPernikahan::STATUS_SELESAI
+                        && in_array($pernikahan->status, [
+                            LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
+                            LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
+                            LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
+                        ], true),
+                    'upload_url' => route('keagamaan.pernikahan.upload-berkas'),
                     'detail_url' => route('keagamaan.pernikahan.show', $pernikahan->pernikahan_id),
                 ],
             ]);
@@ -713,6 +720,10 @@ class PernikahanController extends Controller
                         case LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI:
                             $statusLabel = 'Dokumen OK';
                             $statusColor = 'teal';
+                            break;
+                        case LayananPernikahan::STATUS_SELESAI:
+                            $statusLabel = 'Selesai';
+                            $statusColor = 'green';
                             break;
                     }
 

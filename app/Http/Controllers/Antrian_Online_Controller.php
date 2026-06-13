@@ -12,6 +12,7 @@ use App\Models\StatusPerkawinanHistory;
 use App\Services\FileEncryptionService;
 use App\Services\KtpOcrService;
 use App\Services\EasyOcrService;
+use App\Services\PernikahanLacakBerkasService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -481,6 +482,12 @@ class Antrian_Online_Controller extends Controller
                 }
             }
 
+            // Untuk pernikahan: gunakan riwayat lacak yang disinkronkan (termasuk hasil backfill)
+            $lacakItems = $item->lacak_berkas;
+            if ($pernikahanData && ! empty($pernikahanData['riwayat'])) {
+                $lacakItems = collect($pernikahanData['riwayat']);
+            }
+
             return [
                 'antrian_online_id' => $item->antrian_online_id,
                 'nomor_antrian' => $item->nomor_antrian,
@@ -496,15 +503,21 @@ class Antrian_Online_Controller extends Controller
                     'layanan_id' => $item->layanan->layanan_id,
                     'nama_layanan' => $item->layanan->nama_layanan,
                 ] : null,
-                'lacak_berkas' => $item->lacak_berkas ? $item->lacak_berkas->map(function ($lb) {
+                'lacak_berkas' => $lacakItems ? $lacakItems->map(function ($lb) {
+                    $isArray = is_array($lb);
+                    $lacakId = $isArray ? null : ($lb->lacak_berkas_id ?? null);
+                    $fileBerkas = $isArray ? null : ($lb->file_berkas ?? null);
                     return [
-                        'lacak_berkas_id' => $lb->lacak_berkas_id,
-                        'status' => $lb->status,
-                        'tanggal' => $lb->tanggal ?: ($lb->created_at ? $lb->created_at->format('d M Y') : date('d M Y')),
-                        'keterangan' => $lb->keterangan,
-                        'alasan_penolakan' => $lb->alasan_penolakan,
-                        'file_berkas' => $lb->file_berkas,
-                        'download_url' => $lb->file_berkas ? route('lacak-berkas.download-final', ['id' => $lb->lacak_berkas_id]) : null,
+                        'lacak_berkas_id' => $lacakId,
+                        'status' => $isArray ? ($lb['status'] ?? '') : $lb->status,
+                        'tanggal' => $isArray
+                            ? ($lb['tanggal'] ?? date('d M Y'))
+                            : ($lb->tanggal ?: ($lb->created_at ? $lb->created_at->format('d M Y') : date('d M Y'))),
+                        'keterangan' => $isArray ? ($lb['keterangan'] ?? null) : $lb->keterangan,
+                        'alasan_penolakan' => $isArray ? ($lb['alasan_penolakan'] ?? null) : $lb->alasan_penolakan,
+                        'file_berkas' => $fileBerkas,
+                        'created_at' => $isArray ? ($lb['created_at'] ?? null) : ($lb->created_at?->toIso8601String()),
+                        'download_url' => $fileBerkas ? route('lacak-berkas.download-final', ['id' => $lacakId]) : null,
                     ];
                 }) : [],
                 'pernikahan' => $pernikahanData,
@@ -572,26 +585,34 @@ class Antrian_Online_Controller extends Controller
 
         $statusLabel = LayananPernikahan::STATUS_TO_LABEL[$pernikahan->status] ?? $pernikahan->status;
 
-        $historyCount = 0;
-        try {
-            $historyCount = StatusPerkawinanHistory::where('pernikahan_id', $pernikahan->pernikahan_id)->count();
-        } catch (\Throwable $e) {
-            // table mungkin belum ada, abaikan
+        PernikahanLacakBerkasService::backfillFromHistory($pernikahan);
+        $riwayat = PernikahanLacakBerkasService::buildRiwayat($pernikahan);
+
+        $historyCount = count($riwayat);
+        if ($historyCount === 0) {
+            try {
+                $historyCount = StatusPerkawinanHistory::where('pernikahan_id', $pernikahan->pernikahan_id)->count();
+            } catch (\Throwable $e) {
+                // table mungkin belum ada, abaikan
+            }
         }
 
         return [
             'pernikahan_id' => $pernikahan->pernikahan_id,
             'status' => $pernikahan->status,
             'status_label' => $statusLabel,
+            'step' => LayananPernikahan::stepFromStatus($pernikahan->status),
             'tanggal_perkawinan' => $pernikahan->tanggal_perkawinan
                 ? $pernikahan->tanggal_perkawinan->format('d M Y')
                 : null,
             'nama_gereja' => $pernikahan->nama_gereja,
+            'nama_pemohon' => $pernikahan->nama_pemohon,
             'dokumen_final' => $dokumenFinal,
             'dokumen_final_uploaded_at' => $pernikahan->dokumen_final_uploaded_at
                 ? $pernikahan->dokumen_final_uploaded_at->format('d M Y H:i')
                 : null,
             'history_count' => $historyCount,
+            'riwayat' => $riwayat,
         ];
     }
 
