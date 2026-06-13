@@ -142,9 +142,24 @@
         return '';
     }
 
+    function normalizeOcrExtractError(problem) {
+        var text = normalizeWhitespace(problem).toLowerCase();
+        if (!text) return null;
+        if (/ocr\.?space|easyocr|ocr gagal|tidak menemukan teks|ekstrak|extract|service ocr|fallback|ocr online|easyocr_api_url|membaca ktp/i.test(text)
+            || (text.indexOf('ocr') !== -1 && (text.indexOf('gagal') !== -1 || text.indexOf('fallback') !== -1 || text.indexOf('tidak') !== -1))) {
+            return {
+                problem: 'Gagal Melakukan Ekstrak data',
+                solution: 'Pastikan yang anda upload adalah KTP atau perbaiki cara pengambilan gambar anda agar lebih baik lagi.'
+            };
+        }
+        return null;
+    }
+
     function defaultErrorSolution(problem) {
         var text = normalizeWhitespace(problem).toLowerCase();
         if (!text) return 'Periksa data yang Anda masukkan, lalu coba lagi.';
+        var ocrNorm = normalizeOcrExtractError(problem);
+        if (ocrNorm) return ocrNorm.solution;
         if (EMPTY_REQUIRED_PATTERN.test(text)) return 'Lengkapi kolom yang bertanda wajib, lalu lanjutkan kembali.';
         if (/pdf|format file|berformat/i.test(text)) return 'Pilih ulang file dengan format PDF sesuai ketentuan.';
         if (/ukuran file|2mb|5mb|maksimal/i.test(text)) return 'Kompres file atau pilih file yang ukurannya sesuai batas maksimal.';
@@ -196,6 +211,11 @@
         var text = firstNonEmpty(opts.problem, opts.text, htmlToText(opts.html));
         var genericTitle = !title || /^(error!?|gagal!?|terjadi kesalahan!?|gagal memproses!?)$/i.test(title);
         var problem = text || (genericTitle ? 'Terjadi kesalahan saat memproses permintaan.' : title);
+        var ocrNorm = normalizeOcrExtractError(problem);
+        if (ocrNorm) {
+            problem = ocrNorm.problem;
+            opts.solution = ocrNorm.solution;
+        }
 
         if (genericTitle) {
             title = 'Terjadi kesalahan';

@@ -25,17 +25,51 @@
         var m = document.querySelector('meta[name="csrf-token"]');
         return m ? m.getAttribute('content') : '';
     };
+    function ocrExtractFailCopy() {
+        if (window.ANTRIAN_OCR_MESSAGES && window.ANTRIAN_OCR_MESSAGES.extractFail) {
+            return window.ANTRIAN_OCR_MESSAGES.extractFail;
+        }
+        return {
+            problem: 'Gagal Melakukan Ekstrak data',
+            solution: 'Pastikan yang anda upload adalah KTP atau perbaiki cara pengambilan gambar anda agar lebih baik lagi.'
+        };
+    }
+
+    function friendlyOcrError(msg) {
+        if (typeof window.normalizeOcrExtractError === 'function') {
+            var normalized = window.normalizeOcrExtractError(msg);
+            if (normalized && normalized.solution) return normalized;
+        }
+        var text = String(msg || '').toLowerCase();
+        if (/ocr\.?space|easyocr|ocr gagal|tidak menemukan teks|fallback|service ocr/i.test(text)
+            || (text.indexOf('ocr') !== -1 && (text.indexOf('gagal') !== -1 || text.indexOf('fallback') !== -1))) {
+            return ocrExtractFailCopy();
+        }
+        return { problem: msg, solution: null };
+    }
+
     var toastError = function (msg) {
+        var copy = friendlyOcrError(msg);
+        var problem = copy.problem || msg;
+        var solution = copy.solution;
         if (window.SwalHelper && typeof window.SwalHelper.toastError === 'function') {
-            window.SwalHelper.toastError(msg);
+            window.SwalHelper.toastError(problem, solution || undefined);
         } else if (typeof fireToast === 'function') {
-            fireToast({ type: 'error', icon: 'error', title: 'Terjadi kesalahan', problem: 'Terjadi kesalahan pada sistem.', solution: 'Periksa data yang dimasukkan dan coba lagi.', timer: 5000 });
+            fireToast({
+                type: 'error',
+                icon: 'error',
+                title: 'Terjadi kesalahan',
+                problem: problem,
+                solution: solution || 'Periksa data yang dimasukkan dan coba lagi.',
+                timer: 5000
+            });
         } else if (window.__nativeAlert) {
-            window.__nativeAlert(msg);
+            window.__nativeAlert(problem);
         } else if (window.console && typeof window.console.error === 'function') {
-            window.console.error(msg);
+            window.console.error(problem);
         }
     };
+
     var toastSuccess = function (msg) {
         if (window.SwalHelper && typeof window.SwalHelper.toastSuccess === 'function') {
             window.SwalHelper.toastSuccess(msg);
@@ -197,7 +231,7 @@
         }
 
         // ---------- OCR panel ----------
-        function setOcrPanel(mode, msg) {
+        function setOcrPanel(mode, msg, titleOverride) {
             var panel = $('ocrConfidence');
             var wrap  = $('ocrStatusIcon');
             var icon  = $('ocrStatusFa');
@@ -215,9 +249,18 @@
             panel.className = s.p;
             if (wrap)  wrap.className  = s.w;
             if (icon)  icon.className  = s.i;
-            if (title) { title.className = s.t; title.textContent = s.tt; }
+            if (title) {
+                title.className = s.t;
+                title.textContent = titleOverride || s.tt;
+            }
             if (txt)   txt.textContent = msg || s.m;
             if (badge) { badge.className = s.b; badge.textContent = s.bt; }
+        }
+
+        function showOcrExtractError(rawMsg) {
+            var copy = friendlyOcrError(rawMsg);
+            toastError(rawMsg);
+            setOcrPanel('error', copy.solution || copy.problem, copy.problem);
         }
 
         // ---------- step 1 next → OCR dengan EasyOCR ----------
@@ -249,8 +292,7 @@
                 
                 if (!res.ok || !res.d) {
                     var errMsg = (res.d && res.d.message) ? res.d.message : 'OCR gagal diproses';
-                    toastError(errMsg);
-                    setOcrPanel('error', errMsg);
+                    showOcrExtractError(errMsg);
                     syncNextBtn();
                     return;
                 }
@@ -268,8 +310,7 @@
                 } else {
                     // OCR gagal
                     var errMsg = (res.d.message) ? res.d.message : 'OCR tidak dapat membaca KTP';
-                    toastError(errMsg);
-                    setOcrPanel('error', errMsg);
+                    showOcrExtractError(errMsg);
                     syncNextBtn();
                 }
             })

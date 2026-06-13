@@ -832,23 +832,6 @@
  }
  return { problem: msg, solution: null };
  };
-
- (function patchOcrToastHelper() {
- function apply() {
- if (!window.SwalHelper || typeof SwalHelper.toastError !== 'function' || SwalHelper._ocrToastPatched) return;
- var original = SwalHelper.toastError.bind(SwalHelper);
- SwalHelper.toastError = function(masalah, solusi, duration) {
- var norm = window.normalizeOcrExtractError(masalah);
- if (norm.solution) {
- return original(norm.problem, norm.solution, duration);
- }
- return original(masalah, solusi, duration);
- };
- SwalHelper._ocrToastPatched = true;
- }
- apply();
- document.addEventListener('DOMContentLoaded', apply);
- })();
 </script>
 
 {{-- Search Antrian Functions - didefinisikan sebelum antrian-ocr.js agar selalu tersedia --}}
