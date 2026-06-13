@@ -162,12 +162,20 @@
                         icon: false,
                         showCancelButton: true,
                         showDenyButton: false,
+                        denyButtonText: null,
                         confirmButtonText: 'Konfirmasi',
                         cancelButtonText: 'Batal',
                         reverseButtons: true,
                         buttonsStyling: false,
                         allowOutsideClick: false,
                         allowEscapeKey: false,
+                        didOpen: function() {
+                            // Hapus tombol deny (merah) dari DOM setelah modal terbuka
+                            var denyBtn = document.querySelector('.swal2-deny');
+                            if (denyBtn) { denyBtn.remove(); }
+                            var denyContainer = document.querySelector('.swal2-deny-container');
+                            if (denyContainer) { denyContainer.remove(); }
+                        },
                         customClass: {
                             popup: 'swal-dd-modal',
                             confirmButton: 'swal-dd-btn swal-dd-btn-danger',
@@ -184,7 +192,22 @@
                                 showConfirmButton: false,
                                 showDenyButton: false,
                                 showCancelButton: false,
-                                didOpen: function() { Swal.showLoading(); },
+                                didOpen: function() {
+                                    Swal.showLoading();
+                                    // Hapus tombol deny dari DOM agar tidak muncul selama loading
+                                    var denyBtn = document.querySelector('.swal2-deny');
+                                    if (denyBtn) { denyBtn.remove(); }
+                                    var denyContainer = document.querySelector('.swal2-deny-container');
+                                    if (denyContainer) { denyContainer.remove(); }
+                                    // Strip juga tombol styled yang mengandung class danger/cancel
+                                    document.querySelectorAll('.swal2-styled, .swal-dd-btn').forEach(function(el) {
+                                        if (el.classList.contains('swal2-deny') ||
+                                            el.classList.contains('swal-dd-btn-danger') ||
+                                            el.classList.contains('swal-dd-btn-cancel')) {
+                                            el.remove();
+                                        }
+                                    });
+                                },
                                 customClass: { popup: 'swal-dd-modal', htmlContainer: 'swal2-html-container' }
                             });
                             document.getElementById('logoutForm').submit();
