@@ -312,7 +312,18 @@
                 cancelButtonColor: '#6b7280',
                 allowOutsideClick: false,
                 allowEscapeKey: false,
-                buttonsStyling: true
+                buttonsStyling: true,
+                didOpen: () => {
+                    // Hapus tombol deny (merah) dari DOM setelah modal terbuka
+                    const denyBtn = document.querySelector('.swal2-deny');
+                    if (denyBtn) {
+                        denyBtn.remove();
+                    }
+                    const denyContainer = document.querySelector('.swal2-deny-container');
+                    if (denyContainer) {
+                        denyContainer.remove();
+                    }
+                }
             }).then((result) => {
                 if (!result.isConfirmed) return;
 
