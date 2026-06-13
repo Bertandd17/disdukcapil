@@ -32,6 +32,7 @@
 
     <!-- SweetAlert2 Disdukcapil Notification System -->
     <script src="{{ asset_v('js/sweetalert-disdukcapil.js') }}"></script>
+    <script src="{{ asset_v('js/sweetalert-helper.js') }}"></script>
 
     <!-- Notifikasi Disdukcapil Helper -->
     <script src="{{ asset('js/notifikasi-disdukcapil.js') }}"></script>

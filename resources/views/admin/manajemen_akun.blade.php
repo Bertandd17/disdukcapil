@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('content')
     {{-- 1. Welcome Banner --}}
@@ -146,17 +146,17 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap *</label>
-                            <input type="text" name="name" id="fullName" required class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Nama lengkap">
+                            <input type="text" name="name" id="fullName" data-wajib="true" class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Nama lengkap">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Username *</label>
-                            <input type="text" name="username" id="username_field" required class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Username">
+                            <input type="text" name="username" id="username_field" data-wajib="true" class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Username">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Agama *</label>
-                        <select name="agama" id="agama_select" required class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white">
+                        <select name="agama" id="agama_select" data-wajib="true" class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white">
                             <option value="" disabled selected>Pilih agama...</option>
                             @foreach($list_agama as $agama)
                                 <option value="{{ $agama->jenis_keagamaan_id }}">{{ $agama->nama_jenis_keagamaan }}</option>
@@ -166,7 +166,7 @@
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Alamat Lengkap *</label>
-                        <textarea name="alamat" id="alamat_field" required rows="2" class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none" placeholder="Alamat lengkap"></textarea>
+                        <textarea name="alamat" id="alamat_field" data-wajib="true" rows="2" class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none" placeholder="Alamat lengkap"></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -228,8 +228,8 @@
             // 3. UI Reset
             document.getElementById('modalTitle').innerText = 'Tambah Akun Baru';
             document.getElementById('statusSection').classList.add('hidden');
-            document.getElementById('password_field').required = true;
-            document.getElementById('password_confirmation_field').required = true;
+            SwalHelper.setFieldWajib(document.getElementById('password_field'), true);
+            SwalHelper.setFieldWajib(document.getElementById('password_confirmation_field'), true);
             document.getElementById('pwReq').classList.remove('hidden');
             document.getElementById('pwConfReq').classList.remove('hidden');
 
@@ -253,8 +253,8 @@
             document.getElementById('statusSection').classList.remove('hidden');
             document.getElementById('password_field').value = '';
             document.getElementById('password_confirmation_field').value = '';
-            document.getElementById('password_field').required = false;
-            document.getElementById('password_confirmation_field').required = false;
+            SwalHelper.setFieldWajib(document.getElementById('password_field'), false);
+            SwalHelper.setFieldWajib(document.getElementById('password_confirmation_field'), false);
             document.getElementById('pwReq').classList.add('hidden');
             document.getElementById('pwConfReq').classList.add('hidden');
 

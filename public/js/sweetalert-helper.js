@@ -578,6 +578,176 @@
     }
 
     // =====================================================
+    // VALIDASI KOLOM WAJIB (pengganti HTML required)
+    // =====================================================
+
+    const DEFAULT_WAJIB_SOLUTION = 'Lengkapi kolom yang bertanda wajib (*), lalu coba lagi.';
+
+    function getFieldLabel(field) {
+        if (!field) return 'Kolom';
+        var explicit = field.getAttribute('data-field-label');
+        if (explicit) return explicit.trim();
+
+        var id = field.id;
+        if (id) {
+            var lblFor = document.querySelector('label[for="' + id.replace(/"/g, '\\"') + '"]');
+            if (lblFor) {
+                return stripHtmlToText(lblFor.textContent).replace(/\*/g, '').trim() || 'Kolom';
+            }
+        }
+
+        var wrap = field.closest('.mb-4, .mb-3, .grid > div, [class*="col-"]') || field.parentElement;
+        if (wrap) {
+            var lbl = wrap.querySelector('label');
+            if (lbl && lbl !== field) {
+                var text = stripHtmlToText(lbl.textContent).replace(/\*/g, '').trim();
+                if (text) return text;
+            }
+        }
+
+        return field.getAttribute('placeholder') || field.name || 'Kolom';
+    }
+
+    function isWajibField(field) {
+        if (!field || field.disabled) return false;
+        var val = field.getAttribute('data-wajib');
+        return val === '' || val === 'true' || val === '1';
+    }
+
+    function isFieldEmpty(field) {
+        if (!field || field.disabled) return false;
+        if (field.type === 'file') {
+            return !field.files || field.files.length === 0;
+        }
+        if (field.type === 'checkbox') {
+            return !field.checked;
+        }
+        if (field.type === 'radio') {
+            if (!field.name) return !field.checked;
+            var form = field.form || document;
+            var checked = form.querySelector('input[type="radio"][name="' + field.name.replace(/"/g, '\\"') + '"]:checked');
+            return !checked;
+        }
+        return !String(field.value || '').trim();
+    }
+
+    function markFieldInvalid(field, invalid) {
+        if (!field) return;
+        if (invalid) {
+            field.classList.add('border-red-500');
+            field.style.borderColor = '#ef4444';
+        } else {
+            field.classList.remove('border-red-500');
+            field.style.borderColor = '';
+        }
+    }
+
+    /**
+     * Validasi semua [data-wajib] dalam container.
+     * @returns {{ valid: boolean, field?: HTMLElement, label?: string }}
+     */
+    function validateWajibFields(container, options) {
+        options = options || {};
+        var root = typeof container === 'string'
+            ? document.querySelector(container)
+            : (container || document);
+        if (!root) return { valid: true };
+
+        var selector = options.selector || '[data-wajib]:not([data-wajib="false"])';
+        var fields = root.querySelectorAll(selector);
+        var seenRadio = {};
+        var firstInvalid = null;
+        var firstLabel = '';
+
+        fields.forEach(function(field) {
+            if (!isWajibField(field)) return;
+            if (field.type === 'radio') {
+                if (seenRadio[field.name]) return;
+                seenRadio[field.name] = true;
+            }
+            var empty = isFieldEmpty(field);
+            markFieldInvalid(field, empty);
+            if (empty && !firstInvalid) {
+                firstInvalid = field;
+                firstLabel = getFieldLabel(field);
+            }
+        });
+
+        if (firstInvalid) {
+            if (!options.silent) {
+                var problem = options.problem || (firstLabel + ' wajib diisi.');
+                var solution = options.solution || DEFAULT_WAJIB_SOLUTION;
+                toastError(problem, solution);
+            }
+            if (options.focus !== false) {
+                try { firstInvalid.focus(); } catch (e) { /* ignore */ }
+            }
+            return { valid: false, field: firstInvalid, label: firstLabel };
+        }
+
+        return { valid: true };
+    }
+
+    function toastFieldRequired(label, solution) {
+        var fieldLabel = label || 'Kolom';
+        return toastError(fieldLabel + ' wajib diisi.', solution || DEFAULT_WAJIB_SOLUTION);
+    }
+
+    function setFieldWajib(field, wajib) {
+        if (!field) return;
+        if (wajib) {
+            field.setAttribute('data-wajib', 'true');
+        } else {
+            field.removeAttribute('data-wajib');
+            markFieldInvalid(field, false);
+        }
+    }
+
+    function prepareFormsForWajibValidation() {
+        document.querySelectorAll('form').forEach(function(form) {
+            if (form.getAttribute('data-skip-wajib') === 'true') return;
+            if (form.querySelector('[data-wajib]')) {
+                form.setAttribute('novalidate', 'novalidate');
+            }
+        });
+    }
+
+    function initFormValidation() {
+        prepareFormsForWajibValidation();
+
+        document.addEventListener('submit', function(e) {
+            var form = e.target;
+            if (!form || form.tagName !== 'FORM') return;
+            if (form.getAttribute('data-skip-wajib') === 'true') return;
+            if (!form.querySelector('[data-wajib]')) return;
+
+            var result = validateWajibFields(form, { silent: false });
+            if (!result.valid) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            }
+        }, true);
+
+        document.addEventListener('input', function(e) {
+            if (e.target && isWajibField(e.target) && !isFieldEmpty(e.target)) {
+                markFieldInvalid(e.target, false);
+            }
+        });
+
+        document.addEventListener('change', function(e) {
+            if (e.target && isWajibField(e.target) && !isFieldEmpty(e.target)) {
+                markFieldInvalid(e.target, false);
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFormValidation);
+    } else {
+        initFormValidation();
+    }
+
+    // =====================================================
     // EXPORT KE SwalHelper
     // =====================================================
 
@@ -616,7 +786,15 @@
 
         // Loading
         loading: showLoading,
-        close: closeSwal
+        close: closeSwal,
+
+        // Validasi kolom wajib
+        getFieldLabel,
+        isFieldEmpty,
+        validateWajibFields,
+        toastFieldRequired,
+        setFieldWajib,
+        initFormValidation
     });
 
     window.toastSuccess = toastSuccess;

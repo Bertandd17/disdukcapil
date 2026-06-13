@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('title', 'Manajemen Organisasi')
 
@@ -209,7 +209,7 @@
 
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Pejabat <span class="text-red-500">*</span></label>
-                <input type="text" name="nama_pejabat" id="editNamaPejabat" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan nama lengkap pejabat">
+                <input type="text" name="nama_pejabat" id="editNamaPejabat" data-wajib="true" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan nama lengkap pejabat">
                 <p class="text-xs text-gray-500 mt-1">Contoh: Budi Santoso, S.Kom</p>
             </div>
 

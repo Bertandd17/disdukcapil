@@ -1,4 +1,4 @@
-@extends('layouts.user')
+﻿@extends('layouts.user')
 
 @section('content')
 @php
@@ -891,7 +891,7 @@ function openServiceModal(config, serviceName) {
                         <label class="block text-xs font-semibold text-gray-700 mb-1">
                             Pilih Agama <span class="text-red-400">*</span>
                         </label>
-                        <select name="jenis_agama" id="jenisAgamaSelect" class="form-input" required onchange="loadKeagamaanByAgama(this.value)">
+                        <select name="jenis_agama" id="jenisAgamaSelect" class="form-input" data-wajib="true" onchange="loadKeagamaanByAgama(this.value)">
                             <option value="">Pilih Agama...</option>
                         </select>
                     </div>
@@ -899,7 +899,7 @@ function openServiceModal(config, serviceName) {
                         <label class="block text-xs font-semibold text-gray-700 mb-1">
                             Nama Tempat Keagamaan <span class="text-red-400">*</span>
                         </label>
-                        <select name="keagamaan_id" id="keagamaanSelect" class="form-input" required disabled>
+                        <select name="keagamaan_id" id="keagamaanSelect" class="form-input" data-wajib="true" disabled>
                             <option value="">Pilih agama terlebih dahulu...</option>
                         </select>
                     </div>
@@ -907,7 +907,7 @@ function openServiceModal(config, serviceName) {
                         <label class="block text-xs font-semibold text-gray-700 mb-1">
                             Tanggal Perkawinan (Rencana) <span class="text-red-400">*</span>
                         </label>
-                        <input type="date" name="tanggal_perkawinan" class="form-input" required min="${getMinDate()}">
+                        <input type="date" name="tanggal_perkawinan" class="form-input" data-wajib="true" min="${getMinDate()}">
                     </div>
                 </div>
             </div>
@@ -937,7 +937,7 @@ function openServiceModal(config, serviceName) {
                                 <p class="text-xs font-semibold text-gray-600">Pilih File</p>
                                 <p class="text-[9px] text-gray-400 mt-1">PDF/Gambar, maks. 2MB</p>
                                 <input type="file" name="${file.name}" accept=".pdf,.jpg,.jpeg,.png"
-                                       ${file.required !== false ? 'required' : ''}
+                                       ${file.required !== false ? 'data-wajib="true"' : ''}
                                        class="hidden" onchange="handleFileSelect(this,'${file.name}')">
                             </label>
                         </div>
@@ -973,7 +973,7 @@ function openServiceModal(config, serviceName) {
                         <p class="text-sm font-semibold text-gray-600">Pilih File PDF</p>
                         <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Format: PDF, maks. 2MB</p>
                         <input type="file" name="${file.name}" accept=".pdf"
-                               ${file.required !== false ? 'required' : ''}
+                               ${file.required !== false ? 'data-wajib="true"' : ''}
                                class="hidden" onchange="handleFileSelect(this,'${file.name}')">
                     </label>
                 </div>
@@ -1028,14 +1028,15 @@ function renderField(field) {
     if (field.name && (field.name.toLowerCase().includes('nik') || field.name.toLowerCase().includes('nomor_kk'))) {
         extraAttr = `oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16);" maxlength="16"`;
     }
+    const wajibAttr = field.required !== false ? 'data-wajib="true"' : '';
     if (field.type === 'textarea')
-        return `<textarea name="${field.name}" placeholder="${field.placeholder||''}" class="${cls} h-24 resize-none" ${fieldId} required></textarea>`;
+        return `<textarea name="${field.name}" placeholder="${field.placeholder||''}" class="${cls} h-24 resize-none" ${fieldId} ${wajibAttr}></textarea>`;
     if (field.type === 'select')
-        return `<select name="${field.name}" class="${cls}" ${fieldId} required>
+        return `<select name="${field.name}" class="${cls}" ${fieldId} ${wajibAttr}>
             <option value="">Pilih...</option>
             ${(field.options||[]).map(o=>`<option value="${o}">${o}</option>`).join('')}
         </select>`;
-    return `<input type="${field.type}" name="${field.name}" placeholder="${field.placeholder||''}" class="${cls}" ${fieldId} ${extraAttr} ${fieldEvents} ${field.required !== false ? 'required' : ''}>`;
+    return `<input type="${field.type}" name="${field.name}" placeholder="${field.placeholder||''}" class="${cls}" ${fieldId} ${extraAttr} ${fieldEvents} ${wajibAttr}>`;
 }
 function goToStep(step) {
     currentStep = step;
@@ -1074,7 +1075,7 @@ function goToStep(step) {
 
 function validateAndGoStep3() {
     const inputs = document.getElementById('step2')
-        .querySelectorAll('input[required],textarea[required],select[required]');
+        .querySelectorAll('[data-wajib]:not([data-wajib="false"])');
     let valid = true;
     let hasEmpty = false;
     let errMsg = 'Nomor harus tepat 16 angka.';

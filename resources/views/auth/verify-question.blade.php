@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -260,7 +260,7 @@
                     <label for="security_answer" class="block text-sm font-medium text-gray-700">
                         <i class="fas fa-key mr-2"></i>Jawaban Anda
                     </label>
-                    <input type="text" id="security_answer" name="security_answer" required
+                    <input type="text" id="security_answer" name="security_answer" data-wajib="true"
                         placeholder="Ketik jawaban Anda..."
                         class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-lg"
                         autofocus>

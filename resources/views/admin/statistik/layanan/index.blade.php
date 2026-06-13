@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('title', 'Statistik Layanan - Admin Disdukcapil Toba')
 
@@ -157,7 +157,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun <span class="text-red-500">*</span></label>
-                    <select name="tahun" id="field_tahun" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select name="tahun" id="field_tahun" data-wajib="true" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         @for($y = date('Y'); $y >= date('Y') - 5; $y--)
                             <option value="{{ $y }}">{{ $y }}</option>
                         @endfor
@@ -165,7 +165,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Bulan <span class="text-red-500">*</span></label>
-                    <select name="bulan" id="field_bulan" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select name="bulan" id="field_bulan" data-wajib="true" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         @foreach(App\Models\StatistikLayananBulanan::BULAN_INDONESIA as $key => $nama)
                             <option value="{{ $key }}">{{ $nama }}</option>
                         @endforeach
@@ -236,7 +236,7 @@
             @csrf
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun</label>
-                <select name="tahun" id="gen_tahun" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <select name="tahun" id="gen_tahun" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" data-wajib="true">
                     @for($y = date('Y'); $y >= date('Y') - 5; $y--)
                         <option value="{{ $y }}">{{ $y }}</option>
                     @endfor

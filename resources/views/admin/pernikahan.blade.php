@@ -700,6 +700,7 @@ function showConfirm(action, id) {
         btn.className = 'flex-1 px-4 py-3 rounded-xl font-medium text-white bg-green-600 hover:bg-green-700 transition-colors';
         btn.textContent = 'Ya, Setujui';
         reasonInput.parentElement.classList.add('hidden');
+        reasonInput.removeAttribute('data-wajib');
     } else if (action === 'reject' || action === 'reject_doc') {
         icon.className = 'w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 bg-red-100';
         icon.innerHTML = '<i class="fas fa-times text-3xl text-red-600"></i>';
@@ -710,7 +711,7 @@ function showConfirm(action, id) {
         btn.className = 'flex-1 px-4 py-3 rounded-xl font-medium text-white bg-red-600 hover:bg-red-700 transition-colors';
         btn.textContent = 'Ya, Tolak';
         reasonInput.parentElement.classList.remove('hidden');
-        reasonInput.required = true;
+        reasonInput.setAttribute('data-wajib', 'true');
     }
 
     btn.onclick = () => executeConfirm();

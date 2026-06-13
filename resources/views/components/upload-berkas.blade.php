@@ -1,4 +1,4 @@
-{{--
+﻿{{--
     Komponen Upload Berkas Standar
 
     Props:
@@ -38,7 +38,7 @@
                    name="{{ $name }}{{ ($multiple ?? false) ? '[]' : '' }}"
                    class="d-none upload-input"
                    accept="{{ $accept ?? 'image/jpeg,image/jpg,image/png,application/pdf' }}"
-                   {{ ($required ?? false) ? 'required' : '' }}
+                   {{ ($required ?? false) ? 'data-wajib="true"' : '' }}
                    {{ ($multiple ?? false) ? 'multiple' : '' }}
                    data-max-size="{{ ($maxSize ?? 5) * 1024 * 1024 }}">
         </label>
@@ -84,7 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validasi ukuran file
         if (file.size > maxSize) {
             const maxSizeMB = maxSize / (1024 * 1024);
-            SwalHelper.toastError(`Ukuran file terlalu besar. Maksimal ${maxSizeMB}MB`);
+            SwalHelper.toastError(
+                'Ukuran file terlalu besar. Maksimal ' + maxSizeMB + 'MB.',
+                'Kompres file atau pilih file dengan ukuran di bawah batas maksimal.'
+            );
             input.value = '';
             return;
         }
@@ -108,8 +111,8 @@ document.addEventListener('DOMContentLoaded', function() {
         preview.classList.add('d-none');
         uploadText.textContent = '📎 Pilih File';
 
-        // Disable tombol submit jika required
-        if (input.hasAttribute('required')) {
+        // Disable tombol submit jika wajib
+        if (input.hasAttribute('data-wajib')) {
             const submitBtn = input.closest('form')?.querySelector('button[type="submit"]');
             if (submitBtn) {
                 submitBtn.setAttribute('disabled', 'disabled');

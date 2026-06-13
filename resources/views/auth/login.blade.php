@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -272,7 +272,7 @@
 
                 <!-- Username Input -->
                 <div class="input-group">
-                    <input type="text" id="username" name="username" required placeholder=" "
+                    <input type="text" id="username" name="username" data-wajib="true" placeholder=" "
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer"
                            value="{{ old('username') }}">
                     <label for="username" class="absolute left-4 top-3 text-gray-400 pointer-events-none">
@@ -283,7 +283,7 @@
                 <!-- Password Input -->
                 <div class="input-group">
                     <div class="relative">
-                        <input type="password" id="password" name="password" required placeholder=" "
+                        <input type="password" id="password" name="password" data-wajib="true" placeholder=" "
                                class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer">
                         <label for="password" class="absolute left-4 top-3 text-gray-400 pointer-events-none">
                             <i class="fas fa-lock mr-2"></i>Password

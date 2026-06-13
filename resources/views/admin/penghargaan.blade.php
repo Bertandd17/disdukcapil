@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('content')
 @php
@@ -175,26 +175,26 @@
             <div id="penghargaanMethod"></div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penghargaan <span class="text-red-500">*</span></label>
-                <input type="text" name="nama" id="field_nama" required maxlength="200"
+                <input type="text" name="nama" id="field_nama" data-wajib="true" maxlength="200"
                     placeholder="Contoh: Penghargaan Kualitas Pelayanan Publik"
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Instansi Pemberi <span class="text-red-500">*</span></label>
-                <input type="text" name="instansi" id="field_instansi" required maxlength="200"
+                <input type="text" name="instansi" id="field_instansi" data-wajib="true" maxlength="200"
                     placeholder="Contoh: Kementerian PANRB"
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi <span class="text-red-500">*</span></label>
-                <textarea name="deskripsi_singkat" id="field_deskripsi_singkat" required rows="3"
+                <textarea name="deskripsi_singkat" id="field_deskripsi_singkat" data-wajib="true" rows="3"
                     placeholder="Tuliskan deskripsi singkat penghargaan..."
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"></textarea>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Tingkat <span class="text-red-500">*</span></label>
-                    <select name="tingkat" id="field_tingkat" required
+                    <select name="tingkat" id="field_tingkat" data-wajib="true"
                         class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
                         <option value="">Pilih Tingkat</option>
                         <option value="Nasional">Nasional</option>
@@ -204,7 +204,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun <span class="text-red-500">*</span></label>
-                    <input type="text" name="tahun" id="field_tahun" required
+                    <input type="text" name="tahun" id="field_tahun" data-wajib="true"
                         min="2000" max="{{ date('Y') }}" placeholder="{{ date('Y') }}"
                         class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
                 </div>

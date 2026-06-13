@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('content')
 @php
@@ -119,7 +119,7 @@
                 <label class="block text-sm font-semibold text-gray-700 mb-1">
                     Nama <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="nama" id="field_nama" required maxlength="100"
+                <input type="text" name="nama" id="field_nama" data-wajib="true" maxlength="100"
                     placeholder="Contoh: Undang-Undang No. 24 Tahun 2013"
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     value="{{ old('nama') }}">
@@ -129,7 +129,7 @@
                 <label class="block text-sm font-semibold text-gray-700 mb-1">
                     Deskripsi Singkat <span class="text-red-500">*</span>
                 </label>
-                <textarea name="deskripsi_singkat" id="field_deskripsi_singkat" required rows="4"
+                <textarea name="deskripsi_singkat" id="field_deskripsi_singkat" data-wajib="true" rows="4"
                     placeholder="Tuliskan deskripsi singkat mengenai dasar hukum ini..."
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none">{{ old('deskripsi_singkat') }}</textarea>
             </div>

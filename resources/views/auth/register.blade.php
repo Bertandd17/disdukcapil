@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -96,7 +96,7 @@
 
                 <!-- Name Input -->
                 <div class="input-group">
-                    <input type="text" id="name" name="name" required placeholder=" "
+                    <input type="text" id="name" name="name" data-wajib="true" placeholder=" "
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer placeholder-shown:border-gray-300 placeholder-shown:focus:border-blue-500"
                            value="{{ old('name') }}">
                     <label for="name" class="absolute left-4 top-3 text-gray-400 pointer-events-none transition-all duration-300 peer-focus:text-blue-600 peer-focus:-translate-y-6 peer-focus:scale-90 peer-placeholder-shown:opacity-100">
@@ -106,7 +106,7 @@
 
                 <!-- Username Input -->
                 <div class="input-group">
-                    <input type="text" id="username" name="username" required placeholder=" "
+                    <input type="text" id="username" name="username" data-wajib="true" placeholder=" "
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer placeholder-shown:border-gray-300 placeholder-shown:focus:border-blue-500"
                            value="{{ old('username') }}">
                     <label for="username" class="absolute left-4 top-3 text-gray-400 pointer-events-none transition-all duration-300 peer-focus:text-blue-600 peer-focus:-translate-y-6 peer-focus:scale-90 peer-placeholder-shown:opacity-100">
@@ -117,7 +117,7 @@
                 <!-- Password Input -->
                 <div class="input-group">
                     <div class="relative">
-                        <input type="password" id="password" name="password" required placeholder=" "
+                        <input type="password" id="password" name="password" data-wajib="true" placeholder=" "
                                class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer placeholder-shown:border-gray-300 placeholder-shown:focus:border-blue-500">
                         <label for="password" class="absolute left-4 top-3 text-gray-400 pointer-events-none transition-all duration-300 peer-focus:text-blue-600 peer-focus:-translate-y-6 peer-focus:scale-90 peer-placeholder-shown:opacity-100">
                             <i class="fas fa-lock mr-2"></i>Password
@@ -136,7 +136,7 @@
                 <!-- Confirm Password Input -->
                 <div class="input-group">
                     <div class="relative">
-                        <input type="password" id="password_confirmation" name="password_confirmation" required placeholder=" "
+                        <input type="password" id="password_confirmation" name="password_confirmation" data-wajib="true" placeholder=" "
                                class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer placeholder-shown:border-gray-300 placeholder-shown:focus:border-blue-500">
                         <label for="password_confirmation" class="absolute left-4 top-3 text-gray-400 pointer-events-none transition-all duration-300 peer-focus:text-blue-600 peer-focus:-translate-y-6 peer-focus:scale-90 peer-placeholder-shown:opacity-100">
                             <i class="fas fa-lock mr-2"></i>Konfirmasi Password
@@ -149,7 +149,7 @@
 
                 <!-- Security Question Select -->
                 <div class="input-group">
-                    <select id="security_question_id" name="security_question_id" required
+                    <select id="security_question_id" name="security_question_id" data-wajib="true"
                             class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer appearance-none bg-white placeholder-shown:border-gray-300 placeholder-shown:focus:border-blue-500 cursor-pointer">
                         <option value="" disabled selected></option>
                         @foreach($securityQuestions as $question)
@@ -168,7 +168,7 @@
 
                 <!-- Security Answer Input -->
                 <div class="input-group">
-                    <input type="text" id="security_answer" name="security_answer" required placeholder=" "
+                    <input type="text" id="security_answer" name="security_answer" data-wajib="true" placeholder=" "
                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition peer placeholder-shown:border-gray-300 placeholder-shown:focus:border-blue-500"
                            value="{{ old('security_answer') }}">
                     <label for="security_answer" class="absolute left-4 top-3 text-gray-400 pointer-events-none transition-all duration-300 peer-focus:text-blue-600 peer-focus:-translate-y-6 peer-focus:scale-90 peer-placeholder-shown:opacity-100">

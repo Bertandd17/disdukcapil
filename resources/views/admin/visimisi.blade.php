@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('content')
 
@@ -90,14 +90,14 @@
             <div id="visimisiMethod"></div>
             <div>   
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Visi <span class="text-red-500">*</span></label>
-                <textarea name="visi" id="field_visi" required rows="3" maxlength="200"
+                <textarea name="visi" id="field_visi" data-wajib="true" rows="3" maxlength="200"
                     placeholder="Tuliskan visi organisasi..."
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"></textarea>
                 <p class="text-xs text-gray-400 mt-1">Maksimal 200 karakter</p>
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Misi <span class="text-red-500">*</span></label>
-                <textarea name="misi" id="field_misi" required rows="3" maxlength="200"
+                <textarea name="misi" id="field_misi" data-wajib="true" rows="3" maxlength="200"
                     placeholder="Tuliskan misi organisasi..."
                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"></textarea>
                 <p class="text-xs text-gray-400 mt-1">Maksimal 200 karakter</p>

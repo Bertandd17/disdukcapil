@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid p-6 bg-gray-50 min-h-screen">
@@ -111,7 +111,7 @@
                     <p class="text-sm text-slate-600">Pemohon: <strong id="namaPemohonModal" class="text-slate-900">-</strong></p>
                     <label class="block">
                         <span class="text-sm font-semibold text-slate-700">File Berkas <span class="text-red-500">*</span></span>
-                        <input type="file" name="file_berkas" required accept="application/pdf,.pdf"
+                        <input type="file" name="file_berkas" data-wajib="true" accept="application/pdf,.pdf"
                             class="mt-2 block w-full text-sm border border-slate-300 rounded-lg p-2 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
                         <span class="text-xs text-slate-500 mt-1 block">Format: PDF - Maksimal 5 MB</span>
                     </label>

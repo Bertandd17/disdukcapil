@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('content')
 @php
@@ -102,11 +102,11 @@
 
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Judul <span class="text-red-500">*</span></label>
-                <input type="text" name="judul" id="field_judul" required maxlength="255" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('judul') }}">
+                <input type="text" name="judul" id="field_judul" data-wajib="true" maxlength="255" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('judul') }}">
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Isi lengkap (HTML diperbolehkan) <span class="text-red-500">*</span></label>
-                <textarea name="konten" id="field_konten" required rows="8" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm">{{ old('konten') }}</textarea>
+                <textarea name="konten" id="field_konten" data-wajib="true" rows="8" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm">{{ old('konten') }}</textarea>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
