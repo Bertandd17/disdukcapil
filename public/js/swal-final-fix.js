@@ -61,11 +61,13 @@
 
         // Pastikan konfirmasi 2 tombol tidak punya deny (FIX BUG "No" BUTTON)
         if (params.showCancelButton === true && params.showConfirmButton === true && !params._allowDeny) {
-            params.showDenyButton = false;
-            delete params.denyButtonText;
-            if (params.cancelButtonText && /^No$/i.test(params.cancelButtonText.trim())) {
-                params.cancelButtonText = 'Batal';
-            }
+            params.showDenyButton = false; // Matikan deny button
+            delete params.denyButtonText;  // Hapus teks deny button
+
+            // Opsi: Jika ingin tombol Batal tetap tampil, biarkan saja.
+            // Jika ingin hanya ada 1 tombol (Konfirmasi), set showCancelButton = false.
+            // Untuk kasus ini, kita biarkan Batal tetap ada tapi pastikan No hilang.
+
             // STRIP: sembunyikan deny button dari DOM agar tidak tampil
             var origDidOpen = params.didOpen || function() {};
             params.didOpen = function(toast) {
