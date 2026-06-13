@@ -812,6 +812,43 @@
 @push('scripts')
 <script>
  window.ANTRIAN_OCR_CONFIG = @json($ocrClientConfig ?? []);
+ window.ANTRIAN_OCR_MESSAGES = {
+ extractFail: {
+ problem: 'Gagal Melakukan Ekstrak data',
+ solution: 'Pastikan yang anda upload adalah KTP atau perbaiki cara pengambilan gambar anda agar lebih baik lagi.'
+ }
+ };
+
+ window.isOcrExtractError = function(msg) {
+ if (!msg) return false;
+ var t = String(msg).toLowerCase();
+ return /ocr\.?space|easyocr|ocr gagal|tidak menemukan teks|ekstrak data|extract|service ocr|fallback|ocr online|membaca ktp|ktp_image/i.test(t)
+ || (t.indexOf('ocr') !== -1 && (t.indexOf('gagal') !== -1 || t.indexOf('fallback') !== -1 || t.indexOf('tidak') !== -1));
+ };
+
+ window.normalizeOcrExtractError = function(msg) {
+ if (window.isOcrExtractError(msg)) {
+ return window.ANTRIAN_OCR_MESSAGES.extractFail;
+ }
+ return { problem: msg, solution: null };
+ };
+
+ (function patchOcrToastHelper() {
+ function apply() {
+ if (!window.SwalHelper || typeof SwalHelper.toastError !== 'function' || SwalHelper._ocrToastPatched) return;
+ var original = SwalHelper.toastError.bind(SwalHelper);
+ SwalHelper.toastError = function(masalah, solusi, duration) {
+ var norm = window.normalizeOcrExtractError(masalah);
+ if (norm.solution) {
+ return original(norm.problem, norm.solution, duration);
+ }
+ return original(masalah, solusi, duration);
+ };
+ SwalHelper._ocrToastPatched = true;
+ }
+ apply();
+ document.addEventListener('DOMContentLoaded', apply);
+ })();
 </script>
 
 {{-- Search Antrian Functions - didefinisikan sebelum antrian-ocr.js agar selalu tersedia --}}
@@ -826,6 +863,13 @@
  }
  }
  function toastError(problem, solution, title) {
+ var norm = (typeof window.normalizeOcrExtractError === 'function')
+ ? window.normalizeOcrExtractError(problem)
+ : null;
+ if (norm && norm.solution && !solution) {
+ problem = norm.problem;
+ solution = norm.solution;
+ }
  if (typeof fireToast === 'function') {
  return fireToast({
  type: 'error', icon: 'error',
@@ -1716,6 +1760,27 @@
 </script>
 
 <script src="{{ asset_v('js/antrian-ocr.js') }}" defer></script>
+<script>
+ (function watchOcrPanelFriendlyMessage() {
+ function applyFriendlyPanelText() {
+ var msgEl = document.getElementById('ocrStatusMessage');
+ var titleEl = document.getElementById('ocrStatusTitle');
+ if (!msgEl || !window.isOcrExtractError || !window.ANTRIAN_OCR_MESSAGES) return;
+ if (window.isOcrExtractError(msgEl.textContent)) {
+ var copy = window.ANTRIAN_OCR_MESSAGES.extractFail;
+ if (titleEl) titleEl.textContent = copy.problem;
+ msgEl.textContent = copy.solution;
+ }
+ }
+ document.addEventListener('DOMContentLoaded', function() {
+ applyFriendlyPanelText();
+ var msgEl = document.getElementById('ocrStatusMessage');
+ if (!msgEl) return;
+ var observer = new MutationObserver(applyFriendlyPanelText);
+ observer.observe(msgEl, { childList: true, characterData: true, subtree: true });
+ });
+ })();
+</script>
 <script>
  // Load Statistics on Page Load
  function loadStatistics() {
