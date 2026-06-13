@@ -335,9 +335,8 @@ $colorMap = [
 $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategoriLayanan)->pluck('layanan')->flatten()->toArray())->get()->keyBy('layanan_id');
 @endphp
 
-<div class="page-content w-full">
     {{-- Hero --}}
-    <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white pt-16 pb-24">
+    <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-800 text-white py-20 pb-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto">
                 <h1 class="text-3xl md:text-4xl font-extrabold mb-4">Pilih Jenis Layanan</h1>
@@ -451,7 +450,6 @@ $layananById = \App\Models\Layanan_Model::whereIn('layanan_id', collect($kategor
             </div>
         </div>
     </section>
-</div>
 
 {{-- Modal Kategori --}}
 <div id="kategoriModal" class="fixed inset-0 z-40 hidden overflow-y-auto">

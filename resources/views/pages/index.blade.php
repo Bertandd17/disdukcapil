@@ -1,7 +1,6 @@
 @extends('layouts.user')
 
 @section('content')
-<div class="page-content w-full">
     {{-- Hero Section --}}
     <section class="user-home-hero relative min-h-[600px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white overflow-hidden">
         {{-- Background Figures --}}
@@ -951,7 +950,6 @@
             </div>
         </div>
     </section>
-</div>
 
     {{-- Modal baca berita --}}
     <div class="news-modal-overlay" id="newsModalOverlay" onclick="closeNewsModal()">
@@ -1093,7 +1091,7 @@
         }
 
         .user-home-hero .relative.z-10 {
-            padding-top: 13rem;
+            padding-top: 8rem;
             padding-bottom: 12rem;
         }
 

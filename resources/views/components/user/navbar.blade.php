@@ -2,7 +2,7 @@
     $adminBelumAda = ! \App\Models\User::whereHas('roles', function ($q) { $q->where('name', 'Admin'); })->exists();
 @endphp
 {{-- Header Navigation --}}
-<header class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300" id="mainHeader">
+<header class="relative z-50 bg-white/95 backdrop-blur-md shadow-sm shrink-0" id="mainHeader">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             {{-- Logo --}}
@@ -99,8 +99,6 @@
         </nav>
     </div>
 </header>
-
-<div class="h-16"></div>
 
 <script>
     // Mobile Menu Toggle
