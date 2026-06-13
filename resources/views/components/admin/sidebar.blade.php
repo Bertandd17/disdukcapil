@@ -194,19 +194,20 @@
                                 showCancelButton: false,
                                 didOpen: function() {
                                     Swal.showLoading();
-                                    // Hapus tombol deny dari DOM agar tidak muncul selama loading
-                                    var denyBtn = document.querySelector('.swal2-deny');
-                                    if (denyBtn) { denyBtn.remove(); }
+                                    // Hapus SELURUH tombol dari modal loading (confirm, deny, cancel, styled)
+                                    document.querySelectorAll('.swal2-deny, .swal2-cancel, .swal2-confirm, .swal2-styled, .swal-dd-btn').forEach(function(el) {
+                                        el.remove();
+                                    });
+                                    // Hapus container actions (slot tombol)
+                                    var actionsContainer = document.querySelector('.swal2-actions');
+                                    if (actionsContainer) { actionsContainer.remove(); }
+                                    // Hapus container deny/cancel individual
                                     var denyContainer = document.querySelector('.swal2-deny-container');
                                     if (denyContainer) { denyContainer.remove(); }
-                                    // Strip juga tombol styled yang mengandung class danger/cancel
-                                    document.querySelectorAll('.swal2-styled, .swal-dd-btn').forEach(function(el) {
-                                        if (el.classList.contains('swal2-deny') ||
-                                            el.classList.contains('swal-dd-btn-danger') ||
-                                            el.classList.contains('swal-dd-btn-cancel')) {
-                                            el.remove();
-                                        }
-                                    });
+                                    var cancelContainer = document.querySelector('.swal2-cancel-container');
+                                    if (cancelContainer) { cancelContainer.remove(); }
+                                    var confirmContainer = document.querySelector('.swal2-confirm-container');
+                                    if (confirmContainer) { confirmContainer.remove(); }
                                 },
                                 customClass: { popup: 'swal-dd-modal', htmlContainer: 'swal2-html-container' }
                             });
