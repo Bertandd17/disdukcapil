@@ -352,41 +352,49 @@
             });
         });
 
-        // Tampilkan pesan error/success dari session (jika ada)
+        // Tampilkan pesan error/success dari session (jika ada) — pattern toast global
         @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Registrasi Gagal',
-            html: @json(session('error_solution') ?? session('error') ?? 'Periksa data yang Anda masukkan, lalu coba lagi.'),
-            confirmButtonText: 'Tutup',
-            confirmButtonColor: '#dc2626',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        });
+        (function() {
+            var __err = @json(session('error'));
+            var __sol = @json(session('error_solution'));
+            if (typeof toastError === 'function') {
+                toastError(__err, __sol);
+            } else if (window.SwalHelper && SwalHelper.toastError) {
+                SwalHelper.toastError(__err, __sol);
+            } else if (typeof fireToast === 'function') {
+                fireToast({ type: 'error', icon: 'error', title: 'Registrasi Gagal', problem: __err, solution: __sol, timer: 6000 });
+            } else {
+                Swal.fire({ icon: 'error', title: 'Registrasi Gagal', text: __err, confirmButtonText: 'Tutup', confirmButtonColor: '#dc2626' });
+            }
+        })();
         @endif
 
         @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Registrasi Berhasil',
-            text: @json(session('success')),
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#16a34a',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        });
+        (function() {
+            var __msg = @json(session('success'));
+            if (typeof toastSuccess === 'function') {
+                toastSuccess(__msg);
+            } else if (window.SwalHelper && SwalHelper.toastSuccess) {
+                SwalHelper.toastSuccess(__msg);
+            } else {
+                Swal.fire({ icon: 'success', title: 'Registrasi Berhasil', text: __msg, timer: 2000, showConfirmButton: false, toast: true, position: 'top-end' });
+            }
+        })();
         @endif
 
         @if(session('warning'))
-        Swal.fire({
-            icon: 'warning',
-            title: 'Perhatian',
-            text: @json(session('warning')),
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#f59e0b',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        });
+        (function() {
+            var __msg = @json(session('warning'));
+            if (typeof toastError === 'function') {
+                toastError(__msg, 'Periksa kembali data Anda, lalu coba lagi.');
+            } else if (window.SwalHelper && SwalHelper.toastError) {
+                SwalHelper.toastError(__msg, 'Periksa kembali data Anda, lalu coba lagi.');
+            } else if (typeof fireToast === 'function') {
+                fireToast({ type: 'error', icon: 'error', title: 'Perhatian', problem: __msg, solution: 'Periksa kembali data Anda, lalu coba lagi.', timer: 6000 });
+            } else {
+                Swal.fire({ icon: 'warning', title: 'Perhatian', text: __msg, confirmButtonText: 'OK', confirmButtonColor: '#f59e0b' });
+            }
+        })();
         @endif
     </script>
 

@@ -51,91 +51,140 @@
     // =====================================================
     // TOAST NOTIFICATIONS
     // =====================================================
+    // Hanya 2 tipe: SUCCESS dan ERROR.
+    // Error SELALU menampilkan "Masalah" + "Cara memperbaiki".
+    // Solusi otomatis disusun dari pola pesan error (lihat solusiError()).
+    // =====================================================
 
-    function toastSuccess(message, duration = 5000) {
-        const Toast = Swal.mixin({
+    function escapeHtmlSafe(s) {
+        if (s == null) return '';
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Bangun solusi berdasarkan pola pesan error (masalah).
+     * Dipakai ketika caller tidak menyertakan solusi eksplisit.
+     */
+    function solusiError(masalah) {
+        var text = String(masalah || '').toLowerCase().trim();
+        if (!text) return 'Periksa data atau aksi yang sedang dilakukan, lalu coba lagi.';
+
+        if (/(wajib\s+diisi|tidak\s+boleh\s+kosong|isian\s+yang\s+kosong|field[^.]{0,40}wajib|harus\s+dipilih|harap\s+lengkapi|mohon\s+lengkapi|lengkapi\s+(semua|seluruh)\s+data|form\s+belum\s+lengkap|\brequired\b)/i.test(text)) {
+            return 'Lengkapi kolom yang bertanda wajib, lalu lanjutkan kembali.';
+        }
+        if (/(pdf|format\s+file|berformat)/i.test(text)) {
+            return 'Pilih ulang file dengan format yang sesuai (PDF, JPG, atau PNG).';
+        }
+        if (/(ukuran\s+file|2mb|5mb|maksimal\s+\d+\s*(mb|kilobyte|kb))/i.test(text)) {
+            return 'Kompres file atau pilih file dengan ukuran di bawah batas maksimal.';
+        }
+        if (/(nomor\s+antrian|antrian\s+anda)/i.test(text)) {
+            return 'Periksa kembali nomor antrian dan pastikan layanan yang dipilih sesuai.';
+        }
+        if (/(nik|nomor\s+kk|kartu\s+keluarga|16\s+digit)/i.test(text)) {
+            return 'Masukkan angka yang benar sesuai dokumen kependudukan.';
+        }
+        if (/(koneksi|jaringan|network|fetch|http|timeout|tidak\s+dapat\s+terhubung|server\s+error|5\d\d)/i.test(text)) {
+            return 'Periksa koneksi internet, lalu ulangi beberapa saat lagi.';
+        }
+        if (/(csrf|kadaluarsa|kedaluwarsa|419|session\s+habis|token\s+tidak\s+valid)/i.test(text)) {
+            return 'Muat ulang halaman, lalu kirim formulir kembali.';
+        }
+        if (/(username|password|email|login|masuk|kredensial|akun)/i.test(text)) {
+            return 'Pastikan username dan password benar, lalu coba lagi.';
+        }
+        if (/(username\s+sudah|email\s+sudah|sudah\s+terdaftar|already\s+taken|sudah\s+ada|terpakai)/i.test(text)) {
+            return 'Gunakan username atau email lain yang belum terdaftar.';
+        }
+        if (/(jawaban\s+keamanan|security\s+answer)/i.test(text)) {
+            return 'Pastikan jawaban sesuai dengan yang Anda daftarkan (huruf besar/kecil tidak berpengaruh).';
+        }
+        if (/(kesempatan\s+terbisa|percobaan|attempt)/i.test(text)) {
+            return 'Periksa kembali jawaban Anda dengan teliti sebelum mencoba lagi.';
+        }
+        if (/(tidak\s+terbaca|ocr|gambar|kualitas|blur|kurang\s+jelas)/i.test(text)) {
+            return 'Unggah foto dengan pencahayaan cukup dan pastikan seluruh teks pada dokumen terbaca jelas.';
+        }
+        if (/(captcha|verifikasi\s+bot)/i.test(text)) {
+            return 'Selesaikan verifikasi captcha dengan benar, lalu coba lagi.';
+        }
+        if (/(hak\s+akses|forbidden|403|tidak\s+diizinkan|tidak\s+punya\s+akses)/i.test(text)) {
+            return 'Hubungi administrator untuk mendapatkan akses yang sesuai.';
+        }
+        if (/(tidak\s+ditemukan|not\s+found|404|tidak\s+tersedia)/i.test(text)) {
+            return 'Data yang Anda cari tidak ditemukan. Periksa kembali kata kunci pencarian Anda.';
+        }
+        if (/(registrasi\s+hanya\s+dapat\s+dilakukan\s+sekali|akun\s+admin\s+sudah\s+ada|registrasi\s+ditutup)/i.test(text)) {
+            return 'Akun admin sudah ada. Silakan gunakan halaman login untuk masuk.';
+        }
+        return 'Periksa data atau aksi yang sedang dilakukan, lalu coba lagi.';
+    }
+
+    function buildProblemSolutionHtml(masalah, solusi) {
+        var p = escapeHtmlSafe(masalah || 'Terjadi kesalahan saat memproses permintaan.');
+        var s = escapeHtmlSafe(solusi || solusiError(masalah));
+        return '<div class="swal-dd-error-detail">' +
+            '<div class="swal-dd-error-block"><span class="swal-dd-error-label">Masalah</span><span class="swal-dd-error-text">' + p + '</span></div>' +
+            '<div class="swal-dd-error-block"><span class="swal-dd-error-label">Cara memperbaiki</span><span class="swal-dd-error-text">' + s + '</span></div>' +
+            '</div>';
+    }
+
+    function toastSuccess(message, title, duration = 5000) {
+        var resolvedTitle = (typeof message === 'string' && arguments.length >= 1)
+            ? (arguments.length >= 2 && title ? String(title) : String(message))
+            : 'Berhasil';
+        var resolvedHtml = (typeof message === 'string' && arguments.length >= 2 && title)
+            ? String(message)
+            : null;
+
+        return Swal.fire({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
             timer: 5000,
             timerProgressBar: true,
             backdrop: false,
+            icon: 'success',
+            iconColor: 'var(--success-green)',
+            title: resolvedTitle,
+            html: resolvedHtml,
             customClass: {
-                popup: 'swal2-toast-success'
+                popup: 'swal2-toast swal-dd-toast swal-dd-success'
             },
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer);
                 toast.addEventListener('mouseleave', Swal.resumeTimer);
             }
         });
-        Toast.fire({
-            icon: 'success',
-            title: message,
-            iconColor: 'var(--success-green)',
-            zIndex: 99999
-        });
     }
 
-    function toastError(message, duration = 5000) {
-        const Toast = Swal.mixin({
+    function toastError(masalah, solusi, duration = 5000) {
+        var problemText = (typeof masalah === 'string' && masalah) ? String(masalah) : 'Terjadi kesalahan saat memproses permintaan.';
+        var solutionText = (typeof solusi === 'string' && solusi) ? String(solusi) : solusiError(problemText);
+
+        return Swal.fire({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
             timer: 5000,
             timerProgressBar: true,
             backdrop: false,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
-        Toast.fire({
             icon: 'error',
-            title: message,
             iconColor: 'var(--danger-red)',
-            zIndex: 99999
-        });
-    }
-
-    function toastWarning(message, duration = 5000) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            backdrop: false,
+            title: 'Terjadi kesalahan',
+            html: buildProblemSolutionHtml(problemText, solutionText),
+            customClass: {
+                popup: 'swal2-toast swal-dd-toast swal-dd-error'
+            },
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer);
                 toast.addEventListener('mouseleave', Swal.resumeTimer);
             }
-        });
-        Toast.fire({
-            icon: 'warning',
-            title: message,
-            iconColor: 'var(--warning-orange)',
-            zIndex: 99999
-        });
-    }
-
-    function toastInfo(message, duration = 5000) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            backdrop: false,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
-        Toast.fire({
-            icon: 'info',
-            title: message,
-            iconColor: 'var(--info-blue)',
-            zIndex: 99999
         });
     }
 
@@ -167,40 +216,6 @@
             html: message,
             confirmButtonText: '<i class="fas fa-times mr-2"></i>Tutup',
             confirmButtonColor: 'var(--danger-red)',
-            showCancelButton: false,
-            showDenyButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            zIndex: 9999
-        }).then((result) => {
-            if (result.isConfirmed && callback) callback();
-        });
-    }
-
-    function modalWarning(title, message, callback = null) {
-        Swal.fire({
-            icon: 'warning',
-            title: title,
-            html: message,
-            confirmButtonText: '<i class="fas fa-exclamation-triangle mr-2"></i>OK',
-            confirmButtonColor: 'var(--warning-orange)',
-            showCancelButton: false,
-            showDenyButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            zIndex: 9999
-        }).then((result) => {
-            if (result.isConfirmed && callback) callback();
-        });
-    }
-
-    function modalInfo(title, message, callback = null) {
-        Swal.fire({
-            icon: 'info',
-            title: title,
-            html: message,
-            confirmButtonText: '<i class="fas fa-info-circle mr-2"></i>OK',
-            confirmButtonColor: 'var(--info-blue)',
             showCancelButton: false,
             showDenyButton: false,
             allowOutsideClick: false,
@@ -496,23 +511,6 @@
         });
     }
 
-    function notifyWarning(title, message, subMessage, callback) {
-        customConfirm({
-            title: title,
-            message: message,
-            subMessage: subMessage,
-            iconClass: 'fas fa-exclamation-triangle',
-            iconColor: 'var(--warning-orange)',
-            confirmText: 'OK',
-            confirmColor: 'var(--warning-orange)',
-            cancelText: 'Tutup',
-            cancelColor: 'var(--neutral-600)',
-            showLoadingAfterConfirm: false,
-            onConfirm: callback,
-            onCancel: callback
-        });
-    }
-
     // =====================================================
     // LOADING
     // =====================================================
@@ -557,21 +555,15 @@
 
     // Assign semua fungsi
     Object.assign(window.SwalHelper, {
-        // Toast
+        // Toast — hanya Success dan Error
         toastSuccess,
         toastError,
-        toastWarning,
-        toastInfo,
         success: toastSuccess,
         error: toastError,
-        warning: toastWarning,
-        info: toastInfo,
 
         // Modal
         modalSuccess,
         modalError,
-        modalWarning,
-        modalInfo,
         successModal: modalSuccess,
 
         // Confirm
@@ -588,7 +580,6 @@
         // Notifikasi
         notifySuccess,
         notifyError,
-        notifyWarning,
 
         // Loading
         loading: showLoading,
