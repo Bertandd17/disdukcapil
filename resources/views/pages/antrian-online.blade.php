@@ -1506,15 +1506,16 @@
  };
 
  window.PERNIKAHAN_STEP_MAP = {
- 'MENUNGGU_KONFIRMASI_KEAGAMAAN': 1,
- 'DITOLAK_KEAGAMAAN': 1,
- 'MENUNGGU_APPROVE_TANGGAL': 2,
- 'TANGGAL_DITOLAK': 2,
- 'TANGGAL_DISETUJUI': 3,
- 'DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI': 3,
- 'DOKUMEN_PERLU_PERBAIKAN': 3,
- 'DOKUMEN_DIVERIFIKASI': 4,
- 'SELESAI': 5
+ 'Menunggu': 1,
+ 'MENUNGGU_KONFIRMASI_KEAGAMAAN': 2,
+ 'DITOLAK_KEAGAMAAN': 2,
+ 'MENUNGGU_APPROVE_TANGGAL': 3,
+ 'TANGGAL_DITOLAK': 3,
+ 'TANGGAL_DISETUJUI': 4,
+ 'DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI': 5,
+ 'DOKUMEN_PERLU_PERBAIKAN': 5,
+ 'DOKUMEN_DIVERIFIKASI': 6,
+ 'SELESAI': 7
  };
 
  window.PERNIKAHAN_LACAK_COLORS = {
@@ -1685,9 +1686,10 @@
 
  /**
  * Hitung progress khusus layanan pernikahan dari status + riwayat lacak_berkas.
+ * Workflow pernikahan: 7 tahap (align dengan riwayat status yang ditampilkan).
  */
  window.resolvePernikahanProgress = function(pernikahan, antrian) {
- var totalSteps = 5;
+ var totalSteps = 7;
  var status = pernikahan.status || 'MENUNGGU_KONFIRMASI_KEAGAMAAN';
  var isDitolak = status === 'DITOLAK_KEAGAMAAN' || status === 'TANGGAL_DITOLAK';
  var lacakSorted = window.sortLacakBerkasChronological(
@@ -1697,7 +1699,7 @@
  );
 
  if (isDitolak) {
- var failedAtStep = window.PERNIKAHAN_STEP_MAP[status] || 1;
+ var failedAtStep = window.PERNIKAHAN_STEP_MAP[status] || 2;
  return {
  isDitolak: true,
  isTerminal: true,
@@ -1711,7 +1713,7 @@
  };
  }
 
- var currentStep = window.PERNIKAHAN_STEP_MAP[status] || 1;
+ var currentStep = window.PERNIKAHAN_STEP_MAP[status] || 2;
  return {
  isDitolak: false,
  isTerminal: status === 'SELESAI',
