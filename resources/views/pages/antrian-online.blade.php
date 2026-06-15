@@ -1384,16 +1384,125 @@
  // Render Search Results
  window.__antrianRegistry = window.__antrianRegistry || {};
 
- // --- Progress & riwayat antrian (selaras lacak_berkas) ---
+ // --- Progress & riwayat antrian (7 tahap, selaras controller penerbitan) ---
+ window.ANTRIAN_TOTAL_STEPS = 7;
+
+ // Tahap penolakan: hanya Verifikasi Data (btnTolak di admin penerbitan_*_detail)
+ // Untuk workflow rejection 5-tahap: Verifikasi Data adalah step 2
+ window.ANTRIAN_REJECTION_STEP = 2;
+ window.ANTRIAN_REJECTION_TOTAL_STEPS = 5;
+ window.ANTRIAN_REJECTION_STATUS = 'Verifikasi Data';
+
  window.ANTRIAN_STEP_MAP = {
  'Menunggu': 1,
  'Dokumen Diterima': 2,
  'Verifikasi Data': 3,
  'Proses Cetak': 4,
  'Siap Pengambilan': 5,
- 'Selesai': 5,
+ 'Berkas Siap Diunduh': 6,
+ 'Selesai': 7,
+ 'Tolak': null,
  'Ditolak': null,
  'Dibatalkan': null
+ };
+
+ window.ANTRIAN_CANONICAL_STEPS = [
+ { step: 1, status: 'Menunggu', keterangan: 'Antrian berhasil dibuat. Menunggu dokumen diterima oleh admin.' },
+ { step: 2, status: 'Dokumen Diterima', keterangan: 'Dokumen diterima oleh admin. Menunggu verifikasi data.' },
+ { step: 3, status: 'Verifikasi Data', keterangan: 'Data sedang diverifikasi oleh petugas.' },
+ { step: 4, status: 'Proses Cetak', keterangan: 'Dokumen sedang dalam proses cetak.' },
+ { step: 5, status: 'Siap Pengambilan', keterangan: 'Dokumen siap diambil oleh pemohon.' },
+ { step: 6, status: 'Berkas Siap Diunduh', keterangan: 'Berkas hasil penerbitan telah diunggah. Silakan unduh.' },
+ { step: 7, status: 'Selesai', keterangan: 'Permohonan selesai diproses.' }
+ ];
+
+ window.ANTRIAN_REJECTION_LACAK_STATUSES = ['Tolak', 'Ditolak', 'Dibatalkan'];
+
+ window.isAntrianRejectionLacakStatus = function(status) {
+ return window.ANTRIAN_REJECTION_LACAK_STATUSES.indexOf(status) >= 0;
+ };
+
+ /**
+ * Ambil alasan penolakan dari antrian atau riwayat lacak (status Tolak/Ditolak).
+ * Cari di berbagai format keterangan untuk ekstrak alasan dengan robust.
+ */
+ window.extractAlasanPenolakan = function(antrian) {
+ if (!antrian) return null;
+
+ if (antrian.alasan_penolakan && String(antrian.alasan_penolakan).trim() !== '') {
+ return String(antrian.alasan_penolakan).trim();
+ }
+
+ var lacakItems = Array.isArray(antrian.lacak_berkas) ? antrian.lacak_berkas : [];
+ var rejectionRecords = lacakItems.filter(function(lb) {
+ return lb && window.isAntrianRejectionLacakStatus(lb.status);
+ });
+ if (rejectionRecords.length === 0) return null;
+
+ rejectionRecords.sort(function(a, b) {
+ var da = new Date(a.created_at || a.tanggal || 0).getTime();
+ var db = new Date(b.created_at || b.tanggal || 0).getTime();
+ return db - da;
+ });
+
+ var latest = rejectionRecords[0];
+ if (latest.alasan_penolakan && String(latest.alasan_penolakan).trim() !== '') {
+ return String(latest.alasan_penolakan).trim();
+ }
+
+ if (latest.keterangan && String(latest.keterangan).trim() !== '') {
+ var ket = String(latest.keterangan).trim();
+ var patterns = [
+ /Alasan:\s*(.+?)(?:\.|$)/i,
+ /berkas\s+(.+?)(?:\.|$)/i,
+ /(.+?)(?:Alasan|berkas)/i,
+ /:\s*(.+?)$/i
+ ];
+ for (var i = 0; i < patterns.length; i++) {
+ var match = ket.match(patterns[i]);
+ if (match && match[1]) {
+ var extracted = String(match[1]).trim();
+ if (extracted.length > 0 && extracted.length < 200) {
+ return extracted;
+ }
+ }
+ }
+ return ket;
+ }
+
+ return null;
+ };
+
+ /**
+ * Tahap penolakan: Verifikasi Data (step 2 dalam workflow 5-tahap rejection).
+ */
+ window.resolveAntrianRejectionMilestone = function() {
+ return {
+ failedAtStatus: window.ANTRIAN_REJECTION_STATUS,
+ failedAtStep: window.ANTRIAN_REJECTION_STEP,
+ totalSteps: window.ANTRIAN_REJECTION_TOTAL_STEPS
+ };
+ };
+
+ /**
+ * Riwayat ditolak: 2 tahap pipeline (Menunggu, Verifikasi Data) + entri penolakan (Tolak/Ditolak).
+ */
+ window.buildAntrianRejectedTimeline = function(lacakSorted, antrian) {
+ var pipeline = window.normalizeAntrianLacakHistory(
+ lacakSorted,
+ window.ANTRIAN_REJECTION_STEP,
+ antrian
+ );
+ var rejection = null;
+ (lacakSorted || []).forEach(function(lb) {
+ if (lb && window.isAntrianRejectionLacakStatus(lb.status)) {
+ rejection = lb;
+ }
+ });
+ if (rejection) {
+ pipeline.push(rejection);
+ }
+ return pipeline;
  };
 
  window.PERNIKAHAN_STEP_MAP = {
@@ -1440,53 +1549,129 @@
  };
 
  /**
- * Hitung progress dari riwayat lacak_berkas, bukan status terminal saja.
- * Antrian Ditolak: step = tahap terakhir sebelum penolakan (bukan 5/5).
+ * Petakan status lacak_berkas ke nomor step (1–7).
+ */
+ window.getAntrianLacakStepNumber = function(status) {
+ if (!status) return null;
+ return Object.prototype.hasOwnProperty.call(window.ANTRIAN_STEP_MAP, status)
+ ? window.ANTRIAN_STEP_MAP[status]
+ : null;
+ };
+
+ /**
+ * Lengkapi riwayat lacak agar jumlah entri = progress step (maks. 7).
+ * Diperbaiki untuk memastikan semua step 1-stepLimit diisi (synthetic jika perlu).
+ */
+ window.normalizeAntrianLacakHistory = function(lacakSorted, targetStep, antrian) {
+ var totalSteps = window.ANTRIAN_TOTAL_STEPS;
+ var stepLimit = Math.min(Math.max(targetStep || 1, 1), totalSteps);
+
+ var recordsByStep = {};
+ if (Array.isArray(lacakSorted) && lacakSorted.length > 0) {
+ lacakSorted.forEach(function(lb) {
+ var step = window.getAntrianLacakStepNumber(lb.status);
+ if (step == null || step < 1 || step > totalSteps) return;
+ var existing = recordsByStep[step];
+ if (!existing) {
+ recordsByStep[step] = lb;
+ return;
+ }
+ if (step === 6 && (lb.download_url || lb.file_berkas) && !(existing.download_url || existing.file_berkas)) {
+ recordsByStep[step] = lb;
+ }
+ });
+ }
+
+ var pickSyntheticDate = function(step) {
+ var nextDate = null;
+ for (var s = step + 1; s <= stepLimit; s++) {
+ if (recordsByStep[s]) {
+ nextDate = recordsByStep[s].tanggal || recordsByStep[s].created_at;
+ break;
+ }
+ }
+ if (nextDate) return nextDate;
+ for (var p = step - 1; p >= 1; p--) {
+ if (recordsByStep[p]) {
+ return recordsByStep[p].tanggal || recordsByStep[p].created_at;
+ }
+ }
+ if (antrian && antrian.created_at) return antrian.created_at;
+ if (Array.isArray(lacakSorted) && lacakSorted.length > 0) {
+ return lacakSorted[0].tanggal || lacakSorted[0].created_at || null;
+ }
+ return new Date().toISOString();
+ };
+
+ var normalized = [];
+ for (var s = 1; s <= stepLimit; s++) {
+ var canonical = window.ANTRIAN_CANONICAL_STEPS[s - 1];
+ if (!canonical) continue;
+
+ var existing = recordsByStep[s];
+ if (existing) {
+ normalized.push(existing);
+ } else {
+ normalized.push({
+ status: canonical.status,
+ keterangan: canonical.keterangan,
+ tanggal: pickSyntheticDate(s),
+ created_at: pickSyntheticDate(s),
+ synthetic: true
+ });
+ }
+ }
+
+ return normalized;
+ };
+
+ /**
+ * Hitung progress dari riwayat lacak_berkas (7 tahap normal, 5 tahap untuk rejection).
+ * Ditolak: selalu tahap Verifikasi Data (step 2 dalam workflow 5-tahap) + riwayat penolakan.
  */
  window.resolveAntrianProgress = function(antrian) {
  var status = antrian.status_antrian || 'Menunggu';
  var isDitolak = status === 'Ditolak';
  var isDibatalkan = status === 'Dibatalkan';
  var lacakSorted = window.sortLacakBerkasChronological(antrian.lacak_berkas || []);
- var totalSteps = 5;
+ var totalSteps = window.ANTRIAN_TOTAL_STEPS;
 
  if (isDitolak || isDibatalkan) {
- var failedAtStatus = null;
- for (var i = lacakSorted.length - 1; i >= 0; i--) {
- var st = lacakSorted[i].status;
- if (st && st !== 'Ditolak' && st !== 'Dibatalkan') {
- failedAtStatus = st;
- break;
- }
- }
- if (!failedAtStatus) {
- failedAtStatus = 'Menunggu';
- }
- var failedAtStep = window.ANTRIAN_STEP_MAP[failedAtStatus] || 1;
+ var rejectionMilestone = isDitolak
+ ? window.resolveAntrianRejectionMilestone()
+ : { failedAtStatus: 'Menunggu', failedAtStep: 1, totalSteps: totalSteps };
+ var failedAtStatus = rejectionMilestone.failedAtStatus;
+ var failedAtStep = rejectionMilestone.failedAtStep;
+ var rejectionTotalSteps = rejectionMilestone.totalSteps || window.ANTRIAN_REJECTION_TOTAL_STEPS;
  var progressSubtitle = isDitolak
- ? 'Ditolak setelah tahap <strong>' + failedAtStatus + '</strong> (Step ' + failedAtStep + ' dari ' + totalSteps + ')'
- : 'Dibatalkan pada tahap <strong>' + failedAtStatus + '</strong> (Step ' + failedAtStep + ' dari ' + totalSteps + ')';
+ ? 'Ditolak pada tahap <strong>' + failedAtStatus + '</strong> (Step ' + failedAtStep + ' dari ' + rejectionTotalSteps + ')'
+ : 'Dibatalkan pada tahap <strong>' + failedAtStatus + '</strong> (Step ' + failedAtStep + ' dari ' + rejectionTotalSteps + ')';
 
  return {
  isDitolak: isDitolak,
  isDibatalkan: isDibatalkan,
  isTerminal: true,
  currentStep: failedAtStep,
- totalSteps: totalSteps,
- stepWidth: Math.round((failedAtStep / totalSteps) * 100),
+ totalSteps: rejectionTotalSteps,
+ stepWidth: Math.round((failedAtStep / rejectionTotalSteps) * 100),
  failedAtStatus: failedAtStatus,
  failedAtStep: failedAtStep,
- progressLabel: 'Step ' + failedAtStep + ' dari ' + totalSteps,
+ progressLabel: 'Step ' + failedAtStep + ' dari ' + rejectionTotalSteps,
  progressSubtitle: progressSubtitle,
- lacakSorted: lacakSorted
+ lacakSorted: isDitolak
+ ? window.buildAntrianRejectedTimeline(lacakSorted, antrian)
+ : lacakSorted
  };
  }
 
  var currentStep = window.ANTRIAN_STEP_MAP[status] || 1;
+ if (status === 'Selesai') {
+ currentStep = 7;
+ }
  return {
  isDitolak: false,
  isDibatalkan: false,
- isTerminal: false,
+ isTerminal: status === 'Selesai' || status === 'Siap Pengambilan',
  currentStep: currentStep,
  totalSteps: totalSteps,
  stepWidth: Math.round((currentStep / totalSteps) * 100),
@@ -1494,7 +1679,7 @@
  failedAtStep: null,
  progressLabel: 'Step ' + currentStep + ' dari ' + totalSteps,
  progressSubtitle: null,
- lacakSorted: lacakSorted
+ lacakSorted: window.normalizeAntrianLacakHistory(lacakSorted, currentStep, antrian)
  };
  };
 
@@ -1545,18 +1730,30 @@
 
  var items = lacakSorted.map(function(lb, idx) {
  var st = lb.status || '-';
- var isReject = st === 'Ditolak';
+ var isReject = st === 'Ditolak' || st === 'Tolak';
  var isCancel = st === 'Dibatalkan';
- var cfg = statusColors[st];
+ var displayStatus = isReject ? 'Ditolak' : st;
+ var cfg = statusColors[st] || statusColors[displayStatus];
  var dotColor = cfg ? cfg.hex : (isReject ? '#ef4444' : (isCancel ? '#f43f5e' : '#6b7280'));
  var tgl = window.formatLacakDate(lb);
  var isLast = idx === lacakSorted.length - 1;
  var alasanHtml = '';
- if (isReject && lb.alasan_penolakan && String(lb.alasan_penolakan).trim() !== '') {
- var alasanEsc = String(lb.alasan_penolakan)
+ if (isReject) {
+ var alasanText = '';
+ if (lb.alasan_penolakan && String(lb.alasan_penolakan).trim() !== '') {
+ alasanText = String(lb.alasan_penolakan).trim();
+ } else if (lb.keterangan && String(lb.keterangan).trim() !== '') {
+ var alasanMatch = String(lb.keterangan).match(/Alasan:\s*(.+)$/i);
+ if (alasanMatch && alasanMatch[1]) {
+ alasanText = alasanMatch[1].trim();
+ }
+ }
+ if (alasanText) {
+ var alasanEsc = alasanText
  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
  alasanHtml = '<p class="text-[11px] text-red-700 mt-0.5 break-words"><i class="fas fa-comment-dots mr-1"></i>' + alasanEsc + '</p>';
+ }
  }
  var keteranganHtml = '';
  if (!isReject && lb.keterangan && String(lb.keterangan).trim() !== '') {
@@ -1573,7 +1770,7 @@
  '<div class="flex-1 min-w-0 pb-1">' +
  '<p class="text-xs font-semibold ' + (isReject ? 'text-red-700' : (isCancel ? 'text-rose-700' : 'text-gray-800')) + '">' +
  (isReject ? '<i class="fas fa-ban mr-1"></i>' : (isCancel ? '<i class="fas fa-times mr-1"></i>' : '<i class="fas fa-check-circle mr-1 text-green-600"></i>')) +
- st +
+ displayStatus +
  '</p>' +
  '<p class="text-[10px] text-gray-400">' + tgl + '</p>' +
  alasanHtml +
@@ -1670,9 +1867,11 @@
  'Dokumen Diterima': { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200', hex: '#22c55e' },
  'Verifikasi Data': { bg: 'bg-indigo-100', text: 'text-indigo-700', border: 'border-indigo-200', hex: '#6366f1' },
  'Proses Cetak': { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-200', hex: '#a855f7' },
- 'Siap Pengambilan': { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200', hex: '#10b981' },
- 'Selesai': { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200', hex: '#10b981' },
+ 'Siap Pengambilan': { bg: 'bg-teal-100', text: 'text-teal-700', border: 'border-teal-200', hex: '#14b8a6' },
+ 'Berkas Siap Diunduh': { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200', hex: '#10b981' },
+ 'Selesai': { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200', hex: '#22c55e' },
  'Ditolak': { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200', hex: '#ef4444' },
+ 'Tolak': { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200', hex: '#ef4444' },
  'Dibatalkan': { bg: 'bg-rose-100', text: 'text-rose-700', border: 'border-rose-200', hex: '#f43f5e' }
  };
  var statusIcons = {
@@ -1681,7 +1880,8 @@
  'Verifikasi Data': 'fa-search',
  'Proses Cetak': 'fa-print',
  'Siap Pengambilan': 'fa-box-open',
- 'Selesai': 'fa-check-circle',
+ 'Berkas Siap Diunduh': 'fa-cloud-download-alt',
+ 'Selesai': 'fa-check-double',
  'Ditolak': 'fa-ban',
  'Dibatalkan': 'fa-times'
  };
@@ -1750,9 +1950,8 @@
  // Alasan Penolakan block (hanya untuk status Ditolak)
  var alasanPenolakanHtml = '';
  if (isDitolak) {
- var alasanText = (antrian.alasan_penolakan && String(antrian.alasan_penolakan).trim() !== '')
- ? antrian.alasan_penolakan
- : 'Alasan tidak dicantumkan oleh petugas.';
+ var alasanExtracted = window.extractAlasanPenolakan(antrian);
+ var alasanText = alasanExtracted || 'Alasan tidak dicantumkan oleh petugas.';
  var alasanEscaped = String(alasanText)
  .replace(/&/g, '&amp;')
  .replace(/</g, '&lt;')
@@ -2006,10 +2205,11 @@
  'Dokumen Diterima': { hex: '#3b82f6', label: 'Dokumen Diterima', icon: 'fa-file-check', step: 2 },
  'Verifikasi Data': { hex: '#6366f1', label: 'Verifikasi Data', icon: 'fa-search', step: 3 },
  'Proses Cetak': { hex: '#a855f7', label: 'Proses Cetak', icon: 'fa-print', step: 4 },
- 'Siap Pengambilan': { hex: '#10b981', label: 'Siap Pengambilan', icon: 'fa-box-open', step: 5 },
- 'Selesai': { hex: '#22c55e', label: 'Selesai', icon: 'fa-check-circle', step: 5 },
- 'Ditolak': { hex: '#ef4444', label: 'Ditolak', icon: 'fa-ban', step: 5 },
- 'Dibatalkan': { hex: '#f43f5e', label: 'Dibatalkan', icon: 'fa-times', step: 5 }
+ 'Siap Pengambilan': { hex: '#14b8a6', label: 'Siap Pengambilan', icon: 'fa-box-open', step: 5 },
+ 'Berkas Siap Diunduh': { hex: '#10b981', label: 'Berkas Siap Diunduh', icon: 'fa-cloud-download-alt', step: 6 },
+ 'Selesai': { hex: '#22c55e', label: 'Selesai', icon: 'fa-check-double', step: 7 },
+ 'Ditolak': { hex: '#ef4444', label: 'Ditolak', icon: 'fa-ban', step: 3 },
+ 'Dibatalkan': { hex: '#f43f5e', label: 'Dibatalkan', icon: 'fa-times', step: 1 }
  };
 
  var nomorAntrian = antrian.nomor_antrian || '-';
@@ -2091,9 +2291,8 @@
 
  var alasanPenolakanModalHtml = '';
  if (isDitolak) {
- var alasanText = (antrian.alasan_penolakan && String(antrian.alasan_penolakan).trim() !== '')
- ? antrian.alasan_penolakan
- : 'Alasan tidak dicantumkan oleh petugas.';
+ var alasanExtractedModal = window.extractAlasanPenolakan(antrian);
+ var alasanText = alasanExtractedModal || 'Alasan tidak dicantumkan oleh petugas.';
  var alasanEscaped = String(alasanText)
  .replace(/&/g, '&amp;')
  .replace(/</g, '&lt;')
@@ -2101,7 +2300,7 @@
  .replace(/"/g, '&quot;')
  .replace(/'/g, '&#39;');
  var ditolakPadaHtml = progressInfo.failedAtStatus
- ? '<p class="text-xs text-red-600 mb-2"><i class="fas fa-map-marker-alt mr-1"></i>Ditolak setelah tahap <strong>' + progressInfo.failedAtStatus + '</strong> (Step ' + progressInfo.failedAtStep + ' dari 5)</p>'
+ ? '<p class="text-xs text-red-600 mb-2"><i class="fas fa-map-marker-alt mr-1"></i>Ditolak pada tahap <strong>' + progressInfo.failedAtStatus + '</strong> (Step ' + progressInfo.failedAtStep + ' dari ' + progressInfo.totalSteps + ')</p>'
  : '';
  alasanPenolakanModalHtml =
  '<div class="mb-4">' +
@@ -2123,9 +2322,11 @@
  'Dokumen Diterima': { hex: '#22c55e' },
  'Verifikasi Data': { hex: '#6366f1' },
  'Proses Cetak': { hex: '#a855f7' },
- 'Siap Pengambilan': { hex: '#10b981' },
+ 'Siap Pengambilan': { hex: '#14b8a6' },
+ 'Berkas Siap Diunduh': { hex: '#10b981' },
  'Selesai': { hex: '#22c55e' },
  'Ditolak': { hex: '#ef4444' },
+ 'Tolak': { hex: '#ef4444' },
  'Dibatalkan': { hex: '#f43f5e' }
  };
  var timelineModalHtml = progressInfo.lacakSorted.length > 0
