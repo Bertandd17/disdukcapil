@@ -53,6 +53,11 @@
             'mengunggah', 'sedang membuat', 'sedang mengupload'
         ].some(function(keyword) { return title.indexOf(keyword) !== -1; });
 
+        var isButtonlessModal = !isToast
+            && params.showConfirmButton === false
+            && params.showCancelButton === false
+            && params.showDenyButton === false;
+
         // Modal konfirmasi 2-tombol: standarisasi Batal + Konfirmasi
         if (isConfirmModal && !params._allowDeny) {
             params.showDenyButton = false;
@@ -62,13 +67,32 @@
             if (params.reverseButtons === undefined) params.reverseButtons = true;
         }
 
-        // Paksa: modal loading TIDAK BOLEH punya tombol
-        if (isLoadingModal || (params.showConfirmButton === false && !params.showCancelButton && !params.showDenyButton && params.didOpen)) {
+        // Paksa: modal loading TIDAK BOLEH punya tombol (flag + strip DOM)
+        if (isLoadingModal || isButtonlessModal) {
             params.showConfirmButton = false;
             params.showCancelButton = false;
             params.showDenyButton = false;
             if (params.allowOutsideClick !== true) params.allowOutsideClick = false;
             if (params.allowEscapeKey !== true) params.allowEscapeKey = false;
+
+            if (!params.customClass) params.customClass = {};
+            if (typeof params.customClass === 'object') {
+                var popupClass = params.customClass.popup || '';
+                if (popupClass.indexOf('swal-register-loading') === -1) {
+                    params.customClass.popup = (popupClass ? popupClass + ' ' : '') + 'swal-register-loading';
+                }
+            }
+
+            var origLoadingDidOpen = params.didOpen || function() {};
+            params.didOpen = function(toast) {
+                origLoadingDidOpen(toast);
+                if (typeof window.stripSwalActionButtons === 'function') {
+                    window.stripSwalActionButtons();
+                    setTimeout(window.stripSwalActionButtons, 0);
+                    setTimeout(window.stripSwalActionButtons, 50);
+                    setTimeout(window.stripSwalActionButtons, 150);
+                }
+            };
         }
 
         // Untuk SEMUA modal (apapun tipenya), pastikan deny button di-strip dari DOM.

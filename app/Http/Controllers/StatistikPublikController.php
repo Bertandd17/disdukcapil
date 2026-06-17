@@ -137,8 +137,8 @@ class StatistikPublikController extends Controller
                 'jumlah_kk' => $item->jumlah_kk,
                 'jumlah_akte_lahir' => $item->jumlah_akte_lahir,
                 'jumlah_akte_kematian' => $item->jumlah_akte_kematian,
-                'jumlah_ktp' => $item->jumlah_ktp,
-                'jumlah_kia' => $item->jumlah_kia,
+                'jumlah_lahir_mati' => $item->jumlah_lahir_mati,
+                'jumlah_pernikahan' => $item->jumlah_pernikahan,
                 'total_dokumen' => $item->total_dokumen,
             ]);
 
@@ -180,11 +180,12 @@ class StatistikPublikController extends Controller
             ->map(fn($item) => [
                 'bulan' => $item->bulan,
                 'nama_bulan' => $item->nama_bulan,
+                'jumlah_kk' => $item->jumlah_kk ?? 0,
+                'jumlah_kelahiran' => $item->jumlah_kelahiran ?? 0,
+                'jumlah_kematian' => $item->jumlah_kematian ?? 0,
+                'jumlah_lahir_mati' => $item->jumlah_lahir_mati ?? 0,
+                'jumlah_pernikahan' => $item->jumlah_pernikahan ?? 0,
                 'total_antrian' => $item->total_antrian,
-                'antrian_menunggu' => $item->antrian_menunggu,
-                'antrian_diproses' => $item->antrian_diproses,
-                'antrian_selesai' => $item->antrian_selesai,
-                'antrian_ditolak' => $item->antrian_ditolak,
                 'waktu_avg_menit' => $item->waktu_avg_penanganan_menit,
                 'persentase_kepuasan' => $item->persentase_kepuasan,
             ]);
@@ -270,8 +271,8 @@ class StatistikPublikController extends Controller
                     'kk' => $dokumen->sum('jumlah_kk'),
                     'akte_lahir' => $dokumen->sum('jumlah_akte_lahir'),
                     'akte_kematian' => $dokumen->sum('jumlah_akte_kematian'),
-                    'ktp' => $dokumen->sum('jumlah_ktp'),
-                    'kia' => $dokumen->sum('jumlah_kia'),
+                    'lahir_mati' => $dokumen->sum('jumlah_lahir_mati'),
+                    'pernikahan' => $dokumen->sum('jumlah_pernikahan'),
                 ],
             ],
             'layanan' => [

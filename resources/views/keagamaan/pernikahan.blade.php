@@ -24,39 +24,6 @@
 
 @section('content')
 
-@php
-// Persiapan data kalender untuk JavaScript
-$calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
- \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
- \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
- \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
- \App\Models\LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
- \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
- \App\Models\LayananPernikahan::STATUS_SELESAI,
-])
-->whereNotNull('tanggal_perkawinan')
-->get()
-->map(function($p) {
- $colorMap = [
- \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL => '#f59e0b',
- \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI => '#3b82f6',
- \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI => '#8b5cf6',
- \App\Models\LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN => '#ef4444',
- \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI => '#14b8a6',
- \App\Models\LayananPernikahan::STATUS_SELESAI => '#22c55e',
- ];
- return [
- 'title' => $p->nama_mempelai_pria,
- 'start' => $p->tanggal_perkawinan->format('Y-m-d'),
- 'backgroundColor' => $colorMap[$p->status] ?? '#3b82f6',
- 'borderColor' => 'transparent',
- 'extendedProps' => ['pernikahan_id' => $p->pernikahan_id],
- ];
-})
-->values()
-->toArray();
-@endphp
-
 <?php
  // ------------------------------------------------------------------ //
  // Helper: badge status
@@ -107,6 +74,10 @@ $calendarEventsData = \App\Models\LayananPernikahan::whereIn('status', [
  <div>
  <h1 class="text-2xl font-bold text-gray-800">Permintaan Nikah</h1>
  <p class="text-gray-500 text-sm">Kelola konfirmasi dan jadwal perkawinan</p>
+ <p class="text-blue-600 text-sm mt-1 font-medium">
+ <i class="fas fa-church mr-1"></i>{{ $keagamaan->nama_jenis_keagamaan }} &mdash; {{ $keagamaan->nama_tempat_ibadah }}
+ </p>
+ <p class="text-gray-400 text-xs mt-0.5">Diurutkan berdasarkan tanggal permintaan terawal</p>
  </div>
  <div class="flex items-center gap-3">
  <button onclick="refreshPage()"
@@ -733,7 +704,7 @@ let calendarInstance = null; // Referensi ke FullCalendar instance
 // -----------------------------------------------------------------------
 // Data events untuk kalender (di-render dari PHP)
 // -----------------------------------------------------------------------
-const calendarEventsData = @json($calendarEventsData);
+const calendarEventsData = @json($calendarEvents);
 
 // -----------------------------------------------------------------------
 // Inisialisasi FullCalendar

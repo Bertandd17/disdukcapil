@@ -53,13 +53,13 @@ class StatistikDokumenRequest extends FormRequest
                 'min:0',
                 'max:9999999',
             ],
-            'jumlah_ktp' => [
+            'jumlah_lahir_mati' => [
                 'nullable',
                 'integer',
                 'min:0',
                 'max:9999999',
             ],
-            'jumlah_kia' => [
+            'jumlah_pernikahan' => [
                 'nullable',
                 'integer',
                 'min:0',
@@ -95,8 +95,8 @@ class StatistikDokumenRequest extends FormRequest
             'jumlah_kk.integer' => 'Jumlah KK harus berupa angka.',
             'jumlah_akte_lahir.integer' => 'Jumlah Akte Lahir harus berupa angka.',
             'jumlah_akte_kematian.integer' => 'Jumlah Akte Kematian harus berupa angka.',
-            'jumlah_ktp.integer' => 'Jumlah KTP harus berupa angka.',
-            'jumlah_kia.integer' => 'Jumlah KIA harus berupa angka.',
+            'jumlah_lahir_mati.integer' => 'Jumlah Lahir Mati harus berupa angka.',
+            'jumlah_pernikahan.integer' => 'Jumlah Pernikahan harus berupa angka.',
         ];
     }
 
@@ -116,7 +116,7 @@ class StatistikDokumenRequest extends FormRequest
         }
 
         // Set default 0 untuk field yang nullable
-        $numberFields = ['jumlah_kk', 'jumlah_akte_lahir', 'jumlah_akte_kematian', 'jumlah_ktp', 'jumlah_kia'];
+        $numberFields = ['jumlah_kk', 'jumlah_akte_lahir', 'jumlah_akte_kematian', 'jumlah_lahir_mati', 'jumlah_pernikahan'];
         foreach ($numberFields as $field) {
             if ($this->has($field)) {
                 $inputs[$field] = (int) str_replace(['.', ','], '', $this->$field);

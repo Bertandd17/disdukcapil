@@ -105,6 +105,25 @@
             transition: all 0.3s ease;
         }
 
+        /* Sembunyikan ikon mata bawaan browser — gunakan toggle custom saja */
+        #password::-ms-reveal,
+        #password::-ms-clear {
+            display: none;
+        }
+
+        #password::-webkit-credentials-auto-fill-button,
+        #password::-webkit-strong-password-auto-fill-button {
+            visibility: hidden;
+            pointer-events: none;
+            position: absolute;
+            right: 0;
+        }
+
+        #password::-webkit-textfield-decoration-container {
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         /* Button Ripple */
         .btn-ripple {
             position: relative;
@@ -288,18 +307,10 @@
                         <label for="password" class="absolute left-4 top-3 text-gray-400 pointer-events-none">
                             <i class="fas fa-lock mr-2"></i>Password
                         </label>
-                        <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <button type="button" onclick="togglePassword()" data-style-guide-skip aria-label="Tampilkan atau sembunyikan password" class="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-gray-400 hover:text-gray-600">
                             <i class="fas fa-eye" id="eyeIcon"></i>
                         </button>
                     </div>
-                </div>
-
-                <!-- Remember Me -->
-                <div class="flex items-center">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="remember" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" {{ old('remember') ? 'checked' : '' }}>
-                        <span class="text-sm text-gray-600">Ingat saya</span>
-                    </label>
                 </div>
 
                 <!-- Login Button -->

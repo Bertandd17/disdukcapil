@@ -59,63 +59,92 @@
 </aside>
 
 <script>
-    // Setup logout button event listener
     document.addEventListener('DOMContentLoaded', function() {
-        const logoutBtn = document.getElementById('sidebarLogoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
+        var logoutBtn = document.getElementById('sidebarLogoutBtn');
+        if (!logoutBtn) return;
 
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: 'Konfirmasi Logout',
-                        html: '<p class="text-gray-600 text-sm">Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?</p>',
-                        icon: false,
-                        showCancelButton: true,
-                        showDenyButton: false,
-                        confirmButtonText: 'Konfirmasi',
-                        cancelButtonText: 'Batal',
-                        reverseButtons: true,
-                        buttonsStyling: false,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        customClass: {
-                            popup: 'swal-dd-modal',
-                            confirmButton: 'swal-dd-btn swal-dd-btn-danger',
-                            cancelButton: 'swal-dd-btn swal-dd-btn-cancel'
-                        },
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire({
-                                title: 'Memproses Logout',
-                                html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>' +
-                                    '<p class="text-gray-600 mt-4">Sedang mengakhiri session...</p>',
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                showConfirmButton: false,
-                                showDenyButton: false,
-                                showCancelButton: false,
-                                didOpen: function() { Swal.showLoading(); },
-                                customClass: { popup: 'swal-dd-modal', htmlContainer: 'swal2-html-container' }
-                            });
-                            document.getElementById('logoutForm').submit();
-                        }
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            if (window.pauseAutoLogoutReset) {
+                window.pauseAutoLogoutReset();
+            }
+
+            if (typeof Swal === 'undefined') {
+                if (typeof fireToast !== 'undefined') {
+                    fireToast({
+                        type: 'warning',
+                        icon: 'warning',
+                        title: 'Konfirmasi keluar sistem',
+                        problem: 'Library SweetAlert tidak termuat di halaman ini.',
+                        solution: 'Muat ulang halaman (F5) untuk menyegarkan script, atau lanjutkan logout dengan konfirmasi browser.'
                     });
                 } else {
-                    if (typeof fireToast !== 'undefined') {
-                        fireToast({
-                            type: 'warning', icon: 'warning',
-                            title: 'Konfirmasi keluar sistem',
-                            problem: 'Library SweetAlert tidak termuat di halaman ini.',
-                            solution: 'Muat ulang halaman (F5) untuk menyegarkan script, atau lanjutkan logout dengan konfirmasi browser.'
-                        });
-                    } else {
-                        document.getElementById('logoutForm').submit();
-                    }
+                    document.getElementById('logoutForm').submit();
                 }
-            }, { passive: false });
-        }
+                return;
+            }
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Konfirmasi Logout',
+                html: 'Sesi Anda akan diakhiri dan Anda akan kembali ke halaman login. Apakah Anda yakin ingin melanjutkan?',
+                showCancelButton: true,
+                showConfirmButton: true,
+                showDenyButton: false,
+                denyButtonText: null,
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                buttonsStyling: true,
+                didOpen: function() {
+                    var denyBtn = document.querySelector('.swal2-deny');
+                    if (denyBtn) denyBtn.remove();
+                    var denyContainer = document.querySelector('.swal2-deny-container');
+                    if (denyContainer) denyContainer.remove();
+                }
+            }).then(function(result) {
+                if (!result.isConfirmed) {
+                    if (window.resumeAutoLogoutReset) {
+                        window.resumeAutoLogoutReset();
+                    }
+                    return;
+                }
+
+                logoutBtn.disabled = true;
+
+                Swal.close();
+
+                window.setTimeout(function() {
+                    if (typeof window.showRegisterStyleLoading === 'function') {
+                        window.showRegisterStyleLoading('Memproses Logout', 'Sedang mengakhiri session...');
+                    } else {
+                        Swal.fire({
+                            title: 'Memproses Logout',
+                            html: '<div class="flex flex-col items-center gap-3 py-2"><i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i><p class="text-gray-600 text-sm">Sedang mengakhiri session...</p></div>',
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            showDenyButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            customClass: { popup: 'swal-register-loading swal-dd-modal' }
+                        });
+                    }
+
+                    window.setTimeout(function() {
+                        if (window.PageLoading && typeof window.PageLoading.show === 'function') {
+                            window.PageLoading.show('Memproses logout...');
+                        }
+                        document.getElementById('logoutForm').submit();
+                    }, 350);
+                }, 100);
+            });
+        }, { passive: false });
     });
 </script>

@@ -77,7 +77,7 @@
         </div>
         <div>
             <h3 class="font-bold text-gray-800 mb-1">Panduan</h3>
-            <p class="text-sm text-gray-600">Klik tombol <strong class="text-blue-700">Edit</strong> untuk mengubah nama pejabat. Perubahan akan langsung tampil di halaman publik <em>Struktur Organisasi</em>.</p>
+            <p class="text-sm text-gray-600">Klik tombol <strong class="text-blue-700">Ubah</strong> untuk mengubah nama pejabat. Perubahan akan langsung tampil di halaman publik <em>Struktur Organisasi</em>.</p>
         </div>
     </div>
 </div>
@@ -152,11 +152,12 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4 text-center whitespace-nowrap">
                             <button type="button"
-                                onclick="openEditModal({{ $item->id }}, '{{ addslashes($item->nama_jabatan) }}', '{{ addslashes($item->nama_pejabat ?? '') }}', '{{ $item->level ?? '' }}', '{{ $item->eselon ?? '' }}', {{ $item->urutan }}, {{ $item->parent_id ?? 'null' }})"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
-                                <i class="fas fa-edit"></i> Edit
+                                data-style-guide-skip
+                                class="organisasi-edit-btn inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition"
+                                data-id="{{ $item->id }}">
+                                <i class="fas fa-edit"></i> Ubah
                             </button>
                         </td>
                     </tr>
@@ -177,6 +178,18 @@
         </table>
     </div>
 </div>
+
+@foreach ($allOrganisasi->sortBy('urutan') as $item)
+    <script type="application/json" id="organisasi-payload-{{ $item->id }}">{!! json_encode([
+        'id'           => $item->id,
+        'nama_jabatan' => $item->nama_jabatan,
+        'nama_pejabat' => $item->nama_pejabat,
+        'level'        => $item->level,
+        'eselon'       => $item->eselon,
+        'urutan'       => $item->urutan,
+        'parent_id'    => $item->parent_id,
+    ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) !!}</script>
+@endforeach
 
 {{-- Modal Edit Pejabat (konsisten dengan modal admin lainnya) --}}
 <div id="modalEditPejabat" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
@@ -256,6 +269,30 @@
     });
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !editModalEl.classList.contains('hidden')) closeEditModal();
+    });
+
+    document.querySelectorAll('.organisasi-edit-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id = btn.getAttribute('data-id');
+            const el = document.getElementById('organisasi-payload-' + id);
+            if (!el) return;
+            try {
+                const item = JSON.parse(el.textContent);
+                openEditModal(
+                    item.id,
+                    item.nama_jabatan,
+                    item.nama_pejabat || '',
+                    item.level || '',
+                    item.eselon || '',
+                    item.urutan,
+                    item.parent_id
+                );
+            } catch (err) {
+                if (window.SwalHelper) {
+                    SwalHelper.toastError('Gagal memuat data jabatan.', 'Muat ulang halaman, lalu coba lagi.');
+                }
+            }
+        });
     });
 
     function filterTable() {

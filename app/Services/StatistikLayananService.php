@@ -4,25 +4,22 @@ namespace App\Services;
 
 use App\Models\StatistikLayananBulanan;
 use App\Models\AntrianOnline;
-use Illuminate\Support\Facades\DB;
 
 class StatistikLayananService
 {
-    /**
-     * Generate statistik layanan bulanan dari data antrian
-     *
-     * @param int $tahun
-     * @param int $bulan
-     * @return StatistikLayananBulanan
-     */
+    private const LAYANAN_KEYWORDS = [
+        'jumlah_kk' => ['Kartu Keluarga', 'KK'],
+        'jumlah_kelahiran' => ['Akta Kelahiran', 'Akte Lahir', 'Akte Kelahiran', 'Kelahiran'],
+        'jumlah_kematian' => ['Akta Kematian', 'Akte Kematian', 'Kematian'],
+        'jumlah_lahir_mati' => ['Lahir Mati'],
+        'jumlah_pernikahan' => ['Pernikahan'],
+    ];
+
     public function generateDariAntrian(int $tahun, int $bulan): StatistikLayananBulanan
     {
-        // Ambil semua antrian pada bulan/tahun tertentu
         $antrianQuery = AntrianOnline::whereYear('created_at', $tahun)
             ->whereMonth('created_at', $bulan);
 
-        // Hitung statistik antrian
-        $totalAntrian = $antrianQuery->count();
         $antrianSelesai = (clone $antrianQuery)->where('status_antrian', AntrianOnline::STATUS_SIAP_PENGAMBILAN)->count();
         $antrianDiproses = (clone $antrianQuery)->whereIn('status_antrian', [
             AntrianOnline::STATUS_DOKUMEN_DITERIMA,
@@ -32,21 +29,27 @@ class StatistikLayananService
         $antrianMenunggu = (clone $antrianQuery)->where('status_antrian', AntrianOnline::STATUS_MENUNGGU)->count();
         $antrianDitolak = (clone $antrianQuery)->where('status_antrian', AntrianOnline::STATUS_DITOLAK)->count();
 
-        // Hitung rata-rata waktu penyelesaian (dalam menit)
-        $rataRataWaktu = $this->hitungRataRataWaktuSelesai($tahun, $bulan);
+        $layananCounts = [];
+        foreach (self::LAYANAN_KEYWORDS as $field => $keywords) {
+            $layananCounts[$field] = $this->hitungBerdasarkanNamaLayanan($tahun, $bulan, $keywords);
+        }
 
-        // Hitung tingkat keberhasilan (persentase antrian selesai)
-        $tingkatKeberhasilan = $totalAntrian > 0 
-            ? round(($antrianSelesai / $totalAntrian) * 100, 2) 
+        $totalAntrian = array_sum($layananCounts);
+        if ($totalAntrian === 0) {
+            $totalAntrian = $antrianQuery->count();
+        }
+
+        $rataRataWaktu = $this->hitungRataRataWaktuSelesai($tahun, $bulan);
+        $tingkatKeberhasilan = $totalAntrian > 0
+            ? round(($antrianSelesai / $totalAntrian) * 100, 2)
             : 0;
 
-        // Update or create statistik
         $statistik = StatistikLayananBulanan::withTrashed()->updateOrCreate(
             [
                 'tahun' => $tahun,
                 'bulan' => $bulan,
             ],
-            [
+            array_merge($layananCounts, [
                 'total_antrian' => $totalAntrian,
                 'antrian_selesai' => $antrianSelesai,
                 'antrian_diproses' => $antrianDiproses,
@@ -56,7 +59,7 @@ class StatistikLayananService
                 'persentase_kepuasan' => $tingkatKeberhasilan,
                 'is_auto_generated' => true,
                 'generated_at' => now(),
-            ]
+            ])
         );
 
         if ($statistik->trashed()) {
@@ -66,9 +69,21 @@ class StatistikLayananService
         return $statistik;
     }
 
-    /**
-     * Hitung rata-rata waktu penyelesaian (dalam menit)
-     */
+    protected function hitungBerdasarkanNamaLayanan(int $tahun, int $bulan, array $keywords): int
+    {
+        return AntrianOnline::whereHas('layanan', function ($query) use ($keywords) {
+                $query->where(function ($subQuery) use ($keywords) {
+                    foreach ($keywords as $index => $keyword) {
+                        $method = $index === 0 ? 'where' : 'orWhere';
+                        $subQuery->{$method}('nama_layanan', 'like', "%{$keyword}%");
+                    }
+                });
+            })
+            ->whereYear('created_at', $tahun)
+            ->whereMonth('created_at', $bulan)
+            ->count();
+    }
+
     protected function hitungRataRataWaktuSelesai(int $tahun, int $bulan): int
     {
         $antrianSelesai = AntrianOnline::where('status_antrian', AntrianOnline::STATUS_SIAP_PENGAMBILAN)
@@ -86,17 +101,13 @@ class StatistikLayananService
         $count = 0;
 
         foreach ($antrianSelesai as $antrian) {
-            $selisih = $antrian->updated_at->diffInMinutes($antrian->created_at);
-            $totalMenit += $selisih;
+            $totalMenit += $antrian->updated_at->diffInMinutes($antrian->created_at);
             $count++;
         }
 
         return $count > 0 ? (int) round($totalMenit / $count) : 0;
     }
 
-    /**
-     * Generate statistik untuk bulan berjalan (current month)
-     */
     public function generateBulanBerjalan(): StatistikLayananBulanan
     {
         $now = now();
@@ -106,49 +117,32 @@ class StatistikLayananService
         );
     }
 
-    /**
-     * Generate statistik untuk bulan sebelumnya (jika belum ada)
-     */
     public function generateBulanLalu(): ?StatistikLayananBulanan
     {
         $lastMonth = now()->subMonth();
         $tahun = (int) $lastMonth->format('Y');
         $bulan = (int) $lastMonth->format('m');
 
-        // Cek apakah sudah ada
         $existing = StatistikLayananBulanan::where('tahun', $tahun)
             ->where('bulan', $bulan)
             ->first();
 
         if ($existing) {
-            return null; // Sudah ada, tidak perlu generate ulang
+            return null;
         }
 
         return $this->generateDariAntrian($tahun, $bulan);
     }
 
-    /**
-     * Re-generate statistik (update data yang sudah ada)
-     */
     public function regenerateBulanan(int $tahun, int $bulan): StatistikLayananBulanan
     {
-        // Hapus data yang sudah ada
         StatistikLayananBulanan::where('tahun', $tahun)
             ->where('bulan', $bulan)
             ->delete();
 
-        // Generate ulang
         return $this->generateDariAntrian($tahun, $bulan);
     }
 
-    /**
-     * Generate statistik untuk range bulan tertentu
-     *
-     * @param int $tahun
-     * @param int $bulanAwal
-     * @param int $bulanAkhir
-     * @return array
-     */
     public function generateRangeBulan(int $tahun, int $bulanAwal, int $bulanAkhir): array
     {
         $results = [];
@@ -160,9 +154,6 @@ class StatistikLayananService
         return $results;
     }
 
-    /**
-     * Generate statistik untuk rentang bulan dan kembalikan response standar controller.
-     */
     public function generateRange(int $tahun, int $bulanAwal, int $bulanAkhir): array
     {
         if ($bulanAwal > $bulanAkhir) {
@@ -179,20 +170,11 @@ class StatistikLayananService
         ];
     }
 
-    /**
-     * Generate semua statistik untuk tahun tertentu
-     *
-     * @param int $tahun
-     * @return array
-     */
     public function generateTahun(int $tahun): array
     {
         return $this->generateRangeBulan($tahun, 1, 12);
     }
 
-    /**
-     * Generate statistik untuk satu tahun penuh dan kembalikan response standar controller.
-     */
     public function generateTahunan(int $tahun): array
     {
         return [
@@ -202,15 +184,17 @@ class StatistikLayananService
         ];
     }
 
-    /**
-     * Get ringkasan statistik layanan untuk tahun tertentu
-     */
     public function getRingkasan(int $tahun): array
     {
         $statistik = StatistikLayananBulanan::where('tahun', $tahun)->get();
 
         return [
             'total_antrian' => $statistik->sum('total_antrian'),
+            'total_kk' => $statistik->sum('jumlah_kk'),
+            'total_kelahiran' => $statistik->sum('jumlah_kelahiran'),
+            'total_kematian' => $statistik->sum('jumlah_kematian'),
+            'total_lahir_mati' => $statistik->sum('jumlah_lahir_mati'),
+            'total_pernikahan' => $statistik->sum('jumlah_pernikahan'),
             'total_selesai' => $statistik->sum('antrian_selesai'),
             'total_diproses' => $statistik->sum('antrian_diproses'),
             'total_menunggu' => $statistik->sum('antrian_menunggu'),
@@ -221,22 +205,21 @@ class StatistikLayananService
         ];
     }
 
-    /**
-     * Get tren statistik layanan bulanan untuk chart
-     */
     public function getTrenBulanan(int $tahun): array
     {
         $statistik = StatistikLayananBulanan::where('tahun', $tahun)
             ->orderBy('bulan')
             ->get();
 
-        return $statistik->map(fn($item) => [
+        return $statistik->map(fn ($item) => [
             'bulan' => $item->bulan,
             'nama_bulan' => $item->nama_bulan,
             'total_antrian' => $item->total_antrian,
-            'antrian_selesai' => $item->antrian_selesai,
-            'antrian_diproses' => $item->antrian_diproses,
-            'antrian_menunggu' => $item->antrian_menunggu,
+            'jumlah_kk' => $item->jumlah_kk ?? 0,
+            'jumlah_kelahiran' => $item->jumlah_kelahiran ?? 0,
+            'jumlah_kematian' => $item->jumlah_kematian ?? 0,
+            'jumlah_lahir_mati' => $item->jumlah_lahir_mati ?? 0,
+            'jumlah_pernikahan' => $item->jumlah_pernikahan ?? 0,
         ])->toArray();
     }
 }

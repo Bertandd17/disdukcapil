@@ -222,11 +222,11 @@ class AkteKematianController extends Controller
     public function uploadBerkasFinal(Request $request, $uuid)
     {
         $validator = Validator::make($request->all(), [
-            'file_berkas' => 'required|file|mimes:pdf|max:2048',
+            'file_berkas' => 'required|file|mimes:pdf|max:5120',
         ], [
             'file_berkas.required' => 'File berkas wajib diunggah.',
             'file_berkas.mimes'    => 'Format yang diizinkan: PDF.',
-            'file_berkas.max'      => 'Ukuran file maksimal 2 MB.',
+            'file_berkas.max'      => 'Ukuran file maksimal 5 MB.',
         ]);
 
         if ($validator->fails()) {
@@ -234,6 +234,10 @@ class AkteKematianController extends Controller
         }
 
         $kematian = AkteKematian::where('uuid', $uuid)->firstOrFail();
+
+        if ($kematian->status !== 'Proses Cetak') {
+            return redirect()->back()->with('upload_error', 'Upload berkas hanya tersedia pada tahap Proses Cetak.');
+        }
 
         $file     = $request->file('file_berkas');
         $ext      = $file->getClientOriginalExtension();

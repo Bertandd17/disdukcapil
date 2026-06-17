@@ -35,6 +35,36 @@ class StatistikLayananRequest extends FormRequest
                 'min:1',
                 'max:12',
             ],
+            'jumlah_kk' => [
+                'nullable',
+                'integer',
+                'min:0',
+                'max:9999999',
+            ],
+            'jumlah_kelahiran' => [
+                'nullable',
+                'integer',
+                'min:0',
+                'max:9999999',
+            ],
+            'jumlah_kematian' => [
+                'nullable',
+                'integer',
+                'min:0',
+                'max:9999999',
+            ],
+            'jumlah_lahir_mati' => [
+                'nullable',
+                'integer',
+                'min:0',
+                'max:9999999',
+            ],
+            'jumlah_pernikahan' => [
+                'nullable',
+                'integer',
+                'min:0',
+                'max:9999999',
+            ],
             'antrian_menunggu' => [
                 'nullable',
                 'integer',
@@ -98,6 +128,11 @@ class StatistikLayananRequest extends FormRequest
             'bulan.integer' => 'Bulan harus berupa angka.',
             'bulan.min' => 'Bulan minimal adalah 1.',
             'bulan.max' => 'Bulan maksimal adalah 12.',
+            'jumlah_kk.integer' => 'Jumlah Kartu Keluarga harus berupa angka.',
+            'jumlah_kelahiran.integer' => 'Jumlah Kelahiran harus berupa angka.',
+            'jumlah_kematian.integer' => 'Jumlah Kematian harus berupa angka.',
+            'jumlah_lahir_mati.integer' => 'Jumlah Lahir Mati harus berupa angka.',
+            'jumlah_pernikahan.integer' => 'Jumlah Pernikahan harus berupa angka.',
             'antrian_menunggu.integer' => 'Jumlah antrian menunggu harus berupa angka.',
             'antrian_diproses.integer' => 'Jumlah antrian diproses harus berupa angka.',
             'antrian_selesai.integer' => 'Jumlah antrian selesai harus berupa angka.',
@@ -126,6 +161,11 @@ class StatistikLayananRequest extends FormRequest
 
         // Set default 0 untuk field yang nullable
         $numberFields = [
+            'jumlah_kk',
+            'jumlah_kelahiran',
+            'jumlah_kematian',
+            'jumlah_lahir_mati',
+            'jumlah_pernikahan',
             'antrian_menunggu',
             'antrian_diproses',
             'antrian_selesai',

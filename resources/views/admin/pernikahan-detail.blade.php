@@ -160,6 +160,39 @@
                     </div>
                 </div>
 
+                @php
+                    $ktpFiles = $pernikahan->getKtpFilesForDisplay();
+                @endphp
+                @if(!empty($ktpFiles))
+                <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Berkas KTP</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($ktpFiles as $key => $file)
+                            <div class="border border-gray-200 rounded-xl p-4 bg-gray-50">
+                                <p class="text-sm font-medium text-gray-800 mb-3">{{ $file['label'] }}</p>
+                                @if($file['is_pdf'])
+                                    <iframe src="{{ $file['url'] }}" class="w-full h-72 rounded-lg border border-gray-200 bg-white" title="{{ $file['label'] }}"></iframe>
+                                    <a href="{{ $file['url'] }}" target="_blank" rel="noopener" data-style-guide-skip class="w-full mt-2 bg-green-600 text-white py-2 rounded-lg text-sm font-semibold text-center flex items-center justify-center">
+                                        <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
+                                    </a>
+                                @elseif($file['is_image'])
+                                    <a href="{{ $file['url'] }}" target="_blank" rel="noopener">
+                                        <img src="{{ $file['url'] }}" alt="{{ $file['label'] }}" class="w-full max-h-72 object-contain rounded-lg border border-gray-200">
+                                    </a>
+                                    <a href="{{ $file['url'] }}" target="_blank" rel="noopener" data-style-guide-skip class="w-full mt-2 bg-green-600 text-white py-2 rounded-lg text-sm font-semibold text-center flex items-center justify-center">
+                                        <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
+                                    </a>
+                                @else
+                                    <a href="{{ $file['url'] }}" target="_blank" rel="noopener" data-style-guide-skip class="w-full bg-green-600 text-white py-2 rounded-lg text-sm font-semibold text-center flex items-center justify-center">
+                                        <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
+                                    </a>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
                 {{-- Dokumen --}}
                 @if($pernikahan->dokumen->isNotEmpty())
                 <div class="bg-white rounded-2xl shadow-sm p-6">
@@ -188,6 +221,11 @@
                                             <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">Ditolak</span>
                                             @break
                                     @endswitch
+                                    @if($doc->file_path)
+                                        <a href="{{ \App\Models\LayananPernikahan::buildPublicFileUrl($doc->file_path) }}" target="_blank" rel="noopener" data-style-guide-skip class="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold">
+                                            <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
+                                        </a>
+                                    @endif
                                     @if($doc->catatan_verifikasi)
                                         <p class="text-xs text-red-600">{{ $doc->catatan_verifikasi }}</p>
                                     @endif

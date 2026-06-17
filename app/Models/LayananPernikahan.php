@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -197,6 +198,76 @@ class LayananPernikahan extends Model
     public function scopeMenungguVerifikasiDokumen(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI);
+    }
+
+    /** Hanya permohonan untuk tempat ibadah tertentu */
+    public function scopeForKeagamaanId(Builder $query, string $keagamaanId): Builder
+    {
+        return $query->where('keagamaan_id', $keagamaanId);
+    }
+
+    /**
+     * Urut tanggal permintaan terawal dulu (contoh: tgl 12 di atas tgl 13).
+     * Record tanpa tanggal di akhir, tie-break: created_at terawal.
+     */
+    public function scopeUrutTanggalPermintaan(Builder $query): Builder
+    {
+        return $query
+            ->orderByRaw('tanggal_perkawinan IS NULL')
+            ->orderBy('tanggal_perkawinan', 'asc')
+            ->orderBy('created_at', 'asc');
+    }
+
+    public static function detectFileKindFromPath(?string $path): array
+    {
+        if (!$path) {
+            return ['is_pdf' => false, 'is_image' => false];
+        }
+
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        return [
+            'is_pdf' => $ext === 'pdf',
+            'is_image' => in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'], true),
+        ];
+    }
+
+    public static function buildPublicFileUrl(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        return asset(Storage::url($path));
+    }
+
+    /**
+     * Payload KTP untuk preview admin/keagamaan (PDF + gambar).
+     */
+    public function getKtpFilesForDisplay(): array
+    {
+        $slots = [
+            'mempelai_pria' => ['column' => 'file_ktp_mempelai_pria', 'label' => 'KTP Mempelai Pria'],
+            'mempelai_wanita' => ['column' => 'file_ktp_mempelai_wanita', 'label' => 'KTP Mempelai Wanita'],
+            'saksi_1' => ['column' => 'file_ktp_saksi_1', 'label' => 'KTP Saksi 1'],
+            'saksi_2' => ['column' => 'file_ktp_saksi_2', 'label' => 'KTP Saksi 2'],
+        ];
+
+        $files = [];
+        foreach ($slots as $key => $meta) {
+            $path = $this->{$meta['column']} ?? null;
+            if (!$path) {
+                continue;
+            }
+
+            $kind = self::detectFileKindFromPath($path);
+            $files[$key] = array_merge([
+                'label' => $meta['label'],
+                'url' => self::buildPublicFileUrl($path),
+            ], $kind);
+        }
+
+        return $files;
     }
 
     public function scopeByNik(Builder $query, string $nik): Builder

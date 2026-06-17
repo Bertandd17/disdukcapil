@@ -54,31 +54,31 @@ class StatistikSeeder extends Seeder
      */
     private array $dataDokumen = [
         // 2024
-        [2024, 1, 456, 234, 89, 567, 345],
-        [2024, 2, 423, 198, 76, 534, 312],
-        [2024, 3, 489, 267, 92, 589, 378],
-        [2024, 4, 445, 223, 84, 523, 356],
-        [2024, 5, 467, 245, 88, 545, 367],
-        [2024, 6, 478, 256, 91, 556, 372],
-        [2024, 7, 491, 278, 95, 578, 389],
-        [2024, 8, 434, 212, 82, 514, 334],
-        [2024, 9, 456, 234, 87, 536, 345],
-        [2024, 10, 468, 247, 89, 548, 356],
-        [2024, 11, 482, 259, 93, 562, 368],
-        [2024, 12, 495, 268, 96, 585, 378],
+        [2024, 1, 456, 234, 89, 72, 345],
+        [2024, 2, 423, 198, 76, 68, 312],
+        [2024, 3, 489, 267, 92, 78, 378],
+        [2024, 4, 445, 223, 84, 71, 356],
+        [2024, 5, 467, 245, 88, 75, 367],
+        [2024, 6, 478, 256, 91, 76, 372],
+        [2024, 7, 491, 278, 95, 79, 389],
+        [2024, 8, 434, 212, 82, 69, 334],
+        [2024, 9, 456, 234, 87, 73, 345],
+        [2024, 10, 468, 247, 89, 75, 356],
+        [2024, 11, 482, 259, 93, 77, 368],
+        [2024, 12, 495, 268, 96, 79, 378],
         // 2023
-        [2023, 1, 412, 201, 78, 501, 298],
-        [2023, 2, 378, 178, 65, 467, 267],
-        [2023, 3, 445, 223, 81, 534, 312],
-        [2023, 4, 401, 189, 72, 489, 289],
-        [2023, 5, 423, 198, 76, 501, 301],
-        [2023, 6, 434, 212, 79, 512, 312],
-        [2023, 7, 456, 234, 85, 534, 334],
-        [2023, 8, 389, 167, 68, 456, 278],
-        [2023, 9, 412, 189, 74, 478, 298],
-        [2023, 10, 423, 198, 77, 489, 301],
-        [2023, 11, 434, 209, 81, 501, 312],
-        [2023, 12, 445, 215, 84, 512, 323],
+        [2023, 1, 412, 201, 78, 66, 298],
+        [2023, 2, 378, 178, 65, 60, 267],
+        [2023, 3, 445, 223, 81, 71, 312],
+        [2023, 4, 401, 189, 72, 64, 289],
+        [2023, 5, 423, 198, 76, 68, 301],
+        [2023, 6, 434, 212, 79, 69, 312],
+        [2023, 7, 456, 234, 85, 73, 334],
+        [2023, 8, 389, 167, 68, 62, 278],
+        [2023, 9, 412, 189, 74, 66, 298],
+        [2023, 10, 423, 198, 77, 68, 301],
+        [2023, 11, 434, 209, 81, 69, 312],
+        [2023, 12, 445, 215, 84, 71, 323],
     ];
 
     /**
@@ -177,7 +177,7 @@ class StatistikSeeder extends Seeder
 
         $saved = 0;
         foreach ($this->dataDokumen as $data) {
-            [$tahun, $bulan, $kk, $akteLahir, $akteKematian, $ktp, $kia] = $data;
+            [$tahun, $bulan, $kk, $akteLahir, $akteKematian, $lahirMati, $pernikahan] = $data;
 
             $statistik = StatistikDokumen::withTrashed()->updateOrCreate(
                 [
@@ -188,8 +188,8 @@ class StatistikSeeder extends Seeder
                     'jumlah_kk' => $kk,
                     'jumlah_akte_lahir' => $akteLahir,
                     'jumlah_akte_kematian' => $akteKematian,
-                    'jumlah_ktp' => $ktp,
-                    'jumlah_kia' => $kia,
+                    'jumlah_lahir_mati' => $lahirMati,
+                    'jumlah_pernikahan' => $pernikahan,
                     'is_auto_generated' => false,
                     'generated_at' => null,
                 ]
@@ -223,12 +223,14 @@ class StatistikSeeder extends Seeder
                 $kepuasan
             ] = $data;
 
+            $layanan = $this->splitLayananTotal($total);
+
             $statistik = StatistikLayananBulanan::withTrashed()->updateOrCreate(
                 [
                     'tahun' => $tahun,
                     'bulan' => $bulan,
                 ],
-                [
+                array_merge($layanan, [
                     'total_antrian' => $total,
                     'antrian_menunggu' => $menunggu,
                     'antrian_diproses' => $diproses,
@@ -238,7 +240,7 @@ class StatistikSeeder extends Seeder
                     'persentase_kepuasan' => $kepuasan,
                     'is_auto_generated' => false,
                     'generated_at' => null,
-                ]
+                ])
             );
 
             if ($statistik->trashed()) {
@@ -249,5 +251,25 @@ class StatistikSeeder extends Seeder
         }
 
         $this->command->info("   {$saved} data statistik layanan bulanan berhasil disimpan");
+    }
+
+    /**
+     * Bagi total antrian ke lima layanan utama.
+     */
+    private function splitLayananTotal(int $total): array
+    {
+        $jumlahKk = (int) round($total * 0.31);
+        $jumlahKelahiran = (int) round($total * 0.26);
+        $jumlahKematian = (int) round($total * 0.09);
+        $jumlahLahirMati = (int) round($total * 0.04);
+        $jumlahPernikahan = max(0, $total - $jumlahKk - $jumlahKelahiran - $jumlahKematian - $jumlahLahirMati);
+
+        return [
+            'jumlah_kk' => $jumlahKk,
+            'jumlah_kelahiran' => $jumlahKelahiran,
+            'jumlah_kematian' => $jumlahKematian,
+            'jumlah_lahir_mati' => $jumlahLahirMati,
+            'jumlah_pernikahan' => $jumlahPernikahan,
+        ];
     }
 }

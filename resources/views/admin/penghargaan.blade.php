@@ -8,12 +8,24 @@
     $provinsi  = $data->where('tingkat', 'Provinsi')->count();
 @endphp
 
-<div class="mb-6 reveal">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+{{-- Welcome Banner --}}
+<div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-6 md:p-8 text-white mb-6 reveal shadow-lg">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800">Penghargaan</h1>
-            <p class="text-gray-600 mt-1 text-sm">Daftar penghargaan yang telah diraih Disdukcapil Kabupaten Toba</p>
+            <h2 class="text-2xl md:text-3xl font-bold mb-2">Penghargaan</h2>
+            <p class="text-blue-100 text-base md:text-lg">Daftar penghargaan yang telah diraih Disdukcapil Kabupaten Toba.</p>
         </div>
+        <div class="flex items-center gap-3">
+            <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2">
+                <p class="text-xs text-blue-100">Total Penghargaan</p>
+                <p class="text-2xl font-bold">{{ $total }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-6 reveal">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4">
         <button type="button" data-style-guide-skip onclick="openPenghargaanModal('create')"
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:scale-95 transition-all">
             <i class="fas fa-plus"></i>
@@ -88,51 +100,44 @@
                     </div>
 
                     <div class="flex-1 min-w-0">
-                        <div class="flex flex-wrap items-start justify-between gap-2 mb-1">
+                        <div class="flex items-start justify-between gap-4">
                             <div class="flex-1 min-w-0">
                                 <h4 class="text-sm sm:text-base font-bold text-gray-800 leading-snug">{{ $item->nama }}</h4>
                                 <p class="text-xs sm:text-sm text-gray-500 mt-0.5">{{ $item->instansi ?? '-' }}</p>
+                                <p class="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-2">{{ $item->deskripsi_singkat }}</p>
+                                <div class="flex flex-wrap items-center gap-3 mt-2 text-xs text-gray-400">
+                                    @if($item->tahun)
+                                        <span><i class="fas fa-calendar mr-1"></i>{{ $item->tahun }}</span>
+                                    @endif
+                                    @if($item->lokasi)
+                                        <span><i class="fas fa-map-marker-alt mr-1"></i>{{ $item->lokasi }}</span>
+                                    @endif
+                                </div>
                             </div>
-                            <span class="px-2.5 py-1 {{ $style['badge'] }} rounded-full text-xs font-semibold flex-shrink-0">
-                                {{ $item->tingkat }}
-                            </span>
-                        </div>
-                        <p class="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-2">{{ $item->deskripsi_singkat }}</p>
-                        <div class="flex flex-wrap items-center gap-3 mt-2 text-xs text-gray-400">
-                            @if($item->tahun)
-                                <span><i class="fas fa-calendar mr-1"></i>{{ $item->tahun }}</span>
-                            @endif
-                            @if($item->lokasi)
-                                <span><i class="fas fa-map-marker-alt mr-1"></i>{{ $item->lokasi }}</span>
-                            @endif
-                        </div>
-
-                        <div class="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-gray-100">
-                            @if($item->file)
-                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank" rel="noopener"
-                                    data-style-guide-skip
-                                    class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
-                                    <i class="fas fa-eye"></i> Lihat File
-                                </a>
-                                <span class="text-gray-200 hidden sm:inline">|</span>
-                            @endif
-                            <button type="button"
-                                data-style-guide-skip
-                                class="penghargaan-edit-btn inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition"
-                                data-id="{{ $item->id }}">
-                                <i class="fas fa-edit"></i> Ubah
-                            </button>
-                            <span class="text-gray-200 hidden sm:inline">|</span>
-                            <form action="{{ route('admin.penghargaan.destroy', $item->id) }}" method="post" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button"
-                                    data-style-guide-skip
-                                    class="penghargaan-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition"
-                                    data-title="{{ $item->nama }}">
-                                    <i class="fas fa-trash-alt"></i> Hapus
-                                </button>
-                            </form>
+                            <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                                <span class="px-2.5 py-1 {{ $style['badge'] }} rounded-full text-xs font-semibold">
+                                    {{ $item->tingkat }}
+                                </span>
+                                <div class="flex flex-wrap items-center justify-end gap-x-3 gap-y-1">
+                                    <button type="button"
+                                        data-style-guide-skip
+                                        class="penghargaan-edit-btn inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition"
+                                        data-id="{{ $item->id }}">
+                                        <i class="fas fa-edit"></i> Ubah
+                                    </button>
+                                    <span class="text-gray-200">|</span>
+                                    <form action="{{ route('admin.penghargaan.destroy', $item->id) }}" method="post" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                            data-style-guide-skip
+                                            class="penghargaan-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition"
+                                            data-title="{{ $item->nama }}">
+                                            <i class="fas fa-trash-alt"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1102,9 +1102,9 @@ function validateAndGoStep3() {
     if (hasEmpty) errMsg = 'Ada Dokumen yang Perlu dilengkapi';
     if (!valid) {
         if (errMsg.indexOf('16 angka') !== -1) {
-            showErrorToast('Nomor harus tepat 16 angka.', 'Masukkan NIK atau nomor KK sesuai dokumen kependudukan (16 digit).');
+            toastError('Nomor harus tepat 16 angka.', 'Masukkan NIK atau nomor KK sesuai dokumen kependudukan (16 digit).');
         } else {
-            showErrorToast('Ada kolom wajib yang belum diisi.', 'Lengkapi semua data pada langkah ini, lalu lanjutkan.');
+            toastError('Ada kolom wajib yang belum diisi.', 'Lengkapi semua data pada langkah ini, lalu lanjutkan.');
         }
         return;
     }
@@ -1128,7 +1128,7 @@ function validateAndGoStep4() {
         }
     });
     if (!valid) {
-        showErrorToast(
+        toastError(
             'Dokumen wajib belum diunggah' + (missingLabel ? ': ' + missingLabel : '') + '.',
             'Unggah semua berkas PDF yang wajib, lalu lanjutkan ke langkah berikutnya.'
         );
@@ -1210,7 +1210,7 @@ function onLivenessPassed() {
     document.getElementById('liveness_passed').value = '1';
     blinkCount = BLINK_TARGET;
     showLivenessCompletedUI();
-    showSuccessToast('Verifikasi Wajah Berhasil');
+    toastSuccess('Verifikasi Wajah Berhasil');
     setTimeout(function() { goToStep(5); }, 900);
 }
 function handleLivenessAction() {
@@ -1401,7 +1401,8 @@ function stripToastHtml(message) {
     return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
 }
 
-function showSuccessToast(title, html) {
+// Toast helpers — success/error only, format konsisten dengan antrian-online.blade.php
+function toastSuccess(title, html) {
     if (typeof fireToast === 'function') {
         return fireToast({ type: 'success', icon: 'success', title: title || 'Berhasil', html: html || undefined, timer: 5000 });
     }
@@ -1410,7 +1411,7 @@ function showSuccessToast(title, html) {
     }
 }
 
-function showErrorToast(problem, solution, title) {
+function toastError(problem, solution, title) {
     var cleanProblem  = stripToastHtml(problem  || 'Terjadi kesalahan saat memproses permintaan.');
     var cleanSolution = stripToastHtml(solution || 'Periksa data yang Anda masukkan, lalu coba lagi.');
     if (typeof fireToast === 'function') {
@@ -1480,9 +1481,49 @@ async function parseJsonResponse(response) {
     };
 }
 
+function stripNomorAntrianFromMessage(message, nomor) {
+    var text = String(message || '').trim();
+    if (!text) return '';
+
+    text = text
+        .replace(/\s*!?\s*Nomor\s+Antrian\s+Anda\s*:\s*[\w-]+/gi, '')
+        .replace(/\s*Nomor\s+antrian\s*:\s*[\w-]+/gi, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
+    if (text && !/[.!?]$/.test(text)) {
+        text += '!';
+    }
+
+    return text;
+}
+
+function buildPengajuanSuccessHtml(data) {
+    var parts = [];
+    var serviceName = currentServiceName || 'Layanan';
+    var nomor = data.nomor_antrian || (data.data && data.data.nomor_antrian) || '';
+    var rawMessage = data.message || '';
+    var detailMessage = stripNomorAntrianFromMessage(rawMessage, nomor);
+
+    if (!detailMessage) {
+        detailMessage = 'Permohonan ' + serviceName + ' berhasil dikirim!';
+    }
+
+    parts.push('Layanan ' + escapeHtmlText(serviceName) + ' berhasil diajukan.');
+    parts.push(escapeHtmlText(detailMessage));
+
+    if (nomor) {
+        parts.push('Nomor antrian: ' + escapeHtmlText(nomor));
+    }
+
+    return parts.join('<br>');
+}
+
 async function submitPengajuanForm(form, btnSubmit) {
+    var submissionSucceeded = false;
+
     if (!form || !form.action || form.action === '#' || form.action.endsWith('#')) {
-        showErrorToast(
+        toastError(
             'URL pengiriman tidak valid.',
             'Tutup modal, pilih layanan kembali, lalu coba kirim pengajuan.'
         );
@@ -1512,7 +1553,11 @@ async function submitPengajuanForm(form, btnSubmit) {
         var data = await parseJsonResponse(response);
 
         if (data.success) {
-            showSuccessToast(data.message || 'Pengajuan Dokumen Berhasil dilakukan');
+            submissionSucceeded = true;
+            if (typeof Swal !== 'undefined' && Swal.isVisible && Swal.isVisible()) {
+                Swal.close();
+            }
+            toastSuccess('Pengajuan Berhasil!', buildPengajuanSuccessHtml(data));
             form.reset();
             closeModal();
             goToStep(1);
@@ -1526,7 +1571,7 @@ async function submitPengajuanForm(form, btnSubmit) {
                     return Array.isArray(val) ? val.join(' ') : val;
                 }).join(' ');
             }
-            showErrorToast(
+            toastError(
                 data.problem || data.message || 'Terjadi kesalahan saat mengirim pengajuan.',
                 data.solution || validationMsg || 'Periksa kelengkapan data dan berkas, lalu coba kirim kembali.'
             );
@@ -1534,19 +1579,21 @@ async function submitPengajuanForm(form, btnSubmit) {
     } catch (error) {
         console.error('Submit error:', error);
         if (error.name === 'AbortError') {
-            showErrorToast(
+            toastError(
                 'Waktu pengiriman habis.',
                 'Periksa koneksi internet atau kurangi ukuran berkas, lalu coba lagi.'
             );
         } else {
-            showErrorToast(
+            toastError(
                 'Gagal mengirim pengajuan.',
                 'Periksa koneksi internet, lalu coba lagi.'
             );
         }
     } finally {
         clearTimeout(timeoutId);
-        Swal.close();
+        if (!submissionSucceeded && typeof Swal !== 'undefined' && Swal.isVisible && Swal.isVisible()) {
+            Swal.close();
+        }
         if (btnSubmit) btnSubmit.disabled = false;
     }
 }
@@ -1574,21 +1621,21 @@ function autoFillFromAntrian(nomorAntrian) {
             if (!data.success) {
                 var errorCode = data.error_code;
                 if (errorCode === 'NOT_FOUND') {
-                    showErrorToast(
+                    toastError(
                         data.problem || data.message || 'Nomor antrian tidak ditemukan dalam sistem.',
                         data.solution || 'Periksa kembali nomor antrian yang diketik, atau buat nomor antrian baru di halaman Antrian Online.',
                         'Nomor antrian tidak ditemukan'
                     );
                     input.value = '';
                 } else if (errorCode === 'ALREADY_USED') {
-                    showErrorToast(
+                    toastError(
                         data.problem || data.message || 'Nomor antrian ini sudah digunakan.',
                         data.solution || 'Buat nomor antrian baru di halaman Antrian Online, lalu gunakan nomor baru tersebut.',
                         'Nomor antrian sudah digunakan'
                     );
                     input.value = '';
                 } else if (errorCode === 'INVALID_SERVICE') {
-                    showErrorToast(
+                    toastError(
                         data.problem || 'Nomor antrian tidak sesuai dengan layanan yang dipilih.',
                         data.solution || 'Pilih layanan yang sesuai atau buat nomor antrian baru.',
                         'Nomor antrian tidak sesuai layanan',
@@ -1596,7 +1643,7 @@ function autoFillFromAntrian(nomorAntrian) {
                     );
                     input.value = '';
                 } else {
-                    showErrorToast(
+                    toastError(
                         data.problem || data.message || 'Gagal mengambil data antrian.',
                         data.solution || 'Periksa nomor antrian dan koneksi internet, lalu coba lagi.',
                         'Gagal mengambil data antrian'
@@ -1613,7 +1660,7 @@ function autoFillFromAntrian(nomorAntrian) {
                 if (nikInput    && data.data.nik)          nikInput.value    = data.data.nik;
                 if (namaInput   && data.data.nama_lengkap) namaInput.value   = data.data.nama_lengkap;
                 if (alamatInput && data.data.alamat)       alamatInput.value = data.data.alamat;
-                showSuccessToast(
+                toastSuccess(
                     'Berhasil Mengambil Data dari Nomor Antrian',
                     'Data pemohon dari nomor antrian <strong>' + escapeHtmlText(nomorAntrian.trim()) + '</strong> telah diisi otomatis ke formulir.'
                 );
@@ -1621,7 +1668,7 @@ function autoFillFromAntrian(nomorAntrian) {
         })
         .catch(function(error) {
             console.error('autoFillFromAntrian error:', error);
-            showErrorToast(
+            toastError(
                 'Sistem gagal mengambil data antrian.',
                 'Periksa koneksi internet, lalu masukkan nomor antrian kembali.',
                 'Gagal mengambil data antrian'
@@ -1662,13 +1709,13 @@ function validateSelectedFile(input) {
         var isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
         if (!isPdf) {
             input.value = '';
-            showErrorToast('Hanya file PDF yang diperbolehkan.', 'Pilih ulang file dengan format PDF sesuai ketentuan.');
+            toastError('Hanya file PDF yang diperbolehkan.', 'Pilih ulang file dengan format PDF sesuai ketentuan.');
             return false;
         }
     }
     if (file.size > 2 * 1024 * 1024) {
         input.value = '';
-        showErrorToast('Maksimal ukuran file: 2MB.', 'Kompres file atau pilih file dengan ukuran di bawah 2MB.');
+        toastError('Maksimal ukuran file: 2MB.', 'Kompres file atau pilih file dengan ukuran di bawah 2MB.');
         return false;
     }
     return true;
@@ -1685,9 +1732,9 @@ function clearFileInput(fieldName) {
    ═══════════════════════════════════════════════════════════════════ */
 function showToast(message, type) {
     if (type === 'success') {
-        return showSuccessToast(message);
+        return toastSuccess(message);
     }
-    return showErrorToast(message);
+    return toastError(message);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1709,7 +1756,7 @@ async function handleKirimPengajuan() {
     var livenessValue = (livenessInput && livenessInput.value) ? livenessInput.value : '0';
 
     if (livenessValue !== '1') {
-        showErrorToast(
+        toastError(
             'Verifikasi wajah belum selesai.',
             'Selesaikan verifikasi wajah pada langkah Verifikasi, lalu kirim pengajuan kembali.'
         );
@@ -1740,7 +1787,7 @@ async function handleKirimPengajuan() {
             if (!checkData.success) {
                 Swal.close();
                 if (btnSubmit) btnSubmit.disabled = false;
-                showErrorToast(
+                toastError(
                     checkData.problem || checkData.message || 'Validasi pengajuan gagal.',
                     checkData.solution || 'Periksa data yang dimasukkan, lalu coba lagi.'
                 );
@@ -1771,11 +1818,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     @if(session('error'))
-    showErrorToast(@json(session('error')), @json(session('error_solution') ?? ''));
+    toastError(@json(session('error')), @json(session('error_solution') ?? ''));
     @endif
 
     @if(session('success'))
-    showSuccessToast(@json(session('success')));
+    toastSuccess('Pengajuan Berhasil!', @json(session('success')));
     @endif
 
 }); /* end DOMContentLoaded */

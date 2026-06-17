@@ -179,15 +179,7 @@
                         fill: true
                     },
                     {
-                        label: 'KTP',
-                        data: data.map(item => item.jumlah_ktp),
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Akte Lahir',
+                        label: 'Kelahiran',
                         data: data.map(item => item.jumlah_akte_lahir),
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -195,10 +187,26 @@
                         fill: true
                     },
                     {
-                        label: 'Akte Kematian',
+                        label: 'Kematian',
                         data: data.map(item => item.jumlah_akte_kematian),
                         borderColor: '#ef4444',
                         backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Lahir Mati',
+                        data: data.map(item => item.jumlah_lahir_mati),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Pernikahan',
+                        data: data.map(item => item.jumlah_pernikahan),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
                         tension: 0.4,
                         fill: true
                     }
@@ -257,31 +265,38 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Total Antrian',
-                        data: data.map(item => item.total_antrian),
+                        label: 'Kartu Keluarga',
+                        data: data.map(item => item.jumlah_kk),
                         borderColor: '#3b82f6',
                         backgroundColor: 'rgba(59, 130, 246, 0.1)',
                         tension: 0.4
                     },
                     {
-                        label: 'Selesai',
-                        data: data.map(item => item.antrian_selesai),
+                        label: 'Kelahiran',
+                        data: data.map(item => item.jumlah_kelahiran),
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         tension: 0.4
                     },
                     {
-                        label: 'Diproses',
-                        data: data.map(item => item.antrian_diproses),
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        label: 'Kematian',
+                        data: data.map(item => item.jumlah_kematian),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
                         tension: 0.4
                     },
                     {
-                        label: 'Menunggu',
-                        data: data.map(item => item.antrian_menunggu),
-                        borderColor: '#ef4444',
-                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        label: 'Lahir Mati',
+                        data: data.map(item => item.jumlah_lahir_mati),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Pernikahan',
+                        data: data.map(item => item.jumlah_pernikahan),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
                         tension: 0.4
                     }
                 ]

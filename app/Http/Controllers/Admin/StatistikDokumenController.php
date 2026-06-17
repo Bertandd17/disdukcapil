@@ -47,8 +47,8 @@ class StatistikDokumenController extends Controller
             'total_kk' => StatistikDokumen::where('tahun', $tahun)->sum('jumlah_kk'),
             'total_akte_lahir' => StatistikDokumen::where('tahun', $tahun)->sum('jumlah_akte_lahir'),
             'total_akte_kematian' => StatistikDokumen::where('tahun', $tahun)->sum('jumlah_akte_kematian'),
-            'total_ktp' => StatistikDokumen::where('tahun', $tahun)->sum('jumlah_ktp'),
-            'total_kia' => StatistikDokumen::where('tahun', $tahun)->sum('jumlah_kia'),
+            'total_lahir_mati' => StatistikDokumen::where('tahun', $tahun)->sum('jumlah_lahir_mati'),
+            'total_pernikahan' => StatistikDokumen::where('tahun', $tahun)->sum('jumlah_pernikahan'),
         ];
 
         // Ambil data
@@ -99,8 +99,8 @@ class StatistikDokumenController extends Controller
             $statistik->jumlah_kk = $request->jumlah_kk ?? 0;
             $statistik->jumlah_akte_lahir = $request->jumlah_akte_lahir ?? 0;
             $statistik->jumlah_akte_kematian = $request->jumlah_akte_kematian ?? 0;
-            $statistik->jumlah_ktp = $request->jumlah_ktp ?? 0;
-            $statistik->jumlah_kia = $request->jumlah_kia ?? 0;
+            $statistik->jumlah_lahir_mati = $request->jumlah_lahir_mati ?? 0;
+            $statistik->jumlah_pernikahan = $request->jumlah_pernikahan ?? 0;
             $statistik->is_auto_generated = false;
             $statistik->save();
 
@@ -167,8 +167,8 @@ class StatistikDokumenController extends Controller
             $statistik->jumlah_kk = $request->jumlah_kk ?? 0;
             $statistik->jumlah_akte_lahir = $request->jumlah_akte_lahir ?? 0;
             $statistik->jumlah_akte_kematian = $request->jumlah_akte_kematian ?? 0;
-            $statistik->jumlah_ktp = $request->jumlah_ktp ?? 0;
-            $statistik->jumlah_kia = $request->jumlah_kia ?? 0;
+            $statistik->jumlah_lahir_mati = $request->jumlah_lahir_mati ?? 0;
+            $statistik->jumlah_pernikahan = $request->jumlah_pernikahan ?? 0;
             $statistik->save();
 
             Log::info('Admin: Statistik dokumen berhasil diupdate', [

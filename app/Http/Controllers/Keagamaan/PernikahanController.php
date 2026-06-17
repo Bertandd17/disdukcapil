@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Keagamaan;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Keagamaan\Concerns\ResolvesKeagamaanAccount;
 use App\Http\Requests\KonfirmasiJemaatRequest;
 use App\Http\Requests\UploadDokumenRequest;
 use App\Models\DokumenPernikahan;
@@ -17,6 +18,8 @@ use Illuminate\Support\Str;
 
 class PernikahanController extends Controller
 {
+    use ResolvesKeagamaanAccount;
+
     public function __construct()
     {
         $this->middleware(['auth']);
@@ -28,29 +31,23 @@ class PernikahanController extends Controller
      */
     public function index(Request $request)
     {
-        // Cari keagamaan_id milik user yang sedang login
-        $keagamaan = DB::table('keagamaan')
-            ->where('user_id', auth()->id())
-            ->first();
-
-        if (!$keagamaan) {
-            abort(403, 'Akun ini tidak terhubung ke data keagamaan.');
-        }
-
+        $keagamaan = $this->resolveKeagamaanAccount();
         $keagamaanId = $keagamaan->keagamaan_id;
 
+        $statusFilter = [
+            LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN,
+            LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
+            LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
+            LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
+            LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
+            LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
+            LayananPernikahan::STATUS_SELESAI,
+        ];
+
         $query = LayananPernikahan::with(['dokumen'])
-            ->where('keagamaan_id', $keagamaanId) // ← hanya data milik gereja ini
-            ->whereIn('status', [
-                LayananPernikahan::STATUS_MENUNGGU_KONFIRMASI_KEAGAMAAN,
-                LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
-                LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
-                LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
-                LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
-                LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
-                LayananPernikahan::STATUS_SELESAI,
-            ])
-            ->orderBy('created_at', 'desc');
+            ->forKeagamaanId($keagamaanId)
+            ->whereIn('status', $statusFilter)
+            ->urutTanggalPermintaan();
 
         if ($request->has('search') && $request->search) {
             $search = $request->search;
@@ -64,22 +61,61 @@ class PernikahanController extends Controller
         $pernikahan = $query->paginate(20);
 
         $statistics = [
-            'menunggu_konfirmasi' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+            'menunggu_konfirmasi' => LayananPernikahan::forKeagamaanId($keagamaanId)
                 ->menungguKonfirmasiKeagamaan()->count(),
-            'dalam_proses' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+            'dalam_proses' => LayananPernikahan::forKeagamaanId($keagamaanId)
                 ->whereIn('status', [
                     LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
                     LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
                     LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
                     LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
                 ])->count(),
-            'tanggal_disetujui' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+            'tanggal_disetujui' => LayananPernikahan::forKeagamaanId($keagamaanId)
                 ->where('status', LayananPernikahan::STATUS_TANGGAL_DISETUJUI)->count(),
-            'selesai' => LayananPernikahan::where('keagamaan_id', $keagamaanId)
+            'selesai' => LayananPernikahan::forKeagamaanId($keagamaanId)
                 ->where('status', LayananPernikahan::STATUS_SELESAI)->count(),
         ];
 
-        return view('keagamaan.pernikahan', compact('pernikahan', 'statistics'));
+        $calendarEvents = $this->buildCalendarEvents($keagamaanId, $statusFilter);
+
+        return view('keagamaan.pernikahan', compact(
+            'pernikahan',
+            'statistics',
+            'keagamaan',
+            'calendarEvents'
+        ));
+    }
+
+    /**
+     * Data event kalender — hanya permohonan tempat ibadah login.
+     */
+    private function buildCalendarEvents(string $keagamaanId, array $statusFilter): array
+    {
+        $colorMap = [
+            LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL => '#f59e0b',
+            LayananPernikahan::STATUS_TANGGAL_DISETUJUI => '#3b82f6',
+            LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI => '#8b5cf6',
+            LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN => '#ef4444',
+            LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI => '#14b8a6',
+            LayananPernikahan::STATUS_SELESAI => '#22c55e',
+        ];
+
+        return LayananPernikahan::forKeagamaanId($keagamaanId)
+            ->whereIn('status', $statusFilter)
+            ->whereNotNull('tanggal_perkawinan')
+            ->urutTanggalPermintaan()
+            ->get()
+            ->map(function ($p) use ($colorMap) {
+                return [
+                    'title' => $p->nama_mempelai_pria,
+                    'start' => $p->tanggal_perkawinan->format('Y-m-d'),
+                    'backgroundColor' => $colorMap[$p->status] ?? '#3b82f6',
+                    'borderColor' => 'transparent',
+                    'extendedProps' => ['pernikahan_id' => $p->pernikahan_id],
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     /**
@@ -553,8 +589,11 @@ class PernikahanController extends Controller
      */
     public function getData(Request $request): JsonResponse
     {
+        $keagamaanId = $this->resolveKeagamaanId();
+
         $query = LayananPernikahan::with(['dokumen'])
-            ->orderBy('created_at', 'desc');
+            ->forKeagamaanId($keagamaanId)
+            ->urutTanggalPermintaan();
 
         if ($request->has('status') && $request->status) {
             if ($request->status === 'all') {
@@ -676,11 +715,12 @@ class PernikahanController extends Controller
     public function checkUpdates(Request $request): JsonResponse
     {
         try {
+            $keagamaanId = $this->resolveKeagamaanId();
             $lastCheck = $request->get('last_check');
             $lastCheckTime = $lastCheck ? \Carbon\Carbon::parse($lastCheck) : now()->subMinutes(5);
 
-            // Ambil semua pernikahan dengan status Menunggu Approve Tanggal
             $pernikahanList = LayananPernikahan::select(['pernikahan_id', 'status', 'nomor_antrian', 'nama_mempelai_pria', 'tanggal_perkawinan', 'nama_gereja', 'updated_at'])
+                ->forKeagamaanId($keagamaanId)
                 ->whereIn('status', [
                     LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
                     LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
@@ -689,7 +729,7 @@ class PernikahanController extends Controller
                     LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
                 ])
                 ->where('updated_at', '>=', $lastCheckTime)
-                ->orderBy('updated_at', 'desc')
+                ->urutTanggalPermintaan()
                 ->get();
 
             $hasUpdates = $pernikahanList->count() > 0;

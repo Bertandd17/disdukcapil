@@ -468,19 +468,8 @@ class Antrian_Online_Controller extends Controller
         $transformedData = $data_antrian->map(function ($item) {
             $pernikahanData = $this->buildPernikahanData($item->nomor_antrian);
 
-            // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
-            $alasanPenolakan = null;
-            if ($item->status_antrian === 'Ditolak' && $item->lacak_berkas) {
-                $latestTolak = $item->lacak_berkas
-                    ->where('status', 'Ditolak')
-                    ->sortByDesc(function ($lb) {
-                        return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
-                    })
-                    ->first();
-                if ($latestTolak) {
-                    $alasanPenolakan = $latestTolak->alasan_penolakan;
-                }
-            }
+            // Ambil alasan penolakan dari riwayat lacak (Tolak/Ditolak)
+            $alasanPenolakan = $this->extractAlasanPenolakanFromAntrian($item);
 
             // Untuk pernikahan: gunakan riwayat lacak yang disinkronkan (termasuk hasil backfill)
             $lacakItems = $item->lacak_berkas;
@@ -807,19 +796,8 @@ class Antrian_Online_Controller extends Controller
             ];
         });
 
-        // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
-        $alasanPenolakan = null;
-        if ($antrian->status_antrian === 'Ditolak') {
-            $latestTolak = $antrian->lacak_berkas
-                ->where('status', 'Ditolak')
-                ->sortByDesc(function ($lb) {
-                    return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
-                })
-                ->first();
-            if ($latestTolak) {
-                $alasanPenolakan = $latestTolak->alasan_penolakan;
-            }
-        }
+        // Ambil alasan penolakan dari riwayat lacak (Tolak/Ditolak)
+        $alasanPenolakan = $this->extractAlasanPenolakanFromAntrian($antrian);
 
         return response()->json([
             'success' => true,
@@ -1500,19 +1478,8 @@ class Antrian_Online_Controller extends Controller
             ->get();
 
         $formatted_data = $data_antrian->map(function ($item) {
-            // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
-            $alasanPenolakan = null;
-            if ($item->status_antrian === 'Ditolak' && $item->lacak_berkas) {
-                $latestTolak = $item->lacak_berkas
-                    ->where('status', 'Ditolak')
-                    ->sortByDesc(function ($lb) {
-                        return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
-                    })
-                    ->first();
-                if ($latestTolak) {
-                    $alasanPenolakan = $latestTolak->alasan_penolakan;
-                }
-            }
+            // Ambil alasan penolakan dari riwayat lacak (Tolak/Ditolak)
+            $alasanPenolakan = $this->extractAlasanPenolakanFromAntrian($item);
 
             return [
                 'antrian_online_id' => $item->antrian_online_id,
@@ -1621,19 +1588,8 @@ class Antrian_Online_Controller extends Controller
             ],
         ])->merge($riwayat);
 
-        // Ambil alasan penolakan dari record lacak_berkas TERBARU dengan status='Ditolak'
-        $alasanPenolakan = null;
-        if ($antrian->status_antrian === 'Ditolak') {
-            $latestTolak = $antrian->lacak_berkas
-                ->where('status', 'Ditolak')
-                ->sortByDesc(function ($lb) {
-                    return $lb->created_at ? $lb->created_at->getTimestamp() : 0;
-                })
-                ->first();
-            if ($latestTolak) {
-                $alasanPenolakan = $latestTolak->alasan_penolakan;
-            }
-        }
+        // Ambil alasan penolakan dari riwayat lacak (Tolak/Ditolak)
+        $alasanPenolakan = $this->extractAlasanPenolakanFromAntrian($antrian);
 
         return response()->json([
             'success' => true,
@@ -1647,6 +1603,35 @@ class Antrian_Online_Controller extends Controller
                 'riwayat' => $riwayat_with_initial,
             ],
         ]);
+    }
+
+    /**
+     * Ambil alasan penolakan dari riwayat lacak_berkas (status Tolak/Ditolak).
+     */
+    protected function extractAlasanPenolakanFromAntrian(Antrian_Online_Model $item): ?string
+    {
+        if ($item->status_antrian !== 'Ditolak' || ! $item->lacak_berkas) {
+            return null;
+        }
+
+        $latest = $item->lacak_berkas
+            ->whereIn('status', ['Tolak', 'Ditolak'])
+            ->sortByDesc(fn ($lb) => $lb->created_at ? $lb->created_at->getTimestamp() : 0)
+            ->first();
+
+        if (! $latest) {
+            return null;
+        }
+
+        if (! empty($latest->alasan_penolakan)) {
+            return trim((string) $latest->alasan_penolakan);
+        }
+
+        if (! empty($latest->keterangan) && preg_match('/Alasan:\s*(.+)$/i', (string) $latest->keterangan, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return null;
     }
 
     /**

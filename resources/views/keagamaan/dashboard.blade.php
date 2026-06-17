@@ -8,8 +8,13 @@
     <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-6 md:p-8 text-white mb-6 reveal shadow-lg">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold mb-2">Selamat Datang, {{ auth()->user()->name }}!</h2>
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Selamat Datang, {{ $keagamaan->nama_tempat_ibadah }}!</h2>
                 <p class="text-blue-100 text-lg">Dashboard Petugas Keagamaan</p>
+                <p class="text-blue-100/90 text-sm mt-2">
+                    <i class="fas fa-church mr-1"></i>
+                    {{ $keagamaan->nama_jenis_keagamaan }} &mdash; {{ $keagamaan->nama_tempat_ibadah }}
+                </p>
+                <p class="text-blue-200 text-xs mt-1">Menampilkan permohonan untuk tempat ibadah Anda saja</p>
             </div>
             <div class="flex flex-col gap-2 text-sm">
                 <div class="flex items-center gap-2">
@@ -25,29 +30,6 @@
     </div>
 
     {{-- Quick Stats --}}
-    @php
-        // Ambil keagamaan milik user yang sedang login
-        $keagamaanUser = \Illuminate\Support\Facades\DB::table('keagamaan')
-            ->where('user_id', auth()->id())
-            ->first();
-
-        $keagamaanId = $keagamaanUser?->keagamaan_id;
-
-        $statistics = [
-            'total' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)->count(),
-            'pending' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)
-                ->menungguKonfirmasiKeagamaan()->count(),
-            'proses' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)
-                ->whereIn('status', [
-                    \App\Models\LayananPernikahan::STATUS_MENUNGGU_APPROVE_TANGGAL,
-                    \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI,
-                    \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIUPLOAD_MENUNGGU_VERIFIKASI,
-                ])->count(),
-            'selesai' => \App\Models\LayananPernikahan::where('keagamaan_id', $keagamaanId)
-                ->where('status', \App\Models\LayananPernikahan::STATUS_SELESAI)->count(),
-        ];
-    @endphp
-
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <div class="stat-card bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between mb-4">
@@ -142,19 +124,10 @@
         {{-- Recent Activity --}}
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
             <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="text-lg font-bold text-gray-800">Aktivitas Terbaru</h3>
+                <h3 class="text-lg font-bold text-gray-800">Permohonan Mendatang</h3>
                 <a href="{{ route('keagamaan.pernikahan.index') }}" class="text-sm text-blue-600 hover:text-blue-700">Lihat Semua</a>
             </div>
             <div class="p-6">
-                @php
-                    // $keagamaanId sudah didefinisikan di @php block atas, langsung dipakai
-                    $recentPernikahan = \App\Models\LayananPernikahan::with(['dokumen'])
-                        ->where('keagamaan_id', $keagamaanId)
-                        ->orderBy('created_at', 'desc')
-                        ->limit(5)
-                        ->get();
-                @endphp
-
                 @if($recentPernikahan->isNotEmpty())
                     <div class="space-y-4">
                         @foreach($recentPernikahan as $item)
@@ -171,9 +144,16 @@
                                     @else fa-clock text-yellow-600 @endif text-sm"></i>
                             </div>
                             <div class="flex-1">
-                                <p class="font-medium text-gray-800 text-sm">{{ $item->nama_mempelai_pria }}</p>
+                                <p class="font-medium text-gray-800 text-sm">{{ $item->nama_mempelai_pria }} &amp; {{ $item->nama_mempelai_wanita }}</p>
                                 <p class="text-xs text-gray-500">{{ $item->nomor_antrian }}</p>
-                                <p class="text-xs text-gray-400">{{ $item->created_at->diffForHumans() }}</p>
+                                @if($item->tanggal_perkawinan)
+                                    <p class="text-xs text-blue-600 font-medium mt-0.5">
+                                        <i class="fas fa-calendar-alt mr-1"></i>
+                                        {{ $item->tanggal_perkawinan->format('d M Y') }}
+                                    </p>
+                                @else
+                                    <p class="text-xs text-gray-400">{{ $item->created_at->diffForHumans() }}</p>
+                                @endif
                             </div>
                             <span class="text-xs px-2 py-1 rounded-full
                                 @if($item->status === \App\Models\LayananPernikahan::STATUS_TANGGAL_DISETUJUI) bg-green-100 text-green-700

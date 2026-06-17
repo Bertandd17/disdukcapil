@@ -62,12 +62,12 @@
             <h3 class="text-2xl font-bold text-red-700 mt-1">{{ number_format($summary['total_akte_kematian'], 0, ',', '.') }}</h3>
         </div>
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-            <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide">KTP</p>
-            <h3 class="text-2xl font-bold text-purple-700 mt-1">{{ number_format($summary['total_ktp'], 0, ',', '.') }}</h3>
+            <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide">Lahir Mati</p>
+            <h3 class="text-2xl font-bold text-purple-700 mt-1">{{ number_format($summary['total_lahir_mati'], 0, ',', '.') }}</h3>
         </div>
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-            <p class="text-xs font-semibold text-yellow-600 uppercase tracking-wide">KIA</p>
-            <h3 class="text-2xl font-bold text-yellow-700 mt-1">{{ number_format($summary['total_kia'], 0, ',', '.') }}</h3>
+            <p class="text-xs font-semibold text-yellow-600 uppercase tracking-wide">Pernikahan</p>
+            <h3 class="text-2xl font-bold text-yellow-700 mt-1">{{ number_format($summary['total_pernikahan'], 0, ',', '.') }}</h3>
         </div>
     </div>
 
@@ -93,8 +93,8 @@
                         <th class="p-4 font-semibold uppercase text-xs text-center">KK</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Akte Lahir</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Akte Kematian</th>
-                        <th class="p-4 font-semibold uppercase text-xs text-center">KTP</th>
-                        <th class="p-4 font-semibold uppercase text-xs text-center">KIA</th>
+                        <th class="p-4 font-semibold uppercase text-xs text-center">Lahir Mati</th>
+                        <th class="p-4 font-semibold uppercase text-xs text-center">Pernikahan</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Total</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Sumber</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Aksi</th>
@@ -108,28 +108,31 @@
                         <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_kk, 0, ',', '.') }}</td>
                         <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_akte_lahir, 0, ',', '.') }}</td>
                         <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_akte_kematian, 0, ',', '.') }}</td>
-                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_ktp, 0, ',', '.') }}</td>
-                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_kia, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_lahir_mati, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_pernikahan, 0, ',', '.') }}</td>
                         <td class="p-4 text-sm font-bold text-gray-800 text-center">{{ number_format($row->total_dokumen, 0, ',', '.') }}</td>
                         <td class="p-4 text-center">
                             <span class="px-3 py-1 rounded-full text-xs font-bold border {{ $row->is_auto_generated ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-gray-50 text-gray-600 border-gray-100' }}">
                                 {{ $row->is_auto_generated ? 'Auto' : 'Manual' }}
                             </span>
                         </td>
-                        <td class="p-4 text-center">
+                        <td class="p-4 text-center whitespace-nowrap">
                             <div class="flex items-center justify-center gap-2">
                                 @if($canEdit)
-                                <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_dokumen_id, "tahun" => $row->tahun, "bulan" => $row->bulan, "jumlah_kk" => $row->jumlah_kk, "jumlah_akte_lahir" => $row->jumlah_akte_lahir, "jumlah_akte_kematian" => $row->jumlah_akte_kematian, "jumlah_ktp" => $row->jumlah_ktp, "jumlah_kia" => $row->jumlah_kia]) }})' 
+                                <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_dokumen_id, "tahun" => $row->tahun, "bulan" => $row->bulan, "jumlah_kk" => $row->jumlah_kk, "jumlah_akte_lahir" => $row->jumlah_akte_lahir, "jumlah_akte_kematian" => $row->jumlah_akte_kematian, "jumlah_lahir_mati" => $row->jumlah_lahir_mati, "jumlah_pernikahan" => $row->jumlah_pernikahan]) }})'
                                         class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
-                                    <i class="bi bi-pencil"></i> Ubah
+                                    <i class="fas fa-edit"></i> Ubah
                                 </button>
                                 @endif
+                                @if($canEdit && $canDelete)
+                                <span class="text-gray-200 hidden sm:inline">|</span>
+                                @endif
                                 @if($canDelete)
-                                <form action="{{ route('admin.statistik-dokumen.destroy', $row->statistik_dokumen_id) }}" method="POST" class="inline-block delete-form" data-title="{{ $row->nama_bulan }} {{ $row->tahun }}">
+                                <form action="{{ route('admin.statistik-dokumen.destroy', $row->statistik_dokumen_id) }}" method="POST" class="inline delete-form" data-title="{{ $row->nama_bulan }} {{ $row->tahun }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button data-style-guide-skip type="submit" class="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
-                                        <i class="bi bi-trash"></i> Hapus
+                                    <button data-style-guide-skip type="button" class="statistik-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
+                                        <i class="fas fa-trash-alt"></i> Hapus
                                     </button>
                                 </form>
                                 @endif
@@ -196,12 +199,12 @@
                     <input type="number" name="jumlah_akte_kematian" id="field_akte_kematian" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">KTP</label>
-                    <input type="number" name="jumlah_ktp" id="field_ktp" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Lahir Mati</label>
+                    <input type="number" name="jumlah_lahir_mati" id="field_lahir_mati" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">KIA</label>
-                    <input type="number" name="jumlah_kia" id="field_kia" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Pernikahan</label>
+                    <input type="number" name="jumlah_pernikahan" id="field_pernikahan" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                 </div>
             </div>
 
@@ -290,13 +293,13 @@
 
     function calculateTotal() {
         var total = 0;
-        ['field_kk', 'field_akte_lahir', 'field_akte_kematian', 'field_ktp', 'field_kia'].forEach(function(id) {
+        ['field_kk', 'field_akte_lahir', 'field_akte_kematian', 'field_lahir_mati', 'field_pernikahan'].forEach(function(id) {
             total += parseInt(document.getElementById(id).value) || 0;
         });
         document.getElementById('totalDokumen').textContent = total.toLocaleString('id-ID');
     }
 
-    ['field_kk', 'field_akte_lahir', 'field_akte_kematian', 'field_ktp', 'field_kia'].forEach(function(id) {
+    ['field_kk', 'field_akte_lahir', 'field_akte_kematian', 'field_lahir_mati', 'field_pernikahan'].forEach(function(id) {
         document.getElementById(id).addEventListener('input', calculateTotal);
     });
 
@@ -307,8 +310,8 @@
         document.getElementById('field_kk').value = '0';
         document.getElementById('field_akte_lahir').value = '0';
         document.getElementById('field_akte_kematian').value = '0';
-        document.getElementById('field_ktp').value = '0';
-        document.getElementById('field_kia').value = '0';
+        document.getElementById('field_lahir_mati').value = '0';
+        document.getElementById('field_pernikahan').value = '0';
         document.getElementById('totalDokumen').textContent = '0';
 
         if (mode === 'create') {
@@ -326,8 +329,8 @@
             document.getElementById('field_kk').value = item.jumlah_kk;
             document.getElementById('field_akte_lahir').value = item.jumlah_akte_lahir;
             document.getElementById('field_akte_kematian').value = item.jumlah_akte_kematian;
-            document.getElementById('field_ktp').value = item.jumlah_ktp;
-            document.getElementById('field_kia').value = item.jumlah_kia;
+            document.getElementById('field_lahir_mati').value = item.jumlah_lahir_mati;
+            document.getElementById('field_pernikahan').value = item.jumlah_pernikahan;
             calculateTotal();
         }
 
@@ -453,7 +456,9 @@
 
     // Delete forms
     document.querySelectorAll('.delete-form').forEach(function (f) {
-        f.addEventListener('submit', function (e) {
+        const btn = f.querySelector('.statistik-delete-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const t = f.getAttribute('data-title') || 'data ini';
             Swal.fire({
@@ -461,7 +466,6 @@
                 html: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
                 icon: false,
                 showCancelButton: true,
-                showDenyButton: false,
                 confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',

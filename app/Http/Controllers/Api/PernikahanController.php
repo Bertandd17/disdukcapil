@@ -423,16 +423,12 @@ class PernikahanController extends Controller
                     'agama_mempelai_wanita' => $pernikahan->agama_mempelai_wanita,
                     'pekerjaan_mempelai_wanita' => $pernikahan->pekerjaan_mempelai_wanita,
                     'alamat_mempelai_wanita' => $pernikahan->alamat_mempelai_wanita,
-                    // File KTP
-                    'file_ktp_mempelai_pria' => $pernikahan->file_ktp_mempelai_pria ? Storage::url($pernikahan->file_ktp_mempelai_pria) : null,
-                    'file_ktp_mempelai_wanita' => $pernikahan->file_ktp_mempelai_wanita ? Storage::url($pernikahan->file_ktp_mempelai_wanita) : null,
-                    'file_ktp_saksi_1' => $pernikahan->file_ktp_saksi_1 ? Storage::url($pernikahan->file_ktp_saksi_1) : null,
-                    'file_ktp_saksi_2' => $pernikahan->file_ktp_saksi_2 ? Storage::url($pernikahan->file_ktp_saksi_2) : null,
                     'nama_saksi_1' => $pernikahan->nama_saksi_1,
-                    'nik_saksi_1' => $pernikahan->nik_saksi_1,
                     'nama_saksi_2' => $pernikahan->nama_saksi_2,
-                    'nik_saksi_2' => $pernikahan->nik_saksi_2,
+                    'ktp_files' => $pernikahan->getKtpFilesForDisplay(),
                     'dokumen' => $pernikahan->dokumen->map(function ($doc) {
+                        $kind = LayananPernikahan::detectFileKindFromPath($doc->file_path);
+
                         return [
                             'id' => $doc->id,
                             'jenis_dokumen' => $doc->jenis_dokumen,
@@ -440,12 +436,18 @@ class PernikahanController extends Controller
                             'status' => $doc->status,
                             'status_label' => $doc->status_label,
                             'file_path' => $doc->file_path,
-                            'file_url' => $doc->file_path ? Storage::url($doc->file_path) : null,
+                            'file_url' => $doc->file_path ? LayananPernikahan::buildPublicFileUrl($doc->file_path) : null,
+                            'is_pdf' => $doc->isPdf() || $kind['is_pdf'],
+                            'is_image' => $doc->isImage() || $kind['is_image'],
                             'catatan_verifikasi' => $doc->catatan_verifikasi,
                         ];
                     }),
-                    'file_berkas_acara' => $pernikahan->file_berkas_acara ? Storage::url($pernikahan->file_berkas_acara) : null,
-                    'file_surat_keterangan' => $pernikahan->file_surat_keterangan ? Storage::url($pernikahan->file_surat_keterangan) : null,
+                    'file_berkas_acara' => $pernikahan->file_berkas_acara
+                        ? LayananPernikahan::buildPublicFileUrl($pernikahan->file_berkas_acara)
+                        : null,
+                    'file_surat_keterangan' => $pernikahan->file_surat_keterangan
+                        ? LayananPernikahan::buildPublicFileUrl($pernikahan->file_surat_keterangan)
+                        : null,
                 ],
             ]);
         } catch (\Exception $e) {

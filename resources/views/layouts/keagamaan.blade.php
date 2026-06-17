@@ -40,6 +40,7 @@
     <!-- SweetAlert2 Final Fix — paksa 3 flag false pada loading modal & auto-strip deny button -->
     <link rel="stylesheet" href="{{ asset('css/swal-final-fix.css') }}">
     <script src="{{ asset('js/swal-final-fix.js') }}"></script>
+    <script src="{{ asset_v('js/register-style-loading.js') }}"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -376,18 +377,19 @@
                 }).then(function(result) {
                     if (result.isConfirmed) {
                         if (cfg.showLoadingAfterConfirm) {
-                            Swal.fire({
-                                title: cfg.loadingTitle,
-                                html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
-                                    + '<p class="text-gray-600 mt-4">' + cfg.loadingMessage + '</p>',
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                showConfirmButton: false,
-                                showDenyButton: false,
-                                showCancelButton: false,
-                                didOpen: function() { Swal.showLoading(); },
-                                customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
-                            });
+                            if (typeof window.showRegisterStyleLoading === 'function') {
+                                window.showRegisterStyleLoading(cfg.loadingTitle, cfg.loadingMessage);
+                            } else {
+                                Swal.fire({
+                                    title: cfg.loadingTitle,
+                                    html: '<div class="flex flex-col items-center gap-3 py-2"><i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i><p class="text-gray-600 text-sm">' + cfg.loadingMessage + '</p></div>',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    showConfirmButton: false,
+                                    showDenyButton: false,
+                                    showCancelButton: false
+                                });
+                            }
                         }
                         if (typeof cfg.onConfirm === 'function') cfg.onConfirm();
                     } else {
@@ -396,18 +398,19 @@
                 });
             },
 
-            loading: function(message) {
+            loading: function(message, detail) {
+                if (typeof window.showRegisterStyleLoading === 'function') {
+                    window.showRegisterStyleLoading(message || 'Memuat...', detail || 'Mohon tunggu sebentar...');
+                    return;
+                }
                 Swal.fire({
                     title: message || 'Memuat...',
-                    html: '<div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>'
-                        + '<p class="text-gray-600 mt-4">Mohon tunggu sebentar...</p>',
+                    html: '<div class="flex flex-col items-center gap-3 py-2"><i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i><p class="text-gray-600 text-sm">' + (detail || 'Mohon tunggu sebentar...') + '</p></div>',
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     showConfirmButton: false,
                     showDenyButton: false,
-                    showCancelButton: false,
-                    didOpen: function() { Swal.showLoading(); },
-                    customClass: { popup: 'swal2-popup swal2-modal', htmlContainer: 'swal2-html-container' }
+                    showCancelButton: false
                 });
             },
 

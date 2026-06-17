@@ -411,7 +411,7 @@
                         </div>
 
                         {{-- Info banner --}}
-                        <div class="flex items-start gap-3 p-3 bg-blue-50/60 rounded-lg mb-6 border border-blue-100">
+                        <div class="flex items-start gap-3 p-3 bg-blue-50/60 rounded-lg mb-8 border border-blue-100">
                             <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
                             <p class="text-xs md:text-sm text-blue-700 leading-relaxed">
                                 Struktur organisasi Dinas Kependudukan dan Pencatatan Sipil Kabupaten Toba. Nama pejabat dapat diperbarui melalui menu admin.
@@ -420,292 +420,232 @@
 
                         {{-- ORGANIZATION CHART --}}
                         <style>
-                            /* ============================================================
-                               Organization Chart — Elbow Tree
-                               ============================================================ */
-                            .org-viewport {
-                                width: 100%;
-                                display: flex;
-                                justify-content: center;
-                                overflow-x: auto;
-                                overflow-y: visible;
-                                padding: 8px 4px;
-                                scrollbar-width: thin;
-                            }
-                            .org-inner {
-                                display: inline-flex;
-                                flex-direction: column;
-                                align-items: center;
-                                min-width: max-content;
-                                transform-origin: top center;
-                                transition: transform 0.2s ease;
-                            }
-
-                            /* Node card */
-                            .org-card {
+                            .oc-card {
                                 position: relative;
-                                background: #ffffff;
-                                border: 1px solid #e5e7eb;
                                 border-radius: 10px;
                                 padding: 10px 14px;
-                                min-width: 170px;
-                                max-width: 220px;
                                 text-align: center;
-                                box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-                                z-index: 2;
-                                word-wrap: break-word;
+                                border: 1.5px solid #e5e7eb;
+                                background: #fff;
+                                box-shadow: 0 1px 3px rgba(0,0,0,.06);
+                                word-break: break-word;
                             }
-                            .org-card .org-badge {
+                            .oc-badge {
                                 display: inline-block;
-                                font-size: 9.5px;
+                                font-size: 9px;
                                 font-weight: 700;
-                                letter-spacing: 0.4px;
-                                padding: 2px 7px;
+                                letter-spacing: .5px;
+                                padding: 2px 8px;
                                 border-radius: 999px;
-                                margin-bottom: 6px;
-                                background: rgba(255,255,255,0.85);
-                                color: inherit;
+                                margin-bottom: 5px;
                             }
-                            .org-card .org-title {
-                                font-weight: 700;
+                            .oc-title {
                                 font-size: 12.5px;
-                                line-height: 1.3;
+                                font-weight: 700;
+                                line-height: 1.35;
                                 color: #111827;
                             }
-                            .org-card .org-name {
+                            .oc-name {
                                 font-size: 11px;
                                 font-style: italic;
                                 color: #6b7280;
                                 margin-top: 4px;
                                 line-height: 1.3;
                             }
-                            .org-card .org-name.empty {
-                                color: #9ca3af;
-                            }
+                            .oc-name.empty { color: #9ca3af; }
 
-                            /* Color variants per level (subtle, modern) */
-                            .org-card--kadis {
-                                background: #fef2f2;
-                                border-color: #fecaca;
-                            }
-                            .org-card--kadis .org-title { color: #991b1b; }
-                            .org-card--kadis .org-badge { background: #dc2626; color: #fff; }
+                            .oc-kadis      { background:#fef2f2; border-color:#fecaca; }
+                            .oc-kadis      .oc-title { color:#991b1b; }
+                            .oc-kadis      .oc-badge { background:#dc2626; color:#fff; }
 
-                            .org-card--sekretaris {
-                                background: #f5f3ff;
-                                border-color: #ddd6fe;
-                            }
-                            .org-card--sekretaris .org-title { color: #5b21b6; }
-                            .org-card--sekretaris .org-badge { background: #7c3aed; color: #fff; }
+                            .oc-sekretaris { background:#f5f3ff; border-color:#ddd6fe; }
+                            .oc-sekretaris .oc-title { color:#5b21b6; }
+                            .oc-sekretaris .oc-badge { background:#7c3aed; color:#fff; }
 
-                            .org-card--bidang-blue {
-                                background: #eff6ff;
-                                border-color: #bfdbfe;
-                            }
-                            .org-card--bidang-blue .org-title { color: #1e40af; }
-                            .org-card--bidang-blue .org-badge { background: #2563eb; color: #fff; }
+                            .oc-blue       { background:#eff6ff; border-color:#bfdbfe; }
+                            .oc-blue       .oc-title { color:#1e40af; }
+                            .oc-blue       .oc-badge { background:#2563eb; color:#fff; }
 
-                            .org-card--bidang-green {
-                                background: #ecfdf5;
-                                border-color: #a7f3d0;
-                            }
-                            .org-card--bidang-green .org-title { color: #065f46; }
-                            .org-card--bidang-green .org-badge { background: #059669; color: #fff; }
+                            .oc-green      { background:#ecfdf5; border-color:#a7f3d0; }
+                            .oc-green      .oc-title { color:#065f46; }
+                            .oc-green      .oc-badge { background:#059669; color:#fff; }
 
-                            .org-card--bidang-orange {
-                                background: #fff7ed;
-                                border-color: #fed7aa;
-                            }
-                            .org-card--bidang-orange .org-title { color: #9a3412; }
-                            .org-card--bidang-orange .org-badge { background: #ea580c; color: #fff; }
+                            .oc-orange     { background:#fff7ed; border-color:#fed7aa; }
+                            .oc-orange     .oc-title { color:#9a3412; }
+                            .oc-orange     .oc-badge { background:#ea580c; color:#fff; }
 
-                            .org-card--bidang-teal {
-                                background: #f0fdfa;
-                                border-color: #99f6e4;
-                            }
-                            .org-card--bidang-teal .org-title { color: #115e59; }
-                            .org-card--bidang-teal .org-badge { background: #0d9488; color: #fff; }
+                            .oc-teal       { background:#f0fdfa; border-color:#99f6e4; }
+                            .oc-teal       .oc-title { color:#115e59; }
+                            .oc-teal       .oc-badge { background:#0d9488; color:#fff; }
 
-                            .org-card--sub {
-                                background: #f9fafb;
-                                border-color: #e5e7eb;
-                                min-width: 150px;
-                                max-width: 180px;
-                                padding: 8px 11px;
-                            }
-                            .org-card--sub .org-title {
-                                font-size: 11.5px;
-                                color: #374151;
-                            }
-                            .org-card--sub .org-name { font-size: 10px; }
-                            .org-card--sub .org-badge { background: #e5e7eb; color: #4b5563; }
+                            .oc-sub        { background:#f9fafb; border-color:#e5e7eb; }
+                            .oc-sub        .oc-title { font-size:11px; color:#374151; }
+                            .oc-sub        .oc-name  { font-size:10px; }
 
-                            /* Tree structure */
-                            .org-node {
+                            .oc-vline { width:2px; background:#cbd5e1; flex-shrink:0; }
+
+                            .oc-root {
                                 display: flex;
                                 flex-direction: column;
                                 align-items: center;
-                                position: relative;
-                                padding: 0 14px;
+                                width: 100%;
                             }
-                            .org-children {
+
+                            .oc-l2-row {
                                 display: flex;
                                 justify-content: center;
-                                padding-top: 26px;
-                                position: relative;
+                                align-items: flex-start;
+                                width: 100%;
+                                gap: 8px;
                             }
 
-                            /* Vertical drop from parent card to bus */
-                            .org-node.has-children > .org-card::after {
-                                content: '';
-                                position: absolute;
-                                bottom: -13px;
-                                left: 50%;
-                                width: 2px;
-                                height: 13px;
+                            .oc-l2-col {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                flex: 1;
+                                min-width: 0;
+                            }
+
+                            .oc-sub-row {
+                                display: flex;
+                                justify-content: center;
+                                flex-wrap: wrap;
+                                gap: 6px;
+                                width: 100%;
+                            }
+                            .oc-sub-col {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                flex: 1;
+                                min-width: 90px;
+                                max-width: 150px;
+                            }
+
+                            .oc-bus {
+                                width: 100%;
+                                max-width: 900px;
+                                height: 2px;
                                 background: #cbd5e1;
-                                transform: translateX(-50%);
-                                z-index: 1;
                             }
 
-                            /* Elbow connectors: each child has top vertical drop + half bus */
-                            .org-children > .org-node::before,
-                            .org-children > .org-node::after {
-                                content: '';
-                                position: absolute;
-                                top: 0;
-                                width: 50%;
-                                height: 13px;
-                                border-top: 2px solid #cbd5e1;
+                            @media (max-width: 640px) {
+                                .oc-l2-row   { flex-direction: column; align-items: center; gap: 0; }
+                                .oc-l2-col   { width: 100%; max-width: 280px; flex: none; }
+                                .oc-bus      { display: none; }
+                                .oc-bus-mob  { display: block !important; }
                             }
-                            .org-children > .org-node::before { left: 0; }
-                            .org-children > .org-node::after { right: 0; }
-                            .org-children > .org-node:first-child::before { border-top: 0; }
-                            .org-children > .org-node:last-child::after { border-top: 0; }
-
-                            /* Vertical line from bus to each child card */
-                            .org-children > .org-node > .org-card::before {
-                                content: '';
-                                position: absolute;
-                                top: -13px;
-                                left: 50%;
-                                width: 2px;
-                                height: 13px;
-                                background: #cbd5e1;
-                                transform: translateX(-50%);
-                                z-index: 1;
-                            }
-
-                            /* Single child: still show clean line */
-                            .org-children > .org-node:only-child::before,
-                            .org-children > .org-node:only-child::after {
-                                border-top: 0;
-                            }
+                            .oc-bus-mob { display: none; }
                         </style>
 
-                        <div class="org-viewport" id="orgViewport">
-                            <div class="org-inner" id="orgInner">
-                                @php
-                                    $kadis = $organisasiByLevel['pimpinan_utama']->firstWhere('kode_posisi', 'kadis')
-                                        ?? (object)['nama_jabatan' => 'Kepala Dinas', 'eselon' => 'II.b', 'nama_pejabat' => null];
+                        @php
+                            $kadis = $organisasiByLevel['pimpinan_utama']->firstWhere('kode_posisi', 'kadis')
+                                ?? (object)['nama_jabatan' => 'Kepala Dinas', 'eselon' => 'II.b', 'nama_pejabat' => null];
 
-                                    $sekdin = $organisasiByLevel['pimpinan_utama']->firstWhere('kode_posisi', 'sekdin')
-                                        ?? (object)['nama_jabatan' => 'Sekretaris', 'eselon' => 'III.d', 'nama_pejabat' => null];
+                            $sekdin = $organisasiByLevel['pimpinan_utama']->firstWhere('kode_posisi', 'sekdin')
+                                ?? (object)['nama_jabatan' => 'Sekretaris', 'eselon' => 'III.d', 'nama_pejabat' => null];
 
-                                    $subBagianList = [
-                                        (object)[
-                                            'nama_jabatan' => 'Sub Bagian Umum & Kepegawaian',
-                                            'nama_pejabat' => $organisasiByLevel['sub_bagian']->firstWhere('kode_posisi', 'subbag_umum')?->nama_pejabat,
-                                        ],
-                                        (object)[
-                                            'nama_jabatan' => 'Sub Bagian Perencanaan',
-                                            'nama_pejabat' => $organisasiByLevel['sub_bagian']->firstWhere('kode_posisi', 'subbag_perencanaan')?->nama_pejabat,
-                                        ],
-                                        (object)[
-                                            'nama_jabatan' => 'Kelompok Fungsional',
-                                            'nama_pejabat' => null,
-                                        ],
-                                    ];
+                            $subBagianList = [
+                                (object)[
+                                    'nama_jabatan' => 'Sub Bagian Umum & Kepegawaian',
+                                    'nama_pejabat' => $organisasiByLevel['sub_bagian']->firstWhere('kode_posisi', 'subbag_umum')?->nama_pejabat,
+                                ],
+                                (object)[
+                                    'nama_jabatan' => 'Sub Bagian Perencanaan',
+                                    'nama_pejabat' => $organisasiByLevel['sub_bagian']->firstWhere('kode_posisi', 'subbag_perencanaan')?->nama_pejabat,
+                                ],
+                                (object)[
+                                    'nama_jabatan' => 'Kelompok Fungsional',
+                                    'nama_pejabat' => null,
+                                ],
+                            ];
 
-                                    $bidafduk = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bidafduk')
-                                        ?? (object)['nama_jabatan' => 'Pelayanan Pendaftaran Penduduk', 'eselon' => 'III.c', 'nama_pejabat' => null];
-                                    $bidPencatatan = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bidapencatatan')
-                                        ?? (object)['nama_jabatan' => 'Pencatatan Sipil', 'eselon' => 'III.c', 'nama_pejabat' => null];
-                                    $bidInformasi = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bid_informasi')
-                                        ?? (object)['nama_jabatan' => 'PIAK', 'eselon' => 'III.c', 'nama_pejabat' => null];
-                                    $bidPemanfaatan = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bid_pemanfaatan')
-                                        ?? (object)['nama_jabatan' => 'PDIP', 'eselon' => 'III.c', 'nama_pejabat' => null];
+                            $bidafduk = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bidafduk')
+                                ?? (object)['nama_jabatan' => 'Pelayanan Pendaftaran Penduduk', 'eselon' => 'III.c', 'nama_pejabat' => null];
+                            $bidPencatatan = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bidapencatatan')
+                                ?? (object)['nama_jabatan' => 'Pencatatan Sipil', 'eselon' => 'III.c', 'nama_pejabat' => null];
+                            $bidInformasi = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bid_informasi')
+                                ?? (object)['nama_jabatan' => 'PIAK', 'eselon' => 'III.c', 'nama_pejabat' => null];
+                            $bidPemanfaatan = $organisasiByLevel['bidang']->firstWhere('kode_posisi', 'bid_pemanfaatan')
+                                ?? (object)['nama_jabatan' => 'PDIP', 'eselon' => 'III.c', 'nama_pejabat' => null];
 
-                                    $bidangList = [
-                                        ['data' => $bidafduk, 'label' => 'Pelayanan Pendaftaran Penduduk', 'color' => 'bidang-blue'],
-                                        ['data' => $bidPencatatan, 'label' => 'Pencatatan Sipil', 'color' => 'bidang-green'],
-                                        ['data' => $bidInformasi, 'label' => 'PIAK', 'color' => 'bidang-orange'],
-                                        ['data' => $bidPemanfaatan, 'label' => 'PDIP', 'color' => 'bidang-teal'],
-                                    ];
-                                @endphp
+                            $bidangList = [
+                                ['data' => $bidafduk, 'label' => 'Pelayanan Pendaftaran Penduduk', 'color' => 'blue'],
+                                ['data' => $bidPencatatan, 'label' => 'Pencatatan Sipil', 'color' => 'green'],
+                                ['data' => $bidInformasi, 'label' => 'PIAK', 'color' => 'orange'],
+                                ['data' => $bidPemanfaatan, 'label' => 'PDIP', 'color' => 'teal'],
+                            ];
+                        @endphp
 
-                                {{-- LEVEL 1: KEPALA DINAS --}}
-                                <div class="org-node has-children">
-                                    <div class="org-card org-card--kadis">
-                                        <span class="org-badge">{{ $kadis->eselon ?? 'II.b' }}</span>
-                                        <div class="org-title">{{ $kadis->nama_jabatan ?? 'Kepala Dinas' }}</div>
-                                        @if(!empty($kadis->nama_pejabat))
-                                            <div class="org-name">{{ $kadis->nama_pejabat }}</div>
+                        <div class="oc-root">
+                            <div class="oc-card oc-kadis" style="min-width:180px;max-width:240px;width:100%">
+                                <span class="oc-badge">{{ $kadis->eselon ?? 'II.b' }}</span>
+                                <div class="oc-title">{{ $kadis->nama_jabatan ?? 'Kepala Dinas' }}</div>
+                                @if(!empty($kadis->nama_pejabat))
+                                    <div class="oc-name">{{ $kadis->nama_pejabat }}</div>
+                                @else
+                                    <div class="oc-name empty">Pejabat belum ditentukan</div>
+                                @endif
+                            </div>
+
+                            <div class="oc-vline" style="height:20px"></div>
+
+                            <div class="oc-bus" style="max-width:900px"></div>
+                            <div class="oc-bus-mob oc-vline" style="height:14px"></div>
+
+                            <div class="oc-l2-row" style="max-width:900px">
+                                <div class="oc-l2-col">
+                                    <div class="oc-vline" style="height:16px"></div>
+                                    <div class="oc-card oc-sekretaris" style="width:100%">
+                                        <span class="oc-badge">{{ $sekdin->eselon ?? 'III.d' }}</span>
+                                        <div class="oc-title">{{ $sekdin->nama_jabatan ?? 'Sekretaris' }}</div>
+                                        @if(!empty($sekdin->nama_pejabat))
+                                            <div class="oc-name">{{ $sekdin->nama_pejabat }}</div>
                                         @else
-                                            <div class="org-name empty">Pejabat belum ditentukan</div>
+                                            <div class="oc-name empty">Pejabat belum ditentukan</div>
                                         @endif
                                     </div>
 
-                                    {{-- LEVEL 2: SEKRETARIS + 4 BIDANG --}}
-                                    <div class="org-children">
-                                        {{-- Sekretaris (with sub-bagian children) --}}
-                                        <div class="org-node has-children">
-                                            <div class="org-card org-card--sekretaris">
-                                                <span class="org-badge">{{ $sekdin->eselon ?? 'III.d' }}</span>
-                                                <div class="org-title">{{ $sekdin->nama_jabatan ?? 'Sekretaris' }}</div>
-                                                @if(!empty($sekdin->nama_pejabat))
-                                                    <div class="org-name">{{ $sekdin->nama_pejabat }}</div>
-                                                @else
-                                                    <div class="org-name empty">Pejabat belum ditentukan</div>
-                                                @endif
-                                            </div>
+                                    <div class="oc-vline" style="height:14px"></div>
+                                    <div style="width:100%;height:2px;background:#cbd5e1;"></div>
 
-                                            <div class="org-children">
-                                                @foreach($subBagianList as $sub)
-                                                    <div class="org-node">
-                                                        <div class="org-card org-card--sub">
-                                                            <div class="org-title">{{ $sub->nama_jabatan }}</div>
-                                                            @if(!empty($sub->nama_pejabat))
-                                                                <div class="org-name">{{ $sub->nama_pejabat }}</div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-                                        {{-- 4 Bidang Level III.c --}}
-                                        @foreach($bidangList as $bidang)
-                                            <div class="org-node">
-                                                <div class="org-card org-card--{{ $bidang['color'] }}">
-                                                    <span class="org-badge">{{ $bidang['data']->eselon ?? 'III.c' }}</span>
-                                                    <div class="org-title">{{ $bidang['label'] }}</div>
-                                                    @if(!empty($bidang['data']->nama_pejabat))
-                                                        <div class="org-name">{{ $bidang['data']->nama_pejabat }}</div>
+                                    <div class="oc-sub-row">
+                                        @foreach($subBagianList as $sub)
+                                            <div class="oc-sub-col">
+                                                <div class="oc-vline" style="height:12px"></div>
+                                                <div class="oc-card oc-sub" style="width:100%">
+                                                    <div class="oc-title">{{ $sub->nama_jabatan }}</div>
+                                                    @if(!empty($sub->nama_pejabat))
+                                                        <div class="oc-name">{{ $sub->nama_pejabat }}</div>
                                                     @else
-                                                        <div class="org-name empty">Pejabat belum ditentukan</div>
+                                                        <div class="oc-name empty">–</div>
                                                     @endif
                                                 </div>
                                             </div>
                                         @endforeach
                                     </div>
                                 </div>
+
+                                @foreach($bidangList as $bidang)
+                                    <div class="oc-l2-col">
+                                        <div class="oc-vline" style="height:16px"></div>
+                                        <div class="oc-card oc-{{ $bidang['color'] }}" style="width:100%">
+                                            <span class="oc-badge">{{ $bidang['data']->eselon ?? 'III.c' }}</span>
+                                            <div class="oc-title">{{ $bidang['label'] }}</div>
+                                            @if(!empty($bidang['data']->nama_pejabat))
+                                                <div class="oc-name">{{ $bidang['data']->nama_pejabat }}</div>
+                                            @else
+                                                <div class="oc-name empty">Pejabat belum ditentukan</div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
 
                         {{-- ============================================================
-                             DETAIL UNIT KERJA � Sub Bagian, Koordinator, Kelompok Fungsional
-                             ditampilkan stacked vertical di bawah tree untuk hindari scroll horizontal
+                             DETAIL UNIT KERJA
                              ============================================================ --}}
                         @php
                             $sekretariatChildren = [
@@ -855,49 +795,6 @@
                                 @endforeach
                             </div>
                         </div>
-
-                        <script>
-                            (function () {
-                                const viewport = document.getElementById('orgViewport');
-                                const inner = document.getElementById('orgInner');
-                                if (!viewport || !inner) return;
-
-                                function fitOrgChart() {
-                                    // Hanya scale ketika tab struktur-organisasi sedang aktif (terlihat)
-                                    const panel = document.getElementById('struktur-organisasi');
-                                    if (!panel || panel.classList.contains('hidden')) return;
-
-                                    inner.style.transform = 'scale(1)';
-                                    viewport.style.height = '';
-
-                                    const vw = viewport.clientWidth;
-                                    const cw = inner.scrollWidth;
-                                    if (cw === 0 || vw === 0) return;
-
-                                    const scale = vw < 768 ? 1 : Math.min(1, vw / cw);
-                                    inner.style.transform = 'scale(' + scale + ')';
-
-                                    // Sesuaikan tinggi viewport agar tidak menyisakan ruang kosong
-                                    const ch = inner.scrollHeight;
-                                    viewport.style.height = scale < 1 ? (ch * scale) + 'px' : '';
-                                }
-
-                                window.addEventListener('load', fitOrgChart);
-                                window.addEventListener('resize', fitOrgChart);
-
-                                // Re-fit setelah tab struktur-organisasi diaktifkan
-                                const panel = document.getElementById('struktur-organisasi');
-                                if (panel) {
-                                    const obs = new MutationObserver(function () {
-                                        if (!panel.classList.contains('hidden')) {
-                                            // Beri waktu DOM render selesai
-                                            setTimeout(fitOrgChart, 50);
-                                        }
-                                    });
-                                    obs.observe(panel, { attributes: true, attributeFilter: ['class'] });
-                                }
-                            })();
-                        </script>
                     </div>
                 </div>
             </div>

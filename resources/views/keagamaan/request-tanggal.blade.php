@@ -12,9 +12,6 @@
                 <p class="text-gray-500 text-sm">Kirim permintaan tanggal dan upload berkas persyaratan</p>
             </div>
             <div class="flex gap-3 items-center">
-                <button onclick="openRequestModal()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Request Tanggal Baru
-                </button>
                 <a href="{{ route('keagamaan.pernikahan.index') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl text-sm font-medium transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>

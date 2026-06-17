@@ -157,20 +157,8 @@ class PernikahanController extends Controller
                 $statusColor = 'bg-yellow-100 text-yellow-800';
             }
 
-            // Kumpulkan file KTP (hanya untuk status sebelum verifikasi dokumen)
-            $ktpFiles = [];
-            if ($pernikahan->file_ktp_mempelai_pria) {
-                $ktpFiles['mempelai_pria'] = Storage::url($pernikahan->file_ktp_mempelai_pria);
-            }
-            if ($pernikahan->file_ktp_mempelai_wanita) {
-                $ktpFiles['mempelai_wanita'] = Storage::url($pernikahan->file_ktp_mempelai_wanita);
-            }
-            if ($pernikahan->file_ktp_saksi_1) {
-                $ktpFiles['saksi_1'] = Storage::url($pernikahan->file_ktp_saksi_1);
-            }
-            if ($pernikahan->file_ktp_saksi_2) {
-                $ktpFiles['saksi_2'] = Storage::url($pernikahan->file_ktp_saksi_2);
-            }
+            // Kumpulkan file KTP (PDF / JPG) untuk konfirmasi tanggal
+            $ktpFiles = $pernikahan->getKtpFilesForDisplay();
 
             // Kumpulkan dokumen dari keagamaan (untuk status verifikasi dokumen)
             $dokumenKeagamaan = [];
@@ -181,13 +169,16 @@ class PernikahanController extends Controller
                 LayananPernikahan::STATUS_SELESAI,
             ])) {
                 foreach ($pernikahan->dokumen as $doc) {
+                    $kind = LayananPernikahan::detectFileKindFromPath($doc->file_path);
                     $dokumenKeagamaan[] = [
                         'id' => $doc->id,
                         'jenis_dokumen' => $doc->jenis_dokumen,
                         'jenis_dokumen_label' => $doc->jenis_dokumen_label,
                         'status' => $doc->status,
                         'status_label' => $doc->status_label,
-                        'file_url' => $doc->file_path ? Storage::url($doc->file_path) : null,
+                        'file_url' => $doc->file_path ? LayananPernikahan::buildPublicFileUrl($doc->file_path) : null,
+                        'is_pdf' => $doc->isPdf() || $kind['is_pdf'],
+                        'is_image' => $doc->isImage() || $kind['is_image'],
                         'original_filename' => $doc->original_filename,
                         'catatan_verifikasi' => $doc->catatan_verifikasi,
                     ];
@@ -252,8 +243,7 @@ class PernikahanController extends Controller
                             : null,
                         'uploaded_at' => $pernikahan->dokumen_final_uploaded_at?->format('d M Y H:i'),
                     ],
-                    'can_upload_dokumen_final' => $pernikahan->status === LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI
-                        || $pernikahan->status === LayananPernikahan::STATUS_SELESAI,
+                    'can_upload_dokumen_final' => $pernikahan->status === LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
                 ],
             ]);
         } catch (\Exception $e) {
@@ -525,10 +515,7 @@ class PernikahanController extends Controller
 
         try {
             $pernikahan = LayananPernikahan::where('pernikahan_id', $id)
-                ->whereIn('status', [
-                    LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
-                    LayananPernikahan::STATUS_SELESAI,
-                ])
+                ->where('status', LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI)
                 ->firstOrFail();
 
             $fieldMap = [

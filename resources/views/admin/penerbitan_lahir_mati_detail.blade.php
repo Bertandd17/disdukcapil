@@ -164,7 +164,8 @@
                         
                         @if($berkas->{$dok['field']})
                             <a href="{{ route('admin.lihat-berkas-lahir-mati', ['uuid' => $berkas->uuid, 'field' => $dok['field']]) }}" target="_blank"
-                            class="w-full bg-green-600 text-white hover:bg-green-700 py-2 rounded-lg text-sm font-semibold transition text-center flex items-center justify-center">
+                            data-style-guide-skip
+                            class="w-full bg-green-600 text-white py-2 rounded-lg text-sm font-semibold text-center flex items-center justify-center">
                                 <i class="fas fa-external-link-alt mr-2"></i> Buka Dokumen
                             </a>
                         @else
@@ -204,65 +205,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnTolak      = document.getElementById('btnTolak');
     const statusBerikut = @json($statusBerikutnya ?? null);
 
-    if (btnTerima) {
-        btnTerima.addEventListener('click', function () {
-            if (!statusBerikut) {
-                SwalHelper.toastError('Permohonan ini sudah berada di tahap akhir.', 'Tidak ada langkah berikutnya yang dapat diproses.');
-                return;
-            }
-            Swal.fire({
-                icon: false,
-                title: 'Konfirmasi Penerimaan',
-                html: 'Lanjutkan permohonan ke tahap <strong>' + statusBerikut + '</strong>?',
-                showCancelButton: true,
-                showDenyButton: false,
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#e5e7eb',
-                reverseButtons: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((res) => {
-                if (res.isConfirmed) {
-                    inputStatus.value = statusBerikut;
-                    inputAlasan.value = '';
-                    formStatus.submit();
-                }
-            });
+    if (window.AdminVerificationConfirm) {
+        window.AdminVerificationConfirm.bindAcceptButton({
+            buttonId: 'btnTerima',
+            formId: 'formUpdateStatus',
+            statusInputId: 'inputStatus',
+            reasonInputId: 'inputAlasan',
+            nextStatus: statusBerikut,
+            confirmTitle: 'Konfirmasi Penerimaan',
+            confirmHtml: 'Lanjutkan permohonan ke tahap <strong>' + statusBerikut + '</strong>?',
+            loadingTitle: 'Memproses Verifikasi',
+            loadingHtml: '<div class="flex flex-col items-center gap-3 py-2"><i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i><p class="text-gray-600 text-sm">Sedang memproses data lahir mati...</p></div>'
         });
     }
 
-    if (btnTolak) {
-        btnTolak.addEventListener('click', function () {
-            Swal.fire({
-                icon: false,
-                title: 'Tolak Permohonan',
-                html: 'Masukkan <strong>alasan penolakan</strong>. Alasan ini akan ditampilkan pada halaman lacak berkas pengguna.',
-                input: 'textarea',
-                inputPlaceholder: 'Tulis alasan penolakan di sini...',
-                inputAttributes: { 'aria-label': 'Alasan penolakan', 'maxlength': '500' },
-                showCancelButton: true,
-                showDenyButton: false,
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#e5e7eb',
-                reverseButtons: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                inputValidator: (value) => {
-                    if (!value || value.trim().length < 5) {
-                        return 'Alasan penolakan wajib diisi (minimal 5 karakter).';
-                    }
-                }
-            }).then((res) => {
-                if (res.isConfirmed) {
-                    inputStatus.value = 'Tolak';
-                    inputAlasan.value = res.value.trim();
-                    formStatus.submit();
-                }
-            });
+    if (btnTolak && window.AdminVerificationConfirm) {
+        window.AdminVerificationConfirm.bindRejectButton({
+            loadingHtml: '<div class="flex flex-col items-center gap-3 py-2"><i class="fas fa-circle-notch fa-spin text-4xl text-red-500"></i><p class="text-gray-600 text-sm">Sedang memproses penolakan surat keterangan lahir mati...</p></div>'
         });
     }
 });

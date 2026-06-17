@@ -74,10 +74,12 @@
                                 <i class="fas fa-expand-alt text-xs"></i>
                                 <span>Detail</span>
                             </a>
-                            @if($data->status == 'Proses Cetak')
+                            {{-- Upload Berkas: hanya tampil saat status Proses Cetak --}}
+                            @if(trim((string) ($data->status ?? '')) === 'Proses Cetak')
                                 <button type="button"
-                                    onclick='openUploadModal("{{ $data->uuid }}", {!! json_encode($data->nama_pemohon) !!})'
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
+                                    class="btn-upload-berkas inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition"
+                                    data-uuid="{{ $data->uuid }}"
+                                    data-nama="{{ $data->nama_pemohon }}">
                                     <i class="fas fa-upload"></i> Upload Berkas
                                 </button>
                             @endif
@@ -91,7 +93,7 @@
 </div>
 
 {{-- Upload Berkas Modal --}}
-<div id="uploadBerkasModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4">
+<div id="uploadBerkasModal" class="fixed inset-0 z-[9999] items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" style="display:none;">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <form id="uploadBerkasForm" method="POST" enctype="multipart/form-data">
             @csrf
@@ -135,29 +137,56 @@
 <script>
 function openUploadModal(uuid, nama) {
     const form = document.getElementById('uploadBerkasForm');
-    form.action = "{{ url('admin/penerbitan-akte-lahir') }}/" + uuid + "/upload-berkas";
-    document.getElementById('namaPemohonModal').textContent = nama || '-';
     const modal = document.getElementById('uploadBerkasModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    const namaEl = document.getElementById('namaPemohonModal');
+    if (!form || !modal || !namaEl) {
+        console.error('openUploadModal: elemen modal tidak ditemukan.');
+        return;
+    }
+    form.action = @json(route('admin.aktelahir.upload-berkas', ['uuid' => '__UUID__'])).replace('__UUID__', uuid);
+    namaEl.textContent = nama || '-';
+    modal.style.display = 'flex';
 }
 function closeUploadModal() {
     const modal = document.getElementById('uploadBerkasModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.getElementById('uploadBerkasForm').reset();
+    const form = document.getElementById('uploadBerkasForm');
+    const submitBtn = form?.querySelector('button[type="submit"]');
+    if (modal) modal.style.display = 'none';
+    if (form) form.reset();
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-upload mr-1"></i> Upload';
+    }
 }
-document.getElementById('uploadBerkasModal').addEventListener('click', function(e){
-    if (e.target === this) closeUploadModal();
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-upload-berkas').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            openUploadModal(btn.dataset.uuid, btn.dataset.nama);
+        });
+    });
+    const modal = document.getElementById('uploadBerkasModal');
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === this) closeUploadModal();
+        });
+    }
+    if (window.AdminVerificationConfirm) {
+        window.AdminVerificationConfirm.bindUploadForm({
+            docLabel: 'Akta Kelahiran',
+            confirmTitle: 'Konfirmasi Upload Berkas',
+            loadingTitle: 'Mengunggah Berkas',
+            loadingHtml: '<div class="flex flex-col items-center gap-3 py-2"><i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i><p class="text-gray-600 text-sm">Sedang mengunggah berkas akta kelahiran...</p></div>'
+        });
+    }
+    @if(session('success'))
+        SwalHelper.toastSuccess(@json(session('success')));
+    @endif
+    @if(session('upload_error'))
+        SwalHelper.toastError(@json(session('upload_error')), 'Periksa file yang diunggah (format PDF, ukuran maksimal) dan coba lagi.');
+    @endif
+    @if($errors->any())
+        SwalHelper.toastError(@json($errors->first()), 'Pastikan semua field wajib telah diisi dengan benar.');
+    @endif
 });
-@if(session('success'))
-    SwalHelper.toastSuccess(@json(session('success')));
-@endif
-@if(session('upload_error'))
-    SwalHelper.toastError(@json(session('upload_error')), 'Periksa file yang diunggah (format PDF, ukuran maksimal) dan coba lagi.');
-@endif
-@if($errors->any())
-    SwalHelper.toastError(@json($errors->first()), 'Pastikan semua field wajib telah diisi dengan benar.');
-@endif
 </script>
 @endpush

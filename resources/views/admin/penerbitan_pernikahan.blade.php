@@ -204,10 +204,7 @@
  \App\Models\LayananPernikahan::STATUS_DITOLAK_KEAGAMAAN,
  \App\Models\LayananPernikahan::STATUS_DOKUMEN_PERLU_PERBAIKAN,
  ]);
- $canUploadFinal = in_array($item->status, [
- \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI,
- \App\Models\LayananPernikahan::STATUS_SELESAI,
- ]);
+ $canUploadFinal = $item->status === \App\Models\LayananPernikahan::STATUS_DOKUMEN_DIVERIFIKASI;
  @endphp
  <div class="p-3 hover:bg-gray-50 transition-colors cursor-pointer"
  data-status="{{ $item->status }}"
@@ -481,6 +478,7 @@
 }
 </style>
 
+<script src="{{ asset_v('js/admin-pernikahan-doc-preview.js') }}"></script>
 <script>
 const DOKUMEN_LABEL_MAP = {
  // Surat keterangan
@@ -833,47 +831,23 @@ async function showDetail(pernikahanId) {
  p.status === 'SELESAI';
 
  if (isMenungguTanggal) {
- const ktpEntries = [
- { key: 'mempelai_pria', label: 'KTP Mempelai Pria' },
- { key: 'mempelai_wanita', label: 'KTP Mempelai Wanita' },
- { key: 'saksi_1', label: 'KTP Saksi 1' },
- { key: 'saksi_2', label: 'KTP Saksi 2' },
- ];
-
- const ktpHtml = ktpEntries
- .filter(e => p.ktp_files && p.ktp_files[e.key])
- .map(e => `
- <div class="border rounded-lg p-3 bg-gray-50">
- <p class="text-xs font-medium text-gray-700 mb-2">${e.label}</p>
- <img src="${escHtml(p.ktp_files[e.key])}" alt="${e.label}"
- class="w-full max-h-64 object-contain rounded border cursor-pointer hover:opacity-90"
- onclick="window.open('${escHtml(p.ktp_files[e.key])}','_blank')">
- </div>
- `).join('');
-
- if (ktpHtml) {
- documentsHtml = `
- <div class="border-t pt-3">
- <p class="text-xs text-gray-500 mb-3">Berkas KTP</p>
- <div class="space-y-3">${ktpHtml}</div>
- </div>
- `;
- }
+ documentsHtml = window.AdminPernikahanDocPreview
+ ? AdminPernikahanDocPreview.renderKtpFilesGrid(p.ktp_files)
+ : '';
 
  } else if (isVerifikasiDokumen && p.dokumen_keagamaan && p.dokumen_keagamaan.length > 0) {
  const dokumenHtml = p.dokumen_keagamaan.map(d => {
  const label = getDokumenLabel(d);
- return `
- <div class="border rounded-lg p-3 bg-gray-50">
- <div class="flex items-center justify-between">
- <p class="text-sm font-medium text-gray-700">${escHtml(label)}</p>
- ${d.file_url ? `
+ const preview = window.AdminPernikahanDocPreview && d.file_url
+ ? AdminPernikahanDocPreview.renderDocPreview(d, label)
+ : (d.file_url ? `
  <a href="${escHtml(d.file_url)}" target="_blank"
  class="px-2 py-1 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 text-xs inline-flex items-center">
  <i class="fas fa-eye mr-1"></i>Lihat
- </a>
- ` : '<span class="text-xs text-gray-400">Belum ada file</span>'}
- </div>
+ </a>` : '<span class="text-xs text-gray-400">Belum ada file</span>');
+ return `
+ <div class="border rounded-lg p-3 bg-gray-50">
+ ${preview}
  ${d.catatan_verifikasi ? `<p class="text-xs text-red-600 mt-2">${escHtml(d.catatan_verifikasi)}</p>` : ''}
  </div>
  `;

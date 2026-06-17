@@ -83,8 +83,8 @@ class GenerateStatistikDummy extends Command
                     'jumlah_kk' => rand(50, 200),
                     'jumlah_akte_lahir' => rand(30, 100),
                     'jumlah_akte_kematian' => rand(10, 50),
-                    'jumlah_ktp' => rand(100, 300),
-                    'jumlah_kia' => rand(20, 80),
+                    'jumlah_lahir_mati' => rand(10, 50),
+                    'jumlah_pernikahan' => rand(80, 200),
                     'is_auto_generated' => false,
                     'generated_at' => now(),
                 ]
@@ -102,10 +102,12 @@ class GenerateStatistikDummy extends Command
         $this->info("Generating statistik layanan...");
 
         for ($bulan = 1; $bulan <= 12; $bulan++) {
-            $totalAntrian = rand(200, 500);
-            $antrianSelesai = rand(150, 400);
-            $antrianDiproses = rand(20, 50);
-            $antrianMenunggu = $totalAntrian - $antrianSelesai - $antrianDiproses;
+            $jumlahKk = rand(80, 180);
+            $jumlahKelahiran = rand(60, 150);
+            $jumlahKematian = rand(20, 60);
+            $jumlahLahirMati = rand(10, 40);
+            $jumlahPernikahan = rand(70, 160);
+            $totalAntrian = $jumlahKk + $jumlahKelahiran + $jumlahKematian + $jumlahLahirMati + $jumlahPernikahan;
 
             StatistikLayananBulanan::updateOrCreate(
                 [
@@ -113,10 +115,15 @@ class GenerateStatistikDummy extends Command
                     'bulan' => $bulan,
                 ],
                 [
+                    'jumlah_kk' => $jumlahKk,
+                    'jumlah_kelahiran' => $jumlahKelahiran,
+                    'jumlah_kematian' => $jumlahKematian,
+                    'jumlah_lahir_mati' => $jumlahLahirMati,
+                    'jumlah_pernikahan' => $jumlahPernikahan,
                     'total_antrian' => $totalAntrian,
-                    'antrian_selesai' => $antrianSelesai,
-                    'antrian_diproses' => $antrianDiproses,
-                    'antrian_menunggu' => max(0, $antrianMenunggu),
+                    'antrian_selesai' => (int) round($totalAntrian * 0.75),
+                    'antrian_diproses' => (int) round($totalAntrian * 0.15),
+                    'antrian_menunggu' => (int) round($totalAntrian * 0.08),
                     'antrian_ditolak' => rand(0, 20),
                     'waktu_avg_penanganan_menit' => rand(30, 120),
                     'persentase_kepuasan' => rand(70, 95),

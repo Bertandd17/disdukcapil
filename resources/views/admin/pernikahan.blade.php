@@ -403,6 +403,7 @@ if (typeof window.SwalHelper === 'undefined') {
 }
 </style>
 
+<script src="{{ asset_v('js/admin-pernikahan-doc-preview.js') }}"></script>
 <script>
 // Calendar
 let currentDate = new Date();
@@ -606,26 +607,35 @@ async function showDetail(id) {
 
             let dokumenHtml = '';
             if (data.dokumen && data.dokumen.length > 0) {
+                const docItems = data.dokumen.map(d => {
+                    const preview = (window.AdminPernikahanDocPreview && d.file_url)
+                        ? AdminPernikahanDocPreview.renderDocPreview(d, d.jenis_dokumen_label)
+                        : (d.file_url ? `<a href="${d.file_url}" target="_blank" class="text-xs text-blue-600 hover:underline"><i class="fas fa-eye mr-1"></i>Lihat</a>` : '-');
+                    return `
+                        <div class="p-3 bg-gray-50 rounded-xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-800">${d.jenis_dokumen_label}</span>
+                                <span class="text-xs px-2 py-1 rounded-full ${d.status === 'VERIFIED' || d.status === 'DIVERIFIKASI' ? 'bg-green-100 text-green-700' : d.status === 'DITOLAK' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}">
+                                    ${d.status_label}
+                                </span>
+                            </div>
+                            ${preview}
+                            ${d.catatan_verifikasi ? `<p class="text-xs text-gray-500 mt-2">${d.catatan_verifikasi}</p>` : ''}
+                        </div>
+                    `;
+                }).join('');
+
                 dokumenHtml = `
                     <div class="mt-6 pt-6 border-t border-gray-100">
                         <h4 class="font-semibold text-gray-800 mb-3">Dokumen yang Diupload</h4>
-                        <div class="grid grid-cols-2 gap-3">
-                            ${data.dokumen.map(d => `
-                                <div class="p-3 bg-gray-50 rounded-xl">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-sm font-medium text-gray-800">${d.jenis_dokumen_label}</span>
-                                        <span class="text-xs px-2 py-1 rounded-full ${d.status === 'VERIFIED' ? 'bg-green-100 text-green-700' : d.status === 'DITOLAK' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}">
-                                            ${d.status_label}
-                                        </span>
-                                    </div>
-                                    ${d.file_path ? `<a href="${d.file_url}" target="_blank" class="text-xs text-blue-600 hover:underline"><i class="fas fa-eye mr-1"></i>Lihat</a>` : '-'}
-                                    ${d.catatan_verifikasi ? `<p class="text-xs text-gray-500 mt-1">${d.catatan_verifikasi}</p>` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">${docItems}</div>
                     </div>
                 `;
             }
+
+            const ktpHtml = (window.AdminPernikahanDocPreview && data.ktp_files)
+                ? AdminPernikahanDocPreview.renderKtpFilesGrid(data.ktp_files)
+                : '';
 
             content.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -663,6 +673,7 @@ async function showDetail(id) {
                     ${data.alasan_ditolak ? `<div class="mt-2 p-3 bg-red-50 rounded-lg text-sm text-red-700"><i class="fas fa-info-circle mr-2"></i>${data.alasan_ditolak}</div>` : ''}
                 </div>
 
+                ${ktpHtml}
                 ${dokumenHtml}
                 ${actionsHtml}
             `;

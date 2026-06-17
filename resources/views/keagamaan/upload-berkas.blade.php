@@ -58,10 +58,6 @@
                                         @elseif($doc->status === \App\Models\DokumenPernikahan::STATUS_DITOLAK)
                                         <span class="text-xs text-red-600"><i class="fas fa-times-circle"></i></span>
                                         @endif
-                                        <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank"
-                                           class="text-xs text-blue-600 hover:text-blue-700">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
                                     </div>
                                 </div>
                                 @endforeach
@@ -86,10 +82,6 @@
                             <i class="fas fa-print mr-2"></i>Print Berkas
                         </button>
                         @endif
-                        <a href="{{ route('keagamaan.pernikahan.show', $item->pernikahan_id) }}"
-                           class="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
-                            <i class="fas fa-eye"></i>
-                        </a>
                     </div>
                 </div>
                 @endforeach
@@ -203,22 +195,38 @@ function openUploadModal(pernikahanId) {
     document.getElementById('uploadModal').classList.remove('hidden');
 }
 
-function closeUploadModal() {
-    document.getElementById('uploadModal').classList.add('hidden');
-}
-
 function printBerkas(pernikahanId) {
     window.open('/keagamaan/pernikahan/print-berkas/' + pernikahanId, '_blank');
 }
 
-// Form submit
-document.getElementById('uploadForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+function closeUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    const form = document.getElementById('uploadForm');
+    const submitBtn = form?.querySelector('button[type="submit"]');
+    if (modal) modal.classList.add('hidden');
+    if (form) form.reset();
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-upload mr-2"></i>Upload';
+    }
+}
 
-    const formData = new FormData(this);
-    SwalHelper.loading('Mengupload berkas...');
+function resetUploadSubmitButton() {
+    const submitBtn = document.querySelector('#uploadForm button[type="submit"]');
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-upload mr-2"></i>Upload';
+    }
+}
 
-    fetch(`{{ route('keagamaan.pernikahan.upload-berkas-post') }}`, {
+function uploadHasFiles(form) {
+    return Array.from(form.querySelectorAll('input[type="file"]')).some(function (input) {
+        return input.files && input.files.length > 0;
+    });
+}
+
+function doUploadFetch(formData) {
+    return fetch(`{{ route('keagamaan.pernikahan.upload-berkas-post') }}`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -233,12 +241,69 @@ document.getElementById('uploadForm').addEventListener('submit', function(e) {
             closeUploadModal();
             setTimeout(() => location.reload(), 1500);
         } else {
+            resetUploadSubmitButton();
             SwalHelper.toastError(data.message || 'Gagal mengupload berkas', 'Periksa format dan ukuran file PDF, lalu coba unggah kembali.');
         }
     })
-    .catch(error => {
+    .catch(function () {
         SwalHelper.close();
+        resetUploadSubmitButton();
         SwalHelper.toastError('Terjadi kesalahan saat mengupload berkas', 'Periksa koneksi internet, lalu coba lagi.');
+    });
+}
+
+// Form submit
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    if (!uploadHasFiles(form)) {
+        SwalHelper.toastError('Pilih minimal satu berkas', 'Unggah dokumen persyaratan terlebih dahulu, lalu coba lagi.');
+        return;
+    }
+
+    Swal.fire({
+        icon: 'question',
+        title: 'Konfirmasi Upload Berkas',
+        html: 'Upload berkas persyaratan pernikahan? Pastikan semua dokumen sudah benar sebelum melanjutkan.',
+        showCancelButton: true,
+        showConfirmButton: true,
+        showDenyButton: false,
+        denyButtonText: null,
+        confirmButtonText: 'Konfirmasi',
+        cancelButtonText: 'Batal',
+        reverseButtons: true,
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor: '#6b7280',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        buttonsStyling: true,
+        didOpen: function () {
+            var denyBtn = document.querySelector('.swal2-deny');
+            if (denyBtn) denyBtn.remove();
+            var denyContainer = document.querySelector('.swal2-deny-container');
+            if (denyContainer) denyContainer.remove();
+        }
+    }).then(function (result) {
+        if (!result.isConfirmed) return;
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Mengupload...';
+        }
+
+        if (typeof window.showRegisterStyleLoading === 'function') {
+            window.showRegisterStyleLoading('Mengunggah Berkas', 'Sedang mengupload berkas persyaratan...');
+        } else {
+            SwalHelper.loading('Mengunggah Berkas', 'Sedang mengupload berkas persyaratan...');
+        }
+
+        window.setTimeout(function () {
+            doUploadFetch(formData);
+        }, 350);
     });
 });
 

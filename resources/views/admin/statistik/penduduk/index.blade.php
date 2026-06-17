@@ -78,24 +78,25 @@
                         <td class="p-4 text-sm font-semibold text-gray-800">{{ $row->kecamatan->nama_kecamatan ?? '-' }}</td>
                         <td class="p-4 text-sm text-gray-700 text-center">{{ $row->tahun }}</td>
                         <td class="p-4 text-sm font-bold text-gray-800 text-right">{{ number_format($row->total_penduduk, 0, ',', '.') }}</td>
-                        <td class="p-4 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                @if($canEdit)
-                                <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_penduduk_id, "kecamatan_id" => $row->kecamatan_id, "tahun" => $row->tahun, "total_penduduk" => $row->total_penduduk, "nama_kecamatan" => $row->kecamatan->nama_kecamatan ?? ""]) }})' 
-                                        class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
-                                    <i class="bi bi-pencil"></i> Ubah
+                        <td class="p-4 text-right whitespace-nowrap">
+                            @if($canEdit)
+                            <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_penduduk_id, "kecamatan_id" => $row->kecamatan_id, "tahun" => $row->tahun, "total_penduduk" => $row->total_penduduk, "nama_kecamatan" => $row->kecamatan->nama_kecamatan ?? ""]) }})'
+                                    class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
+                                <i class="fas fa-edit"></i> Ubah
+                            </button>
+                            @endif
+                            @if($canEdit && $canDelete)
+                            <span class="text-gray-200 hidden sm:inline mx-1">|</span>
+                            @endif
+                            @if($canDelete)
+                            <form action="{{ route('admin.statistik-penduduk.destroy', $row->statistik_penduduk_id) }}" method="POST" class="inline delete-form" data-title="{{ $row->kecamatan->nama_kecamatan ?? '' }} {{ $row->tahun }}">
+                                @csrf
+                                @method('DELETE')
+                                <button data-style-guide-skip type="button" class="statistik-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
+                                    <i class="fas fa-trash-alt"></i> Hapus
                                 </button>
-                                @endif
-                                @if($canDelete)
-                                <form action="{{ route('admin.statistik-penduduk.destroy', $row->statistik_penduduk_id) }}" method="POST" class="inline-block delete-form" data-title="{{ $row->kecamatan->nama_kecamatan ?? '' }} {{ $row->tahun }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button data-style-guide-skip type="submit" class="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
-                                        <i class="bi bi-trash"></i> Hapus
-                                    </button>
-                                </form>
-                                @endif
-                            </div>
+                            </form>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -262,7 +263,9 @@
     });
 
     document.querySelectorAll('.delete-form').forEach(function (f) {
-        f.addEventListener('submit', function (e) {
+        const btn = f.querySelector('.statistik-delete-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const t = f.getAttribute('data-title') || 'data ini';
             Swal.fire({

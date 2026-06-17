@@ -21,10 +21,24 @@ class StatistikLayananBulanan extends Model
 
     public $timestamps = true;
 
+    /** Lima layanan utama Disdukcapil Toba */
+    public const JENIS_LAYANAN = [
+        'jumlah_kk' => 'Kartu Keluarga',
+        'jumlah_kelahiran' => 'Kelahiran',
+        'jumlah_kematian' => 'Kematian',
+        'jumlah_lahir_mati' => 'Lahir Mati',
+        'jumlah_pernikahan' => 'Pernikahan',
+    ];
+
     protected $fillable = [
         'statistik_layanan_bulanan_id',
         'tahun',
         'bulan',
+        'jumlah_kk',
+        'jumlah_kelahiran',
+        'jumlah_kematian',
+        'jumlah_lahir_mati',
+        'jumlah_pernikahan',
         'total_antrian',
         'antrian_menunggu',
         'antrian_diproses',
@@ -39,6 +53,11 @@ class StatistikLayananBulanan extends Model
     protected $casts = [
         'tahun' => 'integer',
         'bulan' => 'integer',
+        'jumlah_kk' => 'integer',
+        'jumlah_kelahiran' => 'integer',
+        'jumlah_kematian' => 'integer',
+        'jumlah_lahir_mati' => 'integer',
+        'jumlah_pernikahan' => 'integer',
         'total_antrian' => 'integer',
         'antrian_menunggu' => 'integer',
         'antrian_diproses' => 'integer',
@@ -237,12 +256,18 @@ class StatistikLayananBulanan extends Model
         });
 
         static::saving(function (self $model): void {
-            // Hitung total sebelum menyimpan
-            $model->total_antrian = 
-                ($model->antrian_menunggu ?? 0) 
-                + ($model->antrian_diproses ?? 0) 
-                + ($model->antrian_selesai ?? 0) 
-                + ($model->antrian_ditolak ?? 0);
+            $layananTotal = collect(array_keys(self::JENIS_LAYANAN))
+                ->sum(fn (string $field) => (int) ($model->{$field} ?? 0));
+
+            if ($layananTotal > 0) {
+                $model->total_antrian = $layananTotal;
+            } else {
+                $model->total_antrian =
+                    ($model->antrian_menunggu ?? 0)
+                    + ($model->antrian_diproses ?? 0)
+                    + ($model->antrian_selesai ?? 0)
+                    + ($model->antrian_ditolak ?? 0);
+            }
         });
     }
 }

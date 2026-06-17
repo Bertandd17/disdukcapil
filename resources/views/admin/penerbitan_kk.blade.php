@@ -74,10 +74,13 @@
                                 class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm font-semibold text-sm h-[44px]">
                                 <i class="fas fa-expand-alt text-xs"></i> <span>Detail</span>
                             </a>
-                            @if($data->status == 'Proses Cetak')
+                            {{-- Upload Berkas: hanya tampil saat status Proses Cetak --}}
+                            @if(trim((string) ($data->status ?? '')) === 'Proses Cetak')
                                 <button type="button"
-                                    onclick='openUploadModal("{{ $data->uuid }}", {!! json_encode($data->jenis) !!}, {!! json_encode($data->nama_pemohon) !!})'
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
+                                    class="btn-upload-berkas inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-semibold shadow-sm transition"
+                                    data-uuid="{{ $data->uuid }}"
+                                    data-jenis="{{ $data->jenis }}"
+                                    data-nama="{{ $data->nama_pemohon }}">
                                     <i class="fas fa-upload"></i> Upload Berkas
                                 </button>
                             @endif
@@ -89,8 +92,8 @@
         </table>
     </div>
 
-    {{-- Upload Berkas Modal — di dalam @section agar ter-render ke DOM --}}
-    <div id="uploadBerkasModal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; padding:1rem; background:rgba(15,23,42,0.6); backdrop-filter:blur(4px);">
+    {{-- Upload Berkas Modal --}}
+    <div id="uploadBerkasModal" class="fixed inset-0 z-[9999] items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" style="display:none;">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <form id="uploadBerkasForm" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -146,24 +149,46 @@ function openUploadModal(uuid, jenis, nama) {
         return;
     }
 
-    form.action               = "{{ url('admin/penerbitan-kk') }}/" + uuid + "/" + encodeURIComponent(jenis) + "/upload-berkas";
-    namaPemohon.textContent   = nama  || '-';
-    jenisLabel.textContent    = '(' + jenis + ')';
-    modal.style.display       = 'flex';
+    form.action = @json(route('admin.kk.upload-berkas', ['uuid' => '__UUID__', 'jenis' => '__JENIS__']))
+        .replace('__UUID__', uuid)
+        .replace('__JENIS__', encodeURIComponent(jenis));
+    namaPemohon.textContent = nama || '-';
+    jenisLabel.textContent  = '(' + jenis + ')';
+    modal.style.display     = 'flex';
 }
 
 function closeUploadModal() {
     const modal = document.getElementById('uploadBerkasModal');
     const form  = document.getElementById('uploadBerkasForm');
+    const submitBtn = form?.querySelector('button[type="submit"]');
     if (modal) modal.style.display = 'none';
-    if (form)  form.reset();
+    if (form) form.reset();
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-upload mr-1"></i> Upload';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-upload-berkas').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            openUploadModal(btn.dataset.uuid, btn.dataset.jenis, btn.dataset.nama);
+        });
+    });
+
     const modal = document.getElementById('uploadBerkasModal');
     if (modal) {
         modal.addEventListener('click', function (e) {
             if (e.target === this) closeUploadModal();
+        });
+    }
+
+    if (window.AdminVerificationConfirm) {
+        window.AdminVerificationConfirm.bindUploadForm({
+            docLabel: 'Kartu Keluarga',
+            confirmTitle: 'Konfirmasi Upload Berkas',
+            loadingTitle: 'Mengunggah Berkas',
+            loadingHtml: '<div class="flex flex-col items-center gap-3 py-2"><i class="fas fa-circle-notch fa-spin text-4xl text-green-500"></i><p class="text-gray-600 text-sm">Sedang mengunggah berkas KK...</p></div>'
         });
     }
 

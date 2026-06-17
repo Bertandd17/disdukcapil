@@ -48,22 +48,40 @@
     </form>
 
     <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide">Total Antrian</p>
-            <h3 class="text-3xl font-bold text-blue-700 mt-1">{{ number_format($summary['total_antrian'], 0, ',', '.') }}</h3>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide">Kartu Keluarga</p>
+            <h3 class="text-2xl font-bold text-blue-700 mt-1">{{ number_format($summary['total_kk'], 0, ',', '.') }}</h3>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p class="text-xs font-semibold text-green-600 uppercase tracking-wide">Selesai</p>
-            <h3 class="text-3xl font-bold text-green-700 mt-1">{{ number_format($summary['total_selesai'], 0, ',', '.') }}</h3>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <p class="text-xs font-semibold text-green-600 uppercase tracking-wide">Kelahiran</p>
+            <h3 class="text-2xl font-bold text-green-700 mt-1">{{ number_format($summary['total_kelahiran'], 0, ',', '.') }}</h3>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <p class="text-xs font-semibold text-red-600 uppercase tracking-wide">Kematian</p>
+            <h3 class="text-2xl font-bold text-red-700 mt-1">{{ number_format($summary['total_kematian'], 0, ',', '.') }}</h3>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide">Lahir Mati</p>
+            <h3 class="text-2xl font-bold text-purple-700 mt-1">{{ number_format($summary['total_lahir_mati'], 0, ',', '.') }}</h3>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <p class="text-xs font-semibold text-yellow-600 uppercase tracking-wide">Pernikahan</p>
+            <h3 class="text-2xl font-bold text-yellow-700 mt-1">{{ number_format($summary['total_pernikahan'], 0, ',', '.') }}</h3>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-blue-600 rounded-xl shadow-sm p-5 text-white">
+            <p class="text-sm opacity-80">Total Antrian</p>
+            <h3 class="text-3xl font-bold">{{ number_format($summary['total_antrian'], 0, ',', '.') }}</h3>
         </div>
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <p class="text-xs font-semibold text-yellow-600 uppercase tracking-wide">Avg Waktu</p>
             <h3 class="text-3xl font-bold text-yellow-700 mt-1">{{ $summary['avg_waktu'] }} menit</h3>
         </div>
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide">Avg Kepuasan</p>
-            <h3 class="text-3xl font-bold text-purple-700 mt-1">{{ $summary['avg_kepuasan'] }}%</h3>
+            <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wide">Avg Kepuasan</p>
+            <h3 class="text-3xl font-bold text-emerald-700 mt-1">{{ $summary['avg_kepuasan'] }}%</h3>
         </div>
     </div>
 
@@ -75,11 +93,12 @@
                     <tr>
                         <th class="p-4 font-semibold uppercase text-xs text-left">No</th>
                         <th class="p-4 font-semibold uppercase text-xs text-left">Periode</th>
+                        <th class="p-4 font-semibold uppercase text-xs text-center">KK</th>
+                        <th class="p-4 font-semibold uppercase text-xs text-center">Kelahiran</th>
+                        <th class="p-4 font-semibold uppercase text-xs text-center">Kematian</th>
+                        <th class="p-4 font-semibold uppercase text-xs text-center">Lahir Mati</th>
+                        <th class="p-4 font-semibold uppercase text-xs text-center">Pernikahan</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Total</th>
-                        <th class="p-4 font-semibold uppercase text-xs text-center">Menunggu</th>
-                        <th class="p-4 font-semibold uppercase text-xs text-center">Diproses</th>
-                        <th class="p-4 font-semibold uppercase text-xs text-center">Selesai</th>
-                        <th class="p-4 font-semibold uppercase text-xs text-center">Ditolak</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Waktu Avg</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Kepuasan</th>
                         <th class="p-4 font-semibold uppercase text-xs text-center">Sumber</th>
@@ -91,11 +110,12 @@
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="p-4 text-sm text-gray-700">{{ $loop->iteration }}</td>
                         <td class="p-4 text-sm font-semibold text-gray-800">{{ $row->bulan_nama }} {{ $row->tahun }}</td>
-                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->total_antrian, 0, ',', '.') }}</td>
-                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->antrian_menunggu, 0, ',', '.') }}</td>
-                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->antrian_diproses, 0, ',', '.') }}</td>
-                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->antrian_selesai, 0, ',', '.') }}</td>
-                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->antrian_ditolak, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_kk ?? 0, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_kelahiran ?? 0, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_kematian ?? 0, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_lahir_mati ?? 0, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm text-gray-700 text-center">{{ number_format($row->jumlah_pernikahan ?? 0, 0, ',', '.') }}</td>
+                        <td class="p-4 text-sm font-bold text-gray-800 text-center">{{ number_format($row->total_antrian, 0, ',', '.') }}</td>
                         <td class="p-4 text-sm text-gray-700 text-center">{{ $row->waktu_avg_penanganan_menit }} menit</td>
                         <td class="p-4 text-center">
                             <span class="px-3 py-1 rounded-full text-xs font-bold border {{ $row->persentase_kepuasan >= 80 ? 'bg-green-50 text-green-600 border-green-100' : ($row->persentase_kepuasan >= 60 ? 'bg-yellow-50 text-yellow-600 border-yellow-100' : 'bg-red-50 text-red-600 border-red-100') }}">
@@ -107,20 +127,23 @@
                                 {{ $row->is_auto_generated ? 'Auto' : 'Manual' }}
                             </span>
                         </td>
-                        <td class="p-4 text-center">
+                        <td class="p-4 text-center whitespace-nowrap">
                             <div class="flex items-center justify-center gap-2">
                                 @if($canEdit)
-                                <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_layanan_bulanan_id, "tahun" => $row->tahun, "bulan" => $row->bulan, "antrian_menunggu" => $row->antrian_menunggu, "antrian_diproses" => $row->antrian_diproses, "antrian_selesai" => $row->antrian_selesai, "antrian_ditolak" => $row->antrian_ditolak, "waktu_avg_penanganan_menit" => $row->waktu_avg_penanganan_menit, "persentase_kepuasan" => $row->persentase_kepuasan]) }})' 
+                                <button data-style-guide-skip type="button" onclick='openModal("edit", {{ json_encode(["id" => $row->statistik_layanan_bulanan_id, "tahun" => $row->tahun, "bulan" => $row->bulan, "jumlah_kk" => $row->jumlah_kk ?? 0, "jumlah_kelahiran" => $row->jumlah_kelahiran ?? 0, "jumlah_kematian" => $row->jumlah_kematian ?? 0, "jumlah_lahir_mati" => $row->jumlah_lahir_mati ?? 0, "jumlah_pernikahan" => $row->jumlah_pernikahan ?? 0, "waktu_avg_penanganan_menit" => $row->waktu_avg_penanganan_menit, "persentase_kepuasan" => $row->persentase_kepuasan]) }})'
                                         class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition">
-                                    <i class="bi bi-pencil"></i> Ubah
+                                    <i class="fas fa-edit"></i> Ubah
                                 </button>
                                 @endif
+                                @if($canEdit && $canDelete)
+                                <span class="text-gray-200 hidden sm:inline">|</span>
+                                @endif
                                 @if($canDelete)
-                                <form action="{{ route('admin.statistik-layanan.destroy', $row->statistik_layanan_bulanan_id) }}" method="POST" class="inline-block delete-form" data-title="{{ $row->bulan_nama }} {{ $row->tahun }}">
+                                <form action="{{ route('admin.statistik-layanan.destroy', $row->statistik_layanan_bulanan_id) }}" method="POST" class="inline delete-form" data-title="{{ $row->bulan_nama }} {{ $row->tahun }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button data-style-guide-skip type="submit" class="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
-                                        <i class="bi bi-trash"></i> Hapus
+                                    <button data-style-guide-skip type="button" class="statistik-delete-btn inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 font-medium transition">
+                                        <i class="fas fa-trash-alt"></i> Hapus
                                     </button>
                                 </form>
                                 @endif
@@ -129,7 +152,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="11" class="p-8 text-center text-gray-500">
+                        <td colspan="12" class="p-8 text-center text-gray-500">
                             <i class="bi bi-inbox text-4xl block mb-2"></i>
                             Tidak ada data statistik layanan
                         </td>
@@ -174,23 +197,27 @@
             </div>
 
             <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                <h4 class="text-sm font-bold text-gray-700 mb-3">Jumlah Antrian</h4>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <h4 class="text-sm font-bold text-gray-700 mb-3">Jumlah Antrian per Layanan</h4>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Menunggu</label>
-                        <input type="number" name="antrian_menunggu" id="field_menunggu" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Kartu Keluarga</label>
+                        <input type="number" name="jumlah_kk" id="field_kk" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Diproses</label>
-                        <input type="number" name="antrian_diproses" id="field_diproses" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Kelahiran</label>
+                        <input type="number" name="jumlah_kelahiran" id="field_kelahiran" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Selesai</label>
-                        <input type="number" name="antrian_selesai" id="field_selesai" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Kematian</label>
+                        <input type="number" name="jumlah_kematian" id="field_kematian" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Ditolak</label>
-                        <input type="number" name="antrian_ditolak" id="field_ditolak" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Lahir Mati</label>
+                        <input type="number" name="jumlah_lahir_mati" id="field_lahir_mati" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Pernikahan</label>
+                        <input type="number" name="jumlah_pernikahan" id="field_pernikahan" value="0" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                     </div>
                 </div>
             </div>
@@ -291,13 +318,13 @@
 
     function calculateTotal() {
         var total = 0;
-        ['field_menunggu', 'field_diproses', 'field_selesai', 'field_ditolak'].forEach(function(id) {
+        ['field_kk', 'field_kelahiran', 'field_kematian', 'field_lahir_mati', 'field_pernikahan'].forEach(function(id) {
             total += parseInt(document.getElementById(id).value) || 0;
         });
         document.getElementById('totalAntrian').textContent = total.toLocaleString('id-ID');
     }
 
-    ['field_menunggu', 'field_diproses', 'field_selesai', 'field_ditolak'].forEach(function(id) {
+    ['field_kk', 'field_kelahiran', 'field_kematian', 'field_lahir_mati', 'field_pernikahan'].forEach(function(id) {
         document.getElementById(id).addEventListener('input', calculateTotal);
     });
 
@@ -305,10 +332,11 @@
         form.reset();
         document.getElementById('field_tahun').value = '{{ date("Y") }}';
         document.getElementById('field_bulan').value = '1';
-        document.getElementById('field_menunggu').value = '0';
-        document.getElementById('field_diproses').value = '0';
-        document.getElementById('field_selesai').value = '0';
-        document.getElementById('field_ditolak').value = '0';
+        document.getElementById('field_kk').value = '0';
+        document.getElementById('field_kelahiran').value = '0';
+        document.getElementById('field_kematian').value = '0';
+        document.getElementById('field_lahir_mati').value = '0';
+        document.getElementById('field_pernikahan').value = '0';
         document.getElementById('field_waktu').value = '0';
         document.getElementById('field_kepuasan').value = '0';
         document.getElementById('totalAntrian').textContent = '0';
@@ -325,10 +353,11 @@
             form.action = baseUrl + '/' + item.id;
             document.getElementById('field_tahun').value = item.tahun;
             document.getElementById('field_bulan').value = item.bulan;
-            document.getElementById('field_menunggu').value = item.antrian_menunggu;
-            document.getElementById('field_diproses').value = item.antrian_diproses;
-            document.getElementById('field_selesai').value = item.antrian_selesai;
-            document.getElementById('field_ditolak').value = item.antrian_ditolak;
+            document.getElementById('field_kk').value = item.jumlah_kk;
+            document.getElementById('field_kelahiran').value = item.jumlah_kelahiran;
+            document.getElementById('field_kematian').value = item.jumlah_kematian;
+            document.getElementById('field_lahir_mati').value = item.jumlah_lahir_mati;
+            document.getElementById('field_pernikahan').value = item.jumlah_pernikahan;
             document.getElementById('field_waktu').value = item.waktu_avg_penanganan_menit;
             document.getElementById('field_kepuasan').value = item.persentase_kepuasan;
             calculateTotal();
@@ -456,7 +485,9 @@
 
     // Delete forms
     document.querySelectorAll('.delete-form').forEach(function (f) {
-        f.addEventListener('submit', function (e) {
+        const btn = f.querySelector('.statistik-delete-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const t = f.getAttribute('data-title') || 'data ini';
             Swal.fire({
@@ -464,7 +495,6 @@
                 html: 'Apakah Anda yakin ingin menghapus <strong>' + t + '</strong>?',
                 icon: false,
                 showCancelButton: true,
-                showDenyButton: false,
                 confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#e5e7eb',
                 confirmButtonText: 'Konfirmasi',

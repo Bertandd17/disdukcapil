@@ -46,10 +46,11 @@ class StatistikLayananController extends Controller
         
         $summary = [
             'total_antrian' => $statistik->sum('total_antrian'),
-            'total_selesai' => $statistik->sum('antrian_selesai'),
-            'total_menunggu' => $statistik->sum('antrian_menunggu'),
-            'total_diproses' => $statistik->sum('antrian_diproses'),
-            'total_ditolak' => $statistik->sum('antrian_ditolak'),
+            'total_kk' => $statistik->sum('jumlah_kk'),
+            'total_kelahiran' => $statistik->sum('jumlah_kelahiran'),
+            'total_kematian' => $statistik->sum('jumlah_kematian'),
+            'total_lahir_mati' => $statistik->sum('jumlah_lahir_mati'),
+            'total_pernikahan' => $statistik->sum('jumlah_pernikahan'),
             'avg_waktu' => (int) round($statistik->avg('waktu_avg_penanganan_menit') ?? 0),
             'avg_kepuasan' => round($statistik->avg('persentase_kepuasan') ?? 0, 2),
         ];
@@ -99,6 +100,11 @@ class StatistikLayananController extends Controller
             $statistik->statistik_layanan_bulanan_id = Str::uuid()->toString();
             $statistik->tahun = $request->tahun;
             $statistik->bulan = $request->bulan;
+            $statistik->jumlah_kk = $request->jumlah_kk ?? 0;
+            $statistik->jumlah_kelahiran = $request->jumlah_kelahiran ?? 0;
+            $statistik->jumlah_kematian = $request->jumlah_kematian ?? 0;
+            $statistik->jumlah_lahir_mati = $request->jumlah_lahir_mati ?? 0;
+            $statistik->jumlah_pernikahan = $request->jumlah_pernikahan ?? 0;
             $statistik->antrian_menunggu = $request->antrian_menunggu ?? 0;
             $statistik->antrian_diproses = $request->antrian_diproses ?? 0;
             $statistik->antrian_selesai = $request->antrian_selesai ?? 0;
@@ -168,6 +174,11 @@ class StatistikLayananController extends Controller
 
             $statistik->tahun = $request->tahun;
             $statistik->bulan = $request->bulan;
+            $statistik->jumlah_kk = $request->jumlah_kk ?? 0;
+            $statistik->jumlah_kelahiran = $request->jumlah_kelahiran ?? 0;
+            $statistik->jumlah_kematian = $request->jumlah_kematian ?? 0;
+            $statistik->jumlah_lahir_mati = $request->jumlah_lahir_mati ?? 0;
+            $statistik->jumlah_pernikahan = $request->jumlah_pernikahan ?? 0;
             $statistik->antrian_menunggu = $request->antrian_menunggu ?? 0;
             $statistik->antrian_diproses = $request->antrian_diproses ?? 0;
             $statistik->antrian_selesai = $request->antrian_selesai ?? 0;
