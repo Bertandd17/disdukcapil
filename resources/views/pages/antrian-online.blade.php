@@ -1384,12 +1384,11 @@
  // Render Search Results
  window.__antrianRegistry = window.__antrianRegistry || {};
 
- // --- Progress & riwayat antrian (7 tahap, selaras controller penerbitan) ---
- window.ANTRIAN_TOTAL_STEPS = 7;
+ // --- Progress & riwayat antrian (5 tahap: KK, akta lahir/mati/kematian) ---
+ window.ANTRIAN_TOTAL_STEPS = 5;
 
- // Tahap penolakan: hanya Verifikasi Data (btnTolak di admin penerbitan_*_detail)
- // Untuk workflow rejection 5-tahap: Verifikasi Data adalah step 2
- window.ANTRIAN_REJECTION_STEP = 2;
+ // Tahap penolakan: Verifikasi Data (btnTolak di admin penerbitan_*_detail)
+ window.ANTRIAN_REJECTION_STEP = 3;
  window.ANTRIAN_REJECTION_TOTAL_STEPS = 5;
  window.ANTRIAN_REJECTION_STATUS = 'Verifikasi Data';
 
@@ -1398,9 +1397,10 @@
  'Dokumen Diterima': 2,
  'Verifikasi Data': 3,
  'Proses Cetak': 4,
- 'Siap Pengambilan': 5,
- 'Berkas Siap Diunduh': 6,
- 'Selesai': 7,
+ 'Selesai': 5,
+ // Legacy (data lama — dilewati atau dipetakan ke tahap terdekat)
+ 'Siap Pengambilan': null,
+ 'Berkas Siap Diunduh': 5,
  'Tolak': null,
  'Ditolak': null,
  'Dibatalkan': null
@@ -1411,9 +1411,7 @@
  { step: 2, status: 'Dokumen Diterima', keterangan: 'Dokumen diterima oleh admin. Menunggu verifikasi data.' },
  { step: 3, status: 'Verifikasi Data', keterangan: 'Data sedang diverifikasi oleh petugas.' },
  { step: 4, status: 'Proses Cetak', keterangan: 'Dokumen sedang dalam proses cetak.' },
- { step: 5, status: 'Siap Pengambilan', keterangan: 'Dokumen siap diambil oleh pemohon.' },
- { step: 6, status: 'Berkas Siap Diunduh', keterangan: 'Berkas hasil penerbitan telah diunggah. Silakan unduh.' },
- { step: 7, status: 'Selesai', keterangan: 'Permohonan selesai diproses.' }
+ { step: 5, status: 'Selesai', keterangan: 'Permohonan selesai diproses.' }
  ];
 
  window.ANTRIAN_REJECTION_LACAK_STATUSES = ['Tolak', 'Ditolak', 'Dibatalkan'];
@@ -1474,7 +1472,7 @@
  };
 
  /**
- * Tahap penolakan: Verifikasi Data (step 2 dalam workflow 5-tahap rejection).
+ * Tahap penolakan: Verifikasi Data (step 3 dalam workflow 5-tahap).
  */
  window.resolveAntrianRejectionMilestone = function() {
  return {
@@ -1550,7 +1548,7 @@
  };
 
  /**
- * Petakan status lacak_berkas ke nomor step (1–7).
+ * Petakan status lacak_berkas ke nomor step (1–5).
  */
  window.getAntrianLacakStepNumber = function(status) {
  if (!status) return null;
@@ -1560,7 +1558,7 @@
  };
 
  /**
- * Lengkapi riwayat lacak agar jumlah entri = progress step (maks. 7).
+ * Lengkapi riwayat lacak agar jumlah entri = progress step (maks. 5).
  * Diperbaiki untuk memastikan semua step 1-stepLimit diisi (synthetic jika perlu).
  */
  window.normalizeAntrianLacakHistory = function(lacakSorted, targetStep, antrian) {
@@ -1577,7 +1575,7 @@
  recordsByStep[step] = lb;
  return;
  }
- if (step === 6 && (lb.download_url || lb.file_berkas) && !(existing.download_url || existing.file_berkas)) {
+ if (step === 5 && (lb.download_url || lb.file_berkas) && !(existing.download_url || existing.file_berkas)) {
  recordsByStep[step] = lb;
  }
  });
@@ -1627,8 +1625,8 @@
  };
 
  /**
- * Hitung progress dari riwayat lacak_berkas (7 tahap normal, 5 tahap untuk rejection).
- * Ditolak: selalu tahap Verifikasi Data (step 2 dalam workflow 5-tahap) + riwayat penolakan.
+ * Hitung progress dari riwayat lacak_berkas (5 tahap normal).
+ * Ditolak: tahap Verifikasi Data (step 3) + riwayat penolakan.
  */
  window.resolveAntrianProgress = function(antrian) {
  var status = antrian.status_antrian || 'Menunggu';
@@ -1666,13 +1664,15 @@
  }
 
  var currentStep = window.ANTRIAN_STEP_MAP[status] || 1;
- if (status === 'Selesai') {
- currentStep = 7;
+ if (status === 'Selesai' || status === 'Berkas Siap Diunduh') {
+ currentStep = 5;
+ } else if (status === 'Siap Pengambilan') {
+ currentStep = 4;
  }
  return {
  isDitolak: false,
  isDibatalkan: false,
- isTerminal: status === 'Selesai' || status === 'Siap Pengambilan',
+ isTerminal: status === 'Selesai' || status === 'Berkas Siap Diunduh',
  currentStep: currentStep,
  totalSteps: totalSteps,
  stepWidth: Math.round((currentStep / totalSteps) * 100),
@@ -1735,6 +1735,8 @@
  var isReject = st === 'Ditolak' || st === 'Tolak';
  var isCancel = st === 'Dibatalkan';
  var displayStatus = isReject ? 'Ditolak' : st;
+ if (displayStatus === 'Siap Pengambilan') displayStatus = 'Proses Cetak';
+ if (displayStatus === 'Berkas Siap Diunduh') displayStatus = 'Selesai';
  var cfg = statusColors[st] || statusColors[displayStatus];
  var dotColor = cfg ? cfg.hex : (isReject ? '#ef4444' : (isCancel ? '#f43f5e' : '#6b7280'));
  var tgl = window.formatLacakDate(lb);
@@ -2207,9 +2209,9 @@
  'Dokumen Diterima': { hex: '#3b82f6', label: 'Dokumen Diterima', icon: 'fa-file-check', step: 2 },
  'Verifikasi Data': { hex: '#6366f1', label: 'Verifikasi Data', icon: 'fa-search', step: 3 },
  'Proses Cetak': { hex: '#a855f7', label: 'Proses Cetak', icon: 'fa-print', step: 4 },
- 'Siap Pengambilan': { hex: '#14b8a6', label: 'Siap Pengambilan', icon: 'fa-box-open', step: 5 },
- 'Berkas Siap Diunduh': { hex: '#10b981', label: 'Berkas Siap Diunduh', icon: 'fa-cloud-download-alt', step: 6 },
- 'Selesai': { hex: '#22c55e', label: 'Selesai', icon: 'fa-check-double', step: 7 },
+ 'Selesai': { hex: '#22c55e', label: 'Selesai', icon: 'fa-check-double', step: 5 },
+ 'Siap Pengambilan': { hex: '#14b8a6', label: 'Proses Cetak', icon: 'fa-print', step: 4 },
+ 'Berkas Siap Diunduh': { hex: '#22c55e', label: 'Selesai', icon: 'fa-check-double', step: 5 },
  'Ditolak': { hex: '#ef4444', label: 'Ditolak', icon: 'fa-ban', step: 3 },
  'Dibatalkan': { hex: '#f43f5e', label: 'Dibatalkan', icon: 'fa-times', step: 1 }
  };

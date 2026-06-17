@@ -188,7 +188,7 @@ class AkteLahirController extends Controller
         $jumlahAkteLahir    = (clone $baseCount)->count();
         $menungguVerifikasi = (clone $baseCount)->where('status','Verifikasi Data')->count();
         $dalamProses        = (clone $baseCount)->where('status','Proses Cetak')->count();
-        $selesai            = (clone $baseCount)->where('status','Siap Pengambilan')->count();
+        $selesai            = (clone $baseCount)->where('status','Selesai')->count();
         return view('admin.penerbitan_akte_lahir', compact('dataAkteLahir','jumlahAkteLahir','menungguVerifikasi','dalamProses','selesai'));
     }
     
@@ -283,9 +283,9 @@ class AkteLahirController extends Controller
         if ($antrianId) {
             Lacak_Berkas_Model::create([
                 'antrian_online_id' => $antrianId,
-                'status'            => 'Berkas Siap Diunduh',
+                'status'            => 'Selesai',
                 'tanggal'           => now()->toDateString(),
-                'keterangan'        => 'Berkas Akta Kelahiran telah diunggah oleh admin. Silakan unduh.',
+                'keterangan'        => 'Berkas Akta Kelahiran telah diunggah oleh admin. Permohonan selesai.',
                 'file_berkas'       => $path,
             ]);
             Antrian_Online_Model::where('antrian_online_id', $antrianId)->update(['status_antrian' => 'Selesai']);

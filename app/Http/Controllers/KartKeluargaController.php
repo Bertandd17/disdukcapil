@@ -465,7 +465,7 @@ class KartKeluargaController extends Controller
         $jumlahkk = $datakk->count();
         $menungguVerifikasi = $datakk->where('status','Verifikasi Data')->count();
         $dalamProses = $datakk->where('status','Proses Cetak')->count();
-        $selesai = $datakk->where('status','Siap Pengambilan')->count();
+        $selesai = $datakk->where('status','Selesai')->count();
 
         return view('admin.penerbitan_kk', compact(
             'datakk','jumlahkk','menungguVerifikasi','dalamProses','selesai'
@@ -609,9 +609,9 @@ class KartKeluargaController extends Controller
         if ($antrianId) {
             Lacak_Berkas_Model::create([
                 'antrian_online_id' => $antrianId,
-                'status'            => 'Berkas Siap Diunduh',
+                'status'            => 'Selesai',
                 'tanggal'           => now()->toDateString(),
-                'keterangan'        => 'Berkas Kartu Keluarga (' . $jenis . ') telah diunggah oleh admin. Silakan unduh.',
+                'keterangan'        => 'Berkas Kartu Keluarga (' . $jenis . ') telah diunggah oleh admin. Permohonan selesai.',
                 'file_berkas'       => $path,
             ]);
             Antrian_Online_Model::where('antrian_online_id', $antrianId)->update(['status_antrian' => 'Selesai']);

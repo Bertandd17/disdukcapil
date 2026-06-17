@@ -691,15 +691,15 @@ class Antrian_Online_Controller extends Controller
             ->where('status_antrian', 'Menunggu')
             ->count();
 
-        // Antrian diproses (semua status kecuali Menunggu, Ditolak, Dibatalkan, Siap Pengambilan)
+        // Antrian diproses (semua status kecuali Menunggu, Ditolak, Dibatalkan, Selesai)
         $status_diproses = ['Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak'];
         $antrian_diproses = Antrian_Online_Model::whereDate('created_at', $hari_ini)
             ->whereIn('status_antrian', $status_diproses)
             ->count();
 
-        // Antrian selesai (Siap Pengambilan)
+        // Antrian selesai
         $antrian_selesai = Antrian_Online_Model::whereDate('created_at', $hari_ini)
-            ->where('status_antrian', 'Siap Pengambilan')
+            ->where('status_antrian', 'Selesai')
             ->count();
 
         return response()->json([

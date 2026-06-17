@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;use Illuminate\Support\Str;
  * AntrianOnline — model antrian online.
  *
  * Sistem antrian dengan workflow:
- * Menunggu → Dokumen Diterima → Verifikasi Data → Proses Cetak → Siap Pengambilan
+ * Menunggu → Dokumen Diterima → Verifikasi Data → Proses Cetak → Selesai
  *
  * Kolom utama:
  *  - nik (16 digit NIK KTP)

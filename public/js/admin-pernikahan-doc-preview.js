@@ -13,13 +13,30 @@
 
     function normalizeFileEntry(entry) {
         if (!entry) return null;
+
         if (typeof entry === 'string') {
             var url = entry;
             var isPdf = /\.pdf(\?|$)/i.test(url);
             var isImage = !isPdf && /\.(jpe?g|png|webp|gif)(\?|$)/i.test(url);
             return { url: url, is_pdf: isPdf, is_image: isImage };
         }
-        return entry;
+
+        var url = entry.url || entry.file_url || null;
+        if (!url) return null;
+
+        var isPdf = entry.is_pdf;
+        var isImage = entry.is_image;
+        if (isPdf === undefined && isImage === undefined) {
+            isPdf = /\.pdf(\?|$)/i.test(url);
+            isImage = !isPdf && /\.(jpe?g|png|webp|gif)(\?|$)/i.test(url);
+        }
+
+        return {
+            url: url,
+            is_pdf: !!isPdf,
+            is_image: !!isImage,
+            label: entry.label || entry.jenis_dokumen_label || null
+        };
     }
 
     function renderDocPreview(entry, label) {

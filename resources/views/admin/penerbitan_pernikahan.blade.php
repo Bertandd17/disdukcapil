@@ -830,10 +830,13 @@ async function showDetail(pernikahanId) {
  p.status === 'DOKUMEN_DIVERIFIKASI' ||
  p.status === 'SELESAI';
 
- if (isMenungguTanggal) {
- documentsHtml = window.AdminPernikahanDocPreview
+ // Berkas KTP (mempelai + saksi) — tampilkan jika ada file
+ const ktpGridHtml = (window.AdminPernikahanDocPreview && p.ktp_files && Object.keys(p.ktp_files).length > 0)
  ? AdminPernikahanDocPreview.renderKtpFilesGrid(p.ktp_files)
  : '';
+
+ if (isMenungguTanggal) {
+ documentsHtml = ktpGridHtml;
 
  } else if (isVerifikasiDokumen && p.dokumen_keagamaan && p.dokumen_keagamaan.length > 0) {
  const dokumenHtml = p.dokumen_keagamaan.map(d => {
@@ -841,10 +844,11 @@ async function showDetail(pernikahanId) {
  const preview = window.AdminPernikahanDocPreview && d.file_url
  ? AdminPernikahanDocPreview.renderDocPreview(d, label)
  : (d.file_url ? `
- <a href="${escHtml(d.file_url)}" target="_blank"
+ <p class="text-xs font-medium text-gray-700 mb-2">${escHtml(label)}</p>
+ <a href="${escHtml(d.file_url)}" target="_blank" rel="noopener"
  class="px-2 py-1 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 text-xs inline-flex items-center">
  <i class="fas fa-eye mr-1"></i>Lihat
- </a>` : '<span class="text-xs text-gray-400">Belum ada file</span>');
+ </a>` : `<p class="text-xs font-medium text-gray-700 mb-1">${escHtml(label)}</p><span class="text-xs text-gray-400">Belum ada file</span>`);
  return `
  <div class="border rounded-lg p-3 bg-gray-50">
  ${preview}
@@ -853,12 +857,14 @@ async function showDetail(pernikahanId) {
  `;
  }).join('');
 
- documentsHtml = `
+ documentsHtml = (ktpGridHtml || '') + `
  <div class="border-t pt-3">
  <p class="text-xs text-gray-500 mb-3">Dokumen Keagamaan</p>
  <div class="space-y-3">${dokumenHtml}</div>
  </div>
  `;
+ } else {
+ documentsHtml = ktpGridHtml;
  }
 
  const contentDiv = document.getElementById('modalContent');

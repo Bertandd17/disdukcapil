@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid p-6 bg-gray-50 min-h-screen">
@@ -36,7 +36,7 @@
                 <option value="">Semua Status</option>
                 <option value="Verifikasi Data">Verifikasi Data</option>
                 <option value="Proses Cetak">Proses Cetak</option>
-                <option value="Siap Pengambilan">Siap Pengambilan</option>
+                <option value="Selesai">Selesai</option>
             </select>
             <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition">Terapkan</button>
         </div>

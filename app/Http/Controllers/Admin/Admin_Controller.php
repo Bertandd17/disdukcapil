@@ -426,7 +426,7 @@ class Admin_Controller extends Controller
                     $menungguCount++;
                 } elseif (in_array($status, ['Dokumen Diterima', 'Verifikasi Data', 'Proses Cetak'])) {
                     $processingCount++;
-                } elseif ($status === 'Siap Pengambilan') {
+                } elseif ($status === 'Selesai') {
                     $completedCount++;
                 }
             }

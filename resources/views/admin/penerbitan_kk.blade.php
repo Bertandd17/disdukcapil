@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid p-6 bg-gray-50 min-h-screen">
@@ -30,7 +30,7 @@
                 <option value="">Semua Status</option>
                 <option value="Verifikasi Data">Verifikasi Data</option>
                 <option value="Proses Cetak">Proses Cetak</option>
-                <option value="Siap Pengambilan">Siap Pengambilan</option>
+                <option value="Selesai">Selesai</option>
             </select>
             <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition">
                 Terapkan
@@ -61,8 +61,7 @@
                             @if($data->status == 'Dokumen Diterima') bg-gray-100 text-gray-700
                             @elseif($data->status == 'Verifikasi Data') bg-blue-100 text-blue-700
                             @elseif($data->status == 'Proses Cetak') bg-yellow-100 text-yellow-700
-                            @elseif($data->status == 'Siap Pengambilan') bg-green-100 text-green-700
-                            @elseif($data->status == 'Selesai') bg-green-100 text-green-700
+                            @elseif(in_array($data->status, ['Selesai', 'Siap Pengambilan'])) bg-green-100 text-green-700
                             @elseif($data->status == 'Tolak') bg-red-100 text-red-700
                             @endif">
                             {{ $data->status }}

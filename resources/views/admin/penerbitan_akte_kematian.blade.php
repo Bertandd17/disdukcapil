@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid p-6 bg-gray-50 min-h-screen">
@@ -38,7 +38,7 @@
             <option value="">Semua Status</option>
             <option value="Verifikasi Data" {{ request('status') == 'Verifikasi Data' ? 'selected' : '' }}>Verifikasi Data</option>
             <option value="Proses Cetak" {{ request('status') == 'Proses Cetak' ? 'selected' : '' }}>Proses Cetak</option>
-            <option value="Siap Pengambilan" {{ request('status') == 'Siap Pengambilan' ? 'selected' : '' }}>Siap Pengambilan</option>
+            <option value="Selesai" {{ request('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
             <option value="Tolak" {{ request('status') == 'Tolak' ? 'selected' : '' }}>Ditolak</option>
         </select>
         <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition">
@@ -74,6 +74,7 @@
                                 'Dokumen Diterima' => 'bg-orange-50 text-orange-600 border-orange-100',
                                 'Verifikasi Data' => 'bg-blue-50 text-blue-600 border-blue-100',
                                 'Proses Cetak' => 'bg-yellow-50 text-yellow-600 border-yellow-100',
+                                'Selesai' => 'bg-green-50 text-green-600 border-green-100',
                                 'Siap Pengambilan' => 'bg-green-50 text-green-600 border-green-100',
                                 'Selesai' => 'bg-green-50 text-green-600 border-green-100',
                                 'Tolak' => 'bg-red-50 text-red-600 border-red-100',

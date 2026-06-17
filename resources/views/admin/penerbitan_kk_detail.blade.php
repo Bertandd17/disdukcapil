@@ -50,13 +50,13 @@
             </div>
 
             @php
-                $alurStatus = ['Verifikasi Data', 'Proses Cetak', 'Siap Pengambilan'];
+                $alurStatus = ['Verifikasi Data', 'Proses Cetak', 'Selesai'];
                 $statusSekarang = ($berkas->status === 'Dokumen Diterima') ? 'Verifikasi Data' : $berkas->status;
                 $idxSekarang = array_search($statusSekarang, $alurStatus);
                 $statusBerikutnya = ($idxSekarang !== false && $idxSekarang < count($alurStatus) - 1)
                     ? $alurStatus[$idxSekarang + 1]
                     : null;
-                $sudahFinal = in_array($statusSekarang, ['Siap Pengambilan', 'Tolak']);
+                $sudahFinal = in_array($statusSekarang, ['Selesai', 'Tolak']);
             @endphp
 
             @if($berkas->status == 'Tolak' && $berkas->alasan_penolakan)
