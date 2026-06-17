@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\IdleSessionMiddleware;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
@@ -168,6 +168,7 @@ class Login_Controller extends Controller
             try {
                 // Login langsung untuk Keagamaan
                 Auth::login($user, true);
+                IdleSessionMiddleware::resetActivity($request);
             } catch (\Throwable $e) {
                 Log::error('Keagamaan login - Auth::login failed', [
                     'username' => $user->username,

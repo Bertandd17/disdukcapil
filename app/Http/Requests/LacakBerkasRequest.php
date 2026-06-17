@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -14,7 +13,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  * - nama_lengkap: string untuk like query
  * - Minimal salah satu harus diisi
  */
-class LacakBerkasRequest extends FormRequest
+class LacakBerkasRequest extends SecureFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -97,16 +96,17 @@ class LacakBerkasRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Trim dan sanitize input
+        parent::prepareForValidation();
+
         if ($this->has('nomor_antrian')) {
             $this->merge([
-                'nomor_antrian' => strtoupper(trim($this->nomor_antrian)),
+                'nomor_antrian' => strtoupper($this->nomor_antrian),
             ]);
         }
 
         if ($this->has('nama_lengkap')) {
             $this->merge([
-                'nama_lengkap' => trim(strip_tags($this->nama_lengkap)),
+                'nama_lengkap' => strip_tags($this->nama_lengkap),
             ]);
         }
     }

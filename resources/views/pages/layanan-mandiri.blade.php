@@ -909,19 +909,19 @@ function openServiceModal(config, serviceName) {
             '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">' +
             '<div>' +
             '<label class="block text-xs font-semibold text-gray-700 mb-1">Pilih Agama <span class="text-red-400">*</span></label>' +
-            '<select name="jenis_agama" id="jenisAgamaSelect" class="form-input" data-wajib="true" onchange="loadKeagamaanByAgama(this.value)">' +
+            '<select name="jenis_agama" id="jenisAgamaSelect" class="form-input" data-wajib="true" data-validate-security="true" onchange="loadKeagamaanByAgama(this.value)">' +
             '<option value="">Pilih Agama...</option>' +
             '</select>' +
             '</div>' +
             '<div>' +
             '<label class="block text-xs font-semibold text-gray-700 mb-1">Nama Tempat Keagamaan <span class="text-red-400">*</span></label>' +
-            '<select name="keagamaan_id" id="keagamaanSelect" class="form-input" data-wajib="true" disabled>' +
+            '<select name="keagamaan_id" id="keagamaanSelect" class="form-input" data-wajib="true" data-validate-security="true" disabled>' +
             '<option value="">Pilih agama terlebih dahulu...</option>' +
             '</select>' +
             '</div>' +
             '<div>' +
             '<label class="block text-xs font-semibold text-gray-700 mb-1">Tanggal Perkawinan (Rencana) <span class="text-red-400">*</span></label>' +
-            '<input type="date" name="tanggal_perkawinan" class="form-input" data-wajib="true" min="' + getMinDate() + '">' +
+            '<input type="date" name="tanggal_perkawinan" class="form-input" data-wajib="true" data-validate-security="true" min="' + getMinDate() + '">' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -1038,14 +1038,16 @@ function renderField(field) {
         extraAttr = 'oninput="this.value = this.value.replace(/[^0-9]/g, \'\').slice(0, 16);" maxlength="16"';
     }
     var wajibAttr = field.required !== false ? ' data-wajib="true"' : '';
+    var skipSecurity = isReadonlyPemohon || field.type === 'hidden' || field.type === 'file';
+    var securityAttr = skipSecurity ? '' : ' data-validate-security="true"';
     if (field.type === 'textarea')
-        return '<textarea name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + inputCls + ' h-24 resize-none" ' + fieldId + ' ' + readonlyAttr + wajibAttr + '></textarea>';
+        return '<textarea name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + inputCls + ' h-24 resize-none" ' + fieldId + ' ' + readonlyAttr + wajibAttr + securityAttr + '></textarea>';
     if (field.type === 'select')
-        return '<select name="' + field.name + '" class="' + inputCls + '" ' + fieldId + wajibAttr + '>' +
+        return '<select name="' + field.name + '" class="' + inputCls + '" ' + fieldId + wajibAttr + securityAttr + '>' +
                '<option value="">Pilih...</option>' +
                (field.options||[]).map(function(o){ return '<option value="' + o + '">' + o + '</option>'; }).join('') +
                '</select>';
-    return '<input type="' + field.type + '" name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + inputCls + '" ' + fieldId + ' ' + extraAttr + ' ' + fieldEvents + ' ' + readonlyAttr + wajibAttr + '>';
+    return '<input type="' + field.type + '" name="' + field.name + '" placeholder="' + (field.placeholder||'') + '" class="' + inputCls + '" ' + fieldId + ' ' + extraAttr + ' ' + fieldEvents + ' ' + readonlyAttr + wajibAttr + securityAttr + '>';
 }
 
 function goToStep(step) {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -14,7 +13,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  * - nik: 16 digit untuk pencarian lacak berkas
  * - layanan_id: string untuk exact match
  */
-class CariAntrianRequest extends FormRequest
+class CariAntrianRequest extends SecureFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -74,15 +73,17 @@ class CariAntrianRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        parent::prepareForValidation();
+
         if ($this->has('nomor_antrian')) {
             $this->merge([
-                'nomor_antrian' => strtoupper(trim($this->nomor_antrian)),
+                'nomor_antrian' => strtoupper($this->nomor_antrian),
             ]);
         }
 
         if ($this->has('nik')) {
             $this->merge([
-                'nik' => preg_replace('/\D/', '', trim($this->nik)),
+                'nik' => preg_replace('/\D/', '', $this->nik),
             ]);
         }
     }

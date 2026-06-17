@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SecureFormRequest;
 use App\Exceptions\KtpOcrException;
 use App\Models\Antrian_Online_Model;
 use App\Models\AntrianOnline;
@@ -229,7 +230,7 @@ class Antrian_Online_Controller extends Controller
     public function Tambah_Antrian(Request $request)
     {
         try {
-            // Duplicate guard: cek antrian aktif berdasarkan NIK, layanan, dan tanggal
+            SecureFormRequest::assertSecureInput($request->all(), ['nik', 'nama_lengkap', 'alamat', 'layanan_id']);
             $existingAntrian = Antrian_Online_Model::where('nik', $request->nik)
                 ->where('layanan_id', $request->layanan_id)
                 ->whereDate('created_at', date('Y-m-d'))
@@ -1221,6 +1222,8 @@ class Antrian_Online_Controller extends Controller
             ], 404);
         }
 
+        SecureFormRequest::assertSecureInput($request->all(), ['nik', 'nama_lengkap', 'alamat']);
+
         // E10: Cek duplicate — NIK belum ada di draft (null), jadi perlu di-step 2
         // Jika request sudah membawa NIK, cek duplikat sebelum finalize
         $nik = trim((string) $request->input('nik', ''));
@@ -1438,6 +1441,8 @@ class Antrian_Online_Controller extends Controller
      */
     public function Cari_Antrian_Post(Request $request)
     {
+        SecureFormRequest::assertSecureInput($request->all(), ['nik', 'nama', 'layanan_id']);
+
         $search = trim($request->input('nik', $request->input('nama', '')));
         $layananId = $request->input('layanan_id', '');
 
@@ -1519,6 +1524,8 @@ class Antrian_Online_Controller extends Controller
      */
     public function Lacak_Berkas_Post(Request $request)
     {
+        SecureFormRequest::assertSecureInput($request->all(), ['search', 'layanan_id']);
+
         $search = trim($request->input('search', ''));
         $layananId = $request->input('layanan_id', '');
 

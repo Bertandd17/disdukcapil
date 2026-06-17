@@ -193,11 +193,6 @@
     {{-- Scripts --}}
     @stack('scripts')
 
-    {{-- Auto-Logout System --}}
-    @if(auth()->check())
-        <script src="{{ asset('js/auto-logout.js') }}"></script>
-    @endif
-
     <script>
         // Scroll Reveal Animation
         function reveal() {
@@ -394,6 +389,8 @@
     <script src="{{ asset('js/disdukcapil-toast.js') }}"></script>
     <script src="{{ asset_v('js/page-loading.js') }}"></script>
     <script src="{{ asset_v('js/style-guide-enhancer.js') }}"></script>
+    <script src="{{ asset_v('js/input-security-validator.js') }}"></script>
+    <script src="{{ asset_v('js/pages-form-guard.js') }}"></script>
     <script>
         (function() {
             if (typeof window.__nativeAlert === 'function') return;

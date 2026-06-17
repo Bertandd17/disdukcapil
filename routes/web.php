@@ -192,7 +192,7 @@ Route::prefix('ocr')->group(function () {
 });
 
 // Admin OCR Routes
-Route::middleware(['auth', 'role:admin'])->prefix('admin/ocr')->name('admin.ocr.')->group(function () {
+Route::middleware(['auth', 'role:admin', 'idle.session'])->prefix('admin/ocr')->name('admin.ocr.')->group(function () {
     Route::get('/result/{antrianId}', [\App\Http\Controllers\Api\EasyOcrController::class, 'showResult'])
         ->name('result')
         ->where('antrianId', '[a-f0-9-]+');
@@ -255,7 +255,7 @@ Route::prefix('admin')->group(function () {
         ->name('admin.verify.submit');
 
     // Admin Dashboard & Pages (membutuhkan auth)
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'idle.session'])->group(function () {
         // Dashboard
         Route::get('/dashboard', [Admin_Controller::class, 'dashboard'])->name('admin.dashboard');
 
@@ -420,7 +420,7 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('keagamaan')->name('keagamaan.')->group(function () {
     // Dashboard & Pages (membutuhkan auth)
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'idle.session'])->group(function () {
         // Dashboard
         Route::get('/dashboard', [App\Http\Controllers\Keagamaan\DashboardController::class, 'index'])->name('dashboard');
 

@@ -13,6 +13,8 @@
     function isButtonLike(el) {
         if (el.hasAttribute('data-style-guide-skip')) return false;
         if (el.classList.contains('sidebar-link')) return false;
+        if (el.classList.contains('user-nav-link')) return false;
+        if (el.closest('.user-public-header, .user-public-nav')) return false;
         if (el.classList.contains('btn')) return true;
         if (el.tagName === 'BUTTON') return true;
         if (el.getAttribute('role') === 'button') return true;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SecureFormRequest;
 use App\Http\Requests\SubmitPernikahanRequest;
 use App\Models\Antrian_Online_Model;
 use App\Models\DokumenPernikahan;
@@ -258,6 +259,10 @@ class PernikahanController extends Controller
             'keagamaan_id' => $request->input('keagamaan_id'),
             'tanggal_perkawinan' => $request->input('tanggal_perkawinan'),
         ]);
+
+        SecureFormRequest::assertSecureInput($request->except([
+            'ktp_mempelai_pria', 'ktp_mempelai_wanita', 'ktp_saksi_1', 'ktp_saksi_2', 'foto_wajah',
+        ]));
 
         $nomorTrimmed = trim($request->input('nomor_antrian', ''));
         $layananId = $request->input('layanan_id');

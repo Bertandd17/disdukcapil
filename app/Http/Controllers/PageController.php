@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LayananMandiriSubmitRequest;
 use App\Models\Berita_Model;
 use App\Models\DasarHukum;
 use App\Models\Penghargaan;
@@ -100,7 +101,7 @@ public function unduhFormulir()
     /**
      * Submit Layanan Mandiri
      */
-    public function submitLayanan(Request $request, $jenis_layanan)
+    public function submitLayanan(LayananMandiriSubmitRequest $request, $jenis_layanan)
     {
         // DEBUG: Log untuk tracking request
         \Log::info('=== PageController::submitLayanan CALLED ===', [
@@ -109,13 +110,7 @@ public function unduhFormulir()
             'all_input_keys' => array_keys($request->all()),
         ]);
 
-        // Validate request
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'nik' => 'required|string|size:16',
-            'no_hp' => 'required|string|max:15',
-            'alamat' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         // Simpan logic ke database disini
         // ...

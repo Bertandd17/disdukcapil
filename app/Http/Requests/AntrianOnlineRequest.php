@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -15,7 +14,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  * - alamat: nullable string
  * - tanggal_lahir: nullable date format
  */
-class AntrianOnlineRequest extends FormRequest
+class AntrianOnlineRequest extends SecureFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -93,23 +92,14 @@ class AntrianOnlineRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Trim semua string input
-        $this->merge([
-            'nama_lengkap' => is_string($this->nama_lengkap) ? trim($this->nama_lengkap) : $this->nama_lengkap,
-            'alamat' => is_string($this->alamat) ? trim($this->alamat) : $this->alamat,
-        ]);
+        parent::prepareForValidation();
 
-        // Strip tags dari input string
         if (is_string($this->nama_lengkap)) {
-            $this->merge([
-                'nama_lengkap' => strip_tags($this->nama_lengkap),
-            ]);
+            $this->merge(['nama_lengkap' => strip_tags($this->nama_lengkap)]);
         }
 
         if (is_string($this->alamat)) {
-            $this->merge([
-                'alamat' => strip_tags($this->alamat),
-            ]);
+            $this->merge(['alamat' => strip_tags($this->alamat)]);
         }
     }
 }

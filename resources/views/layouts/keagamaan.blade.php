@@ -8,6 +8,11 @@
 
     <!-- User Authenticated Meta Tag -->
     <meta name="user-authenticated" content="{{ auth()->check() ? 'true' : 'false' }}">
+    @if(auth()->check() && auth()->user()->hasAnyRole(['Admin', 'Keagamaan']))
+        <meta name="session-idle-enabled" content="true">
+        <meta name="session-idle-minutes" content="{{ config('security.session.admin_idle_timeout', 10) }}">
+        <meta name="logout-url" content="{{ route('logout') }}">
+    @endif
 
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="{{ asset('images/logo_toba.jpeg') }}">
@@ -200,8 +205,8 @@
         @include('components.admin.footer')
     </main>
 
-    @if(auth()->check())
-        <script src="{{ asset('js/auto-logout.js') }}"></script>
+    @if(auth()->check() && auth()->user()->hasAnyRole(['Admin', 'Keagamaan']))
+        <script src="{{ asset_v('js/auto-logout.js') }}"></script>
     @endif
 
     {{-- Sidebar Toggle Script --}}

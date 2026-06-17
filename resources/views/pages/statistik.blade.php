@@ -33,7 +33,7 @@
             <div class="mb-8 flex justify-center reveal">
                 <div class="inline-flex items-center gap-3 bg-white rounded-2xl shadow-sm p-2">
                     <label class="text-sm font-semibold text-gray-700">Tahun:</label>
-                    <select id="filterTahun" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select id="filterTahun" data-validate-security="true" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         @foreach($tahunTersedia as $tahun)
                             <option value="{{ $tahun }}" {{ $tahun == $tahunSekarang ? 'selected' : '' }}>{{ $tahun }}</option>
                         @endforeach

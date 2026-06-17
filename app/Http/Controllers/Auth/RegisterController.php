@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Middleware\IdleSessionMiddleware;
 use App\Exceptions\DatabaseException;
 use App\Http\Controllers\Controller;
 use App\Models\SecurityQuestion;
@@ -218,6 +219,7 @@ class RegisterController extends Controller
 
                 $request->session()->regenerate(true);
                 Auth::login($user, false);
+                IdleSessionMiddleware::resetActivity($request);
                 $request->session()->migrate(true);
 
                 Log::info('Admin login successful with security question', [

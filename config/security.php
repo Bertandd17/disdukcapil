@@ -137,6 +137,7 @@ return [
     */
     'session' => [
         'lifetime' => env('SESSION_LIFETIME', 120), // minutes
+        'admin_idle_timeout' => (int) env('ADMIN_IDLE_TIMEOUT', 10), // menit — admin & keagamaan
         'expire_on_close' => true,
         'secure' => env('SESSION_SECURE', true),
         'http_only' => true,

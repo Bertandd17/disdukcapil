@@ -230,7 +230,7 @@
  <label class="block text-lg font-semibold text-gray-700 mb-2">
  Jenis Layanan <span class="text-red-500">*</span>
  </label>
- <select name="layanan_id" id="layanan_id"
+ <select name="layanan_id" id="layanan_id" data-validate-security="true"
  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-base bg-white">
  <option value="" disabled selected>Pilih jenis layanan...</option>
  @foreach($data_layanan as $layanan)
@@ -290,19 +290,19 @@
  <div class="grid md:grid-cols-2 gap-4">
  <div>
  <label class="block font-semibold text-gray-700 mb-2">NIK <span class="text-red-500">*</span></label>
- <input type="text" name="nik" id="nik" inputmode="numeric" maxlength="16" placeholder="16 digit"
+ <input type="text" name="nik" id="nik" inputmode="numeric" maxlength="16" placeholder="16 digit" data-validate-security="true"
  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-mono text-base">
  </div>
  <div>
  <label class="block font-semibold text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
- <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Sesuai KTP"
+ <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Sesuai KTP" data-validate-security="true"
  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-base">
  </div>
  </div>
 
  <div>
  <label class="block font-semibold text-gray-700 mb-2">Alamat Lengkap <span class="text-red-500">*</span></label>
- <textarea name="alamat" id="alamat" rows="3" placeholder="Alamat pada KTP"
+ <textarea name="alamat" id="alamat" rows="3" placeholder="Alamat pada KTP" data-validate-security="true"
  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none text-base"></textarea>
  </div>
 
@@ -432,11 +432,11 @@
  <div class="bg-gradient-to-br from-gray-50 to-emerald-50 rounded-2xl shadow-lg p-5 sm:p-8 border border-gray-100">
  <div class="grid md:grid-cols-3 gap-4 mb-6">
  <div class="md:col-span-2">
- <input type="text" id="searchInput" placeholder="Masukkan NIK (16 digit) atau nomor antrian" inputmode="text" maxlength="20"
+ <input type="text" id="searchInput" placeholder="Masukkan NIK (16 digit) atau nomor antrian" inputmode="text" maxlength="20" data-validate-security="true"
  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
  </div>
  <div>
- <select id="searchLayanan" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+ <select id="searchLayanan" data-validate-security="true" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
  <option value="">Semua Layanan</option>
  @foreach($data_layanan as $layanan)
  <option value="{{ $layanan->layanan_id }}">{{ $layanan->nama_layanan }}</option>
@@ -1025,6 +1025,11 @@
 
  var searchValue = searchInput.value.trim();
  var layananId = searchLayanan ? searchLayanan.value : '';
+
+ if (window.PagesFormGuard) {
+ if (!window.PagesFormGuard.validateField(searchInput)) return;
+ if (searchLayanan && !window.PagesFormGuard.validateField(searchLayanan)) return;
+ }
 
  console.log('Search value:', searchValue);
  console.log('Layanan ID:', layananId);

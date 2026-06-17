@@ -872,6 +872,19 @@ button:disabled.btn,
     color: var(--success-green) !important;
 }
 
+/* Pastikan tombol sukses tetap kontras meski memiliki utility text-green-* */
+.style-guide-action.btn-success,
+.style-guide-action.btn-success span,
+a.style-guide-action.btn-success,
+button.style-guide-action.btn-success {
+    color: var(--neutral-white) !important;
+}
+
+.user-public-header .user-nav-link,
+.user-public-header .user-nav-link span {
+    transform: none !important;
+}
+
 .bg-red-600,
 .from-red-600,
 .to-red-700 {
