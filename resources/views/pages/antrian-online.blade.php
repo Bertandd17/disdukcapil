@@ -1771,6 +1771,18 @@
  keteranganHtml = '<p class="text-[10px] text-gray-500 mt-0.5">' + ketEsc + '</p>';
  }
 
+ // === BARU: tombol download HANYA muncul jika status item ini "Selesai" / "Berkas Siap Diunduh"
+ // dan punya download_url (berlaku untuk KK, Akte Lahir, Akte Mati, Lahir Mati) ===
+ var downloadHtml = '';
+ var isDownloadableStatus = (st === 'Selesai' || st === 'Berkas Siap Diunduh');
+ if (lb.download_url && isDownloadableStatus) {
+ var dlUrl = lb.download_url + (lb.download_url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
+ downloadHtml = '<a href="' + dlUrl + '" onclick="event.stopPropagation()" target="_blank" rel="noopener" ' +
+ 'class="inline-flex items-center gap-1 mt-1.5 px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold rounded-md shadow-sm transition-colors">' +
+ '<i class="fas fa-download"></i> Download Berkas' +
+ '</a>';
+ }
+
  return '<li class="flex gap-2 ' + (isLast ? '' : 'pb-2') + '">' +
  '<div class="flex flex-col items-center flex-shrink-0">' +
  '<div class="w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm" style="background-color:' + dotColor + '"></div>' +
@@ -1784,6 +1796,7 @@
  '<p class="text-[10px] text-gray-400">' + tgl + '</p>' +
  alasanHtml +
  keteranganHtml +
+ downloadHtml +
  '</div>' +
  '</li>';
  }).join('');
@@ -1793,7 +1806,7 @@
  '<ol class="list-none m-0 p-0">' + items + '</ol>' +
  '</div>';
  };
-
+ 
  // Helper: cari URL dokumen PDF final yang sudah diupload admin
  // Berlaku untuk semua layanan KECUALI pernikahan (pernikahan tetap pakai modal detail)
  window.findDokumenFinalUrl = function(data) {
