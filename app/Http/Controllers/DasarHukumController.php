@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\DasarHukum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DasarHukumController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['show']);
     }
 
     private function checkAdmin()
@@ -26,6 +27,28 @@ class DasarHukumController extends Controller
         $this->checkAdmin();
         $data = DasarHukum::orderBy('created_at', 'desc')->get();
         return view('admin.dasar_hukum', compact('data'));
+    }
+
+    /**
+     * Tampilkan dokumen dasar hukum untuk publik (inline PDF).
+     */
+    public function show(string $uuid)
+    {
+        $item = DasarHukum::where('uuid', $uuid)->firstOrFail();
+
+        if (!$item->file || !Storage::disk('public')->exists($item->file)) {
+            abort(404, 'Dokumen tidak ditemukan');
+        }
+
+        $displayName = Str::slug($item->nama) . '.pdf';
+
+        return response()->file(
+            Storage::disk('public')->path($item->file),
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $displayName . '"',
+            ]
+        );
     }
 
     public function store(Request $request)

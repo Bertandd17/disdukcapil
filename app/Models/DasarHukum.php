@@ -14,6 +14,15 @@ class DasarHukum extends Model
         'nama',
         'deskripsi_singkat'
     ];
+
+    public function publicFileUrl(): ?string
+    {
+        if (!$this->file || !$this->uuid) {
+            return null;
+        }
+
+        return route('dasar-hukum.show', $this->uuid);
+    }
     protected static function boot()
     {
         parent::boot();

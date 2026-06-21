@@ -10,11 +10,6 @@
             <div>
                 <h2 class="text-2xl md:text-3xl font-bold mb-2">Selamat Datang, {{ $keagamaan->nama_tempat_ibadah }}!</h2>
                 <p class="text-blue-100 text-lg">Dashboard Petugas Keagamaan</p>
-                <p class="text-blue-100/90 text-sm mt-2">
-                    <i class="fas fa-church mr-1"></i>
-                    {{ $keagamaan->nama_jenis_keagamaan }} &mdash; {{ $keagamaan->nama_tempat_ibadah }}
-                </p>
-                <p class="text-blue-200 text-xs mt-1">Menampilkan permohonan untuk tempat ibadah Anda saja</p>
             </div>
             <div class="flex flex-col gap-2 text-sm">
                 <div class="flex items-center gap-2">

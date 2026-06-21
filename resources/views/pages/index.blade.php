@@ -328,8 +328,8 @@
                                                 <h4 class="font-semibold text-gray-800">{{ $item->nama }}</h4>
                                                 <p class="text-gray-600 text-sm mt-1">{{ $item->deskripsi_singkat }}</p>
                                             </div>
-                                            @if($item->file)
-                                                <a href="{{ asset('storage/' . $item->file) }}" target="_blank" rel="noopener"
+                                            @if($item->publicFileUrl())
+                                                <a href="{{ $item->publicFileUrl() }}" target="_blank" rel="noopener"
                                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition">
                                                     <i class="fas fa-eye"></i> Lihat
                                                 </a>

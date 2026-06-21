@@ -33,6 +33,11 @@ use Illuminate\Support\Facades\Route;
 // Home page - Beranda
 Route::get('/', [PageController::class, 'index'])->name('home');
 
+// Dokumen dasar hukum (publik)
+Route::get('/dasar-hukum/dokumen/{uuid}', [DasarHukumController::class, 'show'])
+    ->name('dasar-hukum.show')
+    ->whereUuid('uuid');
+
 
 // API Routes untuk layanan (public)
 Route::get('/api/layanan', function () {
