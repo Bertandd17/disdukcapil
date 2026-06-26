@@ -417,6 +417,12 @@
             if (n) n.textContent  = data.nama_lengkap   || '';
             if (s) s.textContent  = data.layanan        || '';
             if (tm) tm.textContent = new Date().toLocaleString('id-ID');
+
+            var btn = $('goToLayananBtn');
+            if (btn) {
+                btn.setAttribute('data-ticket-number', data.nomor_antrian || '');
+                btn.setAttribute('data-layanan-id', data.layanan_id || '');
+            }
             makeConfetti();
         }
 

@@ -243,7 +243,8 @@
       "Bash(echo \"=== Diff ===\")",
       "Bash(echo \"=== Log ===\")",
       "Bash(echo \"Nothing to commit\")",
-      "Bash(php *)"
+      "Bash(php *)",
+      "Bash(composer dump-autoload *)"
     ],
     "additionalDirectories": [
       "d:\\Semester 6\\PA 3\\Project\\PA3"

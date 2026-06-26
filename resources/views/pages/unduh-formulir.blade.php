@@ -163,7 +163,7 @@
             <div class="flex-1 text-center md:text-left">
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Sudah Selesai Mengisi Formulir?</h3>
                 <p class="text-gray-600 text-sm md:text-base mb-4">Jika formulir sudah dicetak, diisi dengan lengkap, dan ditandatangani, silakan scan atau foto formulir tersebut. Kemudian ajukan permohonan Anda melalui menu Layanan Mandiri.</p>
-                <a href="{{ route('layanan-mandiri') }}" class="inline-flex items-center bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all shadow-lg">
+                <a href="{{ route('antrian-online') }}#layananMandiriSection" class="inline-flex items-center bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all shadow-lg">
                     Pergi ke Layanan Mandiri <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>

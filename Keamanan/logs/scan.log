@@ -1,0 +1,1211 @@
+2026-06-23 20:41:01 - Log directory created: logs
+2026-06-23 20:41:01 - Testing multiple targets from file: urls.txt
+2026-06-23 20:41:01 - Scanning complete.
+2026-06-23 20:41:09 - Testing multiple targets from file: urls.txt
+2026-06-23 20:41:09 - Scanning complete.
+2026-06-23 20:42:27 - Testing multiple targets from file: urls.txt
+2026-06-23 20:42:27 - Scanning complete.
+2026-06-23 20:44:58 - Testing multiple targets from file: urls.txt
+2026-06-23 20:44:58 - Scanning complete.
+2026-06-23 20:45:06 - Testing multiple targets from file: urls.txt
+2026-06-23 20:45:06 - Scanning complete.
+2026-06-23 20:48:11 - Testing multiple targets from file: urls.txt
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:11 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:14 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:14 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:14 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:14 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:14 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:14 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:14 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:15 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:15 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:15 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:15 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:15 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:15 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:16 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:16 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:16 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:16 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:16 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:16 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:16 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:16 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:16 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:16 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:16 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:16 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:16 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:16 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:17 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:17 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:17 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:17 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:17 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:17 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:17 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:17 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:17 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:17 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:17 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:17 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:17 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:17 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:17 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:17 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:17 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:18 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:18 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:18 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:18 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:18 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:18 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:48:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:18 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:18 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:18 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:18 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:18 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:18 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:19 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:19 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:19 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:19 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:19 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:19 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:19 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:48:19 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:19 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:20 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:20 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:20 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:20 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:20 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:20 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:20 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:20 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:20 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:48:20 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:21 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:21 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:21 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:21 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:21 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:22 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:22 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:22 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:22 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:48:22 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:22 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:48:22 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:22 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:48:22 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:23 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:48:23 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:23 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:23 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:24 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:24 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:24 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:24 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:24 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:48:24 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:24 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:48:24 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:25 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:25 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:25 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:48:25 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:25 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:25 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:25 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:25 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:26 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:26 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:26 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:26 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:27 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:27 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:27 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:27 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:27 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:28 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:28 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:28 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:28 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:29 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:29 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:29 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:29 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:29 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:29 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:29 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:30 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:30 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:30 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:30 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:30 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:31 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:31 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:31 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:31 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:31 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:32 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:32 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:32 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:32 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:33 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:33 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:34 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:35 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:48:35 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:36 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:37 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:37 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:37 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:48:37 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:37 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:37 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:38 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:39 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:39 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:40 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:41 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:48:41 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:48:42 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:48:42 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:42 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:48:42 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:46 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:48:47 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:48:47 - Scanning complete.
+2026-06-23 20:50:01 - Testing multiple targets from file: urls.txt
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:04 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:04 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:04 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:04 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:04 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:04 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:05 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:05 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:05 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:06 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:06 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:06 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:06 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:06 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:06 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:07 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:07 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:07 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:07 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:07 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:07 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:07 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:07 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:08 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:08 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:08 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:08 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:09 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:09 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:09 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:09 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:09 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:09 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:09 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:10 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:10 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:10 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:10 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:11 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:11 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:11 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:11 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:11 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:12 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:12 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:12 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:12 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:12 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:50:12 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:12 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:13 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:13 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:13 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:14 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:50:14 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:14 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:14 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:15 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:15 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:15 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:50:15 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:16 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:16 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:50:16 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:16 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:16 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:16 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:16 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:16 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:50:16 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:17 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:18 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:18 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:18 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:18 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:18 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:50:18 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:18 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:19 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:19 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:50:19 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:20 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:20 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:21 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:21 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:50:21 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:21 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:22 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:22 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:22 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:23 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:23 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:23 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:50:24 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:24 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:50:24 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:24 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:25 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:25 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:25 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:26 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:26 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:26 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:26 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:26 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:27 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:27 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:27 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:27 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:27 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:28 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:28 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:28 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:29 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:32 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:32 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:33 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:33 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:33 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:33 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:34 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:34 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:34 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:35 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:35 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:35 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:36 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:36 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:36 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:37 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:37 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:38 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:38 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:50:38 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:39 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:39 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:39 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:40 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:40 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:40 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:41 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:41 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:41 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:42 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:42 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:50:42 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:43 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:43 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:50:43 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:44 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:50:44 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:44 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:50:45 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:50:45 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:50:46 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:50:46 - Scanning complete.
+2026-06-23 20:55:48 - Testing multiple targets from file: urls.txt
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:55:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:55:51 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:55:51 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:55:52 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:55:52 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:55:52 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:55:52 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:55:52 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:55:52 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:55:52 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:55:53 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:55:55 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:55:56 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:55:56 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:55:56 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:55:56 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:55:56 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:55:56 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:55:57 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:55:57 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:55:57 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:55:58 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:55:58 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:55:59 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:55:59 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:55:59 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:55:59 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:00 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:00 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:00 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:00 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:56:02 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:03 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:56:04 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:04 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:56:04 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:56:05 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:56:05 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:05 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:56:05 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:56:05 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:07 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:56:07 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:56:07 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:07 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:08 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:56:08 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:56:08 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:56:08 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:08 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:08 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:56:09 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:09 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:56:09 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:09 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:09 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:56:09 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:56:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:11 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:56:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:11 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:56:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:12 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:56:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:12 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:12 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:56:12 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:56:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:56:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:56:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:13 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:56:14 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:14 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:56:14 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:56:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:56:14 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:56:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:56:15 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:15 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-23 20:56:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:56:15 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:15 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-23 20:56:15 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:15 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-23 20:56:15 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:16 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:16 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:16 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:16 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-23 20:56:16 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:16 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-23 20:56:17 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:17 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:17 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:17 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:18 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-23 20:56:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:18 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-23 20:56:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:18 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:18 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:18 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:19 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-23 20:56:19 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:20 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-23 20:56:20 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-23 20:56:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:21 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:21 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:21 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:22 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:22 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:22 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:23 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:23 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:23 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:23 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:24 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:24 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:25 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:25 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:25 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:26 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:26 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:26 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:27 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:27 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:27 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:28 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:28 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:28 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:29 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:29 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:29 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:29 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:30 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:30 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:30 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:31 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:31 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:31 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:32 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:32 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:33 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:33 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:33 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:33 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:34 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:34 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:34 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:35 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:35 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:35 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:35 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:35 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:36 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:40 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:44 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:45 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:45 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:46 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:48 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:50 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-23 20:56:51 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:52 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:52 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:52 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-23 20:56:53 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:53 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:54 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:54 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-23 20:56:54 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-23 20:56:54 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-23 20:56:54 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:55 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:56 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:56 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-23 20:56:57 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-23 20:56:58 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-23 20:56:58 - Scanning complete.
+2026-06-25 19:52:18 - Testing multiple targets from file: urls.txt
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:18 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:19 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:19 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:19 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:19 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:19 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:20 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:20 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:20 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:20 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:21 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:21 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:21 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:21 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:21 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:21 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:21 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:21 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:21 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:22 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:22 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:22 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:22 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:22 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:22 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:22 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:22 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:22 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:22 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:22 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:22 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:22 - Command Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:23 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:23 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:23 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:23 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:23 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:23 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:23 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:24 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:24 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:24 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:24 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:24 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:24 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:24 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:24 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:25 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:25 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:25 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:25 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:25 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:25 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 19:52:25 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:25 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 19:52:25 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:25 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:25 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:25 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:26 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:26 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:26 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:26 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:26 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:26 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:27 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:27 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:27 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:27 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:28 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:28 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:28 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:28 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:28 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:28 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:29 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:29 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:30 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:30 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:30 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:30 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 19:52:31 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:31 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:31 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:32 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 19:52:32 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:32 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:32 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:32 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 19:52:32 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:32 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 19:52:32 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:32 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:33 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 19:52:33 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:33 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:33 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 19:52:33 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:34 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:34 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 19:52:34 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:34 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 19:52:35 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:35 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:35 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:35 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:35 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:35 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:35 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:36 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:36 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:36 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:36 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:36 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:36 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:36 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:37 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:37 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:37 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:37 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:37 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:38 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:38 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:38 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:38 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:38 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:39 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:39 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:39 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:40 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:40 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:40 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:40 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:40 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:41 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:41 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:41 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:41 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:41 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:41 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:41 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:41 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:42 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:42 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:42 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:42 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:42 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:42 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:42 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:42 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:43 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:43 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:43 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:43 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:43 - RFI Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:44 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 19:52:44 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:44 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:44 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:44 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:45 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 19:52:45 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:45 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:45 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:45 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:45 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:45 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 19:52:45 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:46 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 19:52:46 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 19:52:46 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 19:52:47 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 19:52:47 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 19:52:47 - Scanning complete.
+2026-06-25 20:02:03 - Testing multiple targets from file: urls.txt
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:03 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:05 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:05 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:06 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:06 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:06 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:06 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:06 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:06 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:06 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:06 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:06 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:07 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:07 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:07 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:07 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:07 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:07 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:07 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:08 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:08 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:08 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:08 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:08 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:08 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:08 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:08 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:08 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:09 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:09 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:09 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:09 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:09 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:09 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:10 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:10 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:10 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:10 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:10 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:10 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:10 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:10 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:10 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:10 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:10 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:10 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:11 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:11 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:11 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:11 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:11 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:12 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:12 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:12 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:02:12 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:12 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:13 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:13 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:13 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:13 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:14 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:14 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:14 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:14 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:14 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:02:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:15 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:15 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:15 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:15 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:15 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:16 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:16 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:16 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:02:16 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:16 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:17 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:02:17 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:17 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:17 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:17 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:02:17 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:17 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:02:17 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:17 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:17 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:02:17 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:17 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:02:17 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:17 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:02:17 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:17 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:17 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:18 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:02:18 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:18 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:18 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:18 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:18 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:18 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:18 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:19 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:19 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:19 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:19 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:19 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:19 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:19 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:19 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:19 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:19 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:19 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:20 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:20 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:20 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:20 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:20 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:20 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:21 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:21 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:21 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:21 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:21 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:21 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:22 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:22 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:22 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:22 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:22 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:22 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:22 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:22 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:22 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:23 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:23 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:23 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:23 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:23 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:24 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:24 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:24 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:24 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:24 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:25 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:25 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:25 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:02:25 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:25 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:26 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:26 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:26 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:26 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:26 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:26 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:26 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:26 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:02:27 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:27 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:02:28 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:02:28 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:02:28 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:02:28 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:02:28 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:02:28 - Scanning complete.
+2026-06-25 20:03:48 - Testing multiple targets from file: urls.txt
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:48 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:03:48 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:48 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:48 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:48 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:48 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:49 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:49 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:49 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:49 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:49 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:49 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:49 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:49 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:49 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:03:49 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:03:49 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:49 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:50 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:50 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:50 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:50 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:50 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:50 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:50 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:50 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:50 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:50 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:03:50 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:03:50 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:51 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:51 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:51 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:51 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:51 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:03:51 - SQL Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:03:51 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:52 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:03:53 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:53 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:53 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:53 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:53 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:53 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:03:53 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:53 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:03:53 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:54 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:54 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:54 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:55 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:03:55 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:03:55 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:55 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:55 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:03:55 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:56 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:56 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:56 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:03:56 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:56 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:03:56 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:56 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:57 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:57 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:57 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:57 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:57 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:58 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:58 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:03:58 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:03:59 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:03:59 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:03:59 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:03:59 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/verify?user_id=4a7aeda0-30e3-472b-b772-b7f2ce051c5d
+2026-06-25 20:03:59 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:03:59 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/
+2026-06-25 20:03:59 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:03:59 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:03:59 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:04:00 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:04:00 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/login
+2026-06-25 20:04:00 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:00 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:04:00 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:04:00 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:04:00 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:04:00 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/577476b0-cf74-4399-9367-6bc85b624a73/Hilang%20Rusak
+2026-06-25 20:04:00 - Testing https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:01 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/statistik
+2026-06-25 20:04:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:01 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:04:01 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:01 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:01 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:01 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk
+2026-06-25 20:04:01 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:01 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:04:02 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:04:02 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:04:03 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:04:03 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:03 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:03 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:03 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:04:04 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:04 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/dashboard
+2026-06-25 20:04:04 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:05 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:04:05 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:04:05 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:05 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:05 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:05 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/antrian-online
+2026-06-25 20:04:05 - Testing https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:05 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:06 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:04:06 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:04:06 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:06 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:07 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:07 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:07 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/layanan-mandiri
+2026-06-25 20:04:07 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-kk/detail/3ab99375-6fc9-4f8e-9b5e-c734d74df519/Hilang%20Rusak
+2026-06-25 20:04:07 - SQL Injection Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:07 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:07 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:08 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:08 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:08 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:09 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:09 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:10 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:10 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:10 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:11 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:11 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:11 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:11 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:12 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:12 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:12 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:13 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:13 - XSS Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:14 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:14 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:14 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:14 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:14 - Path Traversal Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:15 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:15 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:15 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:15 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:15 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:16 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:16 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-pernikahan
+2026-06-25 20:04:17 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:17 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:17 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:17 - Directory Listing Not Enabled: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:17 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:18 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-akte-lahir
+2026-06-25 20:04:18 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:18 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:18 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:18 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:18 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/dashboard
+2026-06-25 20:04:18 - Command Injection Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:19 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:19 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:20 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/penerbitan-lahir-mati
+2026-06-25 20:04:20 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/admin/manajemen-akun
+2026-06-25 20:04:20 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:20 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:22 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:22 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:22 - LFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:22 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan
+2026-06-25 20:04:22 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:23 - RFI Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:23 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/request-tanggal
+2026-06-25 20:04:25 - File Upload Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:27 - Open Redirect Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:28 - CSRF Not Vulnerable: https://disdukcapil-toba.d4trpl-itdel.id/keagamaan/pernikahan/upload-berkas
+2026-06-25 20:04:28 - Scanning complete.

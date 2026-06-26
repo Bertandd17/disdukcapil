@@ -24,9 +24,6 @@
                 <a href="{{ route('antrian-online') }}" data-style-guide-skip class="user-nav-link px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('antrian-online*') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }} transition">
                     <i class="fas fa-ticket-alt mr-2" aria-hidden="true"></i>Antrian Online
                 </a>
-                <a href="{{ route('layanan-mandiri') }}" data-style-guide-skip class="user-nav-link px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('layanan-mandiri*') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }} transition">
-                    <i class="fas fa-rocket mr-2" aria-hidden="true"></i>Layanan Mandiri
-                </a>
                 <a href="{{ route('statistik') }}" data-style-guide-skip class="user-nav-link px-4 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('statistik') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }} transition">
                     <i class="fas fa-chart-line mr-2" aria-hidden="true"></i>Statistik
                 </a>
@@ -68,9 +65,6 @@
             </a>
             <a href="{{ route('antrian-online') }}" data-style-guide-skip class="user-nav-link flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium min-h-[44px] {{ request()->routeIs('antrian-online*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">
                 <i class="fas fa-ticket-alt w-5 text-center" aria-hidden="true"></i><span>Antrian Online</span>
-            </a>
-            <a href="{{ route('layanan-mandiri') }}" data-style-guide-skip class="user-nav-link flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium min-h-[44px] {{ request()->routeIs('layanan-mandiri*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">
-                <i class="fas fa-rocket w-5 text-center" aria-hidden="true"></i><span>Layanan Mandiri</span>
             </a>
             <a href="{{ route('statistik') }}" data-style-guide-skip class="user-nav-link flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium min-h-[44px] {{ request()->routeIs('statistik') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50' }}">
                 <i class="fas fa-chart-line w-5 text-center" aria-hidden="true"></i><span>Statistik</span>

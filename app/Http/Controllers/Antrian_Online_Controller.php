@@ -338,6 +338,7 @@ class Antrian_Online_Controller extends Controller
                         'nomor_antrian' => $nomor_antrian,
                         'nama_lengkap' => $antrian->nama_lengkap,
                         'layanan' => $antrian->layanan->nama_layanan,
+                        'layanan_id' => $antrian->layanan_id,
                     ],
                     'redirect' => route('antrian-online').'?success='.urlencode('Antrian berhasil dibuat!'),
                 ], 201);

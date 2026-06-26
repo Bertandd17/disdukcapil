@@ -48,7 +48,7 @@
             <div>
                 <ul class="space-y-1">
                     <li>
-                        <a href="{{ url('layanan-mandiri') }}" class="flex items-center gap-2 px-2 py-1 rounded text-xs font-medium text-blue-100 hover:text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300">
+                        <a href="{{ url('antrian-online') }}#layananMandiriSection" class="flex items-center gap-2 px-2 py-1 rounded text-xs font-medium text-blue-100 hover:text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300">
                             <i class="fas fa-rocket text-xs"></i>
                             <span>Layanan Mandiri</span>
                         </a>

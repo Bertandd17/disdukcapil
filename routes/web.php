@@ -86,7 +86,9 @@ Route::get('/unduh-formulir', [PageController::class, 'unduhFormulir'])->name('u
 
 // Antrian Online (Public)
 Route::prefix('antrian-online')->group(function () {
-    Route::get('/', [Antrian_Online_Controller::class, 'Tampil_Antrian'])->name('antrian-online');
+    Route::get('/', [Antrian_Online_Controller::class, 'Tampil_Antrian'])
+        ->name('antrian-online')
+        ->middleware('camera.policy');
     Route::post('/', [Antrian_Online_Controller::class, 'Tambah_Antrian'])->name('antrian.store');
     Route::get('/cari', [Antrian_Online_Controller::class, 'Cari_Antrian'])->name('antrian.search');
     Route::post('/cari', [Antrian_Online_Controller::class, 'Cari_Antrian_Post'])->name('antrian-online.cari');
