@@ -823,36 +823,6 @@
  </div>
  </section>
 
- <section class="py-12 bg-gray-50">
- <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
- <div class="text-center mb-10 reveal">
- <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Keuntungan Layanan Mandiri</h2>
- </div>
- <div class="grid md:grid-cols-3 gap-6 reveal">
- <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 text-center border border-blue-200">
- <div class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3">
- <i class="fas fa-clock text-2xl text-white"></i>
- </div>
- <h3 class="font-bold text-gray-800 mb-2">Hemat Waktu</h3>
- <p class="text-gray-600 text-sm">Tanpa antri di kantor dukcapil</p>
- </div>
- <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 text-center border border-purple-200">
- <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3">
- <i class="fas fa-home text-2xl text-white"></i>
- </div>
- <h3 class="font-bold text-gray-800 mb-2">Dari Mana Saja</h3>
- <p class="text-gray-600 text-sm">Proses online 24 jam</p>
- </div>
- <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 text-center border border-green-200">
- <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mx-auto mb-3">
- <i class="fas fa-check-circle text-2xl text-white"></i>
- </div>
- <h3 class="font-bold text-gray-800 mb-2">Pantau Status</h3>
- <p class="text-gray-600 text-sm">Update status secara real-time</p>
- </div>
- </div>
- </div>
- </section>
 
  {{-- Modal Kategori --}}
  <div id="kategoriModal" class="fixed inset-0 z-40 hidden overflow-y-auto">
@@ -1098,6 +1068,38 @@
  <div id="searchResults" class="mt-8 space-y-4"></div>
  </div>
  </section>
+
+  <section class="py-12 bg-gray-50">
+ <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+ <div class="text-center mb-10 reveal">
+ <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Keuntungan Layanan Mandiri</h2>
+ </div>
+ <div class="grid md:grid-cols-3 gap-6 reveal">
+ <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 text-center border border-blue-200">
+ <div class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+ <i class="fas fa-clock text-2xl text-white"></i>
+ </div>
+ <h3 class="font-bold text-gray-800 mb-2">Hemat Waktu</h3>
+ <p class="text-gray-600 text-sm">Tanpa antri di kantor dukcapil</p>
+ </div>
+ <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 text-center border border-purple-200">
+ <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+ <i class="fas fa-home text-2xl text-white"></i>
+ </div>
+ <h3 class="font-bold text-gray-800 mb-2">Dari Mana Saja</h3>
+ <p class="text-gray-600 text-sm">Proses online 24 jam</p>
+ </div>
+ <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 text-center border border-green-200">
+ <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+ <i class="fas fa-check-circle text-2xl text-white"></i>
+ </div>
+ <h3 class="font-bold text-gray-800 mb-2">Pantau Status</h3>
+ <p class="text-gray-600 text-sm">Update status secara real-time</p>
+ </div>
+ </div>
+ </div>
+ </section>
+
 @endsection
 
 @push('styles')
