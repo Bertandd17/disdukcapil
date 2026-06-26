@@ -12,9 +12,12 @@ class AdminExistsComposer
      */
     public function compose(View $view)
     {
-        $adminExists = User::whereHas('roles', function($query) {
-            $query->where('name', 'Admin');
-        })->exists();
+        // Cache hasil query selama 24 jam untuk menghemat koneksi database
+        $adminExists = \Illuminate\Support\Facades\Cache::remember('admin_exists', 86400, function () {
+            return User::whereHas('roles', function($query) {
+                $query->where('name', 'Admin');
+            })->exists();
+        });
 
         $view->with('adminExists', $adminExists);
     }
